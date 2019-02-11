@@ -1,1 +1,1 @@
-# heroes
+# Heroes of the Gym
