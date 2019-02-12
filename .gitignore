@@ -6,3 +6,4 @@
 .idea/libraries/Dart_SDK.xml
 .idea/heroes.iml
 .idea/encodings.xml
+*.xcsettings
