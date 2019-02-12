@@ -1,0 +1,94 @@
+{
+  "project_info": {
+    "project_number": "7661899587",
+    "firebase_url": "https://heroes-6fe69.firebaseio.com",
+    "project_id": "heroes-6fe69",
+    "storage_bucket": "heroes-6fe69.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7661899587:android:b20c924eea9a76b8",
+        "android_client_info": {
+          "package_name": "com.example.firestore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "7661899587-uqt8c0e76jt5h9qvfmje34f88vomtpeo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5Ig5VCbnxFaV7wpcYJWutT_3AgU1P3d4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7661899587:android:27982075fdb6a060",
+        "android_client_info": {
+          "package_name": "com.example.heroesapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "7661899587-o6hn71tgdmm7ek0e9qthgs0jt23ug7q7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.heroesapp",
+            "certificate_hash": "65b80d65c69935e23349f72a6fa29c7d80d88e5f"
+          }
+        },
+        {
+          "client_id": "7661899587-uqt8c0e76jt5h9qvfmje34f88vomtpeo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5Ig5VCbnxFaV7wpcYJWutT_3AgU1P3d4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "7661899587-uqt8c0e76jt5h9qvfmje34f88vomtpeo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "7661899587-eur1brrsl69epudnh6n07kigjhmbtu93.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.heroesapp",
+                "app_store_id": "437637"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
