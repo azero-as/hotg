@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
-//import 'dashboard.dart';
+import 'dashboard.dart';
 
 void main() => runApp(new MyApp());
 
@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   //Navigation between pages
   final routes = <String, WidgetBuilder>{
     LoginPage.tag: (context) => LoginPage(),
-    //Dashboard.tag: (context) => Dashboard(),
+    Dashboard.tag: (context) => Dashboard(),
   };
 
   @override

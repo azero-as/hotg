@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'dashboard.dart';
+import 'dashboard.dart';
 
 //This is the login page
 
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         onPressed: () {
           //TODO: eventhandler on log in button
-          //Navigator.of(context).pushNamed(Dashboard.tag);
+          Navigator.of(context).pushNamed(Dashboard.tag);
         },
         padding: EdgeInsets.all(12),
         color: const Color(0xFF4FB88B),
