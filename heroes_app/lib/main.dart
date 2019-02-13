@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
 import 'dashboard.dart';
+import 'frontpage.dart';
 
 void main() => runApp(new MyApp());
 
@@ -10,6 +11,7 @@ class MyApp extends StatelessWidget {
   final routes = <String, WidgetBuilder>{
     LoginPage.tag: (context) => LoginPage(),
     Dashboard.tag: (context) => Dashboard(),
+    FrontPage.tag: (context) => FrontPage(),
   };
 
   @override
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
         secondaryHeaderColor: const Color(0xFF5DC6D9),
         accentColor: const Color(0xFFFFAD32),
       ),
-      home: LoginPage(), //Change this to the first page (login/signin)
+      home: FrontPage(), //Change this to the first page (login/signin)
       routes: routes,
     );
   }
