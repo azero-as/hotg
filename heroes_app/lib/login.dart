@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 //import 'dashboard.dart';
 
+//This is the login page
 
 class LoginPage extends StatefulWidget {
 
@@ -16,6 +17,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
 
+
+    //placeholder for logo
     final logo = Hero(
       tag: 'hero',
       child: CircleAvatar(
@@ -25,10 +28,12 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
+    //Welcome text
     final welcomeText = new Text(
       'Welcome back!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0,), textAlign: TextAlign.center,
     );
 
+    //Email input field
     final email = TextFormField(
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
@@ -40,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
         )
     );
 
+    //Password input field
     final password = TextFormField(
       autofocus: false,
       obscureText: true,
@@ -51,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
+    //Login button
     final loginButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
@@ -68,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
+    //Join here button
     final joinButton = FlatButton(
       child: RichText(
         text: TextSpan(
@@ -90,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
 
+    //Returns all the elements to the page
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: new AppBar(
