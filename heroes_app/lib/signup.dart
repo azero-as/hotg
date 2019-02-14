@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dashboard.dart';
 import 'login.dart';
+import 'signuplevel.dart';
 
-//This is the login page
+//This is the signup page
 
 class SignupPage extends StatefulWidget {
 
@@ -70,8 +71,8 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
 
-    //Login button
-    final loginButton = Padding(
+    //Next button
+    final nextButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
         elevation: 5.0,
@@ -80,11 +81,11 @@ class _SignupPageState extends State<SignupPage> {
         ),
         onPressed: () {
           //TODO: eventhandler on log in button
-          Navigator.of(context).pushNamed(Dashboard.tag);
+          Navigator.of(context).pushNamed(SignupLevelPage.tag);
         },
         padding: EdgeInsets.all(12),
         color: const Color(0xFF4FB88B),
-        child: Text('Log In', style: TextStyle(color: Colors.white),),
+        child: Text('Next', style: TextStyle(color: Colors.white),),
       ),
     );
 
@@ -142,7 +143,7 @@ class _SignupPageState extends State<SignupPage> {
                 SizedBox(height: 15.0),
                 passwordVertify,
                 SizedBox(height: 15.0,),
-                loginButton,
+                nextButton,
                 joinButton
               ],
             ),
