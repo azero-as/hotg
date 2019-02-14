@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dashboard.dart';
+import 'signup.dart';
 
 //This is the login page
 
@@ -94,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       onPressed: (){
-        //TODO: eventhandler on join here button
+        Navigator.of(context).pushNamed(SignupPage.tag);
       },
     );
 
