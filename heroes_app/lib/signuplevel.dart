@@ -85,7 +85,7 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         onPressed: () {
-          //TODO: eventhandler on log in button
+          //TODO: eventhandler on letsGo button
           Navigator.of(context).pushNamed(Dashboard.tag);
         },
         padding: EdgeInsets.all(12),
