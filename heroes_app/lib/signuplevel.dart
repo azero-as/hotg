@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dashboard.dart';
+import 'signup.dart';
 
 //This is the singuplevel page
 
@@ -101,8 +102,7 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
         title: Text("Heroes Of The Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
             onPressed: (){
-              //TODO Handle back button
-              //() => Navigator.of(context).pop(); dont know if this is the right code
+              Navigator.of(context).pop(SignupPage.tag);
             }),
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
