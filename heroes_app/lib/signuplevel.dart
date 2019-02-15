@@ -1,0 +1,138 @@
+import 'package:flutter/material.dart';
+import 'dashboard.dart';
+import 'signup.dart';
+
+//This is the singuplevel page
+
+class SignupLevelPage extends StatefulWidget {
+
+  static String tag = 'signupLevel-page';
+
+  @override
+  _SignupLevelPageState createState() => new _SignupLevelPageState();
+
+}
+// Radio buttons values
+enum FitnessLevel { beginner, intermediate, advanced }
+
+class _SignupLevelPageState extends State<SignupLevelPage> {
+
+  // Radio button start state
+  FitnessLevel _fitnessLevel = FitnessLevel.beginner;
+
+  @override
+  Widget build(BuildContext context) {
+
+
+    //Welcome text
+    final infoText = new Text(
+      'Everyone starts in different places. Tell us a litte about your fitness experience in order for us to start you off at the right level and tailor the perfect workout plan for you!', style: TextStyle(fontSize: 15.0,), textAlign: TextAlign.left,
+    );
+
+    //Select Level Info text
+    final selectLevelText = new Text(
+      'Select your current fitness level: ', style: TextStyle(fontSize: 20.0,), textAlign: TextAlign.left,
+    );
+
+    //RADIO BUTTONS
+    final beginner = new RadioListTile(
+        title: new Text('Beginner'),
+        value: FitnessLevel.beginner,
+        groupValue: _fitnessLevel,
+        onChanged: (FitnessLevel value) { setState(() { _fitnessLevel = value; }); },
+        activeColor: Colors.blue
+    );
+
+    final intermediate = new RadioListTile(
+      title: new Text('Intermediate'),
+      value: FitnessLevel.intermediate,
+      groupValue: _fitnessLevel,
+      onChanged: (FitnessLevel value) { setState(() { _fitnessLevel = value; }); },
+      activeColor: Colors.blue
+    );
+
+    final advanced = new RadioListTile(
+      title: new Text('Advanced'),
+      value: FitnessLevel.advanced,
+      groupValue: _fitnessLevel,
+      onChanged: (FitnessLevel value) { setState(() { _fitnessLevel = value; }); },
+      activeColor: Colors.blue
+    );
+
+
+
+    //CharacterName Info text
+    final characterNameText = new Text(
+      'Pick your character name: ', style: TextStyle(fontSize: 20.0,), textAlign: TextAlign.left,
+    );
+
+    //CharacterName input field
+    final characterName = TextFormField(
+        keyboardType: TextInputType.text,
+        autofocus: false,
+        decoration: InputDecoration(
+          labelText: 'Character Name',
+          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          border: UnderlineInputBorder(),
+        )
+    );
+
+    //LetsGo button
+    final letsGoButton = Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: RaisedButton(
+        elevation: 5.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        onPressed: () {
+          //TODO: eventhandler on letsGo button
+          Navigator.of(context).pushNamed(Dashboard.tag);
+        },
+        padding: EdgeInsets.all(12),
+        color: const Color(0xFF4FB88B),
+        child: Text('Lets Go!', style: TextStyle(color: Colors.white),),
+      ),
+    );
+
+    //Returns all the elements to the page
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: new AppBar(
+        title: Text("Heroes Of The Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        leading: IconButton(icon: Icon(Icons.arrow_back_ios),
+            onPressed: (){
+              Navigator.of(context).pop(SignupPage.tag);
+            }),
+        iconTheme: IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+      ),
+      body: Center(
+          child: Container(
+            margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
+            child: ListView(
+              shrinkWrap: true,
+              padding: EdgeInsets.only(left: 24.0, right: 24.0),
+              children: <Widget>[
+                SizedBox(height: 40.0,),
+                infoText,
+                SizedBox(height: 28.0,),
+                selectLevelText,
+                beginner,
+                intermediate,
+                advanced,
+                SizedBox(height: 25.0,),
+                characterNameText,
+                SizedBox(height: 10.0,),
+                characterName,
+                SizedBox(height: 15.0,),
+                letsGoButton,
+              ],
+            ),
+          )
+      ),
+    );
+  }
+
+}
