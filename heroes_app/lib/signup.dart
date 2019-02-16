@@ -118,8 +118,6 @@ class _SignupPageState extends State<SignupPage> {
         title: Text("Heroes Of The Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
             onPressed: (){
-              //TODO Handle back button
-              //() => Navigator.of(context).pop(); dont know if this is the right code
                 Navigator.of(context).pushNamed(FrontPage.tag);
         }),
         iconTheme: IconThemeData(
