@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'signup.dart';
 
 class FrontPage extends StatefulWidget {
     static String tag = 'front-page';
@@ -59,6 +60,9 @@ class _MyHomePageState extends State<FrontPage> {
                                     style: new TextStyle(color: Colors.white)
                                 ),
                                 color: Colors.green,
+                                onPressed: () {
+                                    Navigator.of(context).pushNamed(SignupPage.tag);
+                                },
                                 shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
                             ),
 
