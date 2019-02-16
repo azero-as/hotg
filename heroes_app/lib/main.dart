@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
 import 'dashboard.dart';
+
 import 'frontpage.dart';
+
+import 'signup.dart';
+import 'signuplevel.dart';
 
 void main() => runApp(new MyApp());
 
@@ -12,6 +16,8 @@ class MyApp extends StatelessWidget {
     LoginPage.tag: (context) => LoginPage(),
     Dashboard.tag: (context) => Dashboard(),
     FrontPage.tag: (context) => FrontPage(),
+    SignupPage.tag: (context) => SignupPage(),
+    SignupLevelPage.tag: (context) => SignupLevelPage(),
   };
 
   @override

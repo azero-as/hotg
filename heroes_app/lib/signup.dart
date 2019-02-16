@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'dashboard.dart';
-import 'signup.dart';
+import 'login.dart';
+import 'signuplevel.dart';
 
-//This is the login page
+//This is the signup page
 
-class LoginPage extends StatefulWidget {
+class SignupPage extends StatefulWidget {
 
-  static String tag = 'login-page';
+  static String tag = 'signup-page';
 
   @override
-  _LoginPageState createState() => new _LoginPageState();
+  _SignupPageState createState() => new _SignupPageState();
 
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
 
     //Welcome text
     final welcomeText = new Text(
-      'Welcome back!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0,), textAlign: TextAlign.center,
+      'First, we need the basics', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0,), textAlign: TextAlign.center,
     );
 
     //Email input field
@@ -58,8 +58,20 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
-    //Login button
-    final loginButton = Padding(
+    //Password input field
+    final passwordVertify = TextFormField(
+      autofocus: false,
+      obscureText: true,
+      decoration: InputDecoration(
+        icon: Icon(Icons.lock),
+        labelText: 'Vertify Password',
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        border: UnderlineInputBorder(),
+      ),
+    );
+
+    //Next button
+    final nextButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
         elevation: 5.0,
@@ -68,11 +80,11 @@ class _LoginPageState extends State<LoginPage> {
         ),
         onPressed: () {
           //TODO: eventhandler on log in button
-          Navigator.of(context).pushNamed(Dashboard.tag);
+          Navigator.of(context).pushNamed(SignupLevelPage.tag);
         },
         padding: EdgeInsets.all(12),
         color: const Color(0xFF4FB88B),
-        child: Text('Log In', style: TextStyle(color: Colors.white),),
+        child: Text('Next', style: TextStyle(color: Colors.white),),
       ),
     );
 
@@ -80,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
     final joinButton = FlatButton(
       child: RichText(
         text: TextSpan(
-          text: 'Not already a hero? Join us ', style: TextStyle(color: Colors.black54),
+          text: 'Already a hero? Log in ', style: TextStyle(color: Colors.black54),
           children: <TextSpan>[
             TextSpan(
               text: 'here!',
@@ -95,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       onPressed: (){
-        Navigator.of(context).pushNamed(SignupPage.tag);
+        Navigator.of(context).pushNamed(LoginPage.tag);
       },
     );
 
@@ -115,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: Center(
           child: Container(
-            margin: EdgeInsets.fromLTRB(35, 0, 35, 80),
+            margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
             child: ListView(
               shrinkWrap: true,
               padding: EdgeInsets.only(left: 24.0, right: 24.0),
@@ -127,8 +139,10 @@ class _LoginPageState extends State<LoginPage> {
                 email,
                 SizedBox(height: 18.0,),
                 password,
+                SizedBox(height: 15.0),
+                passwordVertify,
                 SizedBox(height: 15.0,),
-                loginButton,
+                nextButton,
                 joinButton
               ],
             ),
