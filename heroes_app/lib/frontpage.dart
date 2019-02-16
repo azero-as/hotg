@@ -13,9 +13,52 @@ class _MyHomePageState extends State<FrontPage> {
     List<String> strings = ['Flutter', 'is', 'cool', "and","awesome!"];
     String displayedString = "Heroes of the gym!";
 
-
     @override
     Widget build(BuildContext context) {
+    //Welcome text
+    final appName = new Text(
+        'Heroes of the gym', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0,), textAlign: TextAlign.center,
+    );
+
+    //Login button
+    final loginButton = Padding(
+        padding: EdgeInsets.symmetric(vertical: 16.0),
+        child: RaisedButton(
+            elevation: 5.0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+            ),
+            onPressed: () {
+                //TODO: eventhandler on log in button
+                Navigator.of(context).pushNamed(LoginPage.tag);
+
+            },
+            padding: EdgeInsets.all(12),
+            color: const Color(0xFF4FB88B),
+            child: Text('Log In', style: TextStyle(color: Colors.white),),
+        ),
+    );
+
+    //Login button
+    final signupButton = Padding(
+        padding: EdgeInsets.symmetric(vertical: 16.0),
+        child: RaisedButton(
+            elevation: 5.0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+            ),
+            onPressed: () {
+                //TODO: eventhandler on log in button
+                Navigator.of(context).pushNamed(SignupPage.tag);
+
+            },
+            padding: EdgeInsets.all(12),
+            color: const Color(0xFF4FB88B),
+            child: Text('Sign up', style: TextStyle(color: Colors.white),),
+        ),
+    );
+
+
         return Scaffold(
             appBar: AppBar(
                 // Here we take the value from the MyHomePage object that was created by
@@ -23,52 +66,20 @@ class _MyHomePageState extends State<FrontPage> {
                 title: Text("test"),
                 backgroundColor: Colors.green,
             ),
-            body: Container(
-                // Center is a layout widget. It takes a single child and positions it
-                // in the middle of the parent.
-
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                        new Text(displayedString, style: new TextStyle(fontSize: 40.0)),
-                        new Padding(padding: new EdgeInsets.all(10.0)),
-                        new SizedBox(
-                            width: 200.0,
-                            height: 50.0,
-                            child: new RaisedButton(
-                                child: new Text(
-                                    "Login",
-                                    style: new TextStyle(color: Colors.white)
-                                ),
-                                color: Color(0xFF4AB98A),
-                                onPressed: () {
-                                    //TODO: eventhandler on log in button
-                                    Navigator.of(context).pushNamed(LoginPage.tag);
-                                },
-                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-
-                            ),
-
-                        ),
-                        new Container(
-                            width: 200.0,
-                            height: 50.0,
-                            margin: const EdgeInsets.only(top: 10.0),
-                            child: new RaisedButton(
-                                child: new Text(
-                                    "Sign up",
-                                    style: new TextStyle(color: Colors.white)
-                                ),
-                                color: Colors.green,
-                                onPressed: () {
-                                    Navigator.of(context).pushNamed(SignupPage.tag);
-                                },
-                                shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                            ),
-
-                        ),
-                    ],
-                ),
+            body: Center(
+                child: Container(
+                    margin: EdgeInsets.fromLTRB(35, 0, 35, 50),
+                    child: ListView(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.only(left: 24.0, right: 24.0),
+                        children: <Widget>[
+                            appName,
+                            SizedBox(height: 80.0,),
+                            loginButton,
+                            signupButton,
+                        ],
+                    ),
+                )
             ),
         );
     }
