@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
 import 'signuplevel.dart';
+import 'frontpage.dart';
 
 //This is the signup page
 
@@ -79,7 +80,6 @@ class _SignupPageState extends State<SignupPage> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         onPressed: () {
-          //TODO: eventhandler on log in button
           Navigator.of(context).pushNamed(SignupLevelPage.tag);
         },
         padding: EdgeInsets.all(12),
@@ -120,7 +120,8 @@ class _SignupPageState extends State<SignupPage> {
             onPressed: (){
               //TODO Handle back button
               //() => Navigator.of(context).pop(); dont know if this is the right code
-            }),
+                Navigator.of(context).pushNamed(FrontPage.tag);
+        }),
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
         ),
