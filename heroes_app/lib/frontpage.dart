@@ -5,81 +5,103 @@ import 'signup.dart';
 class FrontPage extends StatefulWidget {
     static String tag = 'front-page';
     @override
-    _MyHomePageState createState() => _MyHomePageState();
+    _FrontPageState createState() => _FrontPageState();
 }
 
-class _MyHomePageState extends State<FrontPage> {
-    int counter = 0;
-    List<String> strings = ['Flutter', 'is', 'cool', "and","awesome!"];
-    String displayedString = "Heroes of the gym!";
+class _FrontPageState extends State<FrontPage> {
 
     @override
     Widget build(BuildContext context) {
-    //Welcome text
+
+    //App name
     final appName = new Text(
         'Heroes of the gym', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0,), textAlign: TextAlign.center,
     );
 
     //Login button
     final loginButton = Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
+        padding: EdgeInsets.symmetric(vertical: 0.0),
         child: RaisedButton(
             elevation: 5.0,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
             ),
+            child: Text('Log In', style: TextStyle(color: const Color(0xFF4FB88B), fontSize: 20), ), color: Colors.white,
             onPressed: () {
-                //TODO: eventhandler on log in button
                 Navigator.of(context).pushNamed(LoginPage.tag);
-
             },
-            padding: EdgeInsets.all(12),
-            color: const Color(0xFF4FB88B),
-            child: Text('Log In', style: TextStyle(color: Colors.white),),
         ),
     );
 
-    //Login button
+
+    //Signup button
     final signupButton = Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
+        padding: EdgeInsets.symmetric(vertical: 0.0),
         child: RaisedButton(
-            elevation: 5.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
+            color: const Color(0xFF4FB88B),
+            shape: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(60),
+                borderSide: BorderSide(
+                    width: 1.0,
+                    color: Colors.white
+                )
+            ),
+            child: GestureDetector(
+                child: Center(
+                    child: Text('Sign up',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                        )
+                    ),
+                )
             ),
             onPressed: () {
-                //TODO: eventhandler on log in button
-                Navigator.of(context).pushNamed(SignupPage.tag);
-
+                Navigator.of(context).pushNamed(LoginPage.tag);
             },
-            padding: EdgeInsets.all(12),
-            color: const Color(0xFF4FB88B),
-            child: Text('Sign up', style: TextStyle(color: Colors.white),),
         ),
     );
 
 
         return Scaffold(
             appBar: AppBar(
-                // Here we take the value from the MyHomePage object that was created by
-                // the App.build method, and use it to set our appbar title.
-                title: Text("test"),
-                backgroundColor: Colors.green,
+                backgroundColor: const Color(0xFF4FB88B),
+                elevation: 0.0,
+                automaticallyImplyLeading: false,
             ),
-            body: Center(
-                child: Container(
-                    margin: EdgeInsets.fromLTRB(35, 0, 35, 50),
-                    child: ListView(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.only(left: 24.0, right: 24.0),
-                        children: <Widget>[
-                            appName,
-                            SizedBox(height: 80.0,),
-                            loginButton,
-                            signupButton,
+            backgroundColor: const Color(0xFF4FB88B),
+            body: Stack(
+                children: <Widget>[
+                    Column(
+                    children: <Widget>[
+                        SizedBox(height: 90),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                                Text("Heroes of the gym",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 30.0,
+                                        fontWeight: FontWeight.bold
+                                    ),)
+
+                            ],
+                        ),
+                        SizedBox(height: 120.0),
+                        Container(
+                            height: 40.0,
+                            width: 250.0,
+                            child: loginButton,
+                        ),
+                        SizedBox(height: 20.0),
+                        Container(
+                            height: 40.0,
+                            width: 250.0,
+                            child: signupButton,
+                            )
                         ],
-                    ),
-                )
+                    )
+                ],
             ),
         );
     }
