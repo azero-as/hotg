@@ -8,16 +8,43 @@ class Plan extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
-        return MaterialApp(
-            home: Scaffold(
+        return Scaffold(
                 appBar: AppBar(
                     backgroundColor: const Color(0xFF4FB88B),
+                    title: Text("Fullkroppsstyrke", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                 ),
-                body: ListView.builder(
-                    itemBuilder: (BuildContext context, int index) =>
-                        EntryItem(data[index]),
-                    itemCount: data.length,
-                ),
+                body: new Column(
+                children: <Widget>[
+                        Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                                Container(
+                                    child: Text("Tid: 25 min  ")
+                                ),
+                                Container(
+                                    child: Text("XP: 10")
+                                ),
+                            ],
+                        ),
+                        Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                                Container(
+                                    child: Text("Difficulty: hard")
+                                ),
+
+                            ],
+                        ),
+
+
+                    new Expanded(
+                        child: ListView.builder(
+                            itemBuilder: (BuildContext context, int index) =>
+                                EntryItem(data[index]),
+                            itemCount: data.length,
+                        ),
+                    )
+                ],
             ),
         );
     }
