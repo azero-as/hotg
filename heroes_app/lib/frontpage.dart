@@ -57,7 +57,7 @@ class _FrontPageState extends State<FrontPage> {
                 )
             ),
             onPressed: () {
-                Navigator.of(context).pushNamed(LoginPage.tag);
+                Navigator.of(context).pushNamed(SignupPage.tag);
             },
         ),
     );
