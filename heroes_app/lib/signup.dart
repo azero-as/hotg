@@ -118,7 +118,7 @@ class _SignupPageState extends State<SignupPage> {
         title: Text("Heroes Of The Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
             onPressed: (){
-                Navigator.of(context).pushNamed(FrontPage.tag);
+                Navigator.of(context).pop();
         }),
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
