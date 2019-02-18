@@ -8,31 +8,44 @@ class Plan extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
+
+        var description = new RichText(
+            text: new TextSpan(
+                style: new TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.black,
+                ),
+                children: <TextSpan>[
+                    //TODO: Add icon
+                    new TextSpan(text: 'Time: ', style: new TextStyle(fontWeight: FontWeight.bold)),
+                    //TODO: Add the correct time here
+                    new TextSpan(text: '1  '),
+                    new TextSpan(text: ' XP: ', style: new TextStyle(fontWeight: FontWeight.bold)),
+                    //TODO: Add the correct XP one gets from completing the workout
+                    new TextSpan(text: '100 \n\n'),
+                    new TextSpan(text: 'Difficulty: ', style: new TextStyle(fontWeight: FontWeight.bold)),
+                    //TODO: Add the correct difficulty
+                    new TextSpan(text: 'Beginner'),
+                ]
+            ));
+
         return Scaffold(
                 appBar: AppBar(
                     backgroundColor: const Color(0xFF4FB88B),
                     title: Text("Fullkroppsstyrke", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                 ),
+
                 body: new Column(
                 children: <Widget>[
                         Row(
                             mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                                 Container(
-                                    child: Text("Tid: 25 min  ")
-                                ),
-                                Container(
-                                    child: Text("XP: 10")
-                                ),
-                            ],
-                        ),
-                        Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                                Container(
-                                    child: Text("Difficulty: hard")
-                                ),
+                                    height: 120.0,
 
+                                ),
+                                description,
                             ],
                         ),
 
