@@ -13,6 +13,15 @@ class _FrontPageState extends State<FrontPage> {
     @override
     Widget build(BuildContext context) {
 
+    //placeholder for logo
+    final logo = Hero(
+        tag: 'hero',
+        child: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            radius: 60.0,
+            child: Image.asset('assets/logo.png'),
+        ),
+    );
     //App name
     final appName = new Text(
         'Heroes of the gym', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0,), textAlign: TextAlign.center,
@@ -74,17 +83,11 @@ class _FrontPageState extends State<FrontPage> {
                 children: <Widget>[
                     Column(
                     children: <Widget>[
-                        SizedBox(height: 90),
+                        SizedBox(height: 50),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                                Text("Heroes of the gym",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 30.0,
-                                        fontWeight: FontWeight.bold
-                                    ),)
-
+                                logo,
                             ],
                         ),
                         SizedBox(height: 120.0),
