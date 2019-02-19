@@ -29,6 +29,44 @@ class Plan extends StatelessWidget {
                 ]
             ));
 
+        final startWorkoutButton = Padding(
+            padding: EdgeInsets.symmetric(vertical: 0.0),
+            child: RaisedButton(
+                elevation: 5.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                ),
+                onPressed: () {
+                    //TODO: eventhandler on start workout button
+                },
+                padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
+                color: const Color(0xFF58C6DA),
+                child: Text('Start workout', style: TextStyle(color: Colors.white),),
+            ),
+        );
+
+
+        final newWorkoutButton = Padding(
+            padding: EdgeInsets.symmetric(vertical: 0.0),
+            child: RaisedButton(
+                elevation: 5.0,
+                shape: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                    borderSide: BorderSide(
+                        width: 2.0,
+                        color: const Color(0xFF58C6DA),
+                    )
+                ),
+                onPressed: () {
+                    //TODO: eventhandler on start workout button
+                },
+                padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                color: const Color(0xFFFFFFFF),
+                child: Text('Generate new workout', style: TextStyle(color: Colors.black54),),
+            ),
+        );
+
+
         return Scaffold(
                 appBar: AppBar(
                     backgroundColor: const Color(0xFF4FB88B),
@@ -41,22 +79,24 @@ class Plan extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                                Container(
-                                    height: 120.0,
-
-                                ),
+                                SizedBox(height: 120),
                                 description,
                             ],
                         ),
 
 
                     new Expanded(
-                        child: ListView.builder(
-                            itemBuilder: (BuildContext context, int index) =>
-                                EntryItem(data[index]),
-                            itemCount: data.length,
-                        ),
-                    )
+                        child: Container(
+                            child: ListView.builder(
+                                itemBuilder: (BuildContext context, int index) =>
+                                    EntryItem(data[index]),
+                                itemCount: data.length,
+                            ),
+                        )
+                    ),
+                    startWorkoutButton,
+                    newWorkoutButton,
+
                 ],
             ),
         );
@@ -73,28 +113,29 @@ class Entry {
 
 // The entire multilevel list displayed by this app.
 final List<Entry> data = <Entry>[
+
     Entry(
         'Warm up',
         <Entry>[
-            Entry('Minutes: 5-20'),
-            Entry('Rest after set: 3 min'),
+            Entry('Minutes: '),
+            Entry('Rest after set: '),
             Entry('XP: 5'),
         ],
     ),
     Entry(
         'Push ups',
         <Entry>[
-            Entry('Sets: 3'),
-            Entry('Reps: 10-12'),
-            Entry('XP: 12'),
+            Entry('Sets: '),
+            Entry('Reps: '),
+            Entry('XP: '),
         ],
     ),
     Entry(
         'Squats',
         <Entry>[
-            Entry('Sets: 3'),
-            Entry('Reps: 10-12'),
-            Entry('XP: 12'),
+            Entry('Sets: '),
+            Entry('Reps: '),
+            Entry('XP: '),
         ],
     ),
 ];
@@ -107,7 +148,7 @@ class EntryItem extends StatelessWidget {
     final Entry entry;
 
     Widget _buildTiles(Entry root) {
-        if (root.children.isEmpty) return ListTile(title: Text(root.title));
+        if (root.children.isEmpty) return ListTile(title: Text(root.title,style: TextStyle(fontWeight: FontWeight.bold)));
         return ExpansionTile(
             key: PageStorageKey<Entry>(root),
             title: Text(root.title),
