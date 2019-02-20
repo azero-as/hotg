@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 import 'dashboard.dart';
 import 'authentication.dart';
+import 'signup.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({this.auth});
@@ -72,7 +73,7 @@ class _RootPageState extends State<RootPage> {
         return _buildWaitingScreen();
         break;
       case AuthStatus.NOT_LOGGED_IN:
-        return new LoginPage(
+        return new SignupPage(
           auth: widget.auth,
           onSignedIn: _onLoggedIn,
         );
