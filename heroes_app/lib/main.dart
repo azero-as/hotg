@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'authentication.dart';
+import 'rootPage.dart';
 import 'login.dart';
 import 'dashboard.dart';
 
@@ -30,8 +32,8 @@ class MyApp extends StatelessWidget {
         secondaryHeaderColor: const Color(0xFF5DC6D9),
         accentColor: const Color(0xFFFFAD32),
       ),
-      home: FrontPage(), //Change this to the first page (login/signin)
       routes: routes,
+      home: new RootPage(auth: new Auth()),
     );
   }
 }
