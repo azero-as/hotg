@@ -3,7 +3,6 @@ import 'login.dart';
 import 'signuplevel.dart';
 import 'frontpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 //This is the signup page
 
