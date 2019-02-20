@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
 import 'signuplevel.dart';
+import 'frontpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 
 //This is the signup page
 
@@ -82,7 +82,6 @@ class _SignupPageState extends State<SignupPage> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         onPressed: () {
-          //TODO: eventhandler on log in button
           Navigator.of(context).pushNamed(SignupLevelPage.tag);
         },
         padding: EdgeInsets.all(12),
@@ -121,9 +120,8 @@ class _SignupPageState extends State<SignupPage> {
         title: Text("Heroes Of The Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
             onPressed: (){
-              //TODO Handle back button
-              //() => Navigator.of(context).pop(); dont know if this is the right code
-            }),
+                Navigator.of(context).pop();
+        }),
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
         ),
