@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'authentication.dart';
+import 'rootPage.dart';
 import 'login.dart';
 import 'dashboard.dart';
+
+import 'frontpage.dart';
+
 import 'signup.dart';
 import 'signuplevel.dart';
 
@@ -12,6 +17,7 @@ class MyApp extends StatelessWidget {
   final routes = <String, WidgetBuilder>{
     LoginPage.tag: (context) => LoginPage(),
     Dashboard.tag: (context) => Dashboard(),
+    FrontPage.tag: (context) => FrontPage(),
     SignupPage.tag: (context) => SignupPage(),
     SignupLevelPage.tag: (context) => SignupLevelPage(),
   };
@@ -26,8 +32,8 @@ class MyApp extends StatelessWidget {
         secondaryHeaderColor: const Color(0xFF5DC6D9),
         accentColor: const Color(0xFFFFAD32),
       ),
-      home: LoginPage(), //Change this to the first page (login/signin)
       routes: routes,
+      home: new RootPage(auth: new Auth()),
     );
   }
 }
