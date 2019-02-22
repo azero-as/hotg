@@ -22,8 +22,7 @@ class _FrontPageState extends State<FrontPage> {
     Widget build(BuildContext context) {
 
     //placeholder for logo
-    Widget logo() {
-      return new Hero(
+    final logo = new Hero(
         tag: 'hero',
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
@@ -31,19 +30,16 @@ class _FrontPageState extends State<FrontPage> {
           child: Image.asset('assets/logo.png'),
         ),
       );
-    }
     
     //App name
-    Widget appName() {
-      return new Text(
+    final appName = new Text(
         'Heroes of the Gym', style: TextStyle(
         color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25.0,),
         textAlign: TextAlign.center,
       );
-    }
 
     //Login button
-    Widget loginButton() {
+    final loginButton =
       new Container(
         margin: const EdgeInsets.only(left: 30, right: 30),
         child: RaisedButton(
@@ -68,12 +64,10 @@ class _FrontPageState extends State<FrontPage> {
           },
         ),
       );
-    }
 
 
       //Signup button
-      Widget signupButton() {
-        return new Container(
+      final signupButton = new Container(
           margin: const EdgeInsets.only(left: 30, right: 30),
           child: RaisedButton(
             color: const Color(0xFF4FB88B),
@@ -101,7 +95,6 @@ class _FrontPageState extends State<FrontPage> {
             },
           ),
         );
-      }
 
 
       return Scaffold(
@@ -119,14 +112,14 @@ class _FrontPageState extends State<FrontPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    logo(),
+                    logo,
                   ],
                 ),
-                appName(),
+                appName,
                 SizedBox(height: 80.0),
-                loginButton(),
+                loginButton,
                 SizedBox(height: 20.0),
-                signupButton(),
+                signupButton,
               ],
             )
           ],
