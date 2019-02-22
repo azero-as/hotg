@@ -3,6 +3,7 @@ import 'login.dart';
 //import 'signuplevel.dart';
 //import 'frontpage.dart';
 import 'authentication.dart';
+import 'dart:async';
 
 //This is the signup page
 
@@ -30,6 +31,7 @@ class _SignupPageState extends State<SignupPage> {
 
   String _email;
   String _password;
+  String _passwordVertification;
   String _errorMessage;
 
   bool _isIos;
@@ -80,7 +82,7 @@ class _SignupPageState extends State<SignupPage> {
               _passwordInput2(),
               _nextButton(),
               _loginButton(),
-//              _showErrorMessage(),
+              _showErrorMessage(),
             ],
           ),
         ));
@@ -157,12 +159,12 @@ class _SignupPageState extends State<SignupPage> {
         obscureText: true,
         decoration: InputDecoration(
           icon: Icon(Icons.lock),
-          labelText: 'Password',
+          labelText: 'Vertify password',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: UnderlineInputBorder(),
         ),
-        validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
-        onSaved: (value) => _password = value,
+        validator: (value) => value.isEmpty ? 'You need to vertify your password' : null,
+        onSaved: (value) => _passwordVertification = value,
       ),
     );
   }
@@ -210,6 +212,23 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
+  Widget _showErrorMessage() {
+    if (_errorMessage.length > 0 && _errorMessage != null) {
+      return new Text(
+        _errorMessage,
+        style: TextStyle(
+            fontSize: 13.0,
+            color: Colors.red,
+            height: 1.0,
+            fontWeight: FontWeight.w300),
+      );
+    } else {
+      return new Container(
+        height: 0.0,
+      );
+    }
+  }
+
   @override
   void initState() {
     _errorMessage = "";
@@ -222,7 +241,15 @@ class _SignupPageState extends State<SignupPage> {
     final form = _formKey.currentState;
     if (form.validate()) {
       form.save();
-      return true;
+      // Check if passwords are equal
+      if (_passwordVertification==_password) {
+        return true;
+      }
+      else {
+        setState(() {
+          _errorMessage = "Passwords are different";
+        });
+      }
     }
     return false;
   }
@@ -233,12 +260,7 @@ class _SignupPageState extends State<SignupPage> {
       _errorMessage = "";
       _isLoading = true;
     });
-    if (_email == null) {
-      _isLoading = false;
-    }
-    if (_password == null) {
-      _isLoading = false;
-    }
+
     if (_validateAndSave()) {
       String userId = "";
       try {
@@ -265,6 +287,12 @@ class _SignupPageState extends State<SignupPage> {
             _errorMessage = e.message;
         });
       }
+    }
+    // To prevent loading circle to continue if you've clicked the next button twice with no passwords set.
+    else {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
