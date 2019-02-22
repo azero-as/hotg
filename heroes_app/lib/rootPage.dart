@@ -113,7 +113,7 @@ class _RootPageState extends State<RootPage> {
             userId: _userId,
             auth: widget.auth,
             onSignedOut: _onSignedOut,
-            title: 'Heroes Of The Gym',
+            title: 'Heroes of the Gym',
           );
         } else return _buildWaitingScreen();
         break;

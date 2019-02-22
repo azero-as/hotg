@@ -9,9 +9,9 @@ import 'frontpage.dart';
 import 'signup.dart';
 import 'signuplevel.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(new Heroes());
 
-class MyApp extends StatelessWidget {
+class Heroes extends StatelessWidget {
 
   //Navigation between pages
   final routes = <String, WidgetBuilder>{
