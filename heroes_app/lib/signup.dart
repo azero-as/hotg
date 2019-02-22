@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
-//import 'signuplevel.dart';
-//import 'frontpage.dart';
 import 'authentication.dart';
-import 'dart:async';
+import 'rootpage.dart';
 
 //This is the signup page
 
@@ -11,10 +9,12 @@ class SignupPage extends StatefulWidget {
 
   static String tag = 'signup-page';
 
-  SignupPage({this.auth, this.onSignedIn});
+  SignupPage({this.auth, this.onSignedIn, this.readyToLogIn, this.onSignedOut});
 
   final BaseAuth auth;
   final VoidCallback onSignedIn;
+  final VoidCallback readyToLogIn;
+  final VoidCallback onSignedOut;
 
   @override
   _SignupPageState createState() => new _SignupPageState();
@@ -46,10 +46,10 @@ class _SignupPageState extends State<SignupPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: new AppBar(
-        title: Text("Heroes Of The Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
             onPressed: (){
-                Navigator.of(context).pop();
+                widget.onSignedOut();
         }),
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
@@ -69,7 +69,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget _returnForm(){
     return new Container(
         padding: EdgeInsets.only(left: 24.0, right: 24.0),
-        margin: EdgeInsets.fromLTRB(35, 0, 35, 80),
+        margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
         child: new Form(
           key: _formKey,
           child: new ListView(
@@ -207,7 +207,7 @@ class _SignupPageState extends State<SignupPage> {
         ),
       ),
       onPressed: (){
-        Navigator.of(context).pushNamed(LoginPage.tag);
+        widget.readyToLogIn();
       },
     );
   }

@@ -3,6 +3,7 @@ import 'login.dart';
 import 'dashboard.dart';
 import 'authentication.dart';
 import 'signup.dart';
+import 'frontpage.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({this.auth});
@@ -18,6 +19,8 @@ enum AuthStatus {
   NOT_DETERMINED,
   NOT_LOGGED_IN,
   LOGGED_IN,
+  READY_TO_LOG_IN,
+  READY_TO_SIGN_UP,
 }
 
 class _RootPageState extends State<RootPage> {
@@ -57,6 +60,18 @@ class _RootPageState extends State<RootPage> {
     });
   }
 
+  void _readyToLogIn() {
+    setState(() {
+      authStatus = AuthStatus.READY_TO_LOG_IN;
+    });
+  }
+
+  void _readyToSignUp() {
+    setState(() {
+      authStatus = AuthStatus.READY_TO_SIGN_UP;
+    });
+  }
+
   Widget _buildWaitingScreen() {
     return Scaffold(
       body: Container(
@@ -73,9 +88,23 @@ class _RootPageState extends State<RootPage> {
         return _buildWaitingScreen();
         break;
       case AuthStatus.NOT_LOGGED_IN:
+        return FrontPage(
+            readyToLogIn: _readyToLogIn,
+            readyToSignUp: _readyToSignUp,
+        );
+      case AuthStatus.READY_TO_LOG_IN:
+        return new LoginPage(
+          auth: widget.auth,
+          onSignedIn: _onLoggedIn,
+          readyToSignUp: _readyToSignUp,
+          onSignedOut: _onSignedOut,
+        );
+      case AuthStatus.READY_TO_SIGN_UP:
         return new SignupPage(
           auth: widget.auth,
           onSignedIn: _onLoggedIn,
+          readyToLogIn: _readyToLogIn,
+          onSignedOut: _onSignedOut,
         );
         break;
       case AuthStatus.LOGGED_IN:

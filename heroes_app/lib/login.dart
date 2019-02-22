@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'authentication.dart';
-import 'dashboard.dart';
-import 'signup.dart';
-import 'frontpage.dart';
+import 'rootPage.dart';
 
 //This is the login page
 
@@ -10,10 +8,12 @@ class LoginPage extends StatefulWidget {
 
   static String tag = 'login-page';
 
-  LoginPage({this.auth, this.onSignedIn});
+  LoginPage({this.auth, this.onSignedIn, this.readyToSignUp, this.onSignedOut});
 
   final BaseAuth auth;
   final VoidCallback onSignedIn;
+  final VoidCallback readyToSignUp;
+  final VoidCallback onSignedOut;
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -44,11 +44,10 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: new AppBar(
-        title: Text("Heroes Of The Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
             onPressed: (){
-              //TODO Handle back button
-              //() => Navigator.of(context).pop(); dont know if this is the right code
+              widget.onSignedOut();
             }),
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
@@ -104,12 +103,6 @@ class _LoginPageState extends State<LoginPage> {
       _errorMessage = "";
       _isLoading = true;
     });
-    if (_email == null) {
-      _isLoading = false;
-    }
-    if (_password == null) {
-      _isLoading = false;
-    }
     if (_validateAndSave()) {
       String userId = "";
       try {
@@ -137,6 +130,12 @@ class _LoginPageState extends State<LoginPage> {
         });
       }
     }
+    // To prevent loading circle to continue if you've clicked the next button twice with no passwords set.
+    else {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -152,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _returnBody(){
     return new Container(
         padding: EdgeInsets.only(left: 24.0, right: 24.0),
-        margin: EdgeInsets.fromLTRB(35, 0, 35, 80),
+        margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
         child: new Form(
           key: _formKey,
           child: new ListView(
@@ -269,7 +268,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       onPressed: (){
-        Navigator.of(context).pushNamed(SignupPage.tag);
+        widget.readyToSignUp();
       },
     );
   }

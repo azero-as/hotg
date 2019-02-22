@@ -4,8 +4,16 @@ import 'signup.dart';
 
 class FrontPage extends StatefulWidget {
     static String tag = 'front-page';
+
+
     @override
     _FrontPageState createState() => _FrontPageState();
+
+    FrontPage({this.readyToLogIn, this.readyToSignUp});
+
+    final VoidCallback readyToLogIn;
+    final VoidCallback readyToSignUp;
+
 }
 
 class _FrontPageState extends State<FrontPage> {
@@ -25,7 +33,7 @@ class _FrontPageState extends State<FrontPage> {
     
     //App name
     final appName = new Text(
-        'Heroes of the gym', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25.0,), textAlign: TextAlign.center,
+        'Heroes of the Gym', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25.0,), textAlign: TextAlign.center,
     );
 
     //Login button
@@ -48,7 +56,7 @@ class _FrontPageState extends State<FrontPage> {
             ),
             //child: Text('Log In', style: TextStyle(color: const Color(0xFF4FB88B), fontSize: 20), ), color: Colors.white,
             onPressed: () {
-                Navigator.of(context).pushNamed(LoginPage.tag);
+                widget.readyToLogIn();
             },
         ),
     );
@@ -78,7 +86,7 @@ class _FrontPageState extends State<FrontPage> {
                 )
             ),
             onPressed: () {
-                Navigator.of(context).pushNamed(SignupPage.tag);
+                widget.readyToSignUp();
             },
         ),
     );
