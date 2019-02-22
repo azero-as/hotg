@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class Plan extends StatelessWidget {
@@ -66,42 +67,78 @@ class Plan extends StatelessWidget {
             ),
         );
 
+        CollectionReference collectionReference = Firestore.instance.collection("Exercises");
+        Future<Widget> displayExercises() async{
+            List<Widget> list = new List();
+            list.add(new Text("hj"));
+            list.add(new Text("hhjf"));
+            final t = await collectionReference.getDocuments().then((snapshot){
+                list.add(new Text("hhjfe"));
+                snapshot.documents.forEach((doc){
+                    final subCollectionDocs = collectionReference.document(doc.documentID).collection("Lvl1").getDocuments().then((snapshot){
+                        snapshot.documents.forEach((doc) {
+                            print(doc["name"]);
 
-        return Scaffold(
-                appBar: AppBar(
-                    backgroundColor: const Color(0xFF4FB88B),
-                    title: Text("Fullkroppsstyrke", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
+                        });
+                        list.add(new Text("hjhj"));
 
-                body: new Column(
-                children: <Widget>[
-                        Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                                SizedBox(height: 120),
-                                description,
-                            ],
-                        ),
+                    });
+                   print(subCollectionDocs);
+
+                    return subCollectionDocs;
+                });
+
+            }
+
+            );
+
+        }
+
+            List<String> litems = ["1","2","Third","4"];
+            print(displayExercises());
+            return Scaffold(
+                body: FutureBuilder(
+                    future: displayExercises(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot){
+                       switch(snapshot.connectionState){
+                           case ConnectionState.none:
+                           case ConnectionState.waiting:
+                           case ConnectionState.active:
+                                return Center(child: CircularProgressIndicator());
+                           case ConnectionState.done:
+                               return Column(
+                                   children: <Widget>[
+                                       Row(
+                                           mainAxisSize: MainAxisSize.min,
+                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                           children: [
+                                               SizedBox(height: 120),
+                                               description,
+                                           ],
+                                       ),
 
 
-                    new Expanded(
-                        child: Container(
-                            child: ListView.builder(
-                                itemBuilder: (BuildContext context, int index) =>
-                                    EntryItem(data[index]),
-                                itemCount: data.length,
-                            ),
-                        )
-                    ),
-                    startWorkoutButton,
-                    newWorkoutButton,
+                                       new Expanded(
+                                           child: Container(
+                                               child: ListView.builder(
+                                                   itemBuilder: (BuildContext context, int index) =>
+                                                       EntryItem(data[index]),
+                                                   itemCount: data.length,
+                                               ),)
+                                       ),
+                                       startWorkoutButton,
+                                       newWorkoutButton,
+                                   ],
+                               );
+                       }
 
-                ],
-            ),
-        );
+                    }
+                )
+
+            );
+        }
     }
-}
+
 
 // One entry in the multilevel list displayed by this app.
 class Entry {
