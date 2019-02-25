@@ -77,26 +77,33 @@ class Plan extends StatelessWidget {
                         if (!snapshot.hasData) return new Text('Loading...');
                         if(snapshot.hasData && snapshot.data !=null){
                             var i = 0;
+                            var createDoc = [{
+
+                            }];
                             var test = [];
+                            var test2 = [];
+
                             for(var i = 0; i < snapshot.data.documents.length; i++){
+                                //createDoc[i]['name'] = snapshot.data.documents[i]["name"];
+
                                 test.add(snapshot.data.documents[i]["name"]);
+                                test2.add(snapshot.data.documents[i]);
                             }
+
+
                             return new ListView.builder(
-                                    itemCount: 1,
-                                    itemBuilder: (_, index){
-                                    if(test != null){
-                                        print("TRUE");
+                                itemCount: test.length,
 
-                                    return ListTile(
-                                    title: new Center(child: Text(test.toString(),
-                                    style: TextStyle(fontSize: 25.0),),),
-                                    );};}
+                                itemBuilder: (BuildContext context, int index) =>
+
+                                    EntryItem(test2[index]),
+
+                            );}}),
+        );
+        }
+        }
 
 
-
-                           );}}),
-
-            );}}
 
 
 
@@ -105,59 +112,48 @@ class Plan extends StatelessWidget {
 
 // One entry in the multilevel list displayed by this app.
 class Entry {
-    Entry(this.title, [this.children = const <Entry>[]]);
+    Entry(this.name, [this.info = const <Text>[]]);
 
-    final String title;
-    final List<Entry> children;
+    final String name;
+    final List<Text> info;
+
 }
 
 // The entire multilevel list displayed by this app.
-final List<Entry> data = <Entry>[
 
-    Entry(
-        'Warm up',
-        <Entry>[
-            Entry('Minutes: '),
-            Entry('Rest after set: '),
-            Entry('XP: 5'),
-        ],
-    ),
-    Entry(
-        'Push ups',
-        <Entry>[
-            Entry('Sets: '),
-            Entry('Reps: '),
-            Entry('XP: '),
-        ],
-    ),
-    Entry(
-        'Squats',
-        <Entry>[
-            Entry('Sets: '),
-            Entry('Reps: '),
-            Entry('XP: '),
-        ],
-    ),
-];
 
 // Displays one Entry. If the entry has children then it's displayed
 // with an ExpansionTile.
 class EntryItem extends StatelessWidget {
-    const EntryItem(this.entry);
+    const EntryItem(this.test);
 
-    final Entry entry;
+    final DocumentSnapshot test;
+    Widget _buildTiles(DocumentSnapshot root) {
 
-    Widget _buildTiles(Entry root) {
-        if (root.children.isEmpty) return ListTile(title: Text(root.title,style: TextStyle(fontWeight: FontWeight.bold)));
+        print(test["info"]["Xp"].toString());
+
+        if (root["info"].isEmpty) return ListTile(title: Text(root["name"]));
         return ExpansionTile(
-            key: PageStorageKey<Entry>(root),
-            title: Text(root.title),
-            children: root.children.map(_buildTiles).toList(),
+            key: PageStorageKey<DocumentSnapshot>(root),
+            title: Text(root["name"]),
+            children: <Widget>[
+                ListTile(
+                    title: Text("Sets: " + root["info"]["Sets"]),
+                ),
+                ListTile(
+                    title: Text("Reps: " + root["info"]["Reps"]),
+                ),
+                ListTile(
+                    title: Text("XP: " + root["info"]["Xp"]),
+                ),
+            ]
+
+            //children: root["info"]
         );
     }
 
     @override
     Widget build(BuildContext context) {
-        return _buildTiles(entry);
+        return _buildTiles(test);
     }
 }
