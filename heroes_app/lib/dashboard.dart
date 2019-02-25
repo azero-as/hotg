@@ -22,7 +22,7 @@ class Dashboard extends StatelessWidget {
         secondaryHeaderColor: const Color(0xFF5DC6D9),
         accentColor: const Color(0xFFFFAD32),
       ),
-      home: new DashboardScreen(title: 'Heroes Of The Gym'),
+      home: new DashboardScreen(title: 'Heroes of the Gym'),
     );
   }
 }
