@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
+
 class Plan extends StatelessWidget {
     Plan(this.listType);
     final String listType;
@@ -67,77 +68,39 @@ class Plan extends StatelessWidget {
             ),
         );
 
-        CollectionReference collectionReference = Firestore.instance.collection("Exercises");
-        Future<Widget> displayExercises() async{
-            List<Widget> list = new List();
-            list.add(new Text("hj"));
-            list.add(new Text("hhjf"));
-            final t = await collectionReference.getDocuments().then((snapshot){
-                list.add(new Text("hhjfe"));
-                snapshot.documents.forEach((doc){
-                    final subCollectionDocs = collectionReference.document(doc.documentID).collection("Lvl1").getDocuments().then((snapshot){
-                        snapshot.documents.forEach((doc) {
-                            print(doc["name"]);
 
-                        });
-                        list.add(new Text("hjhj"));
 
-                    });
-                   print(subCollectionDocs);
-
-                    return subCollectionDocs;
-                });
-
-            }
-
-            );
-
-        }
-
-            List<String> litems = ["1","2","Third","4"];
-            print(displayExercises());
             return Scaffold(
-                body: FutureBuilder(
-                    future: displayExercises(),
+                body: StreamBuilder(
+                    stream:  Firestore.instance.collection("Exercises").document("legs").collection("Lvl1").snapshots(),
                     builder: (BuildContext context, AsyncSnapshot snapshot){
-                       switch(snapshot.connectionState){
-                           case ConnectionState.none:
-                           case ConnectionState.waiting:
-                           case ConnectionState.active:
-                                return Center(child: CircularProgressIndicator());
-                           case ConnectionState.done:
-                               return Column(
-                                   children: <Widget>[
-                                       Row(
-                                           mainAxisSize: MainAxisSize.min,
-                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                           children: [
-                                               SizedBox(height: 120),
-                                               description,
-                                           ],
-                                       ),
+                        if (!snapshot.hasData) return new Text('Loading...');
+                        if(snapshot.hasData && snapshot.data !=null){
+                            var i = 0;
+                            var test = [];
+                            for(var i = 0; i < snapshot.data.documents.length; i++){
+                                test.add(snapshot.data.documents[i]["name"]);
+                            }
+                            return new ListView.builder(
+                                    itemCount: 1,
+                                    itemBuilder: (_, index){
+                                    if(test != null){
+                                        print("TRUE");
+
+                                    return ListTile(
+                                    title: new Center(child: Text(test.toString(),
+                                    style: TextStyle(fontSize: 25.0),),),
+                                    );};}
 
 
-                                       new Expanded(
-                                           child: Container(
-                                               child: ListView.builder(
-                                                   itemBuilder: (BuildContext context, int index) =>
-                                                       EntryItem(data[index]),
-                                                   itemCount: data.length,
-                                               ),)
-                                       ),
-                                       startWorkoutButton,
-                                       newWorkoutButton,
-                                   ],
-                               );
-                       }
 
-                    }
-                )
+                           );}}),
 
-            );
-        }
-    }
+            );}}
+
+
+
+
 
 
 // One entry in the multilevel list displayed by this app.
