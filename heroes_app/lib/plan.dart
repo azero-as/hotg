@@ -54,11 +54,10 @@ class _PlanPageState extends State<Plan> {
                 ),
             );}
 
-
-        //loading circle
+        //Information about workout
         Widget _showInfo(){
             return  Container(
-                margin: EdgeInsets.fromLTRB(100, 0, 100, 0),
+                margin: EdgeInsets.fromLTRB(100, 0, 100, 40),
                 child: RichText(
                     text: new TextSpan(
                         style: new TextStyle(
@@ -77,12 +76,11 @@ class _PlanPageState extends State<Plan> {
                             //TODO: Add the correct difficulty
                             new TextSpan(text: 'Beginner'),
                         ]
-                    ));
+                    ))
                 );
-
         }
 
-        //Information about the exercises in the workout
+        //Information about the exercises that is apart of the workout
         Widget _showInformationWorkout(List<dynamic> exercises){
             return new ListView.builder(
                 scrollDirection: Axis.vertical,
@@ -111,16 +109,17 @@ class _PlanPageState extends State<Plan> {
 
 
         return Scaffold(
-                body: StreamBuilder(
-                    stream:  Firestore.instance.collection("Exercises").document("legs").collection("Lvl1").snapshots(),
-                    builder: (BuildContext context, AsyncSnapshot snapshot){
+                body: StreamBuilder<QuerySnapshot>(
+                    stream:  Firestore.instance.collection("Exercises").document("LowerBody").collection("Lvl1").snapshots(),
+                    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
                         if (!snapshot.hasData) return new Text('Loading...');
                         if(snapshot.hasData && snapshot.data !=null){
                             var exercises = [];
-                            for(var i = 0; i < snapshot.data.documents.length; i++){
+                           for(var i = 0; i < snapshot.data.documents.length; i++){
                                 exercises.add(snapshot.data.documents[i]);
-                                print(snapshot.data.documents[i]["name"]);
-                            }
+
+                           }
+                           print(exercises[0]["XP"]);
                             return _returnBody(exercises);
                         }
                     }
@@ -156,19 +155,20 @@ class EntryItem extends StatelessWidget {
 
     final DocumentSnapshot test;
     Widget _buildTiles(DocumentSnapshot root) {
-        if (root["info"].isEmpty) return ListTile(title: Text(root["name"]));
+        //if (root["XP"].isEmpty) return ListTile(title: Text(root["Name"]));
+        print(root["Name"]);
         return ExpansionTile(
             key: PageStorageKey<DocumentSnapshot>(root),
-            title: Text(root["name"]),
+            title: Text(root["Name"]),
             children: <Widget>[
                 ListTile(
-                    title: Text("Sets: " + root["info"]["Sets"]),
+                    title: Text("Sets: 1"),
                 ),
                 ListTile(
-                    title: Text("Reps: " + root["info"]["Reps"]),
+                    title: Text("Reps: 10-12"),
                 ),
                 ListTile(
-                    title: Text("XP: " + root["info"]["Xp"]),
+                    title: Text("XP: " + root["XP"].toString()),
                 ),
             ]
             //children: root["info"]
