@@ -119,7 +119,7 @@ class _PlanPageState extends State<Plan> {
                                 exercises.add(snapshot.data.documents[i]);
 
                            }
-                           print(exercises[0]["XP"]);
+
                             return _returnBody(exercises);
                         }
                     }
@@ -155,8 +155,6 @@ class EntryItem extends StatelessWidget {
 
     final DocumentSnapshot test;
     Widget _buildTiles(DocumentSnapshot root) {
-        //if (root["XP"].isEmpty) return ListTile(title: Text(root["Name"]));
-        print(root["Name"]);
         return ExpansionTile(
             key: PageStorageKey<DocumentSnapshot>(root),
             title: Text(root["Name"]),
