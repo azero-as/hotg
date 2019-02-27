@@ -12,16 +12,12 @@ class Plan extends StatefulWidget {
 
 
 class _PlanPageState extends State<Plan> {
-
-
-
     @override
     Widget build(BuildContext context) {
 
-        List<dynamic> _exercises;
         Widget _returnNewWorkoutButton(){
             return Padding(
-                padding: EdgeInsets.symmetric(vertical: 0.0),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: RaisedButton(
                     elevation: 5.0,
                     shape: OutlineInputBorder(
@@ -43,7 +39,7 @@ class _PlanPageState extends State<Plan> {
 
         Widget _returnStartWorkoutButton(){
             return new Padding(
-                padding: EdgeInsets.symmetric(vertical: 0.0),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20.0),
                 child: RaisedButton(
                     elevation: 5.0,
                     shape: RoundedRectangleBorder(
@@ -61,45 +57,49 @@ class _PlanPageState extends State<Plan> {
 
         //loading circle
         Widget _showInfo(){
-            return new RichText(
-                text: new TextSpan(
-                    style: new TextStyle(
-                        fontSize: 14.0,
-                        color: Colors.black,
-                    ),
-                    children: <TextSpan>[
-                        //TODO: Add icon
-                        new TextSpan(text: 'Time: ', style: new TextStyle(fontWeight: FontWeight.bold)),
-                        //TODO: Add the correct time here
-                        new TextSpan(text: '1  '),
-                        new TextSpan(text: ' XP: ', style: new TextStyle(fontWeight: FontWeight.bold)),
-                        //TODO: Add the correct XP one gets from completing the workout
-                        new TextSpan(text: '100 \n\n'),
-                        new TextSpan(text: 'Difficulty: ', style: new TextStyle(fontWeight: FontWeight.bold)),
-                        //TODO: Add the correct difficulty
-                        new TextSpan(text: 'Beginner'),
-                    ]
-                ));
+            return  Container(
+                margin: EdgeInsets.fromLTRB(100, 0, 100, 0),
+                child: RichText(
+                    text: new TextSpan(
+                        style: new TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                            //TODO: Add icon
+                            new TextSpan(text: 'Time: ', style: new TextStyle(fontWeight: FontWeight.bold)),
+                            //TODO: Add the correct time here
+                            new TextSpan(text: '1  '),
+                            new TextSpan(text: ' XP: ', style: new TextStyle(fontWeight: FontWeight.bold)),
+                            //TODO: Add the correct XP one gets from completing the workout
+                            new TextSpan(text: '100 \n\n'),
+                            new TextSpan(text: 'Difficulty: ', style: new TextStyle(fontWeight: FontWeight.bold)),
+                            //TODO: Add the correct difficulty
+                            new TextSpan(text: 'Beginner'),
+                        ]
+                    ));
+                );
 
         }
 
-        //Loading circle
+        //Information about the exercises in the workout
         Widget _showInformationWorkout(List<dynamic> exercises){
-
             return new ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: exercises.length,
                 itemBuilder: (BuildContext context, int index) =>
                     EntryItem(exercises[index]),
+
             );
+
         }
 
         Widget _returnBody(List<dynamic> exercises){
             return new Container(
                 padding: EdgeInsets.only(left: 24.0, right: 24.0),
-                margin: EdgeInsets.fromLTRB(20, 50, 20, 80),
-                child: new Column(
+                margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
+                child: new ListView(
                     children: <Widget>[
                         _showInfo(),
                         _showInformationWorkout(exercises),
@@ -116,17 +116,11 @@ class _PlanPageState extends State<Plan> {
                     builder: (BuildContext context, AsyncSnapshot snapshot){
                         if (!snapshot.hasData) return new Text('Loading...');
                         if(snapshot.hasData && snapshot.data !=null){
-                               var exercises = [];
-                            //print(snapshot.data.documents[0]["name"]);
-                            print(snapshot.data.documents.length);
+                            var exercises = [];
                             for(var i = 0; i < snapshot.data.documents.length; i++){
                                 exercises.add(snapshot.data.documents[i]);
-                                print("rtret");
                                 print(snapshot.data.documents[i]["name"]);
                             }
-
-                            () => setState(() { _exercises = exercises;});
-                            print(exercises);
                             return _returnBody(exercises);
                         }
                     }
