@@ -2,106 +2,139 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+class Plan extends StatefulWidget {
+
+    static String tag = 'plan-page';
+    @override
+    _PlanPageState createState() => new _PlanPageState();
+
+}
 
 
-class Plan extends StatelessWidget {
-    Plan(this.listType);
-    final String listType;
+class _PlanPageState extends State<Plan> {
+
+
 
     @override
     Widget build(BuildContext context) {
 
-        var description = new RichText(
-            text: new TextSpan(
-                style: new TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.black,
+        List<dynamic> _exercises;
+        Widget _returnNewWorkoutButton(){
+            return Padding(
+                padding: EdgeInsets.symmetric(vertical: 0.0),
+                child: RaisedButton(
+                    elevation: 5.0,
+                    shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: BorderSide(
+                            width: 2.0,
+                            color: const Color(0xFF58C6DA),
+                        )
+                    ),
+                    onPressed: () {
+                        //TODO: eventhandler on start workout button
+                    },
+                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    color: const Color(0xFFFFFFFF),
+                    child: Text('Generate new workout', style: TextStyle(color: Colors.black54),),
                 ),
-                children: <TextSpan>[
-                    //TODO: Add icon
-                    new TextSpan(text: 'Time: ', style: new TextStyle(fontWeight: FontWeight.bold)),
-                    //TODO: Add the correct time here
-                    new TextSpan(text: '1  '),
-                    new TextSpan(text: ' XP: ', style: new TextStyle(fontWeight: FontWeight.bold)),
-                    //TODO: Add the correct XP one gets from completing the workout
-                    new TextSpan(text: '100 \n\n'),
-                    new TextSpan(text: 'Difficulty: ', style: new TextStyle(fontWeight: FontWeight.bold)),
-                    //TODO: Add the correct difficulty
-                    new TextSpan(text: 'Beginner'),
-                ]
-            ));
+            );
+        }
 
-        final startWorkoutButton = Padding(
-            padding: EdgeInsets.symmetric(vertical: 0.0),
-            child: RaisedButton(
-                elevation: 5.0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
+        Widget _returnStartWorkoutButton(){
+            return new Padding(
+                padding: EdgeInsets.symmetric(vertical: 0.0),
+                child: RaisedButton(
+                    elevation: 5.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    onPressed: () {
+                        //TODO: eventhandler on start workout button
+                    },
+                    padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
+                    color: const Color(0xFF58C6DA),
+                    child: Text('Start workout', style: TextStyle(color: Colors.white),),
                 ),
-                onPressed: () {
-                    //TODO: eventhandler on start workout button
-                },
-                padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-                color: const Color(0xFF58C6DA),
-                child: Text('Start workout', style: TextStyle(color: Colors.white),),
-            ),
-        );
+            );}
 
 
-        final newWorkoutButton = Padding(
-            padding: EdgeInsets.symmetric(vertical: 0.0),
-            child: RaisedButton(
-                elevation: 5.0,
-                shape: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    borderSide: BorderSide(
-                        width: 2.0,
-                        color: const Color(0xFF58C6DA),
-                    )
-                ),
-                onPressed: () {
-                    //TODO: eventhandler on start workout button
-                },
-                padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                color: const Color(0xFFFFFFFF),
-                child: Text('Generate new workout', style: TextStyle(color: Colors.black54),),
-            ),
-        );
+        //loading circle
+        Widget _showInfo(){
+            return new RichText(
+                text: new TextSpan(
+                    style: new TextStyle(
+                        fontSize: 14.0,
+                        color: Colors.black,
+                    ),
+                    children: <TextSpan>[
+                        //TODO: Add icon
+                        new TextSpan(text: 'Time: ', style: new TextStyle(fontWeight: FontWeight.bold)),
+                        //TODO: Add the correct time here
+                        new TextSpan(text: '1  '),
+                        new TextSpan(text: ' XP: ', style: new TextStyle(fontWeight: FontWeight.bold)),
+                        //TODO: Add the correct XP one gets from completing the workout
+                        new TextSpan(text: '100 \n\n'),
+                        new TextSpan(text: 'Difficulty: ', style: new TextStyle(fontWeight: FontWeight.bold)),
+                        //TODO: Add the correct difficulty
+                        new TextSpan(text: 'Beginner'),
+                    ]
+                ));
+
+        }
+
+        //Loading circle
+        Widget _showInformationWorkout(List<dynamic> exercises){
+
+            return new ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: exercises.length,
+                itemBuilder: (BuildContext context, int index) =>
+                    EntryItem(exercises[index]),
+            );
+        }
+
+        Widget _returnBody(List<dynamic> exercises){
+            return new Container(
+                padding: EdgeInsets.only(left: 24.0, right: 24.0),
+                margin: EdgeInsets.fromLTRB(20, 50, 20, 80),
+                child: new Column(
+                    children: <Widget>[
+                        _showInfo(),
+                        _showInformationWorkout(exercises),
+                        _returnStartWorkoutButton(),
+                        _returnNewWorkoutButton()
+                    ],
+                )
+            );}
 
 
-
-            return Scaffold(
+        return Scaffold(
                 body: StreamBuilder(
                     stream:  Firestore.instance.collection("Exercises").document("legs").collection("Lvl1").snapshots(),
                     builder: (BuildContext context, AsyncSnapshot snapshot){
                         if (!snapshot.hasData) return new Text('Loading...');
                         if(snapshot.hasData && snapshot.data !=null){
-                            var i = 0;
-                            var createDoc = [{
-
-                            }];
-                            var test = [];
-                            var test2 = [];
-
+                               var exercises = [];
+                            //print(snapshot.data.documents[0]["name"]);
+                            print(snapshot.data.documents.length);
                             for(var i = 0; i < snapshot.data.documents.length; i++){
-                                //createDoc[i]['name'] = snapshot.data.documents[i]["name"];
-
-                                test.add(snapshot.data.documents[i]["name"]);
-                                test2.add(snapshot.data.documents[i]);
+                                exercises.add(snapshot.data.documents[i]);
+                                print("rtret");
+                                print(snapshot.data.documents[i]["name"]);
                             }
 
+                            () => setState(() { _exercises = exercises;});
+                            print(exercises);
+                            return _returnBody(exercises);
+                        }
+                    }
+                ),
+             );
+        }}
 
-                            return new ListView.builder(
-                                itemCount: test.length,
 
-                                itemBuilder: (BuildContext context, int index) =>
-
-                                    EntryItem(test2[index]),
-
-                            );}}),
-        );
-        }
-        }
 
 
 
@@ -129,9 +162,6 @@ class EntryItem extends StatelessWidget {
 
     final DocumentSnapshot test;
     Widget _buildTiles(DocumentSnapshot root) {
-
-        print(test["info"]["Xp"].toString());
-
         if (root["info"].isEmpty) return ListTile(title: Text(root["name"]));
         return ExpansionTile(
             key: PageStorageKey<DocumentSnapshot>(root),
@@ -147,7 +177,6 @@ class EntryItem extends StatelessWidget {
                     title: Text("XP: " + root["info"]["Xp"]),
                 ),
             ]
-
             //children: root["info"]
         );
     }

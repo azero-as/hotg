@@ -93,7 +93,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: new PageView(
         children: [
           new Home("Home screen"),
-          new Plan("Plan screen"),
+          new Plan(),
           new History("History screen"),
         ],
         onPageChanged: onPageChanged,
