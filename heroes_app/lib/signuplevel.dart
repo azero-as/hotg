@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
 import 'dashboard.dart';
 import 'signup.dart';
+import 'authentication.dart';
+import 'rootpage.dart';
 
 //This is the singuplevel page
 
 class SignupLevelPage extends StatefulWidget {
 
   static String tag = 'signupLevel-page';
+
+  SignupLevelPage({this.userId, this.auth, this.onSignedOut, this.title, this.onSignedIn});
+
+  final String userId;
+  final BaseAuth auth;
+  final VoidCallback onSignedOut;
+  final String title;
+  final VoidCallback onSignedIn;
+
 
   @override
   _SignupLevelPageState createState() => new _SignupLevelPageState();
@@ -100,10 +111,11 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
       backgroundColor: Colors.white,
       appBar: new AppBar(
         title: Text("Heroes Of The Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios),
+          // No need to have this when you have to get through this point to go on, and are already signed up?
+/*        leading: IconButton(icon: Icon(Icons.arrow_back_ios),
             onPressed: (){
               Navigator.of(context).pop(SignupPage.tag);
-            }),
+            }),*/
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
         ),

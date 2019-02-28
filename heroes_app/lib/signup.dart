@@ -9,12 +9,13 @@ class SignupPage extends StatefulWidget {
 
   static String tag = 'signup-page';
 
-  SignupPage({this.auth, this.onSignedIn, this.readyToLogIn, this.onSignedOut});
+  SignupPage({this.auth, this.onSignedIn, this.readyToLogIn, this.onSignedOut, this.finishedSignedUp});
 
   final BaseAuth auth;
   final VoidCallback onSignedIn;
   final VoidCallback readyToLogIn;
   final VoidCallback onSignedOut;
+  final VoidCallback finishedSignedUp;
 
   @override
   _SignupPageState createState() => new _SignupPageState();
@@ -31,7 +32,7 @@ class _SignupPageState extends State<SignupPage> {
 
   String _email;
   String _password;
-  String _passwordVertification;
+  String _passwordVerification;
   String _errorMessage;
 
   bool _isIos;
@@ -159,12 +160,12 @@ class _SignupPageState extends State<SignupPage> {
         obscureText: true,
         decoration: InputDecoration(
           icon: Icon(Icons.lock),
-          labelText: 'Vertify password',
+          labelText: 'Verify password',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: UnderlineInputBorder(),
         ),
-        validator: (value) => value.isEmpty ? 'You need to vertify your password' : null,
-        onSaved: (value) => _passwordVertification = value,
+        validator: (value) => value.isEmpty ? 'You need to verify your password' : null,
+        onSaved: (value) => _passwordVerification = value,
       ),
     );
   }
@@ -182,7 +183,7 @@ class _SignupPageState extends State<SignupPage> {
             //Navigator.of(context).pushNamed(SignupLevelPage.tag);
         padding: EdgeInsets.all(12),
         color: const Color(0xFF4FB88B),
-        child: Text('Next', style: TextStyle(color: Colors.white),),
+        child: Text('Sign up and continue', style: TextStyle(color: Colors.white),),
       ),
     );
   }
@@ -242,7 +243,7 @@ class _SignupPageState extends State<SignupPage> {
     if (form.validate()) {
       form.save();
       // Check if passwords are equal
-      if (_passwordVertification==_password) {
+      if (_passwordVerification==_password) {
         return true;
       }
       else {
@@ -275,7 +276,7 @@ class _SignupPageState extends State<SignupPage> {
 
         if (userId.length > 0 && userId != null &&
             _formMode == FormMode.SIGNUP) {
-          widget.onSignedIn();
+          widget.finishedSignedUp();
         }
       } catch (e) {
         print('Error: $e');
