@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'authentication.dart';
+import 'services/crud.dart';
 
 //This is the singuplevel page
 
@@ -20,13 +21,15 @@ class SignupLevelPage extends StatefulWidget {
   _SignupLevelPageState createState() => new _SignupLevelPageState();
 
 }
-// Radio buttons values
-enum FitnessLevel { beginner, intermediate, advanced }
 
 class _SignupLevelPageState extends State<SignupLevelPage> {
 
   // Radio button start state
-  FitnessLevel _fitnessLevel = FitnessLevel.beginner;
+  int _fitnessLevel;
+
+  final charactername = TextEditingController();
+
+  crudMethods crudObj = new crudMethods();
 
   @override
   Widget build(BuildContext context) {
@@ -45,25 +48,25 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
     //RADIO BUTTONS
     final beginner = new RadioListTile(
         title: new Text('Beginner'),
-        value: FitnessLevel.beginner,
+        value: 1,
         groupValue: _fitnessLevel,
-        onChanged: (FitnessLevel value) { setState(() { _fitnessLevel = value; }); },
+        onChanged: (int value) { setState(() { _fitnessLevel = value; }); },
         activeColor: Colors.blue
     );
 
     final intermediate = new RadioListTile(
       title: new Text('Intermediate'),
-      value: FitnessLevel.intermediate,
+      value: 2,
       groupValue: _fitnessLevel,
-      onChanged: (FitnessLevel value) { setState(() { _fitnessLevel = value; }); },
+      onChanged: (int value) { setState(() { _fitnessLevel = value; }); },
       activeColor: Colors.blue
     );
 
     final advanced = new RadioListTile(
       title: new Text('Advanced'),
-      value: FitnessLevel.advanced,
+      value: 3,
       groupValue: _fitnessLevel,
-      onChanged: (FitnessLevel value) { setState(() { _fitnessLevel = value; }); },
+      onChanged: (int value) { setState(() { _fitnessLevel = value; }); },
       activeColor: Colors.blue
     );
 
@@ -78,6 +81,7 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
     final characterName = TextFormField(
         keyboardType: TextInputType.text,
         autofocus: false,
+        controller: charactername,
         decoration: InputDecoration(
           labelText: 'Character Name',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -94,7 +98,12 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         onPressed: () {
-          //TODO: save data to database first
+          crudObj.addFitnessLevel({
+            'Fitness level': _fitnessLevel,
+            'Username': charactername.text,
+          }, widget.userId).catchError((e) {
+            print(e);
+          });
           widget.onSignedIn();
         },
         padding: EdgeInsets.all(12),
