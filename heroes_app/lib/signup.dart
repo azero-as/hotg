@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
 import 'authentication.dart';
-import 'rootpage.dart';
 
 //This is the signup page
 

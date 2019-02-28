@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'authentication.dart';
-import 'rootPage.dart';
 
 //This is the login page
 

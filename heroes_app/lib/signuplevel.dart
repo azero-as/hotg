@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dashboard.dart';
-import 'signup.dart';
 import 'authentication.dart';
-import 'rootpage.dart';
 
 //This is the singuplevel page
 
@@ -97,8 +94,8 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         onPressed: () {
-          //TODO: eventhandler on letsGo button
-          Navigator.of(context).pushNamed(Dashboard.tag);
+          //TODO: save data to database first
+          widget.onSignedIn();
         },
         padding: EdgeInsets.all(12),
         color: const Color(0xFF4FB88B),
