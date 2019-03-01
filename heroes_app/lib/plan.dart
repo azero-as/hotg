@@ -17,7 +17,7 @@ class _PlanPageState extends State<Plan> {
 
         Widget _returnNewWorkoutButton(){
             return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 0),
                 child: RaisedButton(
                     elevation: 5.0,
                     shape: OutlineInputBorder(
@@ -39,7 +39,7 @@ class _PlanPageState extends State<Plan> {
 
         Widget _returnStartWorkoutButton(){
             return new Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0.0),
                 child: RaisedButton(
                     elevation: 5.0,
                     shape: RoundedRectangleBorder(
@@ -96,14 +96,20 @@ class _PlanPageState extends State<Plan> {
         Widget _returnBody(List<dynamic> exercises){
             return new Container(
                 padding: EdgeInsets.only(left: 24.0, right: 24.0),
-                margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
-                child: new ListView(
+                margin: EdgeInsets.fromLTRB(0, 50, 0, 15),
+                child: Column(
                     children: <Widget>[
-                        _showInfo(),
-                        _showInformationWorkout(exercises),
+                        Container(
+                            child: _showInfo(),
+
+                        ),
+                        Expanded(
+                            child: _showInformationWorkout(exercises),
+                        ),
                         _returnStartWorkoutButton(),
-                        _returnNewWorkoutButton()
+                        _returnNewWorkoutButton(),
                     ],
+
                 )
             );}
 
@@ -151,9 +157,9 @@ class Entry {
 // Displays one Entry. If the entry has children then it's displayed
 // with an ExpansionTile.
 class EntryItem extends StatelessWidget {
-    const EntryItem(this.test);
+    const EntryItem(this.entry);
 
-    final DocumentSnapshot test;
+    final DocumentSnapshot entry;
     Widget _buildTiles(DocumentSnapshot root) {
         return ExpansionTile(
             key: PageStorageKey<DocumentSnapshot>(root),
@@ -175,6 +181,6 @@ class EntryItem extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
-        return _buildTiles(test);
+        return _buildTiles(entry);
     }
 }
