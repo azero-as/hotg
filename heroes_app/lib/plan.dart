@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'activeWorkoutSession.dart';
 
 class Plan extends StatefulWidget {
 
@@ -40,12 +41,16 @@ class _PlanPageState extends State<Plan> {
         Widget _returnStartWorkoutButton(){
             return new Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0.0),
+
                 child: RaisedButton(
                     elevation: 5.0,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                     ),
                     onPressed: () {
+                        print("start workout");
+
+                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => activeWorkoutSession(workouts: "tghf")));
                         //TODO: eventhandler on start workout button
                     },
                     padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
