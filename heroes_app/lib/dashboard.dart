@@ -87,6 +87,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           new FlatButton(
               child: new Text('Logout',
                   style: new TextStyle(fontSize: 17.0, color: Colors.white)),
+              key: Key("signOutButton"),
               onPressed: _signOut
           )],
       ),

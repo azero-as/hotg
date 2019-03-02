@@ -18,6 +18,9 @@ void main() {
       final errormessage = find.byValueKey("LogInErrorMessage");
       final loginBackButton = find.byValueKey("loginBackButton");
 
+      //Widgets from dashboard
+      final signOutButton = find.byValueKey("signOutButton");
+
     FlutterDriver driver;
 
     // Connect to the Flutter driver before running any tests
@@ -43,6 +46,18 @@ void main() {
 
       //Go back to frontpage
       await driver.tap(loginBackButton);
+    });
+
+    test("Login succeeded", () async {
+      await driver.tap(logInButton);
+      await driver.tap(usernameTextField);
+      await driver.enterText("test@example.com");
+      await driver.tap(passwordTextField);
+      await driver.enterText("test1234");
+      await driver.tap(logInButton2);
+
+      //Sign up (back to frontpage)
+      await driver.tap(signOutButton);
     });
   });
 
