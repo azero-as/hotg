@@ -45,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: new AppBar(
         title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
+            key: Key("loginBackButton"),
             onPressed: (){
               widget.onSignedOut();
             }),

@@ -116,6 +116,7 @@ class _SignupPageState extends State<SignupPage> {
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
+        key: Key("signupEmail"),
         decoration: InputDecoration(
           icon: Icon(Icons.email),
           labelText: 'Email',
@@ -134,6 +135,7 @@ class _SignupPageState extends State<SignupPage> {
       padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
       child: TextFormField(
         autofocus: false,
+        key: Key("signupPassword"),
         maxLines: 1,
         obscureText: true,
         decoration: InputDecoration(
@@ -154,6 +156,7 @@ class _SignupPageState extends State<SignupPage> {
       padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
       child: TextFormField(
         autofocus: false,
+        key: Key("signupPassword2"),
         maxLines: 1,
         obscureText: true,
         decoration: InputDecoration(
@@ -171,6 +174,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget _nextButton(){
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
+      key: Key("SignUp2"),
       child: RaisedButton(
         elevation: 5.0,
         shape: RoundedRectangleBorder(
@@ -215,6 +219,7 @@ class _SignupPageState extends State<SignupPage> {
     if (_errorMessage.length > 0 && _errorMessage != null) {
       return new Text(
         _errorMessage,
+        key: Key("SignUpErrorMessage"),
         style: TextStyle(
             fontSize: 13.0,
             color: Colors.red,
@@ -224,6 +229,7 @@ class _SignupPageState extends State<SignupPage> {
     } else {
       return new Container(
         height: 0.0,
+        key: Key("SignUpErrorMessage"),
       );
     }
   }
