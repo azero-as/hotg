@@ -47,6 +47,7 @@ class _SignupPageState extends State<SignupPage> {
       appBar: new AppBar(
         title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
+            key: Key("signupBackButton"),
             onPressed: (){
                 widget.onSignedOut();
         }),

@@ -60,6 +60,7 @@ void main() {
     final passwordTextField2 = find.byValueKey("signupPassword2");
     final signUpButton2 = find.byValueKey("SignUp2");
     final errormessage = find.byValueKey("SignUpErrorMessage");
+    final signupBackButton = find.byValueKey("signupBackButton");
 
     FlutterDriver driver;
 
@@ -85,6 +86,22 @@ void main() {
       await driver.enterText("wrongPassword2");
       await driver.tap(signUpButton2);
       expect(await driver.getText(errormessage), "Passwords are different");
+
+      await driver.tap(signupBackButton);
+    });
+
+    test("Badly formatted email", () async {
+      await driver.tap(signUpButton);
+      await driver.tap(usernameTextField);
+      await driver.enterText("badlyformattedemail");
+      await driver.tap(passwordTextField);
+      await driver.enterText("wrongPassword2");
+      await driver.tap(passwordTextField2);
+      await driver.enterText("wrongPassword2");
+      await driver.tap(signUpButton2);
+      expect(await driver.getText(errormessage), "The email address is badly formatted.");
+
+      await driver.tap(signupBackButton);
     });
   });
 }
