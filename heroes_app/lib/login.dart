@@ -73,6 +73,7 @@ class _LoginPageState extends State<LoginPage> {
     if (_errorMessage.length > 0 && _errorMessage != null) {
       return new Text(
         _errorMessage  = "Wrong email or password",
+        key: Key("LogInErrorMessage"),
         style: TextStyle(
             fontSize: 13.0,
             color: Colors.red,
@@ -82,6 +83,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       return new Container(
         height: 0.0,
+        key: Key("LogInErrorMessage"),
       );
     }
   }
@@ -198,6 +200,7 @@ class _LoginPageState extends State<LoginPage> {
       child: TextFormField(
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
+        key: Key("loginUsername"),
         autofocus: false,
         decoration: InputDecoration(
           icon: Icon(Icons.email),
@@ -215,6 +218,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _passwordInput(){
     return Padding(
       padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
+      key: Key("loginPassword"),
       child: TextFormField(
         autofocus: false,
         maxLines: 1,
@@ -234,6 +238,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _loginButton(){
     return Padding(
     padding: EdgeInsets.symmetric(vertical: 16.0),
+    key: Key("LogIn2"),
     child: RaisedButton(
       elevation: 5.0,
       shape: RoundedRectangleBorder(
