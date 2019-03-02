@@ -103,5 +103,19 @@ void main() {
 
       await driver.tap(signupBackButton);
     });
+
+    test("User already exists", () async {
+      await driver.tap(signUpButton);
+      await driver.tap(usernameTextField);
+      await driver.enterText("test@example.com");
+      await driver.tap(passwordTextField);
+      await driver.enterText("wrongPassword2");
+      await driver.tap(passwordTextField2);
+      await driver.enterText("wrongPassword2");
+      await driver.tap(signUpButton2);
+      expect(await driver.getText(errormessage), "The email address is already in use by another account.");
+
+      await driver.tap(signupBackButton);
+    });
   });
 }
