@@ -132,5 +132,19 @@ void main() {
 
       await driver.tap(signupBackButton);
     });
+
+    test("Password badly formatted", () async {
+      await driver.tap(signUpButton);
+      await driver.tap(usernameTextField);
+      await driver.enterText("testNOTAUSER@example.com");
+      await driver.tap(passwordTextField);
+      await driver.enterText("test");
+      await driver.tap(passwordTextField2);
+      await driver.enterText("test");
+      await driver.tap(signUpButton2);
+      expect(await driver.getText(errormessage), "The password must be 6 characters long or more.");
+
+      await driver.tap(signupBackButton);
+    });
   });
 }
