@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dashboard.dart';
-import 'signup.dart';
+import 'authentication.dart';
+import 'services/crud.dart';
 
 //This is the singuplevel page
 
@@ -8,17 +8,28 @@ class SignupLevelPage extends StatefulWidget {
 
   static String tag = 'signupLevel-page';
 
+  SignupLevelPage({this.userId, this.auth, this.onSignedOut, this.title, this.onSignedIn});
+
+  final String userId;
+  final BaseAuth auth;
+  final VoidCallback onSignedOut;
+  final String title;
+  final VoidCallback onSignedIn;
+
+
   @override
   _SignupLevelPageState createState() => new _SignupLevelPageState();
 
 }
-// Radio buttons values
-enum FitnessLevel { beginner, intermediate, advanced }
 
 class _SignupLevelPageState extends State<SignupLevelPage> {
 
   // Radio button start state
-  FitnessLevel _fitnessLevel = FitnessLevel.beginner;
+  int _fitnessLevel;
+
+  final charactername = TextEditingController();
+
+  crudMethods crudObj = new crudMethods();
 
   @override
   Widget build(BuildContext context) {
@@ -37,25 +48,25 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
     //RADIO BUTTONS
     final beginner = new RadioListTile(
         title: new Text('Beginner'),
-        value: FitnessLevel.beginner,
+        value: 1,
         groupValue: _fitnessLevel,
-        onChanged: (FitnessLevel value) { setState(() { _fitnessLevel = value; }); },
+        onChanged: (int value) { setState(() { _fitnessLevel = value; }); },
         activeColor: Colors.blue
     );
 
     final intermediate = new RadioListTile(
       title: new Text('Intermediate'),
-      value: FitnessLevel.intermediate,
+      value: 2,
       groupValue: _fitnessLevel,
-      onChanged: (FitnessLevel value) { setState(() { _fitnessLevel = value; }); },
+      onChanged: (int value) { setState(() { _fitnessLevel = value; }); },
       activeColor: Colors.blue
     );
 
     final advanced = new RadioListTile(
       title: new Text('Advanced'),
-      value: FitnessLevel.advanced,
+      value: 3,
       groupValue: _fitnessLevel,
-      onChanged: (FitnessLevel value) { setState(() { _fitnessLevel = value; }); },
+      onChanged: (int value) { setState(() { _fitnessLevel = value; }); },
       activeColor: Colors.blue
     );
 
@@ -70,6 +81,7 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
     final characterName = TextFormField(
         keyboardType: TextInputType.text,
         autofocus: false,
+        controller: charactername,
         decoration: InputDecoration(
           labelText: 'Character Name',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -86,8 +98,13 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         onPressed: () {
-          //TODO: eventhandler on letsGo button
-          Navigator.of(context).pushNamed(Dashboard.tag);
+          crudObj.addFitnessLevel({
+            'Fitness level': _fitnessLevel,
+            'Username': charactername.text,
+          }, widget.userId).catchError((e) {
+            print(e);
+          });
+          widget.onSignedIn();
         },
         padding: EdgeInsets.all(12),
         color: const Color(0xFF4FB88B),
@@ -100,10 +117,11 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
       backgroundColor: Colors.white,
       appBar: new AppBar(
         title: Text("Heroes Of The Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios),
+          // No need to have this when you have to get through this point to go on, and are already signed up?
+/*        leading: IconButton(icon: Icon(Icons.arrow_back_ios),
             onPressed: (){
               Navigator.of(context).pop(SignupPage.tag);
-            }),
+            }),*/
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
         ),
