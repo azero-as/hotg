@@ -38,7 +38,7 @@ class _PlanPageState extends State<Plan> {
             );
         }
 
-        Widget _returnStartWorkoutButton(){
+        Widget _returnStartWorkoutButton(List<dynamic> exercises){
             return new Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0.0),
 
@@ -48,10 +48,8 @@ class _PlanPageState extends State<Plan> {
                         borderRadius: BorderRadius.circular(15.0),
                     ),
                     onPressed: () {
-                        print("start workout");
+                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => activeWorkoutSession(exercises: exercises)));
 
-                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => activeWorkoutSession(workouts: "tghf")));
-                        //TODO: eventhandler on start workout button
                     },
                     padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
                     color: const Color(0xFF58C6DA),
@@ -111,7 +109,7 @@ class _PlanPageState extends State<Plan> {
                         Expanded(
                             child: _showInformationWorkout(exercises),
                         ),
-                        _returnStartWorkoutButton(),
+                        _returnStartWorkoutButton(exercises),
                         _returnNewWorkoutButton(),
                     ],
 
