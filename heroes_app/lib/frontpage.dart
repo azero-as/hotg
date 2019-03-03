@@ -89,7 +89,7 @@ class _FrontPageState extends State<FrontPage> {
                   ),
                 )
             ),
-            key: Key('Sign Up'),
+            key: Key('SignUp'),
             onPressed: () {
               widget.readyToSignUp();
             },
