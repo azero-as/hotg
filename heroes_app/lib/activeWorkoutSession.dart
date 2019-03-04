@@ -63,6 +63,23 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                         );
              }
 
+        Widget _returnFinishWorkoutButton(){
+            return new Padding(
+                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40.0),
+                child: RaisedButton(
+                    elevation: 5.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    onPressed: () {
+                        //Todo: add event handler
+                    },
+                    padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
+                    color: const Color(0xFF58C6DA),
+                    child: Text('Finish workout', style: TextStyle(color: Colors.white),),
+                ),
+            );}
+
         return new Scaffold(
             appBar: AppBar(actions: <Widget>[
                 new Center(
@@ -70,7 +87,14 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                         style: new TextStyle(fontSize: 17.0, color: Colors.white)),
                 )],),
             body: new Container(
-                child: _showInformationWorkout(),
+                child: Column(
+                    children: <Widget>[
+                    Expanded(
+                        child: _showInformationWorkout(),
+                    ),
+                        _returnFinishWorkoutButton(),
+                    ],
+                )
         ),
         );
     }
