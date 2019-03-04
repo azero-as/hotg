@@ -13,12 +13,6 @@ class activeWorkoutSession extends StatefulWidget{
 
 class _activeWorkoutSession extends State<activeWorkoutSession> {
 
-    bool _value1 = false;
-    bool _value2 = false;
-
-    void _value1Changed(bool value) => setState(() => _value1 = value);
-    void _value2Changed(bool value) => setState(() => _value2 = value);
-
     List _selectedExercises = [];
     int _XpEarned = 0;
 
