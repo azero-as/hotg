@@ -22,13 +22,26 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     void _value1Changed(bool value) => setState(() => _value1 = value);
     void _value2Changed(bool value) => setState(() => _value2 = value);
 
-
+    List _selectedEcercises = List();
 
     @override
     Widget build(BuildContext context) {
         //Information about the exercises that is apart of the workout
+        void _onCategorySelected(bool selected, id) {
+            if (selected == true) {
+                setState(() {
+                    _selectedEcercises.add(id);
+                });
+            } else {
+                setState(() {
+                    _selectedEcercises.remove(id);
+                });
+            }
+        }
+
         print(widget.exercises);
         Widget _showInformationWorkout(){
+            print(widget.exercises[1].documentID);
             return new ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
@@ -37,30 +50,32 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                     ExpansionTile(
                         key: PageStorageKey<int>(index),
                         title:  new CheckboxListTile(
-                            value: _value2,
-                            onChanged: _value2Changed,
-                            title:  Text(widget.exercises[index]["Name"]),
-                            controlAffinity: ListTileControlAffinity.leading,
-                            activeColor: Colors.green,
-                         ),
-                            children: <Widget>[
-                                ListTile(
-                                    title: Text("Sets: 1"),
+                                value: _selectedEcercises
+                                    .contains(widget.exercises[index].documentID),
+                                onChanged: (bool selected) {
+                                _onCategorySelected(selected,
+                                    widget.exercises[index].documentID);
+                                },
+                                title: Text(widget.exercises[index]["Name"]),
                                 ),
-                                ListTile(
-                                    title: Text("Reps: 10-12"),
+                        children: <Widget>[
+                                    ListTile(
+                                        title: Text("Sets: 1"),
+                                    ),
+                                    ListTile(
+                                        title: Text("Reps: 10-12"),
+                                    ),
+                                    ListTile(
+                                        title: Text("Rest between sets: 1 min"),
+                                    ),
+                                    ListTile(
+                                        title: Text("XP: " + widget.exercises[index]["XP"].toString()),
+                                    ),
+                                ]
+                                //children: root["info"]
                                 ),
-                                ListTile(
-                                    title: Text("Rest between sets: 1 min"),
-                                ),
-                                ListTile(
-                                    title: Text("XP: " + widget.exercises[index]["XP"].toString()),
-                                ),
-                            ]
-                            //children: root["info"]
-                            ),
 
-                        );
+                            );
              }
 
         Widget _returnFinishWorkoutButton(){

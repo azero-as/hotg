@@ -127,7 +127,9 @@ class _PlanPageState extends State<Plan> {
                            for(var i = 0; i < snapshot.data.documents.length; i++){
                                 exercises.add(snapshot.data.documents[i]);
 
+
                            }
+
 
                             return _returnBody(exercises);
                         }
