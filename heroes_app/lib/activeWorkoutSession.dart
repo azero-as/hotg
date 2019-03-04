@@ -8,10 +8,7 @@ class activeWorkoutSession extends StatefulWidget{
     activeWorkoutSession({this.exercises});
 
     @override
-
     _activeWorkoutSession createState() => new _activeWorkoutSession();
-
-
 }
 
 class _activeWorkoutSession extends State<activeWorkoutSession> {
@@ -22,19 +19,23 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     void _value1Changed(bool value) => setState(() => _value1 = value);
     void _value2Changed(bool value) => setState(() => _value2 = value);
 
-    List _selectedEcercises = List();
+    List _selectedExercises = [];
+    int _XpEarned = 0;
 
     @override
     Widget build(BuildContext context) {
         //Information about the exercises that is apart of the workout
-        void _onCategorySelected(bool selected, id) {
+        void _onCategorySelected(bool selected, id, xp) {
+            print(xp);
             if (selected == true) {
                 setState(() {
-                    _selectedEcercises.add(id);
+                    _selectedExercises.add(id);
+                    _XpEarned += xp;
                 });
             } else {
                 setState(() {
-                    _selectedEcercises.remove(id);
+                    _selectedExercises.remove(id);
+                    _XpEarned -= xp;
                 });
             }
         }
@@ -50,11 +51,11 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                     ExpansionTile(
                         key: PageStorageKey<int>(index),
                         title:  new CheckboxListTile(
-                                value: _selectedEcercises
+                                value: _selectedExercises
                                     .contains(widget.exercises[index].documentID),
                                 onChanged: (bool selected) {
                                 _onCategorySelected(selected,
-                                    widget.exercises[index].documentID);
+                                    widget.exercises[index].documentID, widget.exercises[index]["XP"]);
                                 },
                                 title: Text(widget.exercises[index]["Name"]),
                                 ),
@@ -77,6 +78,9 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
                             );
              }
+        Widget _calculateXp(){
+            print(_XpEarned);
+        }
 
         Widget _returnFinishWorkoutButton(){
             return new Padding(
@@ -87,7 +91,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                         borderRadius: BorderRadius.circular(15.0),
                     ),
                     onPressed: () {
-                        //Todo: add event handler
+                        _calculateXp();
                     },
                     padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
                     color: const Color(0xFF58C6DA),
