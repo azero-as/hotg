@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LevelUp extends StatefulWidget{
-
-
 
   @override
   State<StatefulWidget> createState() => new _LevelUpState();
@@ -11,18 +10,34 @@ class LevelUp extends StatefulWidget{
 
 class _LevelUpState extends State<LevelUp>{
 
-  int userXP;
+  int _userXP = 0;
+  String _uid = "";
 
-  static final userID = "m11vLk2BRKSt31mRZdYDbfP1GNH3";
+  @override
+  void initState(){
+    super.initState();
+
+    //Get the userID of current user
+    FirebaseAuth.instance.currentUser().then((response){
+      setState(() {
+        _uid = response.uid;
+      });
+    }).catchError((error){
+      print(error);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    _getXP();
+    print("Current user ID: ${_uid}");
+    print("XP: ${_userXP}");
     return new Scaffold(
       body: new Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            
+            new Text("LevelUp"),
           ],
         ),
       ),
@@ -31,15 +46,11 @@ class _LevelUpState extends State<LevelUp>{
 
 
   void _getXP(){
-    final userDoc = Firestore.instance.collection("Users");
+    final userDoc = Firestore.instance.document("Users/${_uid}");
 
-    final xp = userDoc.getDocuments().then((user){
-      user.documents[1].data["XP"];
-    });
-    
-    setState(() {
-      userXP = 0;
-    });
+    print("Print: ${userDoc}");
+
+
   }
 
 }

@@ -4,6 +4,7 @@ import 'authentication.dart';
 import 'home.dart';
 import 'plan.dart';
 import 'history.dart';
+import 'levelUp.dart';
 
 //This is code for bottom navigation menu
 
@@ -92,7 +93,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       body: new PageView(
         children: [
-          new Home("Home screen"),
+          new LevelUp(),
+          //new Home("Home screen"),
           new Plan("Plan screen"),
           new History("History screen"),
         ],
