@@ -51,7 +51,7 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
         value: 1,
         groupValue: _fitnessLevel,
         onChanged: (int value) { setState(() { _fitnessLevel = value; }); },
-        activeColor: Colors.blue
+        activeColor: const Color(0xFF4D3262)
     );
 
     final intermediate = new RadioListTile(
@@ -59,7 +59,7 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
       value: 2,
       groupValue: _fitnessLevel,
       onChanged: (int value) { setState(() { _fitnessLevel = value; }); },
-      activeColor: Colors.blue
+      activeColor: const Color(0xFF4D3262)
     );
 
     final advanced = new RadioListTile(
@@ -67,7 +67,7 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
       value: 3,
       groupValue: _fitnessLevel,
       onChanged: (int value) { setState(() { _fitnessLevel = value; }); },
-      activeColor: Colors.blue
+      activeColor: const Color(0xFF4D3262)
     );
 
 
@@ -107,7 +107,7 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
           widget.onSignedIn();
         },
         padding: EdgeInsets.all(12),
-        color: const Color(0xFF4FB88B),
+        color: const Color(0xFF612A30),
         child: Text('Lets Go!', style: TextStyle(color: Colors.white),),
       ),
     );
