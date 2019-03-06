@@ -41,7 +41,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
     // variables for size, for best view across platforms
     var barHeight = (MediaQuery.of(context).size.height) / 3;
     var barWidth = (MediaQuery.of(context).size.width);
-    var imageHeight = (barHeight - 50);
+    var imageHeight = (barHeight - 55);
     var imageWidth = (barWidth / 2) - 20;
     var progressBar = (imageWidth - 15);
 
@@ -51,8 +51,8 @@ class _AvatarOverviewState extends State<AvatarOverview> {
           child: Container(
               height: barHeight,
               width: barWidth,
-              color: Color(0xFF4FB88B),
-              padding: EdgeInsets.fromLTRB(20, 30, 20, 10),
+              color: Color(0xFF212838),
+              padding: EdgeInsets.fromLTRB(20, 30, 20, 15),
               child: Row(
                 children: <Widget>[
                   // Column for half bar, only image
@@ -163,7 +163,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                 child: Container(
                   child: Text('Next planned workout:\n',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Color(0xFF525050),
                       )),
                 ),
               ),
@@ -179,7 +179,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
     // add border for the workout info box
     decoration: BoxDecoration(
       border: Border.all(color: Colors.black, width: 0.25),
-      color: Colors.black45,
+      color: Color(0xFFE7E9ED),
     ),
     child: Column(
       // Text starts on the left, instead of centered as is the default
@@ -192,8 +192,8 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
           // border to distinguish between the two containers within the box
           // Colour for the entire row
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 0.15),
-            color: Colors.blue,
+            border: Border.all(color: Color(0xFF212838), width: 0.15),
+            color: Color(0xFF212838),
           ),
           child: Row(
             children: <Widget>[
@@ -232,7 +232,9 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                   children: <Widget>[
                     Text(
                       'XP:',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF434242)),
                     ),
                     // add space between lines
                     SizedBox(
@@ -240,7 +242,9 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                     ),
                     Text(
                       'Level:',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF434242)),
                     ),
                     // add space between lines
                     SizedBox(
@@ -248,6 +252,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                     ),
                     Icon(
                       Icons.alarm,
+                      color: Color(0xFF434242),
                     ),
                   ],
                 ),
@@ -260,6 +265,9 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                     children: <Widget>[
                       Text(
                         '56',
+                        style: TextStyle(
+                          color: Color(0xFF434242)
+                        ),
                       ),
                       // add space between lines
                       SizedBox(
@@ -267,6 +275,9 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       ),
                       Text(
                         'Intermediate',
+                        style: TextStyle(
+                          color: Color(0xFF434242)
+                        ),
                       ),
                       // add space between lines
                       SizedBox(
@@ -274,6 +285,9 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       ),
                       Text(
                         '12 min',
+                        style: TextStyle(
+                          color: Color(0xFF434242)
+                        ),
                       ),
                     ]),
               ),
@@ -290,7 +304,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       padding: EdgeInsets.all(10.0),
                       onPressed: () {},
                       elevation: 5.0,
-                      color: Colors.deepOrange,
+                      color: Color(0xFF612A30),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.67),
                       ),
