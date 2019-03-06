@@ -18,9 +18,7 @@ class Dashboard extends StatelessWidget {
       title: 'Flutter Bottom Navigation',
       debugShowCheckedModeBanner: false, //Turns of the "DEBUG" banner in the simulator
       theme: new ThemeData(
-        primaryColor: const Color(0xFF4FB88B),
-        secondaryHeaderColor: const Color(0xFF5DC6D9),
-        accentColor: const Color(0xFFFFAD32),
+        primaryColor: const Color(0xFF612A30),
       ),
       home: new DashboardScreen(title: 'Heroes of the Gym'),
     );
@@ -87,6 +85,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           new FlatButton(
               child: new Text('Logout',
                   style: new TextStyle(fontSize: 17.0, color: Colors.white)),
+              key: Key("signOutButton"),
               onPressed: _signOut
           )],
       ),
@@ -102,7 +101,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       bottomNavigationBar: new Theme(
         data: Theme.of(context).copyWith(
           // sets the background color of the `BottomNavigationBar`
-          canvasColor: const Color(0xFFEDEDED),
+          canvasColor: const Color(0xFF612A30),
+          // sets the active color of the `BottomNavigationBar`
+          primaryColor: const Color(0xFFFFFFFF),
+          // sets the inactive color of the `BottomNavigationBar
+          textTheme: Theme.of(context).textTheme.copyWith(caption: new TextStyle(color: new Color.fromRGBO(255,255, 255, 0.5)))
         ),
         child: new BottomNavigationBar(
           items: [

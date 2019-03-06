@@ -45,8 +45,9 @@ class _SignupPageState extends State<SignupPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: new AppBar(
-        title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        //title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
+            key: Key("signupBackButton"),
             onPressed: (){
                 widget.onSignedOut();
         }),
@@ -74,6 +75,7 @@ class _SignupPageState extends State<SignupPage> {
           child: new ListView(
             shrinkWrap: true,
             children: <Widget>[
+              SizedBox(height: 25.0),
               _logo(),
               _welcomeText('First, we need the basics'),
               _emailInput(),
@@ -94,7 +96,7 @@ class _SignupPageState extends State<SignupPage> {
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
         radius: 60.0,
-        child: Image.asset('assets/logo.png'),
+        child: Image.asset('assets/logo1.png'),
       ),
     );
   }
@@ -116,6 +118,7 @@ class _SignupPageState extends State<SignupPage> {
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
+        key: Key("signupEmail"),
         decoration: InputDecoration(
           icon: Icon(Icons.email),
           labelText: 'Email',
@@ -134,6 +137,7 @@ class _SignupPageState extends State<SignupPage> {
       padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
       child: TextFormField(
         autofocus: false,
+        key: Key("signupPassword"),
         maxLines: 1,
         obscureText: true,
         decoration: InputDecoration(
@@ -154,6 +158,7 @@ class _SignupPageState extends State<SignupPage> {
       padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
       child: TextFormField(
         autofocus: false,
+        key: Key("signupPassword2"),
         maxLines: 1,
         obscureText: true,
         decoration: InputDecoration(
@@ -171,6 +176,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget _nextButton(){
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
+      key: Key("SignUp2"),
       child: RaisedButton(
         elevation: 5.0,
         shape: RoundedRectangleBorder(
@@ -180,7 +186,7 @@ class _SignupPageState extends State<SignupPage> {
             //TODO: Navigate to signuplevel, then sign up.
             //Navigator.of(context).pushNamed(SignupLevelPage.tag);
         padding: EdgeInsets.all(12),
-        color: const Color(0xFF4FB88B),
+        color: const Color(0xFF612A30),
         child: Text('Sign up and continue', style: TextStyle(color: Colors.white),),
       ),
     );
@@ -215,6 +221,7 @@ class _SignupPageState extends State<SignupPage> {
     if (_errorMessage.length > 0 && _errorMessage != null) {
       return new Text(
         _errorMessage,
+        key: Key("SignUpErrorMessage"),
         style: TextStyle(
             fontSize: 13.0,
             color: Colors.red,
@@ -224,6 +231,7 @@ class _SignupPageState extends State<SignupPage> {
     } else {
       return new Container(
         height: 0.0,
+        key: Key("SignUpErrorMessage"),
       );
     }
   }
