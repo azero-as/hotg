@@ -27,7 +27,7 @@ class _FrontPageState extends State<FrontPage> {
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
           radius: 60.0,
-          child: Image.asset('assets/logo.png'),
+          child: Image.asset('assets/logo2.png'),
         ),
       );
     
@@ -44,14 +44,14 @@ class _FrontPageState extends State<FrontPage> {
         margin: const EdgeInsets.only(left: 30, right: 30),
         child: RaisedButton(
           elevation: 5.0,
-          color: Colors.white,
+          color: const Color(0xFFFFFFFF),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(60),
           ),
           child: GestureDetector(
               child: Center(
                 child: Text('Log In', style: TextStyle(
-                  color: const Color(0xFF4FB88B),
+                  color: const Color(0xFF212838),
                   fontSize: 20.0,
                 ),),
                 // color: Colors.white,
@@ -70,7 +70,7 @@ class _FrontPageState extends State<FrontPage> {
       final signupButton = new Container(
           margin: const EdgeInsets.only(left: 30, right: 30),
           child: RaisedButton(
-            color: const Color(0xFF4FB88B),
+            color: const Color(0xFF212838),
             elevation: 5.0,
             shape: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(60),
@@ -89,7 +89,7 @@ class _FrontPageState extends State<FrontPage> {
                   ),
                 )
             ),
-            key: Key('Sign Up'),
+            key: Key('SignUp'),
             onPressed: () {
               widget.readyToSignUp();
             },
@@ -99,11 +99,11 @@ class _FrontPageState extends State<FrontPage> {
 
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFF4FB88B),
+          backgroundColor: const Color(0xFF212838),
           elevation: 0.0,
           automaticallyImplyLeading: false,
         ),
-        backgroundColor: const Color(0xFF4FB88B),
+        backgroundColor: const Color(0xFF212838),
         body: Stack(
           children: <Widget>[
             Column(
@@ -115,6 +115,7 @@ class _FrontPageState extends State<FrontPage> {
                     logo,
                   ],
                 ),
+                SizedBox(height: 10.0),
                 appName,
                 SizedBox(height: 80.0),
                 loginButton,

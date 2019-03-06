@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
 import 'authentication.dart';
-import 'rootpage.dart';
 
 //This is the signup page
 
@@ -9,12 +7,13 @@ class SignupPage extends StatefulWidget {
 
   static String tag = 'signup-page';
 
-  SignupPage({this.auth, this.onSignedIn, this.readyToLogIn, this.onSignedOut});
+  SignupPage({this.auth, this.onSignedIn, this.readyToLogIn, this.onSignedOut, this.finishedSignedUp});
 
   final BaseAuth auth;
   final VoidCallback onSignedIn;
   final VoidCallback readyToLogIn;
   final VoidCallback onSignedOut;
+  final VoidCallback finishedSignedUp;
 
   @override
   _SignupPageState createState() => new _SignupPageState();
@@ -31,7 +30,7 @@ class _SignupPageState extends State<SignupPage> {
 
   String _email;
   String _password;
-  String _passwordVertification;
+  String _passwordVerification;
   String _errorMessage;
 
   bool _isIos;
@@ -46,8 +45,9 @@ class _SignupPageState extends State<SignupPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: new AppBar(
-        title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        //title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
+            key: Key("signupBackButton"),
             onPressed: (){
                 widget.onSignedOut();
         }),
@@ -75,6 +75,7 @@ class _SignupPageState extends State<SignupPage> {
           child: new ListView(
             shrinkWrap: true,
             children: <Widget>[
+              SizedBox(height: 25.0),
               _logo(),
               _welcomeText('First, we need the basics'),
               _emailInput(),
@@ -95,7 +96,7 @@ class _SignupPageState extends State<SignupPage> {
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
         radius: 60.0,
-        child: Image.asset('assets/logo.png'),
+        child: Image.asset('assets/logo1.png'),
       ),
     );
   }
@@ -117,6 +118,7 @@ class _SignupPageState extends State<SignupPage> {
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
         autofocus: false,
+        key: Key("signupEmail"),
         decoration: InputDecoration(
           icon: Icon(Icons.email),
           labelText: 'Email',
@@ -135,6 +137,7 @@ class _SignupPageState extends State<SignupPage> {
       padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
       child: TextFormField(
         autofocus: false,
+        key: Key("signupPassword"),
         maxLines: 1,
         obscureText: true,
         decoration: InputDecoration(
@@ -155,16 +158,17 @@ class _SignupPageState extends State<SignupPage> {
       padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
       child: TextFormField(
         autofocus: false,
+        key: Key("signupPassword2"),
         maxLines: 1,
         obscureText: true,
         decoration: InputDecoration(
           icon: Icon(Icons.lock),
-          labelText: 'Vertify password',
+          labelText: 'Verify password',
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: UnderlineInputBorder(),
         ),
-        validator: (value) => value.isEmpty ? 'You need to vertify your password' : null,
-        onSaved: (value) => _passwordVertification = value,
+        validator: (value) => value.isEmpty ? 'You need to verify your password' : null,
+        onSaved: (value) => _passwordVerification = value,
       ),
     );
   }
@@ -172,6 +176,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget _nextButton(){
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
+      key: Key("SignUp2"),
       child: RaisedButton(
         elevation: 5.0,
         shape: RoundedRectangleBorder(
@@ -181,8 +186,8 @@ class _SignupPageState extends State<SignupPage> {
             //TODO: Navigate to signuplevel, then sign up.
             //Navigator.of(context).pushNamed(SignupLevelPage.tag);
         padding: EdgeInsets.all(12),
-        color: const Color(0xFF4FB88B),
-        child: Text('Next', style: TextStyle(color: Colors.white),),
+        color: const Color(0xFF612A30),
+        child: Text('Sign up and continue', style: TextStyle(color: Colors.white),),
       ),
     );
   }
@@ -216,6 +221,7 @@ class _SignupPageState extends State<SignupPage> {
     if (_errorMessage.length > 0 && _errorMessage != null) {
       return new Text(
         _errorMessage,
+        key: Key("SignUpErrorMessage"),
         style: TextStyle(
             fontSize: 13.0,
             color: Colors.red,
@@ -225,6 +231,7 @@ class _SignupPageState extends State<SignupPage> {
     } else {
       return new Container(
         height: 0.0,
+        key: Key("SignUpErrorMessage"),
       );
     }
   }
@@ -242,7 +249,7 @@ class _SignupPageState extends State<SignupPage> {
     if (form.validate()) {
       form.save();
       // Check if passwords are equal
-      if (_passwordVertification==_password) {
+      if (_passwordVerification==_password) {
         return true;
       }
       else {
@@ -275,7 +282,7 @@ class _SignupPageState extends State<SignupPage> {
 
         if (userId.length > 0 && userId != null &&
             _formMode == FormMode.SIGNUP) {
-          widget.onSignedIn();
+          widget.finishedSignedUp();
         }
       } catch (e) {
         print('Error: $e');
