@@ -82,14 +82,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         actions: <Widget>[
           new FlatButton(
               child: new Text('Logout',
                   style: new TextStyle(fontSize: 17.0, color: Colors.white)),
               onPressed: _signOut
-          )],
-      ),
+          )
+        ],
+      ),*/
       body: new PageView(
         children: [
           new Home("Home screen"),
