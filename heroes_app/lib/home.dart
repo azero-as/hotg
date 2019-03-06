@@ -9,6 +9,7 @@ class Home extends StatelessWidget {
 
   final String listType;
 
+  //Settings icon button with navigation to settings page
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -80,9 +81,9 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                           color: Colors.white,
                         ),
                         /*onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Settings()),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Settings()),
                             );
                           }*/
                       ),

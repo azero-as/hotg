@@ -64,4 +64,5 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 }
 
+//Flutter Auth
 apply plugin: 'com.google.gms.google-services'
