@@ -5,6 +5,7 @@ import 'authentication.dart';
 import 'signup.dart';
 import 'frontpage.dart';
 import 'signuplevel.dart';
+import 'settings.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({this.auth});
@@ -23,6 +24,7 @@ enum AuthStatus {
   READY_TO_LOG_IN,
   READY_TO_SIGN_UP,
   FINISHED_SIGNED_UP,
+  SIGN_OUT
 }
 
 class _RootPageState extends State<RootPage> {
@@ -61,7 +63,11 @@ class _RootPageState extends State<RootPage> {
       _userId = "";
     });
   }
-
+  void _signOut() {
+    setState(() {
+      authStatus = AuthStatus.SIGN_OUT;
+    });
+  }
   void _readyToLogIn() {
     setState(() {
       authStatus = AuthStatus.READY_TO_LOG_IN;
@@ -138,8 +144,15 @@ class _RootPageState extends State<RootPage> {
             auth: widget.auth,
             onSignedOut: _onSignedOut,
             title: 'Heroes of the Gym',
+            signOut: _signOut,
           );
         } else return _buildWaitingScreen();
+        break;
+      case AuthStatus.SIGN_OUT:
+        return new Settings(
+          auth: widget.auth,
+          onSignedOut: _onSignedOut,
+        );
         break;
       default:
         return _buildWaitingScreen();
