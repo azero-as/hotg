@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: new AppBar(
-        title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        //title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
             key: Key("loginBackButton"),
             onPressed: (){
@@ -159,6 +159,7 @@ class _LoginPageState extends State<LoginPage> {
           child: new ListView(
             shrinkWrap: true,
             children: <Widget>[
+              SizedBox(height: 25.0),
               _logo(),
               _textHeader("Welcome back!"),
               _emailInput(),
@@ -178,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
         radius: 60.0,
-        child: Image.asset('assets/logo.png'),
+        child: Image.asset('assets/logo1.png'),
       ),
     );
   }
@@ -247,7 +248,7 @@ class _LoginPageState extends State<LoginPage> {
     ),
       onPressed: _validateAndSubmit,
       padding: EdgeInsets.all(12),
-      color: const Color(0xFF4FB88B),
+      color: const Color(0xFF612A30),
       child: Text('Log In', style: TextStyle(color: Colors.white),),
     ),
     );

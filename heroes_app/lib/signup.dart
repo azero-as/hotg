@@ -45,7 +45,7 @@ class _SignupPageState extends State<SignupPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: new AppBar(
-        title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        //title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
             key: Key("signupBackButton"),
             onPressed: (){
@@ -75,6 +75,7 @@ class _SignupPageState extends State<SignupPage> {
           child: new ListView(
             shrinkWrap: true,
             children: <Widget>[
+              SizedBox(height: 25.0),
               _logo(),
               _welcomeText('First, we need the basics'),
               _emailInput(),
@@ -95,7 +96,7 @@ class _SignupPageState extends State<SignupPage> {
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
         radius: 60.0,
-        child: Image.asset('assets/logo.png'),
+        child: Image.asset('assets/logo1.png'),
       ),
     );
   }
@@ -185,7 +186,7 @@ class _SignupPageState extends State<SignupPage> {
             //TODO: Navigate to signuplevel, then sign up.
             //Navigator.of(context).pushNamed(SignupLevelPage.tag);
         padding: EdgeInsets.all(12),
-        color: const Color(0xFF4FB88B),
+        color: const Color(0xFF612A30),
         child: Text('Sign up and continue', style: TextStyle(color: Colors.white),),
       ),
     );
