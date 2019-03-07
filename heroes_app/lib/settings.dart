@@ -53,10 +53,10 @@ class SettingsState extends State<Settings> {
           child: new ListView(
             shrinkWrap: true,
             children: <Widget>[
-              SizedBox(height: 25.0),
+              SizedBox(height: 50.0),
               usernameField(),
               emailField(),
-              SizedBox(height: 100.0),
+              SizedBox(height: 125.0),
               logOutButton()
               
             ],
@@ -91,7 +91,7 @@ class SettingsState extends State<Settings> {
 
   Widget logOutButton() {
     return Padding(
-      padding: EdgeInsets.all(5.0),
+      padding: EdgeInsets.all(20.0),
       child: RaisedButton(
         elevation: 5.0,
         shape: RoundedRectangleBorder(
