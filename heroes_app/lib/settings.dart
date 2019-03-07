@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'authentication.dart';
 
-// Stateful async guide: https://flutter.institute/run-async-operation-on-widget-creation/
-
 class Settings extends StatefulWidget {
+
+  //For signing out
+
   Settings({this.auth, this.onSignedOut});
 
   final BaseAuth auth;
@@ -22,6 +23,8 @@ class SettingsState extends State<Settings> {
   void initState() {
     super.initState();
 
+    //Getting username (charactername) and email from logged in user in Firebase
+    
     CloudFunctions.instance.call(
       functionName: 'getUserInfo',
     ).then((response) {
@@ -53,7 +56,6 @@ class SettingsState extends State<Settings> {
               SizedBox(height: 25.0),
               usernameField(),
               emailField(),
-              resetPasswordButton(),
               SizedBox(height: 100.0),
               logOutButton()
               
@@ -86,22 +88,6 @@ class SettingsState extends State<Settings> {
     );
   }
  
-
-  Widget resetPasswordButton() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 0.0),
-      child: 
-        OutlineButton.icon(
-          icon: Icon(Icons.lock),
-          label: Text('Change password'),
-          color: Colors.white,
-          borderSide: BorderSide(color: Colors.grey),
-
-          //TODO: Navigate to change password screen
-          onPressed: () {}
-      )
-     );
-  }
 
   Widget logOutButton() {
     return Padding(
