@@ -12,7 +12,7 @@ class _LevelUpState extends State<LevelUp>{
 
   int _userLevel = 0;
   int _userXP = 0;
-  int _levelCap = 0;
+  int _levelCap;
 
   @override
   void initState(){
@@ -38,6 +38,16 @@ class _LevelUpState extends State<LevelUp>{
       print(error);
     });
 
+    CloudFunctions.instance.call(
+      functionName: 'getLevelCap',
+    ).then((response) {
+      setState(() {
+
+      });
+    }).catchError((error) {
+      print(error);
+    });
+
     /*//Get the userID of current user
     FirebaseAuth.instance.currentUser().then((response){
       setState(() {
@@ -50,8 +60,9 @@ class _LevelUpState extends State<LevelUp>{
 
   @override
   Widget build(BuildContext context) {
-    getLevelCap(_userLevel);
 
+
+    print(_levelCap);
     return new Scaffold(
       body: new Center(
         child: new Column(
@@ -67,20 +78,24 @@ class _LevelUpState extends State<LevelUp>{
     );
   }
 
-//get cap to next level
+/*//get cap to next level
   void getLevelCap(level){
+    var cap;
+
     //query from database
     Firestore.instance
         .collection('Levels')
         .where("Level", isEqualTo: level)
         .snapshots()
-        .listen((data) =>
-        data.documents.forEach((doc) => {
-          _levelCap = doc["xpCap"],
-          //print("xpCap: $_levelCap"),
+        .listen((data) => data.documents.forEach((doc) => {
+
+          cap += doc["xpCap"]
+          //print("xpCap: $_levelCap")
         }));
-    //print("Cap: $_levelCap");
-  }
+
+    _levelCap = cap;
+  }*/
+
 
 //check if xp is bigger than level cap
   checkLevelUp(){
@@ -94,7 +109,13 @@ class _LevelUpState extends State<LevelUp>{
 
 //set one level up in db
   void setLevel(){
-    
+    CloudFunctions.instance.call(
+      functionName: 'getUserLevel',
+    ).then((response) {
+      //print("setLevel: ${response['result']}");
+    }).catchError((error) {
+      print(error);
+    });
   }
 
 //reset xp in db

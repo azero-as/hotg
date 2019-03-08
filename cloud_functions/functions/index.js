@@ -122,6 +122,28 @@ exports.getUserLevel = functions.https.onRequest((request, response) => {
         })
 });
 
+exports.getLevelCaps = functions.https.onRequest((req, res) => {
+    var list = [];
+    var ref = admin.firestore.collection('Levels');
+    var allLevels = ref.get()
+        .then(snapshot => {
+            snapshot.forEach(doc => {
+                list.add(doc.id);
+                console.log(doc.id, '=>', doc.data())
+       });
+            return response.send({
+            })
+       }).catch( error => {
+            // 401 is unauthorized.
+            result.status(401).send(error)
+    });
+
+});
+
+exports.setLevel = functions.https.onRequest((req, res) => {
+
+});
+
 exports.helloWorld = functions.https.onRequest((request, response) => {
 
     let msg = {
