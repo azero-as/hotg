@@ -285,7 +285,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       height: 10,
                     ),
                     Text(
-                      'Level:',
+                      'Intensity:',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF434242)),
@@ -316,7 +316,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                         height: 10,
                       ),
                       Text(
-                        'Intermediate',
+                        'Medium',
                         style: TextStyle(color: Color(0xFF434242)),
                       ),
                       // add space between lines
