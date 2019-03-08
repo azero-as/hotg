@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-// import 'settings.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'authentication.dart';
+import 'settings.dart';
 
 // build the home page and call on the stateful classes
 class Home extends StatelessWidget {
@@ -30,6 +32,21 @@ class Home extends StatelessWidget {
 
 // create state for appbar of home page
 class AvatarOverview extends StatefulWidget {
+  AvatarOverview(
+      {Key key,
+      this.auth,
+      this.userId,
+      this.onSignedOut,
+      this.title,
+      this.signOut})
+      : super(key: key);
+
+  final BaseAuth auth;
+  final VoidCallback signOut;
+  final VoidCallback onSignedOut;
+  final String userId;
+  final String title;
+
   @override
   _AvatarOverviewState createState() => _AvatarOverviewState();
 }
@@ -44,6 +61,36 @@ class _AvatarOverviewState extends State<AvatarOverview> {
     var imageHeight = (barHeight - 55);
     var imageWidth = (barWidth / 2) - 20;
     var progressBar = (imageWidth - 15);
+
+    String _username = '';
+    // Can it be int?
+    String _userLevel = '';
+    // Any way to make the next two int? Needs to be able to divide them
+    String _userXP = '';
+    String _levelCap = '';
+
+    //Get levelcap of users level
+
+    //calculate the progression to get the correct percentage in the progress bar
+//    var progress = _userXP/_levelCap;
+
+    @override
+    void initState() {
+      super.initState();
+
+      CloudFunctions.instance
+          .call(
+        functionName: 'yourCloudFunction',
+      )
+          .then((response) {
+        setState(() {
+          _username = response['username'];
+          _userLevel = response['userLevel'];
+        });
+      }).catchError((error) {
+        print(error);
+      });
+    }
 
     return Stack(
       children: <Widget>[
@@ -75,23 +122,21 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                       //Settings symbol and onPressed functionality
                       Padding(
                         padding:
-                            EdgeInsets.fromLTRB((barWidth / 2) - 45, 15, 0, 0),
-                        child: Icon(
-                          Icons.settings,
-                          color: Colors.white,
-                        ),
-                        /*onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Settings()),
-                            );
-                          }*/
+                            EdgeInsets.fromLTRB((barWidth / 2) - 68, 15, 0, 0),
+                        child: IconButton(
+                            icon: Icon(Icons.settings),
+                            color: Colors.white,
+                            padding: EdgeInsets.all(0),
+                            onPressed: () {
+                              widget.signOut();
+                            }),
                       ),
 
                       //Username
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                         child: Text(
+                          //_username,
                           'Username',
                           style: TextStyle(
                             color: Colors.white,
@@ -104,7 +149,8 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                       //Level
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                        child: Text('Level',
+                        child: Text(
+                            'Level' /* + _userLevel  + ' Intermediate thing?'*/,
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.left),
                       ),
@@ -117,7 +163,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                           lineHeight: 15,
                           backgroundColor: Colors.white,
                           progressColor: Color(0xFF4D3262),
-                          percent: 0.5,
+                          percent: 0.2,
                           //bar shape
                           linearStrokeCap: LinearStrokeCap.roundAll,
                           animationDuration: 2000,
@@ -127,7 +173,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                       // XP / XP cap
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        child: Text('XP/XP cap',
+                        child: Text(/*_userXP +*/ 'XP/XP cap' /* + _levelCap*/,
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.left),
                       ),
@@ -265,9 +311,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                     children: <Widget>[
                       Text(
                         '56',
-                        style: TextStyle(
-                          color: Color(0xFF434242)
-                        ),
+                        style: TextStyle(color: Color(0xFF434242)),
                       ),
                       // add space between lines
                       SizedBox(
@@ -275,9 +319,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       ),
                       Text(
                         'Intermediate',
-                        style: TextStyle(
-                          color: Color(0xFF434242)
-                        ),
+                        style: TextStyle(color: Color(0xFF434242)),
                       ),
                       // add space between lines
                       SizedBox(
@@ -285,9 +327,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       ),
                       Text(
                         '12 min',
-                        style: TextStyle(
-                          color: Color(0xFF434242)
-                        ),
+                        style: TextStyle(color: Color(0xFF434242)),
                       ),
                     ]),
               ),
