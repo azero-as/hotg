@@ -7,9 +7,7 @@ import 'settings.dart';
 
 // build the home page and call on the stateful classes
 class Home extends StatelessWidget {
-  Home(this.listType);
-
-  final String listType;
+  static String tag = 'home-page';
 
   //Settings icon button with navigation to settings page
   @override
