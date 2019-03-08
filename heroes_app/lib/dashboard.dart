@@ -69,16 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       this._page = page;
     });
   }
-
-  _signOut() async {
-    try {
-      await widget.auth.signOut();
-      widget.onSignedOut();
-    } catch (e) {
-      print(e);
-    }
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return new Scaffold(

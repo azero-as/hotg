@@ -87,7 +87,15 @@ class SettingsState extends State<Settings> {
         ),
     );
   }
- 
+
+  _signOut() async {
+    try {
+      await widget.auth.signOut();
+      widget.onSignedOut();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   Widget logOutButton() {
     return Padding(
@@ -98,7 +106,7 @@ class SettingsState extends State<Settings> {
         borderRadius: BorderRadius.circular(5.0),
     ),
           onPressed: () {
-            widget.onSignedOut();
+            _signOut();
           },
           color: const Color(0xFF612A30),
         child: Text('Log out', style: TextStyle(color: Colors.white),),
