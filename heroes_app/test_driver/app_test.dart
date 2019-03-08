@@ -19,6 +19,7 @@ void main() {
       final loginBackButton = find.byValueKey("loginBackButton");
 
       //Widgets from dashboard
+      final settingsButton = find.byValueKey("settings");
       final signOutButton = find.byValueKey("signOutButton");
 
     FlutterDriver driver;
@@ -57,6 +58,7 @@ void main() {
       await driver.tap(logInButton2);
 
       //Sign up (back to frontpage)
+      await driver.tap(settingsButton);
       await driver.tap(signOutButton);
     });
   });

@@ -77,6 +77,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         actions: <Widget>[
              new IconButton(
               icon: Icon(Icons.settings),
+              key: Key("settings"),
               onPressed: () { widget.signOut();
               }
               )],

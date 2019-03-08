@@ -102,6 +102,7 @@ class SettingsState extends State<Settings> {
       padding: EdgeInsets.all(20.0),
       child: RaisedButton(
         elevation: 5.0,
+        key: Key("signOutButton"),
         shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
     ),
