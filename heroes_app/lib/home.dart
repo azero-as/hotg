@@ -116,19 +116,15 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                   // Column for second haf bar, character information
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       //Settings symbol and onPressed functionality
-                      Padding(
-                        padding:
-                            EdgeInsets.fromLTRB((barWidth / 2) - 68, 15, 0, 0),
-                        child: IconButton(
-                            icon: Icon(Icons.settings),
-                            color: Colors.white,
-                            padding: EdgeInsets.all(0),
-                            onPressed: () {
-                              widget.signOut();
-                            }),
-                      ),
+                      IconButton(
+                          icon: Icon(Icons.settings),
+                          color: Colors.white,
+                          padding: EdgeInsets.fromLTRB((barWidth / 2) - 44, 0, 0, 0),
+                          onPressed: () {
+                            widget.signOut();
+                          }),
 
                       //Username
                       Padding(
