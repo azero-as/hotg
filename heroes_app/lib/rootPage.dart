@@ -152,6 +152,7 @@ class _RootPageState extends State<RootPage> {
         return new Settings(
           auth: widget.auth,
           onSignedOut: _onSignedOut,
+          onSignedIn: _onLoggedIn,
         );
         break;
       default:
