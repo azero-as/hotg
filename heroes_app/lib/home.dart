@@ -11,14 +11,8 @@ class Home extends StatelessWidget {
   //TODO Place the button in the header on the top right corner.
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.settings),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Settings()),
-        );
-      }
+    return Container(
+      child: Text('home'),
     );
   }
 }

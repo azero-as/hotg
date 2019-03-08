@@ -4,6 +4,7 @@ import 'authentication.dart';
 import 'home.dart';
 import 'plan.dart';
 import 'history.dart';
+import 'settings.dart';
 
 //This is code for bottom navigation menu
 
@@ -26,10 +27,11 @@ class Dashboard extends StatelessWidget {
 }
 
 class DashboardScreen extends StatefulWidget {
-  DashboardScreen({Key key, this.auth, this.userId, this.onSignedOut, this.title})
+  DashboardScreen({Key key, this.auth, this.userId, this.onSignedOut, this.title, this.signOut})
       : super(key: key);
 
   final BaseAuth auth;
+  final VoidCallback signOut;
   final VoidCallback onSignedOut;
   final String userId;
   final String title;
@@ -67,28 +69,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
       this._page = page;
     });
   }
-
-  _signOut() async {
-    try {
-      await widget.auth.signOut();
-      widget.onSignedOut();
-    } catch (e) {
-      print(e);
-    }
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          new FlatButton(
-              child: new Text('Logout',
-                  style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-              key: Key("signOutButton"),
-              onPressed: _signOut
-          )],
-      ),
+             new IconButton(
+              icon: Icon(Icons.settings),
+              key: Key("settings"),
+              onPressed: () { widget.signOut();
+              }
+              )],
+        ),
       body: new PageView(
         children: [
           new Home("Home screen"),
