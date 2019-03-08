@@ -48,8 +48,8 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
 
   Widget _buildHistoryItem(BuildContext context, int index) {
     return ExpansionTile(
-      title: Text("Date of session"),
-      backgroundColor: Color(0x315C2B),
+      title: Center(child: Text("Date of session")),
+      backgroundColor: Color.fromRGBO(33, 40, 56, 0.2),
       children: <Widget>[Text(_listOfSessions[index]), Text('Second text')],
     ); // Should return a single history item widget
   }
