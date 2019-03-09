@@ -25,7 +25,7 @@ class _PlanPageState extends State<Plan> {
                         borderRadius: BorderRadius.circular(15.0),
                         borderSide: BorderSide(
                             width: 2.0,
-                            color: const Color(0xFF58C6DA),
+                            color: const Color(0xFF212838),
                         )
                     ),
                     onPressed: () {
@@ -52,7 +52,7 @@ class _PlanPageState extends State<Plan> {
 
                     },
                     padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-                    color: const Color(0xFF58C6DA),
+                    color: const Color(0xFF212838),
                     child: Text('Start workout', style: TextStyle(color: Colors.white),),
                 ),
             );}
