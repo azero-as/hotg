@@ -119,17 +119,19 @@ class _PlanPageState extends State<Plan> {
 
         return Scaffold(
                 body: StreamBuilder<QuerySnapshot>(
-                    stream:  Firestore.instance.collection("Exercises").document("LowerBody").collection("Lvl1").snapshots(),
+                    stream:  Firestore.instance.collection("Exercises").snapshots(),
                     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
                         if (!snapshot.hasData) return new Text('Loading...');
-                        if(snapshot.hasData && snapshot.data !=null){
+                        if(snapshot.data ==null) return new Text("no workouts");
+                        else{
                             var exercises = [];
                            for(var i = 0; i < snapshot.data.documents.length; i++){
+
                                 exercises.add(snapshot.data.documents[i]);
 
 
                            }
-
+                             print(exercises[0]["name"]);
 
                             return _returnBody(exercises);
                         }
@@ -168,7 +170,7 @@ class EntryItem extends StatelessWidget {
     Widget _buildTiles(DocumentSnapshot root) {
         return ExpansionTile(
             key: PageStorageKey<DocumentSnapshot>(root),
-            title: Text(root["Name"]),
+            title: Text(root["name"]),
             children: <Widget>[
                 ListTile(
                     title: Text("Sets: 1"),
@@ -177,7 +179,7 @@ class EntryItem extends StatelessWidget {
                     title: Text("Reps: 10-12"),
                 ),
                 ListTile(
-                    title: Text("XP: " + root["XP"].toString()),
+                    title: Text("XP: "),
                 ),
             ]
             //children: root["info"]

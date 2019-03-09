@@ -51,7 +51,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                                 _onCategorySelected(selected,
                                     widget.exercises[index].documentID, widget.exercises[index]["XP"]);
                                 },
-                                title: Text(widget.exercises[index]["Name"]),
+                                title: Text(widget.exercises[index]["name"]),
                                 ),
                         children: <Widget>[
                                     ListTile(
