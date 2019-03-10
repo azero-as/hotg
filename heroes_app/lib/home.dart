@@ -118,13 +118,13 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       //Settings symbol and onPressed functionality
-                      IconButton(
+                      /*IconButton(
                           icon: Icon(Icons.settings),
                           color: Colors.white,
                           padding: EdgeInsets.fromLTRB((barWidth / 2) - 44, 0, 0, 0),
                           onPressed: () {
                             widget.signOut();
-                          }),
+                          }),*/
 
                       //Username
                       Padding(
