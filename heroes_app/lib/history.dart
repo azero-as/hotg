@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class History extends StatelessWidget {
   History(this.listType);
@@ -21,36 +23,67 @@ class ListOfTrainingSessions extends StatefulWidget {
 }
 
 class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
-  final List<String> _listOfSessions = [
-    "Bla1",
-    "Bla2",
-    "Bla3",
-    "Bla4",
-    "Bla5",
-    "Bla6",
-    "Bla7",
-    "Bla8",
-    "bla9",
-    "bla10",
-    "Bla11",
-    "Bla12"
-  ];
+  final String _workoutID = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     //TODO: Should return a ListView with training sessions
 
-    return ListView.builder(
-      itemBuilder: _buildHistoryItem,
-      itemCount: _listOfSessions.length,
+    return FutureBuilder(
+      future: Firestore.instance
+          .collection("Users")
+          .document("TkDkU5X55RG9rNjSb6Fn")
+          .collection("Workouts")
+          .getDocuments(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return ListView.builder(
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: (context, index) {
+                return _buildHistoryItem(
+                    context, snapshot.data.documents[index]);
+              });
+        } else {
+          return Text("Loading...");
+        }
+      },
     );
   }
 
-  Widget _buildHistoryItem(BuildContext context, int index) {
+  Widget _buildHistoryItem(BuildContext context, DocumentSnapshot document) {
     return ExpansionTile(
-      title: Center(child: Text("Date of session")),
+      title: Center(
+          child: Text(document["date"].toDate().toString().split(" ")[0])),
       backgroundColor: Color.fromRGBO(33, 40, 56, 0.2),
-      children: <Widget>[Text(_listOfSessions[index]), Text('Second text')],
+      children: <Widget>[
+        Text(document["workoutType"] + " workout"),
+        Container(
+            padding: const EdgeInsets.all(8),
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Column(children: <Widget>[
+                  Text("Warm Up"),
+                  Text("Push ups"),
+                  Text("Total XP")
+                ]),
+                Column(
+                  children: <Widget>[
+                    Text("5 XP"),
+                    Text("10 XP"),
+                    Text(document["total_xp"].toString())
+                  ],
+                )
+              ],
+            ))
+      ],
     ); // Should return a single history item widget
   }
 }
