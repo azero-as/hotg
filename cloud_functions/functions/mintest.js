@@ -9,6 +9,7 @@ admin.initializeApp({
 });
 
 const userId = '0EWvvdAUc2QEJn6ChySZU0iTXmF2';
+
 //getXpCap(getUserLevel(userId));
 
 getUserLevel(userId)
