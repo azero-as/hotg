@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'timer_page.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 class activeWorkoutSession extends StatefulWidget{
 
@@ -72,8 +73,13 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
                             );
              }
-        Widget _calculateXp(){
-            print(_XpEarned);
+        void _calculateXp(){
+                CloudFunctions.instance.call(
+                    functionName: 'addWorkout',
+                    parameters: {
+                        "workoutType": "Full-body workout"
+                    }
+                );
         }
 
         Widget _returnFinishWorkoutButton(){

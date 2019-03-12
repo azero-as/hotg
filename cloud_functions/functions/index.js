@@ -157,31 +157,15 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 });
 
 // Listen for updates to any `user` document.
-exports.addWorkout= functions.https.onRequest((request, response) => {
+exports.addWorkout= functions.https.onCall((data, context) => {
 
-    /**
-     * The token id is sent like this in the request:
-     * 'Authorization': 'Bearer xxxxxxxxxx'
-     * so we need to find it and split it in two.
-     */
-    const tokenId = request.get('Authorization').split('Bearer ')[1]
-    const type = request.query["workoutType"] || "Unknown"
-    return admin.auth().verifyIdToken(tokenId)
-    .then( decoded => {
+    const type = data["workoutType"] || "Unknown"
+    return admin.firestore().collection('Users').doc("CC9zGkKATIf5JPndq197B68QMc92").set({
+                workoutType: type,
+                name: "testing"
+                },{ merge: true })
+            .catch(error => {
+                console.log("error1", error);// 400 bad request
+            })
 
-        const userId = decoded.user_id
-
-        return admin.firestore().collection('Users').doc(userId).set({
-            workoutType: type,
-            name: "testing2"
-            },{ merge: true })
-        .catch(error => {
-
-            response.status(400).send(error) // 400 bad request
-        })
-    })
-    .catch( error => {
-        // 401 is unauthorized.
-        result.status(401).send(error)
-    })
 })
