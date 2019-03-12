@@ -160,9 +160,11 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 exports.addWorkout= functions.https.onCall((data, context) => {
 
     const type = data["workoutType"] || "Unknown"
-    return admin.firestore().collection('Users').doc("CC9zGkKATIf5JPndq197B68QMc92").set({
-                workoutType: type,
-                name: "testing"
+    return admin.firestore().collection('Users').doc("CC9zGkKATIf5JPndq197B68QMc92").collection("Workouts").add({
+                bonus_xp: 0,
+                date: "blabla",
+                total_xp: 100,
+                workoutType: type
                 },{ merge: true })
             .catch(error => {
                 console.log("error1", error);// 400 bad request
