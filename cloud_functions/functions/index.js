@@ -19,24 +19,23 @@ admin.initializeApp(functions.config().firebase);
  * For getting the token id:            https://stackoverflow.com/questions/42751074/how-to-protect-firebase-cloud-function-http-endpoint-to-allow-only-firebase-auth
  * For authorizing with the database:   https://stackoverflow.com/questions/48575730/how-to-protect-firebase-cloud-function-http-endpoint-using-authenticated-id-toke
  */
-exports.getUserInfo = functions.https.onRequest((request, response) => {
 
-    /**
-     * The token id is sent like this in the request:
-     * 'Authorization': 'Bearer xxxxxxxxxx'
-     * so we need to find it and split it in two.
-     */
-    const tokenId = request.get('Authorization').split('Bearer ')[1]
+ 
+// Get email and username for current user
+// TODO: delete this function when we have state management in the app 
+exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
+
+    const tokenId = request.get('Authorization').split('Bearer ')[1];
 
     return admin.auth().verifyIdToken(tokenId)
     .then( decoded => {
 
-        const userId = decoded.user_id
+        const userId = decoded.user_id;
 
         return admin.firestore().collection('Users').doc(userId).get()
         .then(querySnapshot => {
 
-            const data = querySnapshot.data()
+            const data = querySnapshot.data();
 
             return response.send({
                 data: {
@@ -53,6 +52,29 @@ exports.getUserInfo = functions.https.onRequest((request, response) => {
         // 401 is unauthorized.
         result.status(401).send(error)
     })
+});
+
+
+const helpers = require('./helper_functions.js');
+
+// Gets Username, XP, Level and xpCap from current user
+exports.getUserInfo = functions.https.onRequest((request, response) => {
+
+    const tokenId = request.get('Authorization').split('Bearer ')[1];
+    return admin.auth().verifyIdToken(tokenId)
+    .then( decoded => {
+        
+        const userId = decoded.user_id;
+
+        helpers.getUserInfo(userId)
+        .then( (userInfo) => {
+            response.send(userInfo)
+            })
+        })
+        .catch(error => {
+            // 401 is unauthorized.
+            result.status(401).send(error)
+    })
 })
 
 exports.helloWorld = functions.https.onRequest((request, response) => {
@@ -66,3 +88,4 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
     
     response.send(msg);
 });
+

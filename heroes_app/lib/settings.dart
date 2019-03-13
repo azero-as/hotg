@@ -28,7 +28,7 @@ class SettingsState extends State<Settings> {
 
     CloudFunctions.instance
         .call(
-      functionName: 'getUserInfo',
+      functionName: 'getSettingsUserInfo',
     )
         .then((response) {
       setState(() {
