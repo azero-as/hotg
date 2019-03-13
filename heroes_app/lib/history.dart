@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -23,8 +25,6 @@ class ListOfTrainingSessions extends StatefulWidget {
 }
 
 class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
-  final String _workoutID = "";
-
   @override
   void initState() {
     // TODO: implement initState
@@ -56,39 +56,62 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
     );
   }
 
-  Widget _buildHistoryItem(BuildContext context, DocumentSnapshot document) {
-    return ExpansionTile(
-      title: Center(
-          child: Text(document["date"].toDate().toString().split(" ")[0])),
-      backgroundColor: Color.fromRGBO(33, 40, 56, 0.2),
-      children: <Widget>[
-        Text(document["workoutType"] + " workout"),
-        Container(
-            padding: const EdgeInsets.all(8),
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Column(children: <Widget>[
-                  Text("Warm Up"),
-                  Text("Push ups"),
-                  Text("Total XP")
-                ]),
-                Column(
+  Future getExercises(exerciseID) async {
+    var firestore = Firestore.instance;
+    QuerySnapshot qn = await firestore
+        .collection("Users")
+        .document("TkDkU5X55RG9rNjSb6Fn")
+        .collection("Workouts")
+        .document(exerciseID)
+        .collection("Exercises")
+        .getDocuments();
+    return qn.documents;
+  }
+
+  Widget _buildHistoryItem(
+      BuildContext context, DocumentSnapshot workoutsDocument) {
+    final String _exerciseDocumentID = workoutsDocument.documentID;
+    final String workoutDate =
+        workoutsDocument["date"].toDate().toString().split(" ")[0];
+    final workoutType = workoutsDocument["workoutType"];
+
+    return Container(
+        child: FutureBuilder(
+            future: getExercises(
+                _exerciseDocumentID), // Fetches all exercises in the Exercise collection
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                // Liste med DocumentSnapshots
+                return ExpansionTile(
+                  title: Center(child: Text(workoutDate)),
+                  backgroundColor: Color.fromRGBO(33, 40, 56, 0.2),
                   children: <Widget>[
-                    Text("5 XP"),
-                    Text("10 XP"),
-                    Text(document["total_xp"].toString())
+                    //Må loope gjennom values i en exercise og legge hver value
+                    Text("$workoutType workout"),
+                    Container(
+                        padding: const EdgeInsets.all(8),
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: snapshot.data
+                              .map((document) => {
+                                    print(document["name"]),
+                                    Column(
+                                      children: <Widget>[
+                                        Text(document["name"])
+                                      ],
+                                    ),
+                                    Column(children: <Widget>[
+                                      Text(document["XP"].toString())
+                                    ])
+                                  })
+                              .toList(),
+                        ))
                   ],
-                )
-              ],
-            ))
-      ],
-    ); // Should return a single history item widget
+                );
+              } else {
+                return Text("Loading...");
+              }
+            }));
   }
 }
-
-// TODO: Trenger en listview for å lage en scrollbar liste med økter
-// TODO: Hver økt skal kunne trykkes på for å vise detaljer (eks ExpansionTile)
-// TODO: Designet skal stemme overens med figma
-// TODO: Dataen som vises skal hentes fra databasen (Stream, Cloud?)
