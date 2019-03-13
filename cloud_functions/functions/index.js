@@ -20,7 +20,7 @@ admin.initializeApp(functions.config().firebase);
  * For authorizing with the database:   https://stackoverflow.com/questions/48575730/how-to-protect-firebase-cloud-function-http-endpoint-using-authenticated-id-toke
  */
 
- 
+
 // Get email and username for current user
 // TODO: delete this function when we have state management in the app 
 exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
@@ -54,8 +54,35 @@ exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
     })
 });
 
-
 const helpers = require('./helper_functions.js');
+
+exports.getUserInfo = functions.https.onRequest((request, response) => {
+
+    const tokenId = request.get('Authorization').split('Bearer ')[1];
+
+    return admin.auth().verifyIdToken(tokenId)
+    .then( decoded => {
+
+        const userId = decoded.user_id;
+
+        return helpers.getUserInfo(userId)
+        .then(data => {
+
+            return response.send({
+                data
+            })
+        })
+        .catch(error => {
+            response.status(400).send(error) // 400 bad request
+        })
+    })
+    .catch( error => {
+        // 401 is unauthorized.
+        result.status(401).send(error)
+    })
+});
+
+/*const helpers = require('./helper_functions.js');
 
 // Gets Username, XP, Level and xpCap from current user
 exports.getUserInfo = functions.https.onRequest((request, response) => {
@@ -77,6 +104,7 @@ exports.getUserInfo = functions.https.onRequest((request, response) => {
     })
 })
 
+*/
 exports.helloWorld = functions.https.onRequest((request, response) => {
 
     let msg = {

@@ -46,26 +46,17 @@ class AvatarOverview extends StatefulWidget {
   final String title;
 
   @override
-  _AvatarOverviewState createState() => _AvatarOverviewState();
+  State createState() => new _AvatarOverviewState();
 }
 
 // class for appbar of home page
 class _AvatarOverviewState extends State<AvatarOverview> {
-  @override
-  Widget build(BuildContext context) {
-    // variables for size, for best view across platforms
-    var barHeight = (MediaQuery.of(context).size.height) / 3;
-    var barWidth = (MediaQuery.of(context).size.width);
-    var imageHeight = (barHeight - 55);
-    var imageWidth = (barWidth / 2) - 20;
-    var progressBar = (imageWidth - 15);
-
-    String _username = '';
+  String _username = '';
     // Can it be int?
-    String _userLevel = '';
+  int _userLevel;
     // Any way to make the next two int? Needs to be able to divide them
-    String _userXP = '';
-    String _levelCap = '';
+  int _userXp;
+  int _xpCap;
 
     //Get levelcap of users level
 
@@ -78,17 +69,27 @@ class _AvatarOverviewState extends State<AvatarOverview> {
 
       CloudFunctions.instance
           .call(
-        functionName: 'yourCloudFunction',
+        functionName: 'getUserInfo',
       )
           .then((response) {
         setState(() {
           _username = response['username'];
           _userLevel = response['userLevel'];
+          _userXp = response['userXp'];
+          _xpCap = response['xpCap'];
         });
       }).catchError((error) {
         print(error);
       });
     }
+    @override
+  Widget build(BuildContext context) {
+    // variables for size, for best view across platforms
+    var barHeight = (MediaQuery.of(context).size.height) / 3;
+    var barWidth = (MediaQuery.of(context).size.width);
+    var imageHeight = (barHeight - 55);
+    var imageWidth = (barWidth / 2) - 20;
+    var progressBar = (imageWidth - 15);
 
     return Stack(
       children: <Widget>[
@@ -130,13 +131,12 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                         child: Text(
-                          //_username,
-                          'Username',
+                          _username,
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
-                          textAlign: TextAlign.left,
+                          //textAlign: TextAlign.left,
                         ),
                       ),
 
@@ -144,7 +144,8 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
                         child: Text(
-                            'Level' /* + _userLevel  + ' Intermediate thing?'*/,
+                          'Level: $_userLevel',
+                           // 'Level' /* + _userLevel  + ' Intermediate thing?'*/,
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.left),
                       ),
@@ -167,7 +168,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                       // XP / XP cap
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        child: Text(/*_userXP +*/ 'XP/XP cap' /* + _levelCap*/,
+                        child: Text(/*_userXP +*/ '$_userXp/$_xpCap' /* + _levelCap*/,
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.left),
                       ),
