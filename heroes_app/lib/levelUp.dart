@@ -10,43 +10,29 @@ class LevelUp extends StatefulWidget{
 
 class _LevelUpState extends State<LevelUp>{
 
-  int _userLevel = 0;
-  int _userXP = 0;
-  int _levelCap;
+  int _userLevel;
+  int _userXp;
+  int _xpCap;
+ // bool _updateLevel;
 
   @override
   void initState(){
     super.initState();
 
     CloudFunctions.instance.call(
-      functionName: 'getUserXP',
+      functionName: 'updateUserLevelInfo',
     ).then((response) {
       setState(() {
-        _userXP = response['XP'];
+        _userXp = response['userXp'];
+        _userLevel = response['userLevel'];
+        _xpCap = response['xpCap'];
+     //   _updateLevel = response['updateLevel'];
       });
     }).catchError((error) {
       print(error);
     });
 
-    CloudFunctions.instance.call(
-      functionName: 'getUserLevel',
-    ).then((response) {
-      setState(() {
-        _userLevel = response['Level'];
-      });
-    }).catchError((error) {
-      print(error);
-    });
-
-    CloudFunctions.instance.call(
-      functionName: 'getLevelCap',
-    ).then((response) {
-      setState(() {
-
-      });
-    }).catchError((error) {
-      print(error);
-    });
+   
 
     /*//Get the userID of current user
     FirebaseAuth.instance.currentUser().then((response){
@@ -62,16 +48,17 @@ class _LevelUpState extends State<LevelUp>{
   Widget build(BuildContext context) {
 
 
-    print(_levelCap);
+    print(_xpCap);
     return new Scaffold(
       body: new Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new Text("Level: ${_userLevel}"),
-            new Text("XP: ${_userXP}"),
-            new Text("Next level cap: ${_levelCap}"),
-            levelUp(),
+            new Text("Level: $_userLevel"),
+            new Text("XP: $_userXp"),
+            new Text("Next level cap: $_xpCap"),
+         //   new Text("Level up?: $_updateLevel"),
+            //levelUp(),
           ],
         ),
       ),
@@ -97,32 +84,8 @@ class _LevelUpState extends State<LevelUp>{
   }*/
 
 
-//check if xp is bigger than level cap
-  checkLevelUp(){
-    //xp >= cap -> level up
-    if (_userXP >= _levelCap){
-      return true;
-    } else {
-      return false;
-    }
-  }
 
-//set one level up in db
-  void setLevel(){
-    CloudFunctions.instance.call(
-      functionName: 'getUserLevel',
-    ).then((response) {
-      //print("setLevel: ${response['result']}");
-    }).catchError((error) {
-      print(error);
-    });
-  }
-
-//reset xp in db
-  void resetXP(){
-
-  }
-
+/*
 //Level Up
   Widget levelUp(){
     if (checkLevelUp()){
@@ -155,5 +118,5 @@ class _LevelUpState extends State<LevelUp>{
       );
     }
   }
-
+*/
 }

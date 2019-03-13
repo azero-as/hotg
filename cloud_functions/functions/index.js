@@ -53,13 +53,9 @@ exports.getUserInfo = functions.https.onRequest((request, response) => {
     })
 });
 
-
+/*
 exports.getUserXP = functions.https.onRequest((request, response) => {
-    /**
-     * The token id is sent like this in the request:
-     * 'Authorization': 'Bearer xxxxxxxxxx'
-     * so we need to find it and split it in two.
-     */
+
     const tokenId = request.get('Authorization').split('Bearer ')[1];
 
     return admin.auth().verifyIdToken(tokenId)
@@ -89,11 +85,7 @@ exports.getUserXP = functions.https.onRequest((request, response) => {
 });
 
 exports.getUserLevel = functions.https.onRequest((request, response) => {
-    /**
-     * The token id is sent like this in the request:
-     * 'Authorization': 'Bearer xxxxxxxxxx'
-     * so we need to find it and split it in two.
-     */
+
     const tokenId = request.get('Authorization').split('Bearer ')[1];
 
     return admin.auth().verifyIdToken(tokenId)
@@ -122,6 +114,7 @@ exports.getUserLevel = functions.https.onRequest((request, response) => {
         })
 });
 
+
 exports.getLevelCaps = functions.https.onRequest((req, res) => {
     var list = [];
     var ref = admin.firestore.collection('Levels');
@@ -144,6 +137,8 @@ exports.setLevel = functions.https.onRequest((req, res) => {
 
 });
 
+*/
+
 exports.helloWorld = functions.https.onRequest((request, response) => {
 
     let msg = {
@@ -154,4 +149,34 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
     };
     
     response.send(msg);
+});
+
+const helpers = require('./helper_functions.js');
+
+// Updates user level info: xp, level and xpCap for current level if level is updated.
+// Returns new values.
+exports.updateUserLevelInfo = functions.https.onRequest((request, response) => {
+
+    const tokenId = request.get('Authorization').split('Bearer ')[1];
+
+    return admin.auth().verifyIdToken(tokenId)
+    .then( decoded => {
+
+        const userId = decoded.user_id;
+
+        return helpers.updateUserLevelInfo(userId)
+        .then(data => {
+
+            return response.send({
+                data
+            })
+        })
+        .catch(error => {
+            response.status(400).send(error) // 400 bad request
+        })
+    })
+    .catch( error => {
+        // 401 is unauthorized.
+        result.status(401).send(error)
+    })
 });
