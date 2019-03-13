@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'home.dart';
 
 class Summary extends StatefulWidget {
   Summary({this.workoutID});
@@ -34,18 +35,26 @@ class _SummaryState extends State<Summary> {
 
   @override
   Widget build(BuildContext context) {
-    print("build summary called!");
     return Scaffold(
-        backgroundColor: Colors.blueGrey[100],
-        body: Column(
+        appBar: AppBar(
+          leading: new IconButton(icon: Icon(Icons.close), onPressed: () {}),
+          title: Text(
+            "Summary",
+            style: TextStyle(fontSize: 22),
+          ),
+          centerTitle: true,
+        ),
+        //backgroundColor: Colors.blueGrey[100],
+        body: Center(
+            child: Column(
           children: <Widget>[
-            _buildListHeader(context),
-            _exercisesListContainer(context),
-            Divider(),
-            _scoreContainer(context),
-            //_getScore(),
+            Container(
+              padding: EdgeInsets.only(
+                  right: 20.0, left: 20.0, top: 50.0, bottom: 20.0),
+              child: _buildBody(),
+            )
           ],
-        ));
+        )));
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
@@ -53,24 +62,23 @@ class _SummaryState extends State<Summary> {
       title: Text(document["name"], style: TextStyle(fontSize: 20)),
       trailing: Text(document["XP"].toString() + " xp",
           style: TextStyle(fontSize: 20)),
-      contentPadding: EdgeInsetsDirectional.only(start: 70.0, end: 70.0),
+      contentPadding: EdgeInsetsDirectional.only(start: 60.0, end: 60.0),
     );
   }
 
   Widget _buildListHeader(BuildContext context) {
     return ListTile(
       title: Text(
-        "Summary",
+        "Warrior Gym Workout",
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
       ),
-      contentPadding: EdgeInsets.only(top: 30.0),
     );
   }
 
   Widget _getScore(BuildContext context) {
     if (_workoutID == '') {
-      return Text("Loaading..");
+      return Container(height: 0.0, width: 0.0);
     } else {
       return FutureBuilder(
           future: Firestore.instance
@@ -91,31 +99,30 @@ class _SummaryState extends State<Summary> {
   }
 
   Widget _buildScore(BuildContext context, DocumentSnapshot snapshot) {
-    return ListView(
+    return Column(
       children: <Widget>[
         ListTile(
-          title: Text("Bonus "),
-          trailing: Text(snapshot["bonus_xp"].toString() + " xp"),
+          title: Text("Bonus ", style: TextStyle(fontSize: 22)),
+          trailing: Text(snapshot["bonus_xp"].toString() + " xp",
+              style: TextStyle(fontSize: 22)),
           contentPadding: EdgeInsetsDirectional.only(start: 50.0, end: 50.0),
         ),
         ListTile(
           title: Text("Total: ",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-          trailing: Text(
-            snapshot["total_xp"].toString() + " xp",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          contentPadding:
-              EdgeInsetsDirectional.only(start: 50.0, end: 50.0, bottom: 50),
-        )
+          trailing: Text(snapshot["total_xp"].toString() + " xp",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          contentPadding: EdgeInsetsDirectional.only(start: 50.0, end: 50.0),
+        ),
       ],
     );
   }
 
   Widget _streamBuilder() {
-    print("Streambuilder called");
     if (_workoutID == '') {
-      return Text("Loaading..");
+      return Center(
+        child: CircularProgressIndicator(),
+      );
     } else {
       return StreamBuilder(
           stream: Firestore.instance
@@ -128,16 +135,15 @@ class _SummaryState extends State<Summary> {
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Text("Loading...");
+              return Text("");
             }
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             }
             if (snapshot.hasData) {
-              print(snapshot.data);
               return new ListView.builder(
                   //spacing between items
-                  itemExtent: 60.0,
+                  itemExtent: 50.0,
                   itemCount: snapshot.data.documents.length,
                   itemBuilder: (context, index) {
                     return _buildListItem(
@@ -148,14 +154,17 @@ class _SummaryState extends State<Summary> {
     }
   }
 
-  Widget _exercisesListContainer(BuildContext context) {
-    return Container(height: 5 * 60.0, child: _streamBuilder());
-  }
-
-  Widget _scoreContainer(BuildContext context) {
-    return Container(
-        height: 100.0,
-        margin: const EdgeInsets.only(left: 30, right: 30, bottom: 10),
-        child: _getScore(context));
+  Widget _buildBody() {
+    return Card(
+        elevation: 2.0,
+        child: Column(children: <Widget>[
+          _buildListHeader(context),
+          Container(
+            height: 300.0,
+            child: _streamBuilder(),
+          ),
+          Divider(color: Colors.black),
+          _getScore(context),
+        ]));
   }
 }
