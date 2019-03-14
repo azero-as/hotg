@@ -36,18 +36,13 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
     //TODO: Should return a ListView with training sessions
 
     return FutureBuilder(
-      future: Firestore.instance
-          .collection("Users")
-          .document("TkDkU5X55RG9rNjSb6Fn")
-          .collection("Workouts")
-          .getDocuments(),
+      future: _getWorkouts("TkDkU5X55RG9rNjSb6Fn"),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return ListView.builder(
-              itemCount: snapshot.data.documents.length,
+              itemCount: snapshot.data.length,
               itemBuilder: (context, index) {
-                return _buildHistoryItem(
-                    context, snapshot.data.documents[index]);
+                return _buildHistoryItem(context, snapshot.data[index]);
               });
         } else {
           return Text("Loading...");
@@ -56,45 +51,74 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
     );
   }
 
-  Future getExercises(exerciseID) async {
+  // Requests all completed workouts by the user from the database
+  Future _getWorkouts(String userID) async {
     var firestore = Firestore.instance;
     QuerySnapshot qn = await firestore
         .collection("Users")
-        .document("TkDkU5X55RG9rNjSb6Fn")
+        .document(userID)
         .collection("Workouts")
-        .document(exerciseID)
+        .getDocuments();
+    return qn.documents;
+  }
+
+  // Requests all exercises belonging to one completed workout
+  Future _getExercises(String workoutID, String userID) async {
+    var firestore = Firestore.instance;
+    QuerySnapshot qn = await firestore
+        .collection("Users")
+        .document(userID)
+        .collection("Workouts")
+        .document(workoutID)
         .collection("Exercises")
         .getDocuments();
     return qn.documents;
   }
 
   Widget _buildHistoryItem(
-      BuildContext context, DocumentSnapshot workoutsDocument) {
-    final String _exerciseDocumentID = workoutsDocument.documentID;
+      BuildContext context, DocumentSnapshot workoutDocument) {
+    final String _workoutDocumentID = workoutDocument.documentID;
     final String workoutDate =
-        workoutsDocument["date"].toDate().toString().split(" ")[0];
-    final workoutType = workoutsDocument["workoutType"];
+        workoutDocument["date"].toDate().toString().split(" ")[0];
+    final workoutType = workoutDocument["workoutType"];
 
     return Container(
         child: FutureBuilder(
-            future: getExercises(
-                _exerciseDocumentID), // Fetches all exercises in the Exercise collection
+            future: _getExercises(_workoutDocumentID,
+                "TkDkU5X55RG9rNjSb6Fn"), // Fetches all exercises in the Exercise collection
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 // Liste med DocumentSnapshots
-                return ExpansionTile(
-                  title: Center(child: Text(workoutDate)),
-                  backgroundColor: Color.fromRGBO(33, 40, 56, 0.2),
-                  children: <Widget>[
-                    //Må loope gjennom values i en exercise og legge hver value
-                    Text("$workoutType workout"),
-                    Container(
-                        padding: const EdgeInsets.all(8),
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: snapshot.data
-                              .map((document) => {
+                return _buildSingleWorkoutTile(
+                    workoutDate, workoutType, snapshot.data[0]);
+              } else {
+                return Text("Loading...");
+              }
+            }));
+  }
+
+  Widget _buildSingleWorkoutTile(
+      String workoutDate, String workoutType, DocumentSnapshot exerciseData) {
+    return ExpansionTile(
+        title: Center(
+          child: Text(workoutDate),
+        ),
+        backgroundColor: Color.fromRGBO(33, 40, 56, 0.2),
+        children: <Widget>[
+          Text("$workoutType workout"),
+          Container(
+              padding: const EdgeInsets.all(8),
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[Text(exerciseData["name"])],
+              ))
+        ]);
+  }
+}
+
+/*
+snapshot.data.map((document) => {
                                     print(document["name"]),
                                     Column(
                                       children: <Widget>[
@@ -104,14 +128,4 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
                                     Column(children: <Widget>[
                                       Text(document["XP"].toString())
                                     ])
-                                  })
-                              .toList(),
-                        ))
-                  ],
-                );
-              } else {
-                return Text("Loading...");
-              }
-            }));
-  }
-}
+                                  })*/
