@@ -26,7 +26,7 @@ class _LevelUpState extends State<LevelUp>{
         _userXp = response['userXp'];
         _userLevel = response['userLevel'];
         _xpCap = response['xpCap'];
-     //   _updateLevel = response['updateLevel'];
+        _updateLevel = response['updateLevel'];
       });
     }).catchError((error) {
       print(error);
@@ -47,16 +47,17 @@ class _LevelUpState extends State<LevelUp>{
   @override
   Widget build(BuildContext context) {
 
-
-    print(_xpCap);
     return new Scaffold(
       body: new Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new Text("Level: $_userLevel"),
-            new Text("XP: $_userXp"),
-            new Text("Next level cap: $_xpCap"),
+            new RaisedButton(
+              onPressed: () {
+                _levelUpAlert(context);
+              },
+              child: const Text("Pop-up"),
+            ),
          //   new Text("Level up?: $_updateLevel"),
             //levelUp(),
           ],
@@ -65,58 +66,25 @@ class _LevelUpState extends State<LevelUp>{
     );
   }
 
-/*//get cap to next level
-  void getLevelCap(level){
-    var cap;
 
-    //query from database
-    Firestore.instance
-        .collection('Levels')
-        .where("Level", isEqualTo: level)
-        .snapshots()
-        .listen((data) => data.documents.forEach((doc) => {
-
-          cap += doc["xpCap"]
-          //print("xpCap: $_levelCap")
-        }));
-
-    _levelCap = cap;
-  }*/
-
-
-
-/*
-//Level Up
-  Widget levelUp(){
-    if (checkLevelUp()){
-      setLevel();
-      resetXP();
-
-      return new Container(
-        padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-        child:
-        new RichText(
-          text:
-          TextSpan(
-            style: DefaultTextStyle.of(context).style,
-            children: <TextSpan>[
-          TextSpan(
-            text: 'Congratulations! You are now: \n',
-            style: TextStyle(color: Colors.black, fontSize: 15),
-          ),
-          TextSpan(
-            text: 'Level $_userLevel\n',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          TextSpan(
-            text: 'Novice',
-             style: TextStyle(),
-          ),],)),
-      );} else {
-      return new Container(
-        child: new Text(""),
-      );
-    }
+  Future<void> _levelUpAlert(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Level up!'),
+          content: const Text('Congratulations! You are now: Level 2'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
-*/
+
 }
