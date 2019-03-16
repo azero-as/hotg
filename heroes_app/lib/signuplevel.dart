@@ -34,7 +34,7 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
 
   final charactername = TextEditingController();
 
-  crudMethods crudObj = new crudMethods();
+  CrudMethods crudObj = new CrudMethods();
 
   @override
   Widget build(BuildContext context) {
