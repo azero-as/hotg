@@ -26,10 +26,12 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
 
   // Radio button start state
   int _fitnessLevel;
+  int _rpgClassValue;
 
   // Adding start states for level and xp
   int _level = 1;
   int _XP = 0;
+  String rpgClass = '';
 
 
   final charactername = TextEditingController();
@@ -119,6 +121,35 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
       ),
     );
 
+
+    //RADIO BUTTONS
+    final weightloss = new RadioListTile(
+        title: new Text('Tank'),
+        subtitle: new Text('This is the right class for you if you want to loose weight'),
+        value: 1,
+        groupValue: _rpgClassValue,
+        onChanged: (int value) { setState(() { _rpgClassValue = value; }); },
+        activeColor: const Color(0xFF4D3262)
+    );
+
+    final strength = new RadioListTile(
+        title: new Text('Warrior'),
+        subtitle: new Text('This is the right class for you if you want to gain strength'),
+        value: 2,
+        groupValue: _rpgClassValue,
+        onChanged: (int value) { setState(() { _rpgClassValue = value; }); },
+        activeColor: const Color(0xFF4D3262)
+    );
+
+    final fitness = new RadioListTile(
+        title: new Text('Traveller'),
+        subtitle: new Text('This is the right class for you if you want to improve your fitness'),
+        value: 3,
+        groupValue: _rpgClassValue,
+        onChanged: (int value) { setState(() { _rpgClassValue = value; }); },
+        activeColor: const Color(0xFF4D3262)
+    );
+
     //Returns all the elements to the page
     return Scaffold(
       backgroundColor: Colors.white,
@@ -141,17 +172,20 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
               padding: EdgeInsets.only(left: 24.0, right: 24.0),
               children: <Widget>[
                 SizedBox(height: 40.0,),
-                infoText,
+                characterNameText,
+                characterName,
                 SizedBox(height: 28.0,),
                 selectLevelText,
+                infoText,
                 beginner,
                 intermediate,
                 advanced,
                 SizedBox(height: 25.0,),
-                characterNameText,
-                SizedBox(height: 10.0,),
-                characterName,
-                SizedBox(height: 15.0,),
+                new Text('Pick your class', style: TextStyle(fontSize: 20.0,), textAlign: TextAlign.left,),
+                new Text('Everyone has different goals for exercising, choose a class to get exercise sets which suits your goal!', style: TextStyle(fontSize: 15.0,), textAlign: TextAlign.left,),
+                weightloss,
+                strength,
+                fitness,
                 letsGoButton,
               ],
             ),
