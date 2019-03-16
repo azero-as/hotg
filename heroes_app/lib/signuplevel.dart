@@ -27,6 +27,11 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
   // Radio button start state
   int _fitnessLevel;
 
+  // Adding start states for level and xp
+  int _level = 1;
+  int _XP = 0;
+
+
   final charactername = TextEditingController();
 
   crudMethods crudObj = new crudMethods();
@@ -101,6 +106,8 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
           crudObj.addFitnessLevel({
             'Fitness level': _fitnessLevel,
             'Username': charactername.text,
+            'Level':_level,
+            'XP':_XP,
           }, widget.userId).catchError((e) {
             print(e);
           });
