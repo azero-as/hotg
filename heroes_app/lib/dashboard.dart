@@ -4,7 +4,6 @@ import 'authentication.dart';
 import 'home.dart';
 import 'plan.dart';
 import 'history.dart';
-import 'settings.dart';
 
 //This is code for bottom navigation menu
 
