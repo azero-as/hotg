@@ -110,6 +110,7 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
             'Username': charactername.text,
             'Level':_level,
             'XP':_XP,
+            'class': rpgClass,
           }, widget.userId).catchError((e) {
             print(e);
           });
@@ -125,28 +126,46 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
     //RADIO BUTTONS
     final weightloss = new RadioListTile(
         title: new Text('Tank'),
-        subtitle: new Text('This is the right class for you if you want to loose weight'),
+        subtitle: new Text(
+            'This is the right class for you if you want to loose weight'),
         value: 1,
         groupValue: _rpgClassValue,
-        onChanged: (int value) { setState(() { _rpgClassValue = value; }); },
+        onChanged: (int value) {
+          setState(() {
+            _rpgClassValue = value;
+            rpgClass = "Tank";
+          });
+        },
         activeColor: const Color(0xFF4D3262)
     );
 
     final strength = new RadioListTile(
         title: new Text('Warrior'),
-        subtitle: new Text('This is the right class for you if you want to gain strength'),
+        subtitle: new Text(
+            'This is the right class for you if you want to gain strength'),
         value: 2,
         groupValue: _rpgClassValue,
-        onChanged: (int value) { setState(() { _rpgClassValue = value; }); },
+        onChanged: (int value) {
+          setState(() {
+            _rpgClassValue = value;
+            rpgClass = "Warrior";
+          });
+        },
         activeColor: const Color(0xFF4D3262)
     );
 
     final fitness = new RadioListTile(
         title: new Text('Traveller'),
-        subtitle: new Text('This is the right class for you if you want to improve your fitness'),
+        subtitle: new Text(
+            'This is the right class for you if you want to improve your fitness'),
         value: 3,
         groupValue: _rpgClassValue,
-        onChanged: (int value) { setState(() { _rpgClassValue = value; }); },
+        onChanged: (int value) {
+          setState(() {
+            _rpgClassValue = value;
+            rpgClass = "Traveller";
+          });
+        },
         activeColor: const Color(0xFF4D3262)
     );
 
