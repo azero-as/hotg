@@ -16,12 +16,16 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
     List _selectedExercises = [];
     int _XpEarned = 0;
+    int _BonusXP = 1;
+    var _test;
 
     @override
     Widget build(BuildContext context) {
         //Information about the exercises that is apart of the workout
         void _onCategorySelected(bool selected, id, xp) {
             print(xp);
+            print(widget.exercises[0]);
+
             if (selected == true) {
                 setState(() {
                     _selectedExercises.add(id);
@@ -31,13 +35,12 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                 setState(() {
                     _selectedExercises.remove(id);
                     _XpEarned -= xp;
+                    _BonusXP = 0;
                 });
             }
         }
 
-        print(widget.exercises);
         Widget _showInformationWorkout(){
-            print(widget.exercises[1].documentID);
             return new ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
@@ -74,12 +77,33 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                             );
              }
         void _calculateXp(){
+                var date = new DateTime.now().millisecondsSinceEpoch;
+                print("date:$date");
+                print(date);
+               // CloudFunctions.instance.call(
+                 // functionName: 'getExercises',
+
+                //).then((response) {
+                //  print(response);
+                //     print(response["exercises"]);
+                /**  print(response["exercises"][0]);
+                  print(response["exercises"][0]["name"]);
+
+                }).catchError((error) {
+                  print(error);
+                  print("error");
+                });**/
                 CloudFunctions.instance.call(
                     functionName: 'addWorkout',
                     parameters: {
+                        //TODO: add correct bonus xp
+                        "bonus_xp": _BonusXP,
+                        "total_xp": _XpEarned,
+                        "date": date,
                         "workoutType": "Full-body workout"
                     }
                 );
+
         }
 
         Widget _returnFinishWorkoutButton(){

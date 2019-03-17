@@ -156,18 +156,54 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
     response.send(msg);
 });
 
+
+exports.getExercises  = functions.https.onRequest((request, response) => {
+
+        return admin.firestore().collection('Users').doc("CC9zGkKATIf5JPndq197B68QMc92").collection("Workouts").doc("2sBmiDB5vBMnWLswuCnz").get()
+                .then(querySnapshot => {
+
+                    const data = querySnapshot.data();
+
+                    return response.send({data})
+                })
+                .catch(error => {
+                    response.status(400).send(error) // 400 bad request
+                })
+
+        .catch( error => {
+            // 401 is unauthorized.
+            result.status(401).send(error)
+        })
+});
+
+
+
 // Listen for updates to any `user` document.
 exports.addWorkout= functions.https.onCall((data, context) => {
 
-    const type = data["workoutType"] || "Unknown"
-    return admin.firestore().collection('Users').doc("CC9zGkKATIf5JPndq197B68QMc92").collection("Workouts").add({
-                bonus_xp: 0,
-                date: "blabla",
-                total_xp: 100,
-                workoutType: type
-                },{ merge: true })
-            .catch(error => {
-                console.log("error1", error);// 400 bad request
-            })
+    const workoutType = data["workoutType"] || "Unknown"
+    const bonus_xp = data["bonus_xp"] || "Unknown"
+    const total_xp = data["total_xp"] || "Unknown"
 
-})
+    const date = data["date"] || "Unknown"
+
+    var info = {
+                bonus_xp: bonus_xp,
+                date: date,
+                total_xp: total_xp,
+                workoutType: workoutType,
+                }
+    var exercises = {XP: 1, name: "squat", repetitions: 10-12}
+
+     return admin.firestore().collection('Users').doc("CC9zGkKATIf5JPndq197B68QMc92").collection("Workouts").add(info)
+     .then(docRef => {
+               console.log("Document written with ID: ", docRef.id);
+                return admin.firestore().collection('Users').doc("CC9zGkKATIf5JPndq197B68QMc92").collection("Workouts").doc(docRef.id).collection("Exercises").add(exercises);
+
+           })
+                      .catch(function(error) {
+                          console.error("Error adding document: ", error);
+                      });
+
+
+});
