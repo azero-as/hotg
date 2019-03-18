@@ -25,6 +25,7 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
   int _fitnessLevel = 1;
   int _rpgClassValue = 1;
   var _formKey = GlobalKey<FormState>();
+  String _chooseClassDescription = "Please choose a class for your character. Your choice will determine the type of workouts that are recommended for you. You will still have access to all other available workouts. Your choice of a class should be based on your chosen training focus. If your main focus is to improve your strength, you get the choice of Barbarian, Paladin, or Fighter. With the Monk, Rogue, or Ranger class you get a mix of both strength and stamina based workouts.";
 
   // Adding start states for level and xp
   int _level = 1;
@@ -37,33 +38,38 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
 
   @override
   Widget build(BuildContext context) {
-    // ----------------------------INFO TEXTS--------------------------------
-    //Welcome text
-    final infoText = new Text(
-      'Everyone starts in different places. Tell us a litte about your fitness experience in order for us to start you off at the right level and tailor the perfect workout plan for you!',
-      style: TextStyle(
-        fontSize: 15.0,
-      ),
-      textAlign: TextAlign.left,
-    );
+    // -----------------------TEXT BOXES AND SPACING--------------------------
+    Widget _headerText(String t){
+      return Padding(
+        padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+        child: new Text(
+          t,
+          style: TextStyle(
+            fontSize: 20.0,
+          ),
+          textAlign: TextAlign.left,
+        ),
+      );
+    }
 
-    //CharacterName Info text
-    final characterNameText = new Text(
-      'Pick your character name: ',
-      style: TextStyle(
-        fontSize: 20.0,
-      ),
-      textAlign: TextAlign.left,
-    );
+    Widget _descriptionText(String t){
+      return Padding(
+        padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+        child: new Text(
+          t,
+          style: TextStyle(
+            fontSize: 15.0,
+          ),
+          textAlign: TextAlign.left,
+        ),
+      );
+    }
 
-    //Select Level Info text
-    final selectLevelText = new Text(
-      'Select your current fitness level: ',
-      style: TextStyle(
-        fontSize: 20.0,
-      ),
-      textAlign: TextAlign.left,
-    );
+    Widget _space(double height){
+      return SizedBox(
+        height: height,
+      );
+    }
 
     // ----------------------------FORM FIELDS--------------------------------
     // ----RADIO BUTTONS for fitness level----
@@ -100,45 +106,88 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
         },
         activeColor: const Color(0xFF4D3262));
 
+    
     // -------RADIO BUTTONS for class---------
-    final weightloss = new RadioListTile(
-        title: new Text('Tank'),
+    final barbarian = new RadioListTile(
+        title: new Text('Barbarian'),
         subtitle: new Text(
-            'This is the right class for you if you want to loose weight'),
+            'A fierce warrior of primitive background who can enter a battle rage.'),
         value: 1,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
           setState(() {
             _rpgClassValue = value;
-            rpgClass = "Tank";
+            rpgClass = "Barbarian";
           });
         },
         activeColor: const Color(0xFF4D3262));
 
-    final strength = new RadioListTile(
-        title: new Text('Warrior'),
+    final fighter = new RadioListTile(
+        title: new Text('Fighter'),
         subtitle: new Text(
-            'This is the right class for you if you want to gain strength'),
+            'A holy warrior bound to a sacred oath.'),
         value: 2,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
           setState(() {
             _rpgClassValue = value;
-            rpgClass = "Warrior";
+            rpgClass = "Fighter";
           });
         },
         activeColor: const Color(0xFF4D3262));
 
-    final fitness = new RadioListTile(
-        title: new Text('Traveller'),
+    final paladin = new RadioListTile(
+        title: new Text('Paladin'),
         subtitle: new Text(
-            'This is the right class for you if you want to improve your fitness'),
+            'A master of martial combat, skilled with a variety of weapons and armor.'),
         value: 3,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
           setState(() {
             _rpgClassValue = value;
-            rpgClass = "Traveller";
+            rpgClass = "Paladin";
+          });
+        },
+        activeColor: const Color(0xFF4D3262));
+
+    final monk = new RadioListTile(
+        title: new Text('Monk'),
+        subtitle: new Text(
+            'A master of martial arts, harnessing the power of the body in pursuit of physical and spiritual perfection.'),
+        value: 4,
+        groupValue: _rpgClassValue,
+        onChanged: (int value) {
+          setState(() {
+            _rpgClassValue = value;
+            rpgClass = "Monk";
+          });
+        },
+        activeColor: const Color(0xFF4D3262));
+
+    final rogue = new RadioListTile(
+        title: new Text('Rogue'),
+        subtitle: new Text(
+            'A scoundrel who uses stealth and trickery to overcome obstacles and enemies.'),
+        value: 5,
+        groupValue: _rpgClassValue,
+        onChanged: (int value) {
+          setState(() {
+            _rpgClassValue = value;
+            rpgClass = "Rogue";
+          });
+        },
+        activeColor: const Color(0xFF4D3262));
+
+    final ranger = new RadioListTile(
+        title: new Text('Ranger'),
+        subtitle: new Text(
+            'A warrior who uses martial prowess and nature magic to combat threats on the edges of civilization.'),
+        value: 6,
+        groupValue: _rpgClassValue,
+        onChanged: (int value) {
+          setState(() {
+            _rpgClassValue = value;
+            rpgClass = "Ranger";
           });
         },
         activeColor: const Color(0xFF4D3262));
@@ -168,6 +217,7 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
         onPressed: () {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
+            print("Succeeded");
             crudObj.addFitnessLevel({
               'Fitness level': _fitnessLevel,
               'Username': charactername.text,
@@ -213,39 +263,25 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    SizedBox(
-                      height: 40.0,
-                    ),
-                    characterNameText,
-                    characterName,
-                    SizedBox(
-                      height: 28.0,
-                    ),
-                    selectLevelText,
-                    infoText,
+                    _space(40.0),
+                    _descriptionText('Everyone starts in different places. Tell us a litte about your fitness experience in order for us to start you off at the right level and tailor the perfect workout plan for you!'),
+                    _space(10.0),
+                    _headerText('Select your current fitness level: '),
                     beginner,
                     intermediate,
                     advanced,
-                    SizedBox(
-                      height: 25.0,
-                    ),
-                    new Text(
-                      'Pick your class',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                    new Text(
-                      'Everyone has different goals for exercising, choose a class to get exercise sets which suits your goal!',
-                      style: TextStyle(
-                        fontSize: 15.0,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                    weightloss,
-                    strength,
-                    fitness,
+                    _descriptionText(_chooseClassDescription),
+                    _headerText("Pick your class"),
+                    _headerText("STRENGTH"),
+                    barbarian,
+                    fighter,
+                    paladin,
+                    _headerText("DEXTERITY"),
+                    monk,
+                    rogue,
+                    ranger,
+                    _headerText('Pick your character name: '),
+                    characterName,
                     letsGoButton,
                   ],
                 ))),
