@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'dashboard.dart';
+import 'home.dart';
 
 class LevelUp extends StatefulWidget{
 
@@ -26,7 +28,7 @@ class _LevelUpState extends State<LevelUp>{
         _userXp = response['userXp'];
         _userLevel = response['userLevel'];
         _xpCap = response['xpCap'];
-        _updateLevel = response['updateLevel'];
+     //   _updateLevel = response['updateLevel'];
       });
     }).catchError((error) {
       print(error);
@@ -73,7 +75,7 @@ class _LevelUpState extends State<LevelUp>{
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Level up!'),
-          content: const Text('Congratulations! You are now: Level 2'),
+          content: new Text('Congratulations! You are now: Level ${_userLevel}'),
           actions: <Widget>[
             FlatButton(
               child: Text('Close'),
