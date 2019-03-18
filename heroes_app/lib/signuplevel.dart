@@ -22,8 +22,9 @@ class SignupLevelPage extends StatefulWidget {
 
 class _SignupLevelPageState extends State<SignupLevelPage> {
   // Radio button start state
-  int _fitnessLevel;
-  int _rpgClassValue;
+  int _fitnessLevel = 1;
+  int _rpgClassValue = 1;
+  var _formKey = GlobalKey<FormState>();
 
   // Adding start states for level and xp
   int _level = 1;
@@ -36,11 +37,21 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
 
   @override
   Widget build(BuildContext context) {
+    // ----------------------------INFO TEXTS--------------------------------
     //Welcome text
     final infoText = new Text(
       'Everyone starts in different places. Tell us a litte about your fitness experience in order for us to start you off at the right level and tailor the perfect workout plan for you!',
       style: TextStyle(
         fontSize: 15.0,
+      ),
+      textAlign: TextAlign.left,
+    );
+
+    //CharacterName Info text
+    final characterNameText = new Text(
+      'Pick your character name: ',
+      style: TextStyle(
+        fontSize: 20.0,
       ),
       textAlign: TextAlign.left,
     );
@@ -54,7 +65,8 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
       textAlign: TextAlign.left,
     );
 
-    //RADIO BUTTONS
+    // ----------------------------FORM FIELDS--------------------------------
+    // ----RADIO BUTTONS for fitness level----
     final beginner = new RadioListTile(
         title: new Text('Beginner'),
         value: 1,
@@ -88,56 +100,7 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
         },
         activeColor: const Color(0xFF4D3262));
 
-    //CharacterName Info text
-    final characterNameText = new Text(
-      'Pick your character name: ',
-      style: TextStyle(
-        fontSize: 20.0,
-      ),
-      textAlign: TextAlign.left,
-    );
-
-    //CharacterName input field
-    final characterName = TextFormField(
-        keyboardType: TextInputType.text,
-        autofocus: false,
-        controller: charactername,
-        decoration: InputDecoration(
-          labelText: 'Character Name',
-          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          border: UnderlineInputBorder(),
-        ));
-
-    //LetsGo button
-    final letsGoButton = Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
-      child: RaisedButton(
-        elevation: 5.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        onPressed: () {
-          crudObj.addFitnessLevel({
-            'Fitness level': _fitnessLevel,
-            'Username': charactername.text,
-            'Level': _level,
-            'XP': _XP,
-            'class': rpgClass,
-          }, widget.userId).catchError((e) {
-            print(e);
-          });
-          widget.onSignedIn();
-        },
-        padding: EdgeInsets.all(12),
-        color: const Color(0xFF612A30),
-        child: Text(
-          'Lets Go!',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-
-    //RADIO BUTTONS
+    // -------RADIO BUTTONS for class---------
     final weightloss = new RadioListTile(
         title: new Text('Tank'),
         subtitle: new Text(
@@ -180,6 +143,52 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
         },
         activeColor: const Color(0xFF4D3262));
 
+    //CharacterName input field
+    final characterName = TextFormField(
+        keyboardType: TextInputType.text,
+        autofocus: false,
+        validator: (value) => value.isEmpty
+            ? 'You need to have a name for your character.'
+            : null,
+        controller: charactername,
+        decoration: InputDecoration(
+          labelText: 'Character Name',
+          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          border: UnderlineInputBorder(),
+        ));
+
+    //LetsGo button
+    final letsGoButton = Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: RaisedButton(
+        elevation: 5.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        onPressed: () {
+          if (_formKey.currentState.validate()) {
+            _formKey.currentState.save();
+            crudObj.addFitnessLevel({
+              'Fitness level': _fitnessLevel,
+              'Username': charactername.text,
+              'Level': _level,
+              'XP': _XP,
+              'class': rpgClass,
+            }, widget.userId).catchError((e) {
+              print(e);
+            });
+            widget.onSignedIn();
+          }
+        },
+        padding: EdgeInsets.all(12),
+        color: const Color(0xFF612A30),
+        child: Text(
+          'Lets Go!',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+
     //Returns all the elements to the page
     return Scaffold(
       backgroundColor: Colors.white,
@@ -198,46 +207,48 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
       body: Center(
           child: Container(
         margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
-        child: ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.only(left: 24.0, right: 24.0),
-          children: <Widget>[
-            SizedBox(
-              height: 40.0,
-            ),
-            characterNameText,
-            characterName,
-            SizedBox(
-              height: 28.0,
-            ),
-            selectLevelText,
-            infoText,
-            beginner,
-            intermediate,
-            advanced,
-            SizedBox(
-              height: 25.0,
-            ),
-            new Text(
-              'Pick your class',
-              style: TextStyle(
-                fontSize: 20.0,
-              ),
-              textAlign: TextAlign.left,
-            ),
-            new Text(
-              'Everyone has different goals for exercising, choose a class to get exercise sets which suits your goal!',
-              style: TextStyle(
-                fontSize: 15.0,
-              ),
-              textAlign: TextAlign.left,
-            ),
-            weightloss,
-            strength,
-            fitness,
-            letsGoButton,
-          ],
-        ),
+        padding: EdgeInsets.only(left: 24.0, right: 24.0),
+        child: SingleChildScrollView(
+            child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 40.0,
+                    ),
+                    characterNameText,
+                    characterName,
+                    SizedBox(
+                      height: 28.0,
+                    ),
+                    selectLevelText,
+                    infoText,
+                    beginner,
+                    intermediate,
+                    advanced,
+                    SizedBox(
+                      height: 25.0,
+                    ),
+                    new Text(
+                      'Pick your class',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    new Text(
+                      'Everyone has different goals for exercising, choose a class to get exercise sets which suits your goal!',
+                      style: TextStyle(
+                        fontSize: 15.0,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    weightloss,
+                    strength,
+                    fitness,
+                    letsGoButton,
+                  ],
+                ))),
       )),
     );
   }
