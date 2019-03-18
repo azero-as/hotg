@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'timer_page.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:intl/intl.dart';
+import 'dart:async';
 
 class activeWorkoutSession extends StatefulWidget{
 
@@ -20,6 +21,32 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     int _XpEarned = 0;
     int _BonusXP = 1;
     var _test;
+
+    Timer _timer;
+    static int _start = 300;
+    double _minutes = _start /60;
+    int _seconds = _start % 60;
+
+    void startTimer() {
+      const oneSec = const Duration(seconds: 1);
+      _timer = new Timer.periodic(
+          oneSec,
+              (Timer timer) => setState(() {
+            if (_start < 1) {
+              timer.cancel();
+            } else {
+              _start = _start - 1;
+              _minutes = _start /60;
+              _seconds = _start% 60;
+            }
+          }));
+    }
+
+    @override
+    void dispose() {
+      _timer.cancel();
+      super.dispose();
+    }
 
     @override
     Widget build(BuildContext context) {
@@ -114,6 +141,22 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
         }
 
+        Widget _returnTimer(){
+          int _min = num.parse(_minutes.toStringAsFixed(0));
+          return new Column(
+            children: <Widget>[
+              RaisedButton(
+                onPressed: (){
+                  startTimer();
+                },
+                child: Text("Start"),
+              ),
+              Text("$_min" + " min"),
+              Text("$_seconds" + " sec")
+            ],
+          );
+        }
+
         Widget _returnFinishWorkoutButton(){
             return new Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40.0),
@@ -131,6 +174,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                 ),
             );}
 
+
         return new Scaffold(
             appBar: AppBar(actions: <Widget>[
                 new Center(
@@ -140,7 +184,8 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             body: new Container(
                 child: Column(
                     children: <Widget>[
-                    Expanded(
+                      _returnTimer(),
+                      Expanded(
                         child: _showInformationWorkout(),
                     ),
                         _returnFinishWorkoutButton(),
