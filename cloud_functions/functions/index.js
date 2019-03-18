@@ -182,9 +182,9 @@ exports.getExercises  = functions.https.onRequest((request, response) => {
 exports.addWorkout= functions.https.onCall((data, context) => {
 
     const workoutType = data["workoutType"] || "Unknown"
-    const bonus_xp = data["bonus_xp"] || "Unknown"
-    const total_xp = data["total_xp"] || "Unknown"
-
+    const bonus_xp = data["bonus_xp"]
+    const total_xp = data["total_xp"]
+    console.log(data["bonus_xp"])
     const date = data["date"] || "Unknown"
 
     var info = {
