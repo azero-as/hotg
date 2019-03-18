@@ -22,9 +22,10 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     @override
     Widget build(BuildContext context) {
         //Information about the exercises that is apart of the workout
+
         void _onCategorySelected(bool selected, id, xp) {
             print(xp);
-            print(widget.exercises[0]);
+            print(widget.exercises[1]["name"]);
 
             if (selected == true) {
                 setState(() {
@@ -35,10 +36,10 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                 setState(() {
                     _selectedExercises.remove(id);
                     _XpEarned -= xp;
-                    _BonusXP = 0;
                 });
             }
         }
+
 
         Widget _showInformationWorkout(){
             return new ListView.builder(
@@ -76,23 +77,22 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
                             );
              }
-        void _calculateXp(){
+        void _saveWorkout(){
                 var date = new DateTime.now().millisecondsSinceEpoch;
                 print("date:$date");
                 print(date);
-               // CloudFunctions.instance.call(
-                 // functionName: 'getExercises',
+                //Check if you have gotten bonus
+                for(var i = 0; i < widget.exercises.length; i++){
+                  if(!  _selectedExercises.contains(widget.exercises[i].documentID)){
+                    _BonusXP = 0;
+                    break;
+                  }
+                  else if(_BonusXP == 0){
+                    _BonusXP = 1;
+                  }
+                }
 
-                //).then((response) {
-                //  print(response);
-                //     print(response["exercises"]);
-                /**  print(response["exercises"][0]);
-                  print(response["exercises"][0]["name"]);
-
-                }).catchError((error) {
-                  print(error);
-                  print("error");
-                });**/
+                print(_BonusXP);
                 CloudFunctions.instance.call(
                     functionName: 'addWorkout',
                     parameters: {
@@ -115,7 +115,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                         borderRadius: BorderRadius.circular(15.0),
                     ),
                     onPressed: () {
-                        _calculateXp();
+                      _saveWorkout();
                     },
                     padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
                     color: const Color(0xFF58C6DA),
