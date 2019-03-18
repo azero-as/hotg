@@ -52,37 +52,39 @@ class AvatarOverview extends StatefulWidget {
 // class for appbar of home page
 class _AvatarOverviewState extends State<AvatarOverview> {
   String _username = '';
-    // Can it be int?
+
+  // Can it be int?
   int _userLevel;
-    // Any way to make the next two int? Needs to be able to divide them
+
+  // Any way to make the next two int? Needs to be able to divide them
   int _userXp;
   int _xpCap;
 
-    //Get levelcap of users level
+  //Get levelcap of users level
 
-    //calculate the progression to get the correct percentage in the progress bar
-//    var progress = _userXP/_levelCap;
+  //calculate the progression to get the correct percentage in the progress bar
 
-    @override
-    void initState() {
-      super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-      CloudFunctions.instance
-          .call(
-        functionName: 'getUserInfo',
-      )
-          .then((response) {
-        setState(() {
-          _username = response['username'];
-          _userLevel = response['userLevel'];
-          _userXp = response['userXp'];
-          _xpCap = response['xpCap'];
-        });
-      }).catchError((error) {
-        print(error);
+    CloudFunctions.instance
+        .call(
+      functionName: 'getUserInfo',
+    )
+        .then((response) {
+      setState(() {
+        _username = response['username'];
+        _userLevel = response['userLevel'];
+        _userXp = response['userXp'];
+        _xpCap = response['xpCap'];
       });
-    }
-    @override
+    }).catchError((error) {
+      print(error);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     // variables for size, for best view across platforms
     var barHeight = (MediaQuery.of(context).size.height) / 3;
@@ -90,6 +92,9 @@ class _AvatarOverviewState extends State<AvatarOverview> {
     var imageHeight = (barHeight - 55);
     var imageWidth = (barWidth / 2) - 20;
     var progressBar = (imageWidth - 15);
+
+    var progress = (_userXp/_xpCap);
+    print(progress);
 
     return Stack(
       children: <Widget>[
@@ -143,22 +148,21 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                       //Level
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                        child: Text(
-                          'Level: $_userLevel',
-                           // 'Level' /* + _userLevel  + ' Intermediate thing?'*/,
+                        child: Text('Level: $_userLevel',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.left),
                       ),
 
                       //Progress bar
                       Padding(
+
                         padding: EdgeInsets.fromLTRB(15, 35, 0, 0),
                         child: LinearPercentIndicator(
                           width: progressBar,
                           lineHeight: 15,
                           backgroundColor: Colors.white,
                           progressColor: Color(0xFF4D3262),
-                          percent: 0.2,
+                          percent: progress,
                           //bar shape
                           linearStrokeCap: LinearStrokeCap.roundAll,
                           animationDuration: 2000,
@@ -168,7 +172,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                       // XP / XP cap
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        child: Text(/*_userXP +*/ '$_userXp/$_xpCap' /* + _levelCap*/,
+                        child: Text('$_userXp/$_xpCap',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.left),
                       ),
