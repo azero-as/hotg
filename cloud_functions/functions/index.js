@@ -184,16 +184,13 @@ exports.addWorkout= functions.https.onCall((data, context) => {
     const workoutType = data["workoutType"] || "Unknown"
     const bonus_xp = data["bonus_xp"]
     const total_xp = data["total_xp"]
-    console.log(data["bonus_xp"])
-    const date = data["date"] || "Unknown"
+    const selectedExercises = data["selectedExercises"]
 
-    var info = {
-                bonus_xp: bonus_xp,
-                date: date,
+    var info = { bonus_xp: bonus_xp,
+                date: admin.firestore.FieldValue.serverTimestamp(),
                 total_xp: total_xp,
-                workoutType: workoutType,
-                }
-    var exercises = {XP: 1, name: "squat", repetitions: 10-12}
+                workoutType: workoutType,}
+    var exercises = {name: "bkabl", XP: 1}
 
      return admin.firestore().collection('Users').doc("CC9zGkKATIf5JPndq197B68QMc92").collection("Workouts").add(info)
      .then(docRef => {

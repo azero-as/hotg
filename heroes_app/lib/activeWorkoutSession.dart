@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'timer_page.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:intl/intl.dart';
 
 class activeWorkoutSession extends StatefulWidget{
 
@@ -15,6 +16,7 @@ class activeWorkoutSession extends StatefulWidget{
 class _activeWorkoutSession extends State<activeWorkoutSession> {
 
     List _selectedExercises = [];
+    List _exercises = [];
     int _XpEarned = 0;
     int _BonusXP = 1;
     var _test;
@@ -23,18 +25,20 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     Widget build(BuildContext context) {
         //Information about the exercises that is apart of the workout
 
-        void _onCategorySelected(bool selected, id, xp) {
+        void _onCategorySelected(bool selected, id, xp, String name) {
             print(xp);
             print(widget.exercises[1]["name"]);
 
             if (selected == true) {
                 setState(() {
                     _selectedExercises.add(id);
+                    _exercises.add([{"id": id, "XP": xp, "name": name}]);
                     _XpEarned += xp;
                 });
             } else {
                 setState(() {
                     _selectedExercises.remove(id);
+                    _exercises.remove([{"id": id, "XP": xp, "name": name}]);
                     _XpEarned -= xp;
                 });
             }
@@ -54,7 +58,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                                     .contains(widget.exercises[index].documentID),
                                 onChanged: (bool selected) {
                                 _onCategorySelected(selected,
-                                    widget.exercises[index].documentID, widget.exercises[index]["XP"]);
+                                    widget.exercises[index].documentID, widget.exercises[index]["XP"],widget.exercises[index]["name"]);
                                 },
                                 title: Text(widget.exercises[index]["name"]),
                                 ),
@@ -78,9 +82,11 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                             );
              }
         void _saveWorkout(){
-                var date = new DateTime.now().millisecondsSinceEpoch;
+                DateTime date = new DateTime.now();
                 print("date:$date");
                 print(date);
+                String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(date);
+
                 //Check if you have gotten bonus
                 for(var i = 0; i < widget.exercises.length; i++){
                   if(!  _selectedExercises.contains(widget.exercises[i].documentID)){
@@ -92,15 +98,17 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                   }
                 }
 
+                print(_exercises);
+
                 print(_BonusXP);
                 CloudFunctions.instance.call(
                     functionName: 'addWorkout',
                     parameters: {
-                        //TODO: add correct bonus xp
                         "bonus_xp": _BonusXP,
                         "total_xp": _XpEarned,
-                        "date": date,
-                        "workoutType": "Full-body workout"
+                        "workoutType": "Full-body workout",
+                        "exercises": _selectedExercises
+
                     }
                 );
 
