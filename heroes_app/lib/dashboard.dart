@@ -92,8 +92,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       body: new PageView(
         children: [
-          new LevelUp(),
-          //new Home("Home screen"),
+          new Home("Home screen"),
           new Plan(),
           new History("History screen"),
         ],
