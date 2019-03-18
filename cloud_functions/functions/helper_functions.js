@@ -59,6 +59,8 @@ async function updateUserLevelInfo(userId) {
 
 }
       
+      
+// Get current user level, xp and username from "Users" collection
 async function getUsersCollection(userId) {
 
     return admin.firestore().collection('Users').doc(userId).get()

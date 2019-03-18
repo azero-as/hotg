@@ -1,3 +1,4 @@
+// For debugging and testing locally
 
 var admin = require("firebase-admin");
 
