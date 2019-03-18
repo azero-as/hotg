@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'home.dart';
+import 'main.dart';
 
 class Summary extends StatefulWidget {
   Summary({this.workoutID});
@@ -36,22 +36,29 @@ class _SummaryState extends State<Summary> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.grey[300],
         appBar: AppBar(
-          leading: new IconButton(icon: Icon(Icons.close), onPressed: () {}),
+          backgroundColor: const Color(0xFF612A30),
+          leading: new IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                Navigator.popUntil(context, ModalRoute.withName('dashboard'));
+              }),
           title: Text(
             "Summary",
             style: TextStyle(fontSize: 22),
           ),
           centerTitle: true,
         ),
-        //backgroundColor: Colors.blueGrey[100],
         body: Center(
             child: Column(
           children: <Widget>[
             Container(
+              // set heigth of container to be 85% of screen height
+              height: MediaQuery.of(context).size.height * 0.80,
               padding: EdgeInsets.only(
-                  right: 20.0, left: 20.0, top: 50.0, bottom: 20.0),
-              child: _buildBody(),
+                  right: 20.0, left: 20.0, top: 30.0, bottom: 30.0),
+              child: _buildCard(),
             )
           ],
         )));
@@ -62,18 +69,19 @@ class _SummaryState extends State<Summary> {
       title: Text(document["name"], style: TextStyle(fontSize: 20)),
       trailing: Text(document["XP"].toString() + " xp",
           style: TextStyle(fontSize: 20)),
-      contentPadding: EdgeInsetsDirectional.only(start: 60.0, end: 60.0),
+      contentPadding: EdgeInsetsDirectional.only(start: 40.0, end: 40.0),
     );
   }
 
   Widget _buildListHeader(BuildContext context) {
-    return ListTile(
+    return Container(
+        child: ListTile(
       title: Text(
-        "Warrior Gym Workout",
+        "Workout Summary",
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
       ),
-    );
+    ));
   }
 
   Widget _getScore(BuildContext context) {
@@ -89,7 +97,7 @@ class _SummaryState extends State<Summary> {
               .get(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (!snapshot.hasData) {
-              return Text("");
+              return Container(height: 0.0, width: 0.0);
             }
             if (snapshot.hasData) {
               return _buildScore(context, snapshot.data);
@@ -118,7 +126,7 @@ class _SummaryState extends State<Summary> {
     );
   }
 
-  Widget _streamBuilder() {
+  Widget _getWorkoutInfo() {
     if (_workoutID == '') {
       return Center(
         child: CircularProgressIndicator(),
@@ -135,13 +143,14 @@ class _SummaryState extends State<Summary> {
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Text("");
+              return Center(child: CircularProgressIndicator());
             }
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             }
             if (snapshot.hasData) {
               return new ListView.builder(
+
                   //spacing between items
                   itemExtent: 50.0,
                   itemCount: snapshot.data.documents.length,
@@ -154,17 +163,19 @@ class _SummaryState extends State<Summary> {
     }
   }
 
-  Widget _buildBody() {
+  Widget _buildCard() {
     return Card(
         elevation: 2.0,
         child: Column(children: <Widget>[
           _buildListHeader(context),
           Container(
-            height: 300.0,
-            child: _streamBuilder(),
+            height: MediaQuery.of(context).size.height * 0.45,
+            child: _getWorkoutInfo(),
           ),
           Divider(color: Colors.black),
-          _getScore(context),
+          Container(
+              height: MediaQuery.of(context).size.height * 0.15,
+              child: _getScore(context)),
         ]));
   }
 }
