@@ -6,6 +6,9 @@ import 'authentication.dart';
 import 'settings.dart';
 
 // build the home page and call on the stateful classes
+import 'models/user.dart';
+import 'package:scoped_model/scoped_model.dart';
+
 class Home extends StatelessWidget {
   static String tag = 'home-page';
 
@@ -13,18 +16,26 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      // general background color for the page
-      decoration: BoxDecoration(
-        color: Colors.white,
-      ),
-      child: Column(
-        children: <Widget>[
-          AvatarOverview(),
-          SizedBox(height: 20.0),
-          WorkoutOverview()
-        ],
-      ),
-    );
+        // general background color for the page
+        decoration: BoxDecoration(
+          color: Colors.white,
+        ),
+        child: Column(
+          children: <Widget>[
+            AvatarOverview(),
+            SizedBox(height: 20.0),
+            WorkoutOverview(),
+            SizedBox(height: 20.0),
+            Container(child:
+                ScopedModelDescendant<User>(builder: (context, child, model) {
+              return Container(
+                  child: Column(children: [
+                new Text(model.level.toString()),
+                new RaisedButton(onPressed: () => model.incrementLevelByOne()),
+              ]));
+            }))
+          ],
+        ));
   }
 }
 

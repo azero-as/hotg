@@ -6,11 +6,15 @@ import 'signup.dart';
 import 'frontpage.dart';
 import 'signuplevel.dart';
 import 'settings.dart';
+import 'models/user.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 class RootPage extends StatefulWidget {
-  RootPage({this.auth});
+  RootPage({this.auth, this.user});
 
   final BaseAuth auth;
+  final User user;
 
   @override
   State<StatefulWidget> createState() => new _RootPageState();
@@ -99,6 +103,25 @@ class _RootPageState extends State<RootPage> {
       ),
     );
   }
+  
+  void _setUserInfo(BuildContext context) {
+    var user = ScopedModel.of<User>(context);
+    CloudFunctions.instance
+        .call(
+      functionName: 'getUserInfo',
+    )
+        .then((response) {
+          user.startState(response['username'],response['userLevel'], response['userXp'], response['xpCap']);
+//      setState(() {
+//        _username = response['username'];
+//        _userLevel = response['userLevel'];
+//        _userXp = response['userXp'];
+//        _xpCap = response['xpCap'];
+//      });
+    }).catchError((error) {
+      print(error);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,6 +162,7 @@ class _RootPageState extends State<RootPage> {
         break;
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
+          _setUserInfo(context);
           return new DashboardScreen(
             userId: _userId,
             auth: widget.auth,
