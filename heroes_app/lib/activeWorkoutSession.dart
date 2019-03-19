@@ -103,6 +103,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                 itemCount: widget.exercises.length,
                 itemBuilder: (BuildContext context, int index) =>
                     ExpansionTile(
+
                         key: PageStorageKey<int>(index),
                         title:  new CheckboxListTile(
                                 value: _selectedExercises
@@ -115,16 +116,24 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                                 ),
                         children: <Widget>[
                                     ListTile(
-                                        title: Text("Sets: 1"),
+                                        title: new Padding(
+                                            padding: EdgeInsets.all(20),
+                                            child: new Text("Sets: 1")),
                                     ),
                                     ListTile(
-                                        title: Text("Reps: 10-12"),
+                                        title: new Padding(
+                                            padding: EdgeInsets.all(20),
+                                            child: new Text("Reps: 10-12")),
                                     ),
                                     ListTile(
-                                        title: Text("Rest between sets: 1 min"),
+                                        title: new Padding(
+                                            padding: EdgeInsets.all(20),
+                                            child: new Text("Rest between sets: 1 min")),
                                     ),
                                     ListTile(
-                                        title: Text("XP: " + widget.exercises[index]["XP"].toString()),
+                                        title: new Padding(
+                                            padding: EdgeInsets.all(20),
+                                            child: new Text("XP: " + widget.exercises[index]["XP"].toString())),
                                     ),
                                 ]
                                 //children: root["info"]
@@ -137,16 +146,18 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         //Timer for warm-up
         Widget _returnTimer(){
           int _min = num.parse(_minutes.toStringAsFixed(0));
-
           return Container(
+            padding: EdgeInsets.all(30),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
+                Text("Warm-up"),
                 RaisedButton(
                   onPressed: (){
                       startTimer();
                     },
                   child: Container(
-                    padding: EdgeInsets.all(10.0),
+                    padding: EdgeInsets.all(1.0),
                     child: Text("$_min" + ":" + "$_seconds" + " min"),
                   )
                 )
