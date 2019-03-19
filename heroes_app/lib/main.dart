@@ -17,6 +17,7 @@ void main() => runApp(new Heroes());
 class Heroes extends StatelessWidget {
 
   final User user = new User();
+
   //Navigation between pages
   final routes = <String, WidgetBuilder>{
     LoginPage.tag: (context) => LoginPage(),
