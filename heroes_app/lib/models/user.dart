@@ -1,8 +1,6 @@
 import 'package:scoped_model/scoped_model.dart';
 import '../authentication.dart';
 
-import 'package:cloud_functions/cloud_functions.dart';
-
 class User extends Model {
 
   Auth auth = new Auth();
@@ -27,18 +25,17 @@ class User extends Model {
   //Methods just for setting in the beginning
   setLevel(int number) {
     this._level = number;
+    notifyListeners();
   }
 
   setXpCap(int number) {
     this._xpCap = number;
-  }
-
-  void setXP(int number) {
-    this._xp = number;
+    notifyListeners();
   }
 
   void setCharacterName(String name) {
     this._characterName = name;
+    notifyListeners();
   }
 
   // Methods used by other widgets:
@@ -48,17 +45,10 @@ class User extends Model {
     //TODO: Also change value in database
   }
 
-  void changeXPtoZeroPlusNumber(int number) {
-    this._xp = number;
-    notifyListeners();
-    //TODO: Also change value in database
-  }
-
   void incrementLevelByOne() {
     this._level = this._level + 1;
     notifyListeners();
     //TODO: Also change value in database
+    //TODO: Make the pop up appear?
   }
-
-
 }

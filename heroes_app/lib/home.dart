@@ -25,15 +25,6 @@ class Home extends StatelessWidget {
             AvatarOverview(),
             SizedBox(height: 20.0),
             WorkoutOverview(),
-            SizedBox(height: 20.0),
-            Container(child:
-            ScopedModelDescendant<User>(builder: (context, child, model) {
-                return Container(
-                    child: Column(children: [
-                      new Text(model.level.toString()),
-                      new RaisedButton(onPressed: () => model.incrementLevelByOne()),
-                    ]));
-            }))
           ],
         ));
   }
