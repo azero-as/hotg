@@ -59,7 +59,7 @@ async function getLevelXpCap(userLevel) {
 async function getAllUserWorkouts(userId) {
   workouts = []
   return admin.firestore().collection('Users').doc(userId)
-  .collection('Workouts').orderBy('date', 'asc').limit(5)
+  .collection('Workouts').orderBy('date', 'desc').limit(5)
   .get()
   .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
