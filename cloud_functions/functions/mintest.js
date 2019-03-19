@@ -1,4 +1,7 @@
 
+// For debugging and testing locally
+
+
 var admin = require("firebase-admin");
 
 var serviceAccount = require("./minkey.json");
@@ -9,6 +12,7 @@ admin.initializeApp({
 });
 
 const userId = '0EWvvdAUc2QEJn6ChySZU0iTXmF2';
+
 
 //getXpCap(getUserLevel(userId));
 
@@ -41,3 +45,4 @@ function getXpCap(level) {
         console.log('Error: ', error);
     });
 }
+

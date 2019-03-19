@@ -77,17 +77,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return new Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-             new IconButton(
+          new IconButton(
               icon: Icon(Icons.settings),
               key: Key("settings"),
               onPressed: () { widget.signOut();
               }
-              )],
-        ),
+          )
+        ],
+      ),
       body: new PageView(
         children: [
+
           new LevelUp(),
           //new Home("Home screen"),
+          //new Home(),
           new Plan(),
           new History("History screen"),
         ],
