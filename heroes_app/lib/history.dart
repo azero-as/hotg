@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -25,38 +23,22 @@ class ListOfTrainingSessions extends StatefulWidget {
 }
 
 class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
+  List _workouts = [];
+
   @override
   void initState() {
     super.initState();
+
+    CloudFunctions.instance
+        .call(functionName: 'getAllUserWorkouts')
+        .then((response) {
+      setState(() {
+        _workouts = response;
+      });
+    }).catchError((error) {
+      print(error);
+    });
   }
-
-// ============ Firestore calls ============
-
-  // Requests all completed workouts by the user from the database
-  Future _getWorkouts(String userID) async {
-    var firestore = Firestore.instance;
-    QuerySnapshot qn = await firestore
-        .collection("Users")
-        .document(userID)
-        .collection("Workouts")
-        .getDocuments();
-    return qn.documents;
-  }
-
-  // Requests all exercises belonging to one completed workout
-  Future _getExercises(String workoutID, String userID) async {
-    var firestore = Firestore.instance;
-    QuerySnapshot qn = await firestore
-        .collection("Users")
-        .document(userID)
-        .collection("Workouts")
-        .document(workoutID)
-        .collection("Exercises")
-        .getDocuments();
-    return qn.documents;
-  }
-
-// ============ End Firestore calls ============
 
 // ============ Gui build ============
 
@@ -64,88 +46,104 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _getWorkouts("TkDkU5X55RG9rNjSb6Fn"),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasError) {
-          return Text("Error: ${snapshot.error}");
-        }
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return Text("Should be a waiting screen");
-          default:
-            return ListView.builder(
-                // Loops through every workout
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
-                  return _singleWorkoutItemBuilder(
-                      context, snapshot.data[index]);
-                });
-        }
-      },
-    );
+    if (_workouts.isEmpty) {
+      return Container(
+          width: 50, height: 50, child: CircularProgressIndicator());
+    } else {
+      return ListView.builder(
+          // Loops through every workout
+          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+          itemCount: _workouts.length,
+          itemBuilder: (context, index) {
+            return _workoutCard(
+                context, _workouts[index]); //Sending one workout
+          });
+    }
   }
 
-// The Gui for one workout tile
-
-  Widget _singleWorkoutItemBuilder(
-      BuildContext context, DocumentSnapshot workoutDocument) {
-    final String _workoutDocumentID =
-        workoutDocument.documentID; //Current workout ID used for firestore call
-    final String _workoutDate = workoutDocument["date"]
+  Widget _workoutCard(BuildContext context, workoutObject) {
+    final String _workoutDate = Timestamp(workoutObject["date"]["_seconds"],
+            workoutObject["date"]["_nanoseconds"])
         .toDate()
         .toString()
-        .split(" ")[0]; //Workout date of the current workout
-    final _workoutType = workoutDocument[
-        "workoutType"]; //The workout type of the current workout
-    return _fetchWorkoutItemContent(
-        _workoutDocumentID, _workoutDate, _workoutType);
-  }
+        .split(" ")[0];
+    final String _workoutType = workoutObject["workoutType"];
+    final String _totalXP = workoutObject["total_xp"].toString();
 
-  Widget _fetchWorkoutItemContent(workoutID, workoutDate, workoutType) {
-    Widget _exerciseList = FutureBuilder(
-      future: _getExercises(workoutID, "TkDkU5X55RG9rNjSb6Fn"),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasError) {
-          return Text("Error: ${snapshot.error}");
-        }
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return Text("Waiting for exercises to load");
-          default:
-            return _createWorkoutItemContent(
-                workoutDate,
-                workoutType,
-                snapshot
-                    .data); // Should return the whole workout tile with exercises.
-        }
-      },
-    );
-    return _exerciseList;
-  }
+    List _exercises = workoutObject["exercises"];
 
-  // Somehow need to loop through the list of exercises.
-  Widget _createWorkoutItemContent(String workoutDate, String workoutType,
-      List<DocumentSnapshot> exercisesSnapshotList) {
-    List<Row> _widgetListExercises = [];
-    for (var index = 0; index < exercisesSnapshotList.length; index++) {
-      DocumentSnapshot _currentExercise = exercisesSnapshotList[index];
-      Row _oneExercise = Row(
+    List<Widget> exercises = [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Expanded(
-            child: Text(_currentExercise["name"]),
+              flex: 2,
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Text("Exercise"))),
+          Expanded(
+            flex: 1,
+            child: Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 10), child: Text("Sets")),
           ),
           Expanded(
-              child: Text(
-            _currentExercise["XP"].toString() + " XP",
-          ))
+              flex: 1,
+              child: Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10), child: Text("XP")))
         ],
-      );
-      _widgetListExercises.add(_oneExercise);
-    }
+      )
+    ];
+    _exercises.forEach((exercise) => {
+          exercises.add(Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Expanded(
+                  flex: 2,
+                  child: Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                      child: Column(children: [Text(exercise["name"])]))),
+              Expanded(
+                  flex: 1,
+                  child: Column(children: [
+                    Text(exercise["sets"].toString() +
+                        "x" +
+                        exercise["repetitions"].toString())
+                  ])),
+              Expanded(
+                  flex: 1,
+                  child: Column(children: [Text(exercise["XP"].toString())]))
+            ],
+          ))
+        });
+    exercises.add(Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: Text("Total XP: $_totalXP"))
+      ],
+    ));
+
     return ExpansionTile(
-      title: Text(workoutDate + ": " + workoutType),
-      children: _widgetListExercises,
-    );
+        title: Text(_workoutDate + ": " + _workoutType), children: exercises);
   }
 }
+
+//Text(_workouts[0]["exercises"][0]["XP"].toString());
+
+// The Gui for one workout tile
+/*
+Widget _singleWorkoutItemBuilder(
+    BuildContext context, DocumentSnapshot workoutDocument) {
+  final String _workoutDocumentID =
+      workoutDocument.documentID; //Current workout ID used for firestore call
+  final String _workoutDate = workoutDocument["date"]
+      .toDate()
+      .toString()
+      .split(" ")[0]; //Workout date of the current workout
+  final _workoutType =
+      workoutDocument["workoutType"]; //The workout type of the current workout
+  return _fetchWorkoutItemContent(
+      _workoutDocumentID, _workoutDate, _workoutType);
+}
+*/
