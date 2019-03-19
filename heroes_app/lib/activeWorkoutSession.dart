@@ -20,7 +20,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     List _exercises = [];
     int _XpEarned = 0;
     int _BonusXP = 1;
-    var _test;
+
 
     Timer _timer;
     static int _start = 300;
@@ -42,6 +42,33 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
           }));
     }
 
+    //Save the workout to the database using cloud functions
+    void _saveWorkout(){
+      DateTime date = new DateTime.now();
+
+      //Check if you have gotten bonus
+      for(var i = 0; i < widget.exercises.length; i++){
+        if(!  _selectedExercises.contains(widget.exercises[i].documentID)){
+          _BonusXP = 0;
+          break;
+        }
+        else if(_BonusXP == 0){
+          _BonusXP = 1;
+        }
+      }
+
+      CloudFunctions.instance.call(
+          functionName: 'addWorkout',
+          parameters: {
+            "bonus_xp": _BonusXP,
+            "total_xp": _XpEarned,
+            "workoutType": "Full-body workout",
+            "exercises": _selectedExercises
+          }
+      );
+    }
+
+
     @override
     void dispose() {
       _timer.cancel();
@@ -50,12 +77,9 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
     @override
     Widget build(BuildContext context) {
-        //Information about the exercises that is apart of the workout
 
+      //Information about the exercises that is apart of the workout
         void _onCategorySelected(bool selected, id, xp, String name) {
-            print(xp);
-            print(widget.exercises[1]["name"]);
-
             if (selected == true) {
                 setState(() {
                     _selectedExercises.add(id);
@@ -71,7 +95,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             }
         }
 
-
+        //Information about the different exercises in the workout
         Widget _showInformationWorkout(){
             return new ListView.builder(
                 scrollDirection: Axis.vertical,
@@ -107,53 +131,27 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                                 ),
 
                             );
-             }
-        void _saveWorkout(){
-                DateTime date = new DateTime.now();
-                print("date:$date");
-                print(date);
-                String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(date);
-
-                //Check if you have gotten bonus
-                for(var i = 0; i < widget.exercises.length; i++){
-                  if(!  _selectedExercises.contains(widget.exercises[i].documentID)){
-                    _BonusXP = 0;
-                    break;
-                  }
-                  else if(_BonusXP == 0){
-                    _BonusXP = 1;
-                  }
                 }
 
-                print(_exercises);
 
-                print(_BonusXP);
-                CloudFunctions.instance.call(
-                    functionName: 'addWorkout',
-                    parameters: {
-                        "bonus_xp": _BonusXP,
-                        "total_xp": _XpEarned,
-                        "workoutType": "Full-body workout",
-                        "exercises": _selectedExercises
-
-                    }
-                );
-
-        }
-
+        //Timer for warm-up
         Widget _returnTimer(){
           int _min = num.parse(_minutes.toStringAsFixed(0));
-          return new Column(
-            children: <Widget>[
-              RaisedButton(
-                onPressed: (){
-                  startTimer();
-                },
-                child: Text("Start"),
-              ),
-              Text("$_min" + " min"),
-              Text("$_seconds" + " sec")
-            ],
+
+          return Container(
+            child: Row(
+              children: <Widget>[
+                RaisedButton(
+                  onPressed: (){
+                      startTimer();
+                    },
+                  child: Container(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text("$_min" + ":" + "$_seconds" + " min"),
+                  )
+                )
+              ],
+            ),
           );
         }
 
