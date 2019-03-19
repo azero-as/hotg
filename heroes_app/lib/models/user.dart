@@ -7,10 +7,10 @@ class User extends Model {
 
   Auth auth = new Auth();
 
-  int _xpCap = 0;
-  int _xp = 0;
-  int _level = 1;
-  String _characterName = '';
+  int _xpCap;
+  int _xp;
+  int _level;
+  String _characterName;
 
   int get xpCap => _xpCap;
   int get xp => _xp;

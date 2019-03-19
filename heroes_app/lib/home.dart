@@ -27,12 +27,12 @@ class Home extends StatelessWidget {
             WorkoutOverview(),
             SizedBox(height: 20.0),
             Container(child:
-                ScopedModelDescendant<User>(builder: (context, child, model) {
-              return Container(
-                  child: Column(children: [
-                new Text(model.level.toString()),
-                new RaisedButton(onPressed: () => model.incrementLevelByOne()),
-              ]));
+            ScopedModelDescendant<User>(builder: (context, child, model) {
+                return Container(
+                    child: Column(children: [
+                      new Text(model.level.toString()),
+                      new RaisedButton(onPressed: () => model.incrementLevelByOne()),
+                    ]));
             }))
           ],
         ));
@@ -110,27 +110,28 @@ class _AvatarOverviewState extends State<AvatarOverview> {
               width: barWidth,
               color: Color(0xFF212838),
               padding: EdgeInsets.fromLTRB(20, 30, 20, 15),
-              child: Row(
-                children: <Widget>[
-                  // Column for half bar, only image
-                  Column(children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Image.asset(
-                        'assets/avatar-test.png',
-                        height: imageHeight,
-                        width: imageWidth,
-                        fit: BoxFit.fill,
-                      ),
-                    )
-                  ]),
+              child: ScopedModelDescendant<User>(builder: (context, child, model) {
+                return Row(
+                  children: <Widget>[
+                    // Column for half bar, only image
+                    Column(children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Image.asset(
+                          'assets/avatar-test.png',
+                          height: imageHeight,
+                          width: imageWidth,
+                          fit: BoxFit.fill,
+                        ),
+                      )
+                    ]),
 
-                  // Column for second haf bar, character information
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //Settings symbol and onPressed functionality
-                      /*IconButton(
+                    // Column for second haf bar, character information
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        //Settings symbol and onPressed functionality
+                        /*IconButton(
                           icon: Icon(Icons.settings),
                           color: Colors.white,
                           padding: EdgeInsets.fromLTRB((barWidth / 2) - 44, 0, 0, 0),
@@ -138,55 +139,57 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                             widget.signOut();
                           }),*/
 
-                      //Username
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        child: Text(
-                          _username,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                        //Username
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                          child: Text(
+                            model.characterName.toString(),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            //textAlign: TextAlign.left,
                           ),
-                          //textAlign: TextAlign.left,
                         ),
-                      ),
 
-                      //Level
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                        child: Text(
-                          'Level: $_userLevel',
-                           // 'Level' /* + _userLevel  + ' Intermediate thing?'*/,
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.left),
-                      ),
-
-                      //Progress bar
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15, 35, 0, 0),
-                        child: LinearPercentIndicator(
-                          width: progressBar,
-                          lineHeight: 15,
-                          backgroundColor: Colors.white,
-                          progressColor: Color(0xFF4D3262),
-                          percent: 0.2,
-                          //bar shape
-                          linearStrokeCap: LinearStrokeCap.roundAll,
-                          animationDuration: 2000,
+                        //Level
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
+                          child: Text(
+                              'Level: ${model.level.toString()}',
+                              // 'Level' /* + _userLevel  + ' Intermediate thing?'*/,
+                              style: TextStyle(color: Colors.white),
+                              textAlign: TextAlign.left),
                         ),
-                      ),
 
-                      // XP / XP cap
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        child: Text(/*_userXP +*/ '$_userXp/$_xpCap' /* + _levelCap*/,
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.left),
-                      ),
-                    ],
-                  ),
-                ],
-              )),
+                        //Progress bar
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(15, 35, 0, 0),
+                          child: LinearPercentIndicator(
+                            width: progressBar,
+                            lineHeight: 15,
+                            backgroundColor: Colors.white,
+                            progressColor: Color(0xFF4D3262),
+                            percent: 0.2,
+                            //bar shape
+                            linearStrokeCap: LinearStrokeCap.roundAll,
+                            animationDuration: 2000,
+                          ),
+                        ),
+
+                        // XP / XP cap
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                          child: Text(/*_userXP +*/
+                              '${model.xp.toString()}/${model.xpCap.toString()}' /* + _levelCap*/,
+                              style: TextStyle(color: Colors.white),
+                              textAlign: TextAlign.left),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              })),
         )
       ],
     );
