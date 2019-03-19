@@ -6,6 +6,9 @@ import 'authentication.dart';
 import 'settings.dart';
 
 // build the home page and call on the stateful classes
+import 'models/user.dart';
+import 'package:scoped_model/scoped_model.dart';
+
 class Home extends StatelessWidget {
   static String tag = 'home-page';
 
@@ -13,18 +16,17 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      // general background color for the page
-      decoration: BoxDecoration(
-        color: Colors.white,
-      ),
-      child: Column(
-        children: <Widget>[
-          AvatarOverview(),
-          SizedBox(height: 20.0),
-          WorkoutOverview()
-        ],
-      ),
-    );
+        // general background color for the page
+        decoration: BoxDecoration(
+          color: Colors.white,
+        ),
+        child: Column(
+          children: <Widget>[
+            AvatarOverview(),
+            SizedBox(height: 20.0),
+            WorkoutOverview(),
+          ],
+        ));
   }
 }
 
@@ -98,27 +100,28 @@ class _AvatarOverviewState extends State<AvatarOverview> {
               width: barWidth,
               color: Color(0xFF212838),
               padding: EdgeInsets.fromLTRB(20, 30, 20, 15),
-              child: Row(
-                children: <Widget>[
-                  // Column for half bar, only image
-                  Column(children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Image.asset(
-                        'assets/avatar-test.png',
-                        height: imageHeight,
-                        width: imageWidth,
-                        fit: BoxFit.fill,
-                      ),
-                    )
-                  ]),
+              child: ScopedModelDescendant<User>(builder: (context, child, model) {
+                return Row(
+                  children: <Widget>[
+                    // Column for half bar, only image
+                    Column(children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: Image.asset(
+                          'assets/avatar-test.png',
+                          height: imageHeight,
+                          width: imageWidth,
+                          fit: BoxFit.fill,
+                        ),
+                      )
+                    ]),
 
-                  // Column for second haf bar, character information
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //Settings symbol and onPressed functionality
-                      /*IconButton(
+                    // Column for second haf bar, character information
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        //Settings symbol and onPressed functionality
+                        /*IconButton(
                           icon: Icon(Icons.settings),
                           color: Colors.white,
                           padding: EdgeInsets.fromLTRB((barWidth / 2) - 44, 0, 0, 0),
@@ -126,56 +129,55 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                             widget.signOut();
                           }),*/
 
-                      //Username
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        child: Text(
-                          _username,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                        //Username
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                          child: Text(
+                            model.characterName.toString(),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            //textAlign: TextAlign.left,
                           ),
-                          //textAlign: TextAlign.left,
                         ),
-                      ),
 
-                      //Level
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                        child: Text('Level $_userLevel Class',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.left),
-                      ),
-
-                      //Progress bar
-                      Padding(
-
-                        padding: EdgeInsets.fromLTRB(15, 35, 0, 0),
-                        child: LinearPercentIndicator(
-                          width: progressBar,
-                          lineHeight: 15,
-                          backgroundColor: Colors.white,
-                          progressColor: Color(0xFF4D3262),
-                          // add initial value?
-                          percent: progress,
-                          //bar shape
-                          linearStrokeCap: LinearStrokeCap.roundAll,
-                          animationDuration: 2000,
+                        //Level
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
+                          child: Text(
+                              'Level ${model.level.toString()} Class',
+                              style: TextStyle(color: Colors.white),
+                              textAlign: TextAlign.left),
                         ),
-                      ),
 
-                      // XP / XP cap
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        child: Text('$_userXp/$_xpCap',
-                            style: TextStyle(color: Colors.white),
-                            textAlign: TextAlign.left),
-                      ),
-                    ],
-                  ),
-                ],
-              )),
+                        //Progress bar
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(15, 35, 0, 0),
+                          child: LinearPercentIndicator(
+                            width: progressBar,
+                            lineHeight: 15,
+                            backgroundColor: Colors.white,
+                            progressColor: Color(0xFF4D3262),
+                            percent: progress,
+                            //bar shape
+                            linearStrokeCap: LinearStrokeCap.roundAll,
+                            animationDuration: 2000,
+                          ),
+                        ),
+
+                        // XP / XP cap
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                          child: Text('${model.xp.toString()}/${model.xpCap.toString()}',
+                              style: TextStyle(color: Colors.white),
+                              textAlign: TextAlign.left),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              })),
         )
       ],
     );
