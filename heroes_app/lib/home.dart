@@ -51,18 +51,12 @@ class AvatarOverview extends StatefulWidget {
 
 // class for appbar of home page
 class _AvatarOverviewState extends State<AvatarOverview> {
+
+  // different user information to call from database
   String _username = '';
-
-  // Can it be int?
   int _userLevel;
-
-  // Any way to make the next two int? Needs to be able to divide them
   int _userXp;
   int _xpCap;
-
-  //Get levelcap of users level
-
-  //calculate the progression to get the correct percentage in the progress bar
 
   @override
   void initState() {
@@ -93,8 +87,8 @@ class _AvatarOverviewState extends State<AvatarOverview> {
     var imageWidth = (barWidth / 2) - 20;
     var progressBar = (imageWidth - 15);
 
+    //calculate the progression to get the correct percentage in the progress bar
     var progress = (_userXp/_xpCap);
-    print(progress);
 
     return Stack(
       children: <Widget>[
@@ -140,6 +134,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
+                            fontSize: 18,
                           ),
                           //textAlign: TextAlign.left,
                         ),
@@ -148,7 +143,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                       //Level
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                        child: Text('Level: $_userLevel',
+                        child: Text('Level $_userLevel Class',
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.left),
                       ),
@@ -162,6 +157,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                           lineHeight: 15,
                           backgroundColor: Colors.white,
                           progressColor: Color(0xFF4D3262),
+                          // add initial value?
                           percent: progress,
                           //bar shape
                           linearStrokeCap: LinearStrokeCap.roundAll,
