@@ -218,6 +218,7 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 
 
 
+
 exports.getExercises  = functions.https.onRequest((request, response) => {
 
         return admin.firestore().collection('Users').doc("CC9zGkKATIf5JPndq197B68QMc92").collection("Workouts").doc("2sBmiDB5vBMnWLswuCnz").get()
@@ -262,4 +263,24 @@ exports.addWorkout= functions.https.onCall((data, context) => {
 
 
 });
+
+
+// Returns a list of all user workouts objects 
+exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {
+
+        // user: lenatorresdal
+        const userId = 'TkDkU5X55RG9rNjSb6Fn'
+
+        return helpers.getAllUserWorkouts(userId)
+        .then(data => {
+
+            return response.send({
+                data
+            })
+        })
+        .catch(error => {
+            response.status(400).send(error) // 400 bad request
+        })
+   
+})
 

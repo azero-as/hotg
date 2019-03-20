@@ -4,9 +4,9 @@ import 'authentication.dart';
 import 'home.dart';
 import 'plan.dart';
 import 'history.dart';
+
 import 'settings.dart';
 import 'levelUp.dart';
-
 
 import 'models/user.dart';
 import 'package:scoped_model/scoped_model.dart';
