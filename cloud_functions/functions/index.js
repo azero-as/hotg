@@ -39,7 +39,7 @@ exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
 
             return response.send({
                 data: {
-                    username: data.Username,
+                    username: data.characterName,
                     email: decoded.email
                 }
             })
@@ -81,42 +81,6 @@ exports.getUserInfo = functions.https.onRequest((request, response) => {
         result.status(401).send(error)
     })
 });
-
-/*const helpers = require('./helper_functions.js');
-
-// Gets Username, XP, Level and xpCap from current user
-exports.getUserInfo = functions.https.onRequest((request, response) => {
-
-    const tokenId = request.get('Authorization').split('Bearer ')[1];
-    return admin.auth().verifyIdToken(tokenId)
-    .then( decoded => {
-        
-        const userId = decoded.user_id;
-
-        helpers.getUserInfo(userId)
-        .then( (userInfo) => {
-            response.send(userInfo)
-            })
-        })
-        .catch(error => {
-            // 401 is unauthorized.
-            result.status(401).send(error)
-    })
-})
-
-*/
-exports.helloWorld = functions.https.onRequest((request, response) => {
-
-    let msg = {
-        data: { // must be here for flutter
-            msg: "Hello from Firebase!",
-            version: 10,
-        }
-    };
-    
-    response.send(msg);
-});
-
 
 // Returns a list of all user workouts objects 
 exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {

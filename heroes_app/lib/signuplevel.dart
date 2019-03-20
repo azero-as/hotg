@@ -28,8 +28,8 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
   String _chooseClassDescription = "Please choose a class for your character. Your choice will determine the type of workouts that are recommended for you. You will still have access to all other available workouts. Your choice of a class should be based on your chosen training focus. If your main focus is to improve your strength, you get the choice of Barbarian, Paladin, or Fighter. With the Monk, Rogue, or Ranger class you get a mix of both strength and stamina based workouts.";
 
   // Adding start states for level and xp
-  int _level = 1;
-  int _XP = 0;
+  int _gameLevel = 1;
+  int _xp = 0;
   String rpgClass = '';
 
   final charactername = TextEditingController();
@@ -219,10 +219,10 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
             _formKey.currentState.save();
             print("Succeeded");
             crudObj.addFitnessLevel({
-              'Fitness level': _fitnessLevel,
-              'Username': charactername.text,
-              'Level': _level,
-              'XP': _XP,
+              'fitnessLevel': _fitnessLevel,
+              'characterName': charactername.text,
+              'gameLevel': _gameLevel,
+              'xp': _xp,
               'class': rpgClass,
             }, widget.userId).catchError((e) {
               print(e);
