@@ -2,7 +2,8 @@ var admin = require("firebase-admin");
 
 module.exports = {
     getUserInfo: getUserInfo,
-    updateUserLevelInfo: updateUserLevelInfo
+    updateUserLevelInfo: updateUserLevelInfo,
+    updateUserXpWorkout: updateUserXpWorkout
 }
 
 async function getUserInfo(userId) {
@@ -58,7 +59,17 @@ async function updateUserLevelInfo(userId) {
     }
 
 }
-      
+// Update user xp with totalWorkoutXP
+
+async function updateUserXpWorkout(userId, totalWorkoutXp) {
+    var userCollection = await getUsersCollection(userId)
+    var currentXp = userCollection[1]
+    var updatedXp = await updateUserXP(currentXp, totalWorkoutXp, userId)
+
+    return {
+        updatedXp: updatedXp // New XP
+    }
+}
       
 // Get current user level, xp and username from "Users" collection
 async function getUsersCollection(userId) {
@@ -132,3 +143,17 @@ async function resetUserXp(xpCap, userXp, userId) {
     })
     
 }
+
+async function updateUserXP(currentXP, totalWorkoutXp, userId) {
+    const updatedXp = currentXP + totalWorkoutXp
+    return admin.firestore().collection("Users").doc(userId).update({
+        XP: updatedXp,
+    })
+    .then(function() {
+        return updatedXp
+    })
+    .catch(function(error) {
+        console.error("Error writing document: ", error)
+    })
+}
+

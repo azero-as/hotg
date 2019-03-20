@@ -9,6 +9,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
+
  // Get username and email for settings page
 exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
 
@@ -98,4 +99,39 @@ exports.updateUserLevelInfo = functions.https.onRequest((request, response) => {
         // 401 is unauthorized.
         result.status(401).send(error)
     })
-});
+})
+
+// Get total_xp and bonus_xp from finished workout, and updates the
+// total amount of XP in the User collection
+
+exports.updateUserXpWorkout = functions.https.onRequest((request, response) => {
+   const total_xp = request.body.total_xp
+   const bonus_xp = request.body.bonus_xp
+
+   const totalWorkoutXp = total_xp + bonus_xp
+
+   const tokenId = request.get('Authorization').split('Bearer ')[1];
+
+   return admin.auth().verifyIdToken(tokenId)
+   .then( decoded => {
+
+       const userId = decoded.user_id;
+
+       return helpers.updateUserXpWorkout(userId, totalWorkoutXp)
+       .then(data => {
+           return response.send({
+               data
+           })
+       })
+       .catch(error => {
+           console.log(error)
+        response.status(400).send(error) // 400 bad request
+    })  
+   })
+   .catch( error => {
+       console.log(error)
+    // 401 is unauthorized.
+    result.status(401).send(error)
+})
+
+})
