@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'models/user.dart';
 import 'authentication.dart';
 import 'settings.dart';
 
 // build the home page and call on the stateful classes
-import 'models/user.dart';
-import 'package:scoped_model/scoped_model.dart';
 
 class Home extends StatelessWidget {
   static String tag = 'home-page';
@@ -115,7 +115,6 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                         ),
                       )
                     ]),
-
 
                     // Column for second haf bar, character information
                     Column(
