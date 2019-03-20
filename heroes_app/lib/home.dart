@@ -57,8 +57,8 @@ class _AvatarOverviewState extends State<AvatarOverview> {
   // different user information to call from database
   String _username = '';
   int _userLevel;
-  int _userXp;
-  int _xpCap;
+  int _userXp = 0;
+  int _xpCap = 1;
 
   @override
   void initState() {
@@ -116,6 +116,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                       )
                     ]),
 
+
                     // Column for second haf bar, character information
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,6 +138,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
+                              fontSize: 18,
                             ),
                             //textAlign: TextAlign.left,
                           ),
