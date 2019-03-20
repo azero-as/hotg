@@ -80,22 +80,28 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
               flex: 2,
               child: Padding(
                   padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                  child: Text("Exercise"))),
+                  child: Text(
+                    "Exercise",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ))),
           Expanded(
             flex: 1,
             child: Padding(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 10), child: Text("Sets")),
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                child: Text("Sets",
+                    style: TextStyle(fontWeight: FontWeight.bold))),
           ),
           Expanded(
               flex: 1,
               child: Padding(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10), child: Text("XP")))
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Text("XP",
+                      style: TextStyle(fontWeight: FontWeight.bold))))
         ],
       )
     ];
     _exercises.forEach((exercise) => {
           exercises.add(Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Expanded(
                   flex: 2,
@@ -124,26 +130,11 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
       ],
     ));
 
-    return ExpansionTile(
-        title: Text(_workoutDate + ": " + _workoutType), children: exercises);
+    return Card(
+        child: ExpansionTile(
+            title: Text("$_workoutDate: $_workoutType workout"),
+            children: exercises));
   }
 }
 
 //Text(_workouts[0]["exercises"][0]["XP"].toString());
-
-// The Gui for one workout tile
-/*
-Widget _singleWorkoutItemBuilder(
-    BuildContext context, DocumentSnapshot workoutDocument) {
-  final String _workoutDocumentID =
-      workoutDocument.documentID; //Current workout ID used for firestore call
-  final String _workoutDate = workoutDocument["date"]
-      .toDate()
-      .toString()
-      .split(" ")[0]; //Workout date of the current workout
-  final _workoutType =
-      workoutDocument["workoutType"]; //The workout type of the current workout
-  return _fetchWorkoutItemContent(
-      _workoutDocumentID, _workoutDate, _workoutType);
-}
-*/
