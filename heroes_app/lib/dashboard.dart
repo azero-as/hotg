@@ -8,10 +8,12 @@ import 'settings.dart';
 import 'levelUp.dart';
 
 
+import 'models/user.dart';
+import 'package:scoped_model/scoped_model.dart';
+
 //This is code for bottom navigation menu
 
 class Dashboard extends StatelessWidget {
-
   //Used for navigation
   static String tag = 'dashboard';
 
@@ -71,40 +73,67 @@ class _DashboardScreenState extends State<DashboardScreen> {
       this._page = page;
     });
   }
-  
+
   @override
-  Widget build(BuildContext context) {
+//  Widget build(BuildContext context) {
+//    return new Scaffold(
+//        appBar: new AppBar(
+//          title: new Text(widget.userId),
+//        ),
+//      body: Center(
+//        child: ScopedModelDescendant<User>(
+//          builder: (context, child, model) {
+//            return RaisedButton(
+//                onPressed: () {
+//                  model.incrementXP(45);
+//                },
+//                child: Text(model.xp.toString()),
+//                );
+//          }
+//        ),
+//      )
+//    );
+//  }
+//
+ Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
         actions: <Widget>[
           new IconButton(
               icon: Icon(Icons.settings),
               key: Key("settings"),
-              onPressed: () { widget.signOut();
+              onPressed: () {
+                widget.signOut();
               }
           )
         ],
       ),
-      body: new PageView(
-        children: [
-
-          new LevelUp(),
-          //new Home("Home screen"),
-          //new Home(),
-          new Plan(),
-          new History("History screen"),
-        ],
-        onPageChanged: onPageChanged,
-        controller: _pageController,
+      body: Center(
+        child: ScopedModelDescendant<User>(
+            builder: (context, child, model){
+          return new PageView(
+            children: [
+              new Home(),
+              new Plan(),
+              new History("History screen"),
+            ],
+            onPageChanged: onPageChanged,
+            controller: _pageController,
+          );
+        })
       ),
       bottomNavigationBar: new Theme(
         data: Theme.of(context).copyWith(
           // sets the background color of the `BottomNavigationBar`
-          canvasColor: const Color(0xFF612A30),
-          // sets the active color of the `BottomNavigationBar`
-          primaryColor: const Color(0xFFFFFFFF),
-          // sets the inactive color of the `BottomNavigationBar
-          textTheme: Theme.of(context).textTheme.copyWith(caption: new TextStyle(color: new Color.fromRGBO(255,255, 255, 0.5)))
+            canvasColor: const Color(0xFF612A30),
+            // sets the active color of the `BottomNavigationBar`
+            primaryColor: const Color(0xFFFFFFFF),
+            // sets the inactive color of the `BottomNavigationBar
+            textTheme: Theme
+                .of(context)
+                .textTheme
+                .copyWith(caption: new TextStyle(
+                color: new Color.fromRGBO(255, 255, 255, 0.5)))
         ),
         child: new BottomNavigationBar(
           items: [
