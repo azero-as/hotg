@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'authentication.dart';
-import 'settings.dart';
 
 // build the home page and call on the stateful classes
 import 'models/user.dart';

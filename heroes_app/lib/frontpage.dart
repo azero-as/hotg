@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
-import 'signup.dart';
 
 class FrontPage extends StatefulWidget {
     static String tag = 'front-page';
