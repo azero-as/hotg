@@ -29,9 +29,9 @@ async function getUsersCollection(userId) {
 
     return admin.firestore().collection('Users').doc(userId).get()
     .then(querySnapshot => {
-        var userLevel = querySnapshot.data().Level
-        var userXp = querySnapshot.data().XP
-        var username = querySnapshot.data().Username
+        var userLevel = querySnapshot.data().gameLevel
+        var userXp = querySnapshot.data().xp
+        var username = querySnapshot.data().characterName
 
         return [userLevel, userXp, username]
     })
