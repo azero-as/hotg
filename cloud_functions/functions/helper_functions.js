@@ -3,7 +3,8 @@ var admin = require("firebase-admin");
 module.exports = {
     getUserInfo: getUserInfo,
     updateUserLevelInfo: updateUserLevelInfo,
-    updateUserXpWorkout: updateUserXpWorkout
+    updateUserXpWorkout: updateUserXpWorkout,
+    getAllUserWorkouts: getAllUserWorkouts
 }
 
 async function getUserInfo(userId) {
@@ -76,9 +77,9 @@ async function getUsersCollection(userId) {
 
     return admin.firestore().collection('Users').doc(userId).get()
     .then(querySnapshot => {
-        var userLevel = querySnapshot.data().Level
-        var userXp = querySnapshot.data().XP
-        var username = querySnapshot.data().Username
+        var userLevel = querySnapshot.data().gameLevel
+        var userXp = querySnapshot.data().xp
+        var username = querySnapshot.data().characterName
 
         return [userLevel, userXp, username]
     })
@@ -147,7 +148,7 @@ async function resetUserXp(xpCap, userXp, userId) {
 async function updateUserXP(currentXP, totalWorkoutXp, userId) {
     const updatedXp = currentXP + totalWorkoutXp
     return admin.firestore().collection("Users").doc(userId).update({
-        XP: updatedXp,
+        xp: updatedXp,
     })
     .then(function() {
         return updatedXp
@@ -156,4 +157,23 @@ async function updateUserXP(currentXP, totalWorkoutXp, userId) {
         console.error("Error writing document: ", error)
     })
 }
+
+// Get all workouts ordered by date (newest first)
+// Limit = 5
+async function getAllUserWorkouts(userId) {
+  workouts = []
+  return admin.firestore().collection('Users').doc(userId)
+  .collection('Workouts').orderBy('date', 'desc').limit(5)
+  .get()
+  .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          workouts.push(doc.data())
+      })
+      return workouts
+  })
+  .catch(function(error) {
+      console.log('Error: ',error)
+  })
+}
+
 

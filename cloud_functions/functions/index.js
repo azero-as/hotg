@@ -27,7 +27,7 @@ exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
 
             return response.send({
                 data: {
-                    username: data.Username,
+                    username: data.characterName,
                     email: decoded.email
                 }
             })
