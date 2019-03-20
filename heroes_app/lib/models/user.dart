@@ -45,15 +45,33 @@ class User extends Model {
   }
 
   // Methods used by other widgets:
-  void incrementXP(int number) {
-    this._xp = this.xp + number;
+  void incrementXP(int bonus_xp, int total_xp) {
+    print("incrementXP");
+
+    CloudFunctions.instance.
+        call(
+        functionName: 'updateUserXpWorkout',
+        parameters: {
+          "bonus_xp": bonus_xp,
+          "total_xp": total_xp
+        }
+    )
+    .then((response){
+      print("Her");
+      print(response['updatedXp']);
+
+      setXP(response['updatedXp']);
+    }).catchError((error) {
+      print(error);
+    });
+
     checkLevelUp();
     notifyListeners();
     //TODO: Also change value in database
   }
 
   void incrementLevelByOne() {
-
+    print("incrementLevel");
     CloudFunctions.instance.
       call(
         functionName: 'updateUserLevelInfo',
@@ -68,12 +86,11 @@ class User extends Model {
     });
 
     notifyListeners();
-    //TODO: Also change value in database
     //TODO: Make the pop up appear?
   }
 
   checkLevelUp(){
-    //print("checkLevelUp");
+    print("checkLevelUp");
     if(this._xp >= this._xpCap){
       incrementLevelByOne();
     }

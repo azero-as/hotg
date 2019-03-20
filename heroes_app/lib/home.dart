@@ -344,7 +344,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       RaisedButton(
                         padding: EdgeInsets.all(10.0),
                         onPressed: () {
-                          model.checkLevelUp();
+                          model.incrementXP(20, 20);
                         },
                         elevation: 5.0,
                         color: Color(0xFF612A30),
