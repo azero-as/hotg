@@ -86,17 +86,13 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             if (selected == true) {
                 setState(() {
                     _selectedExercises.add(id);
-                    _exercises.add({"XP": xp, "name": name, "repetitions": 12, "sets": 3});
+                    _exercises.add({"XP": xp, "name": name});
                     _XpEarned += xp;
                 });
             } else {
                 setState(() {
-                    print(_selectedExercises);
                     _selectedExercises.remove(id);
-                    //var object = { 'utils': [ 'util1', 'util2' ] }
-
-                    _exercises.removeWhere(id);
-                    //_exercises.removeWhere("id" == id);
+                    _exercises.removeWhere((item) => item["name"] == name);
                     _XpEarned -= xp;
                 });
             }
@@ -174,7 +170,6 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         }
 
         Widget _returnFinishWorkoutButton(){
-            print(_exercises);
             return new Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40.0),
                 child: RaisedButton(
