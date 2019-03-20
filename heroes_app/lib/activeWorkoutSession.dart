@@ -22,6 +22,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     int _BonusXP = 1;
 
 
+    //TODO: Fix timer. Not in use at the moment
     Timer _timer;
     static int _start = 300;
     double _minutes = _start /60;
@@ -80,9 +81,6 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
       //Information about the exercises that is apart of the workout
         void _onCategorySelected(bool selected, t, id, xp, String name) {
-            print(t);
-            print(xp);
-            print(id);
             if (selected == true) {
                 setState(() {
                     _selectedExercises.add(id);
@@ -106,7 +104,6 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                 itemCount: widget.exercises.length,
                 itemBuilder: (BuildContext context, int index) =>
                     ExpansionTile(
-
                         key: PageStorageKey<int>(index),
                         title:  new CheckboxListTile(
                                 value: _selectedExercises
@@ -117,6 +114,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                                 },
                                 title: Text(widget.exercises[index]["name"]),
                                 ),
+                        //TODO: Get the appropriate sets and reps from the workout
                         children: <Widget>[
                                     ListTile(
                                         title: new Padding(
