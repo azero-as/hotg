@@ -117,3 +117,22 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
     response.send(msg);
 });
 
+
+// Returns a list of all user workouts objects 
+exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {
+
+        // user: lenatorresdal
+        const userId = 'TkDkU5X55RG9rNjSb6Fn'
+
+        return helpers.getAllUserWorkouts(userId)
+        .then(data => {
+
+            return response.send({
+                data
+            })
+        })
+        .catch(error => {
+            response.status(400).send(error) // 400 bad request
+        })
+   
+})
