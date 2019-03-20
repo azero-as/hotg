@@ -334,29 +334,34 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
               // Column for button
               Expanded(
                 flex: 3,
-                child: Column(
-                  children: <Widget>[
-                    // add space to make the button stay at the bottom of the box
-                    SizedBox(
-                      height: 50,
-                    ),
-                    RaisedButton(
-                      padding: EdgeInsets.all(10.0),
-                      onPressed: () {},
-                      elevation: 5.0,
-                      color: Color(0xFF612A30),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.67),
+                child: ScopedModelDescendant<User>(builder: (context, child, model) {
+                  return Column(
+                    children: <Widget>[
+                      // add space to make the button stay at the bottom of the box
+                      SizedBox(
+                        height: 50,
                       ),
-                      child: Text(
-                        'See workout',
-                        style: TextStyle(color: Colors.white, fontSize: 13.0),
+                      RaisedButton(
+                        padding: EdgeInsets.all(10.0),
+                        onPressed: () {
+                          model.checkLevelUp();
+                        },
+                        elevation: 5.0,
+                        color: Color(0xFF612A30),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.67),
+                        ),
+                        child: Text(
+                          'See workout',
+                          style: TextStyle(color: Colors.white, fontSize: 13.0),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  );
+                })
               ),
             ],
+
           ),
         ),
       ],

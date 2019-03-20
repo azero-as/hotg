@@ -1,4 +1,5 @@
 import 'package:scoped_model/scoped_model.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import '../authentication.dart';
 
 class User extends Model {
@@ -28,6 +29,11 @@ class User extends Model {
     notifyListeners();
   }
 
+  setXP(int number) {
+    this._xp = number;
+    notifyListeners();
+  }
+
   setXpCap(int number) {
     this._xpCap = number;
     notifyListeners();
@@ -41,14 +47,35 @@ class User extends Model {
   // Methods used by other widgets:
   void incrementXP(int number) {
     this._xp = this.xp + number;
+    checkLevelUp();
     notifyListeners();
     //TODO: Also change value in database
   }
 
   void incrementLevelByOne() {
-    this._level = this._level + 1;
+
+    CloudFunctions.instance.
+      call(
+        functionName: 'updateUserLevelInfo',
+    )
+    .then((response){
+      setLevel(response['userLevel']);
+      setXP(response['userXP']);
+      setXpCap(response['xpCap']);
+
+    }).catchError((error) {
+      print(error);
+    });
+
     notifyListeners();
     //TODO: Also change value in database
     //TODO: Make the pop up appear?
+  }
+
+  checkLevelUp(){
+    //print("checkLevelUp");
+    if(this._xp >= this._xpCap){
+      incrementLevelByOne();
+    }
   }
 }
