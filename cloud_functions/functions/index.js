@@ -245,23 +245,20 @@ exports.addWorkout= functions.https.onCall((data, context) => {
     const workoutType = data["workoutType"] || "Unknown"
     const bonus_xp = data["bonus_xp"]
     const total_xp = data["total_xp"]
-    const selectedExercises = data["selectedExercises"]
+    const selectedExercises = data["exercises"]
 
     var info = { bonus_xp: bonus_xp,
                 date: admin.firestore.FieldValue.serverTimestamp(),
                 total_xp: total_xp,
-                workoutType: workoutType,}
-    var exercises = {name: "bkabl", XP: 1}
+                workoutType: workoutType,
+                exercises: selectedExercises,
+                }
 
      return admin.firestore().collection('Users').doc("CC9zGkKATIf5JPndq197B68QMc92").collection("Workouts").add(info)
-     .then(docRef => {
-               console.log("Document written with ID: ", docRef.id);
-                return admin.firestore().collection('Users').doc("CC9zGkKATIf5JPndq197B68QMc92").collection("Workouts").doc(docRef.id).collection("Exercises").add(exercises);
 
-           })
-                      .catch(function(error) {
-                          console.error("Error adding document: ", error);
-                      });
+          .catch(function(error) {
+              console.error("Error adding document: ", error);
+          });
 
 
 });

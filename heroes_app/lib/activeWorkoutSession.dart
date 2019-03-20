@@ -63,7 +63,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             "bonus_xp": _BonusXP,
             "total_xp": _XpEarned,
             "workoutType": "Full-body workout",
-            "exercises": _selectedExercises
+            "exercises": _exercises
           }
       );
     }
@@ -79,17 +79,24 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     Widget build(BuildContext context) {
 
       //Information about the exercises that is apart of the workout
-        void _onCategorySelected(bool selected, id, xp, String name) {
+        void _onCategorySelected(bool selected, t, id, xp, String name) {
+            print(t);
+            print(xp);
+            print(id);
             if (selected == true) {
                 setState(() {
                     _selectedExercises.add(id);
-                    _exercises.add([{"id": id, "XP": xp, "name": name}]);
+                    _exercises.add({"XP": xp, "name": name, "repetitions": 12, "sets": 3});
                     _XpEarned += xp;
                 });
             } else {
                 setState(() {
+                    print(_selectedExercises);
                     _selectedExercises.remove(id);
-                    _exercises.remove([{"id": id, "XP": xp, "name": name}]);
+                    //var object = { 'utils': [ 'util1', 'util2' ] }
+
+                    _exercises.removeWhere(id);
+                    //_exercises.removeWhere("id" == id);
                     _XpEarned -= xp;
                 });
             }
@@ -110,7 +117,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                                     .contains(widget.exercises[index].documentID),
                                 onChanged: (bool selected) {
                                 _onCategorySelected(selected,
-                                    widget.exercises[index].documentID, widget.exercises[index]["XP"],widget.exercises[index]["name"]);
+                                    widget.exercises[index],widget.exercises[index].documentID, widget.exercises[index]["XP"],widget.exercises[index]["name"]);
                                 },
                                 title: Text(widget.exercises[index]["name"]),
                                 ),
@@ -167,6 +174,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         }
 
         Widget _returnFinishWorkoutButton(){
+            print(_exercises);
             return new Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40.0),
                 child: RaisedButton(
@@ -178,7 +186,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                       _saveWorkout();
                     },
                     padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-                    color: const Color(0xFF58C6DA),
+                    color: const Color(0xFF612A30),
                     child: Text('Finish workout', style: TextStyle(color: Colors.white),),
                 ),
             );}
@@ -187,13 +195,13 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         return new Scaffold(
             appBar: AppBar(actions: <Widget>[
                 new Center(
-                    child: new Text('Workout',
+                    child: new Text('',
                         style: new TextStyle(fontSize: 17.0, color: Colors.white)),
                 )],),
             body: new Container(
                 child: Column(
                     children: <Widget>[
-                      _returnTimer(),
+                      //_returnTimer(),
                       Expanded(
                         child: _showInformationWorkout(),
                     ),

@@ -74,7 +74,7 @@ class _PlanPageState extends State<Plan> {
                             //TODO: Add icon
                             new TextSpan(text: 'Time: ', style: new TextStyle(fontWeight: FontWeight.bold)),
                             //TODO: Add the correct time here
-                            new TextSpan(text: '1  '),
+                            new TextSpan(text: '1 hour '),
                             new TextSpan(text: ' XP: ', style: new TextStyle(fontWeight: FontWeight.bold)),
                             //TODO: Add the correct XP one gets from completing the workout
                             new TextSpan(text: '100 \n\n'),
@@ -102,7 +102,7 @@ class _PlanPageState extends State<Plan> {
         Widget _returnBody(List<dynamic> exercises){
             return new Container(
                 padding: EdgeInsets.only(left: 24.0, right: 24.0),
-                margin: EdgeInsets.fromLTRB(0, 50, 0, 15),
+                margin: EdgeInsets.fromLTRB(0, 50, 0, 35),
                 child: Column(
                     children: <Widget>[
                         Container(
@@ -113,7 +113,7 @@ class _PlanPageState extends State<Plan> {
                             child: _showInformationWorkout(exercises),
                         ),
                         _returnStartWorkoutButton(exercises),
-                        _returnNewWorkoutButton(),
+                       // _returnNewWorkoutButton(),
                     ],
 
                 )
