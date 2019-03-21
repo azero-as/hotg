@@ -57,9 +57,6 @@ class User extends Model {
         }
     )
     .then((response){
-      print("Her");
-      print(response['updatedXp']);
-
       setXP(response['updatedXp']);
     }).catchError((error) {
       print(error);
