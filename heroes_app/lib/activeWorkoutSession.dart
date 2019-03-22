@@ -174,7 +174,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
           ),
           onPressed: () {
             _saveWorkout();
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Summary()));
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Summary(exercises: _exercises, bonus: _BonusXP, total_xp: _XpEarned, workoutType: widget.workoutName)));
           },
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
           color: const Color(0xFF612A30),
