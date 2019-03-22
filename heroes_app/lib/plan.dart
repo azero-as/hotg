@@ -5,7 +5,11 @@ import 'activeWorkoutSession.dart';
 
 class Plan extends StatefulWidget {
 
-    static String tag = 'plan-page';
+    final List exercises;
+    Plan({this.exercises});
+
+
+
     @override
     _PlanPageState createState() => new _PlanPageState();
 
@@ -17,7 +21,7 @@ class _PlanPageState extends State<Plan> {
 
   @override
     Widget build(BuildContext context) {
-
+    print(widget.exercises);
 
         Widget _returnNewWorkoutButton(){
             return Padding(
@@ -91,7 +95,7 @@ class _PlanPageState extends State<Plan> {
             return new ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: exercises.length,
+                itemCount: widget.exercises.length,
                 itemBuilder: (BuildContext context, int index) =>
                     EntryItem(exercises[index]),
 
@@ -99,7 +103,39 @@ class _PlanPageState extends State<Plan> {
 
         }
 
-        Widget _returnBody(List<dynamic> exercises){
+    Widget _showInformationWorkouttest(){
+      return new ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: widget.exercises.length,
+        itemBuilder: (BuildContext context, int index) =>
+            ExpansionTile(
+                key: PageStorageKey<int>(index),
+                title:  new Text((widget.exercises[index]["name"]),
+                ),
+                //TODO: Get the appropriate sets and reps from the workout
+                children: <Widget>[
+                  ListTile(
+                    title: new Text("Sets: " + widget.exercises[index]["targetSets"])),
+
+                  ListTile(
+                    title:new Text("Reps: " + widget.exercises[index]["targetReps"])),
+                  ListTile(
+                    title: new Text("Rest between sets: " + widget.exercises[index]["restBetweenSets"])
+                  ),
+                  ListTile(
+                    title: new Text("XP: " +  widget.exercises[index]["xp"].toString())),
+                ]
+              //children: root["info"]
+            ),
+
+      );
+    }
+
+
+    Widget _returnBody(List<dynamic> exercises){
+            print("Exercises: ");
+            print(exercises);
             return new Container(
                 padding: EdgeInsets.only(left: 24.0, right: 24.0),
                 margin: EdgeInsets.fromLTRB(0, 50, 0, 35),
@@ -110,17 +146,21 @@ class _PlanPageState extends State<Plan> {
 
                         ),
                         Expanded(
-                            child: _showInformationWorkout(exercises),
+                            child: _showInformationWorkouttest(),
                         ),
-                        _returnStartWorkoutButton(exercises),
-                       // _returnNewWorkoutButton(),
+                       // _returnStartWorkoutButton(exercises),
+                        _returnNewWorkoutButton(),
                     ],
 
                 )
             );}
 
-
         return Scaffold(
+              appBar: AppBar(actions: <Widget>[
+                new Center(
+                  child: new Text('',
+                      style: new TextStyle(fontSize: 17.0, color: Colors.white)),
+                )],),
                 body: StreamBuilder<QuerySnapshot>(
                     stream:  Firestore.instance.collection("Exercises").snapshots(),
                     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
@@ -128,14 +168,11 @@ class _PlanPageState extends State<Plan> {
                         if(snapshot.data ==null) return new Text("no workouts");
                         else{
                             var exercises = [];
-                           for(var i = 0; i < snapshot.data.documents.length; i++){
-
-                                exercises.add(snapshot.data.documents[i]);
-
-
+                           for(var i = 0; i < widget.exercises.length; i++){
+                             exercises.add(widget.exercises[i]);
                            }
-                             print(exercises[0]["name"]);
 
+                           print(exercises);
                             return _returnBody(exercises);
                         }
                     }
@@ -170,10 +207,12 @@ class EntryItem extends StatelessWidget {
     const EntryItem(this.entry);
 
     final DocumentSnapshot entry;
+
     Widget _buildTiles(DocumentSnapshot root) {
+
         return ExpansionTile(
             key: PageStorageKey<DocumentSnapshot>(root),
-            title: Text(root["name"]),
+            title: Text("name"),
             children: <Widget>[
                 ListTile(
                     title: Text("Sets: 1"),

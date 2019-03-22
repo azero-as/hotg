@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'authentication.dart';
+import 'Plan.dart';
 
 // build the home page and call on the stateful classes
 import 'models/user.dart';
@@ -199,6 +200,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
   static String _workoutName = "";
   static int _duration = -1;
   static int _xp = -1;
+  static List exercises = [];
 
   @override
   void initState() {
@@ -213,6 +215,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
           _workoutName = response['workoutName'];
           _duration = response['duration'];
           _xp = response['xp'];
+          exercises = response['exercises'];
         });
       }).catchError((error) {
         print(error);
@@ -223,11 +226,11 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
   Widget build(BuildContext context) {
 
     return LayoutBuilder(builder: (context, constraints) {
-      if(_intensity == ""|| _workoutName == "" || _duration == -1 || _xp == -1){
+      if(_intensity == ""|| _workoutName == "" || _duration == -1 || _xp == -1 || exercises == []){
         return new Text("");
       }
       else{
-
+        print(exercises);
         print(_intensity);
         return Container(
           // make sure the placement is centered and a little away from appbar
@@ -373,7 +376,9 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       ),
                       RaisedButton(
                         padding: EdgeInsets.all(10.0),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Plan(exercises: exercises)));
+                        },
                         elevation: 5.0,
                         color: Color(0xFF612A30),
                         shape: RoundedRectangleBorder(

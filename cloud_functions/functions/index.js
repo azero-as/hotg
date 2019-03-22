@@ -239,6 +239,26 @@ exports.getExercises  = functions.https.onRequest((request, response) => {
 });
 
 
+exports.getWorkout  = functions.https.onRequest((request, response) => {
+
+        return admin.firestore().collection("Workouts").doc("w7ujyNOojW4QAE4GV4wc").get()
+                .then(querySnapshot => {
+
+                    const data = querySnapshot.data();
+
+                    return response.send({data})
+                })
+                .catch(error => {
+                    response.status(400).send(error) // 400 bad request
+                })
+
+        .catch( error => {
+            // 401 is unauthorized.
+            result.status(401).send(error)
+        })
+});
+
+
 
 // Listen for updates to any `user` document.
 exports.addWorkout= functions.https.onCall((data, context) => {
