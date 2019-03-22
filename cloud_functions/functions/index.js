@@ -13,6 +13,7 @@ admin.initializeApp(functions.config().firebase);
  // Get username and email for settings page
 exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
 
+
     const tokenId = request.get('Authorization').split('Bearer ')[1];
 
     return admin.auth().verifyIdToken(tokenId)
@@ -42,6 +43,96 @@ exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
     })
 });
 
+
+exports.getUserXP = functions.https.onRequest((request, response) => {
+    /**
+     * The token id is sent like this in the request:
+     * 'Authorization': 'Bearer xxxxxxxxxx'
+     * so we need to find it and split it in two.
+     */
+    const tokenId = request.get('Authorization').split('Bearer ')[1];
+
+    return admin.auth().verifyIdToken(tokenId)
+        .then( decoded => {
+
+            const userId = decoded.user_id;
+
+            return admin.firestore().collection('Users').doc(userId).get()
+                .then(querySnapshot => {
+
+                    const data = querySnapshot.data();
+
+                    return response.send({
+                        data: {
+                           XP: data.XP,
+                        }
+                    })
+                })
+                .catch(error => {
+                    response.status(400).send(error) // 400 bad request
+                })
+        })
+        .catch( error => {
+            // 401 is unauthorized.
+            result.status(401).send(error)
+        })
+});
+
+exports.getUserLevel = functions.https.onRequest((request, response) => {
+    /**
+     * The token id is sent like this in the request:
+     * 'Authorization': 'Bearer xxxxxxxxxx'
+     * so we need to find it and split it in two.
+     */
+    const tokenId = request.get('Authorization').split('Bearer ')[1];
+
+    return admin.auth().verifyIdToken(tokenId)
+        .then( decoded => {
+
+            const userId = decoded.user_id;
+
+            return admin.firestore().collection('Users').doc(userId).get()
+                .then(querySnapshot => {
+
+                    const data = querySnapshot.data();
+
+                    return response.send({
+                        data: {
+                            Level: data.Level,
+                        }
+                    })
+                })
+                .catch(error => {
+                    response.status(400).send(error) // 400 bad request
+                })
+        })
+        .catch( error => {
+            // 401 is unauthorized.
+            result.status(401).send(error)
+        })
+});
+
+exports.getLevelCaps = functions.https.onRequest((req, res) => {
+    var list = [];
+    var ref = admin.firestore.collection('Levels');
+    var allLevels = ref.get()
+        .then(snapshot => {
+            snapshot.forEach(doc => {
+                list.add(doc.id);
+                console.log(doc.id, '=>', doc.data())
+       });
+            return response.send({
+            })
+       }).catch( error => {
+            // 401 is unauthorized.
+            result.status(401).send(error)
+    });
+
+});
+
+exports.setLevel = functions.https.onRequest((req, res) => {
+
+});
 
 const helpers = require('./helper_functions.js');
 
@@ -134,3 +225,64 @@ exports.updateUserXpWorkout = functions.https.onCall((data, context) => {
 
     }
 })
+
+exports.getExercises  = functions.https.onRequest((request, response) => {
+
+        return admin.firestore().collection('Users').doc("CC9zGkKATIf5JPndq197B68QMc92").collection("Workouts").doc("2sBmiDB5vBMnWLswuCnz").get()
+                .then(querySnapshot => {
+
+                    const data = querySnapshot.data();
+
+                    return response.send({data})
+                })
+                .catch(error => {
+                    response.status(400).send(error) // 400 bad request
+                })
+
+        .catch( error => {
+            // 401 is unauthorized.
+            result.status(401).send(error)
+        })
+});
+
+
+
+// Listen for updates to any `user` document.
+exports.addWorkout= functions.https.onCall((data, context) => {
+
+    if (context.auth.uid != null) {
+        var userId = context.auth.uid
+
+        const workoutType = data["workoutType"] || "Unknown"
+        const bonus_xp = data["bonus_xp"]
+        const total_xp = data["total_xp"]
+        const selectedExercises = data["exercises"]
+
+        var info = { bonus_xp: bonus_xp,
+            date: admin.firestore.FieldValue.serverTimestamp(),
+            total_xp: total_xp,
+            workoutType: workoutType,
+            exercises: selectedExercises,
+            }
+            
+            return admin.firestore().collection('Users').doc(userId)
+            .collection("Workouts").add(info)
+            
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+          })
+    }
+    else {
+        // Not authenticated:
+        throw new functions.https.HttpsError(code, message)
+    }
+
+    
+
+    
+
+     
+
+
+});
+
