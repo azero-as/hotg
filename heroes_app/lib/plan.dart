@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'activeWorkoutSession.dart';
 
 class Plan extends StatefulWidget {
 
@@ -12,8 +13,11 @@ class Plan extends StatefulWidget {
 
 
 class _PlanPageState extends State<Plan> {
-    @override
+
+
+  @override
     Widget build(BuildContext context) {
+
 
         Widget _returnNewWorkoutButton(){
             return Padding(
@@ -37,16 +41,18 @@ class _PlanPageState extends State<Plan> {
             );
         }
 
-        Widget _returnStartWorkoutButton(){
+        Widget _returnStartWorkoutButton(List<dynamic> exercises){
             return new Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0.0),
+
                 child: RaisedButton(
                     elevation: 5.0,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                     ),
                     onPressed: () {
-                        //TODO: eventhandler on start workout button
+                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => activeWorkoutSession(exercises: exercises)));
+
                     },
                     padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
                     color: const Color(0xFF212838),
@@ -68,7 +74,7 @@ class _PlanPageState extends State<Plan> {
                             //TODO: Add icon
                             new TextSpan(text: 'Time: ', style: new TextStyle(fontWeight: FontWeight.bold)),
                             //TODO: Add the correct time here
-                            new TextSpan(text: '1  '),
+                            new TextSpan(text: '1 hour '),
                             new TextSpan(text: ' XP: ', style: new TextStyle(fontWeight: FontWeight.bold)),
                             //TODO: Add the correct XP one gets from completing the workout
                             new TextSpan(text: '100 \n\n'),
@@ -96,7 +102,7 @@ class _PlanPageState extends State<Plan> {
         Widget _returnBody(List<dynamic> exercises){
             return new Container(
                 padding: EdgeInsets.only(left: 24.0, right: 24.0),
-                margin: EdgeInsets.fromLTRB(0, 50, 0, 15),
+                margin: EdgeInsets.fromLTRB(0, 50, 0, 35),
                 child: Column(
                     children: <Widget>[
                         Container(
@@ -106,8 +112,8 @@ class _PlanPageState extends State<Plan> {
                         Expanded(
                             child: _showInformationWorkout(exercises),
                         ),
-                        _returnStartWorkoutButton(),
-                        _returnNewWorkoutButton(),
+                        _returnStartWorkoutButton(exercises),
+                       // _returnNewWorkoutButton(),
                     ],
 
                 )
@@ -116,15 +122,19 @@ class _PlanPageState extends State<Plan> {
 
         return Scaffold(
                 body: StreamBuilder<QuerySnapshot>(
-                    stream:  Firestore.instance.collection("Exercises").document("LowerBody").collection("Lvl1").snapshots(),
+                    stream:  Firestore.instance.collection("Exercises").snapshots(),
                     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
                         if (!snapshot.hasData) return new Text('Loading...');
-                        if(snapshot.hasData && snapshot.data !=null){
+                        if(snapshot.data ==null) return new Text("no workouts");
+                        else{
                             var exercises = [];
                            for(var i = 0; i < snapshot.data.documents.length; i++){
+
                                 exercises.add(snapshot.data.documents[i]);
 
+
                            }
+                             print(exercises[0]["name"]);
 
                             return _returnBody(exercises);
                         }
@@ -163,7 +173,7 @@ class EntryItem extends StatelessWidget {
     Widget _buildTiles(DocumentSnapshot root) {
         return ExpansionTile(
             key: PageStorageKey<DocumentSnapshot>(root),
-            title: Text(root["Name"]),
+            title: Text(root["name"]),
             children: <Widget>[
                 ListTile(
                     title: Text("Sets: 1"),
@@ -172,7 +182,7 @@ class EntryItem extends StatelessWidget {
                     title: Text("Reps: 10-12"),
                 ),
                 ListTile(
-                    title: Text("XP: " + root["XP"].toString()),
+                    title: Text("XP: "),
                 ),
             ]
             //children: root["info"]
