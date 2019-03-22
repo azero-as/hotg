@@ -4,11 +4,10 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/user.dart';
 import 'authentication.dart';
-import 'StartWorkout.dart';
+import 'startWorkout.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
 // build the home page and call on the stateful classes
-
 class Home extends StatelessWidget {
   static String tag = 'home-page';
 
@@ -53,8 +52,6 @@ class AvatarOverview extends StatefulWidget {
 
 // class for appbar of home page
 class _AvatarOverviewState extends State<AvatarOverview> {
-
-
   Widget build(BuildContext context) {
     // variables for size, for best view across platforms
     var barHeight = (MediaQuery.of(context).size.height) / 3;
@@ -70,7 +67,8 @@ class _AvatarOverviewState extends State<AvatarOverview> {
               width: barWidth,
               color: Color(0xFF212838),
               padding: EdgeInsets.fromLTRB(20, 30, 20, 15),
-              child: ScopedModelDescendant<User>(builder: (context, child, model) {
+              child:
+                  ScopedModelDescendant<User>(builder: (context, child, model) {
                 return Row(
                   children: <Widget>[
                     // Column for half bar, only image
@@ -141,7 +139,8 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                         // XP / XP cap
                         Padding(
                           padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                          child: Text('${model.xp.toString()}/${model.xpCap.toString()}',
+                          child: Text(
+                              '${model.xp.toString()}/${model.xpCap.toString()}',
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.left),
                         ),
@@ -174,55 +173,59 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
   void initState() {
     super.initState();
 
-      CloudFunctions.instance
-          .call(
-        functionName: 'getWorkout',
-      ).then((response) {
-        setState(() {
-          _intensity = response['intensity'];
-          _workoutName = response['workoutName'];
-          _duration = response['duration'];
-          _xp = response['xp'];
-          exercises = response['exercises'];
-        });
-      }).catchError((error) {
-        print(error);
+    CloudFunctions.instance
+        .call(
+      functionName: 'getWorkout',
+    )
+        .then((response) {
+      setState(() {
+        _intensity = response['intensity'];
+        _workoutName = response['workoutName'];
+        _duration = response['duration'];
+        _xp = response['xp'];
+        exercises = response['exercises'];
       });
-    }
+    }).catchError((error) {
+      print(error);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return LayoutBuilder(builder: (context, constraints) {
-      if(_intensity == ""|| _workoutName == "" || _duration == -1 || _xp == -1 || exercises == []){
+      if (_intensity == "" ||
+          _workoutName == "" ||
+          _duration == -1 ||
+          _xp == -1 ||
+          exercises == []) {
         return new Text("");
-      }
-      else{
+      } else {
         print(exercises);
         print(_intensity);
         return Container(
-          // make sure the placement is centered and a little away from appbar
-          padding: EdgeInsets.fromLTRB(50, 20, 50, 0),
-          child: Column(
-            children: <Widget>[
-              // New container for text, aligned on the left
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  child: Text('Next planned workout:\n',
-                      style: TextStyle(
-                        color: Color(0xFF525050),
-                      )),
+            // make sure the placement is centered and a little away from appbar
+            padding: EdgeInsets.fromLTRB(50, 20, 50, 0),
+            child: Column(
+              children: <Widget>[
+                // New container for text, aligned on the left
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    child: Text('Next planned workout:\n',
+                        style: TextStyle(
+                          color: Color(0xFF525050),
+                        )),
+                  ),
                 ),
-              ),
-              // call on workout widget
-              _workout(),
-            ],
-          ));
-    }});
+                // call on workout widget
+                _workout(),
+              ],
+            ));
+      }
+    });
   }
 
-  Widget _workout(){
+  Widget _workout() {
     return new Container(
       // add border for the workout info box
       decoration: BoxDecoration(
@@ -345,7 +348,15 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       RaisedButton(
                         padding: EdgeInsets.all(10.0),
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => StartWorkout(exercises: exercises, duration: _duration, intensity: _intensity, xp: _xp)));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      StartWorkout(
+                                          exercises: exercises,
+                                          duration: _duration,
+                                          intensity: _intensity,
+                                          xp: _xp)));
                         },
                         elevation: 5.0,
                         color: Color(0xFF612A30),
