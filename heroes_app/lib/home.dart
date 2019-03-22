@@ -116,7 +116,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                         Padding(
                           padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
                           child: Text(
-                              'Level: ${model.level.toString()} ${model.className.toString()}',
+                              'Level ${model.level.toString()} ${model.className.toString()}',
                               // 'Level' /* + _userLevel  + ' Intermediate thing?'*/,
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.left),
