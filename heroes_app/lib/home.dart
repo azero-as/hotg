@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/user.dart';
 import 'authentication.dart';
@@ -53,32 +52,6 @@ class AvatarOverview extends StatefulWidget {
 // class for appbar of home page
 class _AvatarOverviewState extends State<AvatarOverview> {
 
-  // different user information to call from database
-  String _username = '';
-  int _userLevel;
-  int _userXp = 0;
-  int _xpCap = 1;
-
-  @override
-  void initState() {
-    super.initState();
-
-    CloudFunctions.instance
-        .call(
-      functionName: 'getUserInfo',
-    )
-        .then((response) {
-      setState(() {
-        _username = response['username'];
-        _userLevel = response['userLevel'];
-        _userXp = response['userXp'];
-        _xpCap = response['xpCap'];
-      });
-    }).catchError((error) {
-      print(error);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // variables for size, for best view across platforms
@@ -87,9 +60,6 @@ class _AvatarOverviewState extends State<AvatarOverview> {
     var imageHeight = (barHeight - 55);
     var imageWidth = (barWidth / 2) - 20;
     var progressBar = (imageWidth - 15);
-
-    //calculate the progression to get the correct percentage in the progress bar
-    var progress = (_userXp/_xpCap);
 
     return Stack(
       children: <Widget>[
@@ -142,11 +112,12 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                           ),
                         ),
 
-                        //Level
+                        //Level and class
                         Padding(
                           padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
                           child: Text(
-                              'Level ${model.level.toString()} Class',
+                              'Level ${model.level.toString()} ${model.className.toString()}',
+                              // 'Level' /* + _userLevel  + ' Intermediate thing?'*/,
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.left),
                         ),
@@ -159,7 +130,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                             lineHeight: 15,
                             backgroundColor: Colors.white,
                             progressColor: Color(0xFF4D3262),
-                            percent: progress,
+                            percent: model.xp / model.xpCap,
                             //bar shape
                             linearStrokeCap: LinearStrokeCap.roundAll,
                             animationDuration: 2000,

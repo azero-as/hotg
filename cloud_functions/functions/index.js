@@ -1,9 +1,6 @@
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
 
 //The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
 const functions = require('firebase-functions');
@@ -12,22 +9,8 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
-/**
- * Helpful links
- * For getting the token id:            https://stackoverflow.com/questions/42751074/how-to-protect-firebase-cloud-function-http-endpoint-to-allow-only-firebase-auth
- * For authorizing with the database:   https://stackoverflow.com/questions/48575730/how-to-protect-firebase-cloud-function-http-endpoint-using-authenticated-id-toke
- */
 
-
-    /**
-     * The token id is sent like this in the request:
-     * 'Authorization': 'Bearer xxxxxxxxxx'
-     * so we need to find it and split it in two.
-     */
-
-
-// Get email and username for current user
-// TODO: delete this function when we have state management in the app 
+ // Get username and email for settings page
 exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
 
 
@@ -59,7 +42,6 @@ exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
         result.status(401).send(error)
     })
 });
-
 
 
 exports.getUserXP = functions.https.onRequest((request, response) => {
@@ -154,6 +136,7 @@ exports.setLevel = functions.https.onRequest((req, res) => {
 
 const helpers = require('./helper_functions.js');
 
+// Get characterName, gameLevel, xp, class and xpCap for current level for home page
 exports.getUserInfo = functions.https.onRequest((request, response) => {
 
     const tokenId = request.get('Authorization').split('Bearer ')[1];
@@ -162,6 +145,7 @@ exports.getUserInfo = functions.https.onRequest((request, response) => {
     .then( decoded => {
 
         const userId = decoded.user_id;
+        console.log('UserId: ',userId)
 
         return helpers.getUserInfo(userId)
         .then(data => {
@@ -180,13 +164,19 @@ exports.getUserInfo = functions.https.onRequest((request, response) => {
     })
 });
 
-// Returns a list of all user workouts objects 
-exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {
 
-        // user: lenatorresdal
-        const userId = 'TkDkU5X55RG9rNjSb6Fn'
+// Updates user level info: xp, level and xpCap for current level if level is updated.
+// Returns new values.
+exports.updateUserLevelInfo = functions.https.onRequest((request, response) => {
 
-        return helpers.getAllUserWorkouts(userId)
+    const tokenId = request.get('Authorization').split('Bearer ')[1];
+
+    return admin.auth().verifyIdToken(tokenId)
+    .then( decoded => {
+
+        const userId = decoded.user_id;
+
+        return helpers.updateUserLevelInfo(userId)
         .then(data => {
 
             return response.send({
@@ -196,9 +186,45 @@ exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {
         .catch(error => {
             response.status(400).send(error) // 400 bad request
         })
-   
+    })
+    .catch( error => {
+        // 401 is unauthorized.
+        result.status(401).send(error)
+    })
 })
 
+// Get total_xp and bonus_xp from finished workout, and updates the
+// total amount of XP in the User collection
+
+exports.updateUserXpWorkout = functions.https.onCall((data, context) => {
+
+    // Check if user is authenticated: 
+    if (context.auth.uid != null) {
+
+        var userId = context.auth.uid
+        const total_xp = data.total_xp
+        const bonus_xp = data.bonus_xp
+     
+        const totalWorkoutXp = total_xp + bonus_xp
+        
+        console.log(userId)
+
+        return helpers.updateUserXpWorkout(userId, totalWorkoutXp)
+        .then(data => {
+            console.log(data)
+            return data
+        })
+        .catch(error => {
+            console.log(error)
+            // return error
+            return {}
+        })  
+    } else {
+        // not authenticated: 
+        throw new functions.https.HttpsError(code, message)
+
+    }
+})
 
 exports.getExercises  = functions.https.onRequest((request, response) => {
 
