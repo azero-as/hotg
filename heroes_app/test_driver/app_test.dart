@@ -12,7 +12,7 @@ void main() {
       final logInButton = find.byValueKey('LogIn');
 
       //Widgets from login
-      final usernameTextField = find.byValueKey("loginUsername");;
+      final usernameTextField = find.byValueKey("loginUsername");
       final passwordTextField = find.byValueKey("loginPassword");
       final logInButton2 = find.byValueKey("LogIn2");
       final errormessage = find.byValueKey("LogInErrorMessage");
@@ -72,7 +72,7 @@ void main() {
     final signUpButton = find.byValueKey('SignUp');
 
 //Widgets from login
-    final usernameTextField = find.byValueKey("signupEmail");;
+    final usernameTextField = find.byValueKey("signupEmail");
     final passwordTextField = find.byValueKey("signupPassword");
     final passwordTextField2 = find.byValueKey("signupPassword2");
     final signUpButton2 = find.byValueKey("SignUp2");

@@ -39,7 +39,7 @@ exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
 
             return response.send({
                 data: {
-                    username: data.Username,
+                    username: data.characterName,
                     email: decoded.email
                 }
             })
@@ -82,38 +82,21 @@ exports.getUserInfo = functions.https.onRequest((request, response) => {
     })
 });
 
-/*const helpers = require('./helper_functions.js');
+// Returns a list of all user workouts objects 
+exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {
 
-// Gets Username, XP, Level and xpCap from current user
-exports.getUserInfo = functions.https.onRequest((request, response) => {
+        // user: lenatorresdal
+        const userId = 'TkDkU5X55RG9rNjSb6Fn'
 
-    const tokenId = request.get('Authorization').split('Bearer ')[1];
-    return admin.auth().verifyIdToken(tokenId)
-    .then( decoded => {
-        
-        const userId = decoded.user_id;
+        return helpers.getAllUserWorkouts(userId)
+        .then(data => {
 
-        helpers.getUserInfo(userId)
-        .then( (userInfo) => {
-            response.send(userInfo)
+            return response.send({
+                data
             })
         })
         .catch(error => {
-            // 401 is unauthorized.
-            result.status(401).send(error)
-    })
+            response.status(400).send(error) // 400 bad request
+        })
+   
 })
-
-*/
-exports.helloWorld = functions.https.onRequest((request, response) => {
-
-    let msg = {
-        data: { // must be here for flutter
-            msg: "Hello from Firebase!",
-            version: 10,
-        }
-    };
-    
-    response.send(msg);
-});
-
