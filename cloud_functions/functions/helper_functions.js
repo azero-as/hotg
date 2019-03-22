@@ -10,6 +10,7 @@ async function getUserInfo(userId) {
     var userLevel = userCollection[0]
     var userXp = userCollection[1]
     var username = userCollection[2]
+    var className = userCollection[3]
 
     let userLevelString = userLevel.toString()
     var xpCap = await getLevelXpCap(userLevelString)
@@ -20,20 +21,22 @@ async function getUserInfo(userId) {
         userLevel: userLevel,
         userXp: userXp,
         xpCap: xpCap,
+        className: className
     }
 
 }
       
-// Get current user level, xp and username from "Users" collection
+// Get current user level, xp, charactername and class from "Users" collection
 async function getUsersCollection(userId) {
 
     return admin.firestore().collection('Users').doc(userId).get()
     .then(querySnapshot => {
-        var userLevel = querySnapshot.data().Level
-        var userXp = querySnapshot.data().XP
-        var username = querySnapshot.data().Username
+        var userLevel = querySnapshot.data().gameLevel
+        var userXp = querySnapshot.data().xp
+        var username = querySnapshot.data().characterName
+        var className = querySnapshot.data().class
 
-        return [userLevel, userXp, username]
+        return [userLevel, userXp, username, className]
     })
     .catch(function(error) {
         console.log('Error: ', error)
