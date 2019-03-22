@@ -17,7 +17,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
   List _selectedExercises = [];
   List _exercises = [];
   int _XpEarned = 0;
-  int _BonusXP = 1;
+  int _BonusXP = 0;
 
   //TODO: Fix timer. Not in use at the moment
   Timer _timer;
@@ -40,27 +40,6 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             }));
   }
 
-  //Save the workout to the database using cloud functions
-  void _saveWorkout() {
-    DateTime date = new DateTime.now();
-
-    //Check if you have gotten bonus
-    for (var i = 0; i < widget.exercises.length; i++) {
-      if (!_selectedExercises.contains(widget.exercises[i]["name"])) {
-        _BonusXP = 0;
-        break;
-      } else if (_BonusXP == 0) {
-        _BonusXP = 1;
-      }
-    }
-
-    CloudFunctions.instance.call(functionName: 'addWorkout', parameters: {
-      "bonus_xp": _BonusXP,
-      "total_xp": _XpEarned,
-      "workoutType": widget.workoutName,
-      "exercises": _exercises
-    });
-  }
 
   @override
   void dispose() {
@@ -75,7 +54,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       if (selected == true) {
         setState(() {
           _selectedExercises.add(id);
-          _exercises.add({"XP": xp, "name": name});
+          _exercises.add({"xp": xp, "name": name});
           _XpEarned += xp;
         });
       } else {
@@ -86,6 +65,29 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         });
       }
     }
+
+    //Save the workout to the database using cloud functions
+    void _saveWorkout() {
+      DateTime date = new DateTime.now();
+
+      if (_selectedExercises.length == widget.exercises.length) {
+        _BonusXP = 1;
+      } else {
+        _BonusXP = 0;
+      }
+
+      _XpEarned = _XpEarned + _BonusXP;
+      
+      CloudFunctions.instance.call(functionName: 'addWorkout', parameters: {
+        "bonus_xp": _BonusXP,
+        "total_xp": _XpEarned,
+        "workoutType": widget.workoutName,
+        "exercises": _exercises
+      });
+
+
+    }
+
 
     //Information about the different exercises in the workout
     Widget _showInformationWorkout() {
