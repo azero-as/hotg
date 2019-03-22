@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'dart:async';
+import 'summary.dart';
 
 class activeWorkoutSession extends StatefulWidget {
   final List<dynamic> exercises;
@@ -173,6 +174,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
           ),
           onPressed: () {
             _saveWorkout();
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Summary()));
           },
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
           color: const Color(0xFF612A30),
