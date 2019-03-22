@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'authentication.dart';
-import 'Plan.dart';
+import 'StartWorkout.dart';
 
 // build the home page and call on the stateful classes
 import 'models/user.dart';
@@ -377,7 +377,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       RaisedButton(
                         padding: EdgeInsets.all(10.0),
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Plan(exercises: exercises)));
+                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => StartWorkout(exercises: exercises, duration: _duration, intensity: _intensity, xp: _xp)));
                         },
                         elevation: 5.0,
                         color: Color(0xFF612A30),

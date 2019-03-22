@@ -49,7 +49,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
       //Check if you have gotten bonus
       for(var i = 0; i < widget.exercises.length; i++){
-        if(!  _selectedExercises.contains(widget.exercises[i].documentID)){
+        if(!  _selectedExercises.contains(widget.exercises[i]["name"])){
           _BonusXP = 0;
           break;
         }
@@ -107,10 +107,10 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                         key: PageStorageKey<int>(index),
                         title:  new CheckboxListTile(
                                 value: _selectedExercises
-                                    .contains(widget.exercises[index].documentID),
+                                    .contains(widget.exercises[index]["name"]),
                                 onChanged: (bool selected) {
                                 _onCategorySelected(selected,
-                                    widget.exercises[index],widget.exercises[index].documentID, widget.exercises[index]["XP"],widget.exercises[index]["name"]);
+                                    widget.exercises[index],widget.exercises[index]["name"], widget.exercises[index]["xp"],widget.exercises[index]["name"]);
                                 },
                                 title: Text(widget.exercises[index]["name"]),
                                 ),
@@ -119,22 +119,22 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                                     ListTile(
                                         title: new Padding(
                                             padding: EdgeInsets.all(20),
-                                            child: new Text("Sets: 1")),
+                                            child: new Text("Sets: " + widget.exercises[index]["targetSets"])),
                                     ),
                                     ListTile(
                                         title: new Padding(
                                             padding: EdgeInsets.all(20),
-                                            child: new Text("Reps: 10-12")),
+                                            child: new Text("Reps: " + widget.exercises[index]["targetReps"])),
                                     ),
                                     ListTile(
                                         title: new Padding(
                                             padding: EdgeInsets.all(20),
-                                            child: new Text("Rest between sets: 1 min")),
+                                            child: new Text("Rest between sets: " + widget.exercises[index]["restBetweenSets"])),
                                     ),
                                     ListTile(
                                         title: new Padding(
                                             padding: EdgeInsets.all(20),
-                                            child: new Text("XP: " + widget.exercises[index]["XP"].toString())),
+                                            child: new Text("XP: " + widget.exercises[index]["xp"].toString())),
                                     ),
                                 ]
                                 //children: root["info"]
