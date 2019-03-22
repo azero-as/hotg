@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'authentication.dart';
 
 // build the home page and call on the stateful classes
@@ -52,37 +51,7 @@ class AvatarOverview extends StatefulWidget {
 
 // class for appbar of home page
 class _AvatarOverviewState extends State<AvatarOverview> {
-  String _username = '';
-    // Can it be int?
-  int _userLevel;
-    // Any way to make the next two int? Needs to be able to divide them
-  int _userXp;
-  int _xpCap;
-
-    //Get levelcap of users level
-
-    //calculate the progression to get the correct percentage in the progress bar
-//    var progress = _userXP/_levelCap;
-
-    @override
-    void initState() {
-      super.initState();
-
-      CloudFunctions.instance
-          .call(
-        functionName: 'getUserInfo',
-      )
-          .then((response) {
-        setState(() {
-          _username = response['username'];
-          _userLevel = response['userLevel'];
-          _userXp = response['userXp'];
-          _xpCap = response['xpCap'];
-        });
-      }).catchError((error) {
-        print(error);
-      });
-    }
+ 
     @override
   Widget build(BuildContext context) {
     // variables for size, for best view across platforms
@@ -142,11 +111,11 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                           ),
                         ),
 
-                        //Level
+                        //Level and class
                         Padding(
                           padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
                           child: Text(
-                              'Level: ${model.level.toString()}',
+                              'Level: ${model.level.toString()} ${model.className.toString()}',
                               // 'Level' /* + _userLevel  + ' Intermediate thing?'*/,
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.left),
