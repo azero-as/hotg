@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'authentication.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 //This is the login page
 
@@ -166,6 +168,7 @@ class _LoginPageState extends State<LoginPage> {
               _passwordInput(),
               _loginButton(),
               _joinButton(),
+              _resetButton(),
               _showErrorMessage(),
             ],
           ),
@@ -278,5 +281,41 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
   }
+
+  //Reset password here button
+  Widget _resetButton(){
+    return FlatButton(
+      child: RichText(
+        text: TextSpan(
+          text: 'Forgot your password? Reset ', style: TextStyle(color: Colors.black54),
+          children: <TextSpan>[
+            TextSpan(
+              text: 'here!',
+              style: TextStyle(
+                color: Colors.black54,
+                decoration: TextDecoration.underline,
+                decorationColor: Colors.black54,
+                decorationStyle: TextDecorationStyle.solid,
+              ),
+            ),
+          ],
+        ),
+      ),
+      onPressed: (){
+        resetPassword();
+      },
+    );
+  }
+
+  resetPassword(){
+    Future<FirebaseUser> auth = FirebaseAuth.instance.currentUser();
+
+    //var userEmail = auth.then((res){res.email;});
+
+    auth.then((res){
+      
+    });
+  }
+
 
 }
