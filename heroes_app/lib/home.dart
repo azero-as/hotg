@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'models/user.dart';
 import 'authentication.dart';
 
 // build the home page and call on the stateful classes
-import 'models/user.dart';
-import 'package:scoped_model/scoped_model.dart';
 
 class Home extends StatelessWidget {
   static String tag = 'home-page';
@@ -51,8 +51,8 @@ class AvatarOverview extends StatefulWidget {
 
 // class for appbar of home page
 class _AvatarOverviewState extends State<AvatarOverview> {
- 
-    @override
+
+  @override
   Widget build(BuildContext context) {
     // variables for size, for best view across platforms
     var barHeight = (MediaQuery.of(context).size.height) / 3;
@@ -106,6 +106,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
+                              fontSize: 18,
                             ),
                             //textAlign: TextAlign.left,
                           ),
@@ -129,7 +130,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                             lineHeight: 15,
                             backgroundColor: Colors.white,
                             progressColor: Color(0xFF4D3262),
-                            percent: 0.2,
+                            percent: model.xp / model.xpCap,
                             //bar shape
                             linearStrokeCap: LinearStrokeCap.roundAll,
                             animationDuration: 2000,
@@ -139,8 +140,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                         // XP / XP cap
                         Padding(
                           padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                          child: Text(/*_userXP +*/
-                              '${model.xp.toString()}/${model.xpCap.toString()}' /* + _levelCap*/,
+                          child: Text('${model.xp.toString()}/${model.xpCap.toString()}',
                               style: TextStyle(color: Colors.white),
                               textAlign: TextAlign.left),
                         ),

@@ -10,12 +10,14 @@ class User extends Model {
   int _level;
   String _characterName;
   String _className;
+  double _progress;
 
   int get xpCap => _xpCap;
   int get xp => _xp;
   int get level => _level;
   String get characterName => _characterName;
   String get className => _className;
+  double get progress => _progress;
 
   void startState(String username, int userLevel, int userXp, int xpCap, String className) {
     _characterName = username;
@@ -59,4 +61,11 @@ class User extends Model {
     //TODO: Also change value in database
     //TODO: Make the pop up appear?
   }
+
+  setProgress(double _xp, double _xpCap) {
+    this._progress = this._xp / this._xpCap;
+    notifyListeners();
+  }
+
+
 }
