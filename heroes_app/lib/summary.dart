@@ -67,7 +67,7 @@ class _SummaryState extends State<Summary> {
     return Container(
         child: ListTile(
       title: Text(
-        workouts[0]['workoutType'] + " Workout",
+        workouts[0]['workoutType'],
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
       ),
