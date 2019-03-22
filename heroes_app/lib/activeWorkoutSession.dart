@@ -5,8 +5,9 @@ import 'dart:async';
 
 class activeWorkoutSession extends StatefulWidget {
   final List<dynamic> exercises;
+  final String workoutName;
 
-  activeWorkoutSession({this.exercises});
+  activeWorkoutSession({this.exercises, this.workoutName});
 
   @override
   _activeWorkoutSession createState() => new _activeWorkoutSession();
@@ -56,7 +57,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     CloudFunctions.instance.call(functionName: 'addWorkout', parameters: {
       "bonus_xp": _BonusXP,
       "total_xp": _XpEarned,
-      "workoutType": "Full-body workout",
+      "workoutType": widget.workoutName,
       "exercises": _exercises
     });
   }

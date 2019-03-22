@@ -200,8 +200,6 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
           exercises == []) {
         return new Text("");
       } else {
-        print(exercises);
-        print(_intensity);
         return Container(
             // make sure the placement is centered and a little away from appbar
             padding: EdgeInsets.fromLTRB(50, 20, 50, 0),
@@ -356,7 +354,8 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                                           exercises: exercises,
                                           duration: _duration,
                                           intensity: _intensity,
-                                          xp: _xp)));
+                                          xp: _xp,
+                                          workoutName: _workoutName)));
                         },
                         elevation: 5.0,
                         color: Color(0xFF612A30),
