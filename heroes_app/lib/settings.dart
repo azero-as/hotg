@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'authentication.dart';
-import 'home.dart';
 
 class Settings extends StatefulWidget {
   //For signing out

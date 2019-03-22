@@ -45,7 +45,7 @@ exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
 
             return response.send({
                 data: {
-                    username: data.Username,
+                    username: data.characterName,
                     email: decoded.email
                 }
             })
@@ -180,42 +180,24 @@ exports.getUserInfo = functions.https.onRequest((request, response) => {
     })
 });
 
-/*const helpers = require('./helper_functions.js');
+// Returns a list of all user workouts objects 
+exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {
 
-// Gets Username, XP, Level and xpCap from current user
-exports.getUserInfo = functions.https.onRequest((request, response) => {
+        // user: lenatorresdal
+        const userId = 'TkDkU5X55RG9rNjSb6Fn'
 
-    const tokenId = request.get('Authorization').split('Bearer ')[1];
-    return admin.auth().verifyIdToken(tokenId)
-    .then( decoded => {
-        
-        const userId = decoded.user_id;
+        return helpers.getAllUserWorkouts(userId)
+        .then(data => {
 
-        helpers.getUserInfo(userId)
-        .then( (userInfo) => {
-            response.send(userInfo)
+            return response.send({
+                data
             })
         })
         .catch(error => {
-            // 401 is unauthorized.
-            result.status(401).send(error)
-    })
+            response.status(400).send(error) // 400 bad request
+        })
+   
 })
-
-
-*/
-exports.helloWorld = functions.https.onRequest((request, response) => {
-
-    let msg = {
-        data: { // must be here for flutter
-            msg: "Hello from Firebase!",
-            version: 10,
-        }
-    };
-    
-    response.send(msg);
-});
-
 
 
 exports.getExercises  = functions.https.onRequest((request, response) => {
@@ -242,23 +224,38 @@ exports.getExercises  = functions.https.onRequest((request, response) => {
 // Listen for updates to any `user` document.
 exports.addWorkout= functions.https.onCall((data, context) => {
 
-    const workoutType = data["workoutType"] || "Unknown"
-    const bonus_xp = data["bonus_xp"]
-    const total_xp = data["total_xp"]
-    const selectedExercises = data["exercises"]
+    if (context.auth.uid != null) {
+        var userId = context.auth.uid
 
-    var info = { bonus_xp: bonus_xp,
-                date: admin.firestore.FieldValue.serverTimestamp(),
-                total_xp: total_xp,
-                workoutType: workoutType,
-                exercises: selectedExercises,
-                }
+        const workoutType = data["workoutType"] || "Unknown"
+        const bonus_xp = data["bonus_xp"]
+        const total_xp = data["total_xp"]
+        const selectedExercises = data["exercises"]
 
-     return admin.firestore().collection('Users').doc("CC9zGkKATIf5JPndq197B68QMc92").collection("Workouts").add(info)
+        var info = { bonus_xp: bonus_xp,
+            date: admin.firestore.FieldValue.serverTimestamp(),
+            total_xp: total_xp,
+            workoutType: workoutType,
+            exercises: selectedExercises,
+            }
+            
+            return admin.firestore().collection('Users').doc(userId)
+            .collection("Workouts").add(info)
+            
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+          })
+    }
+    else {
+        // Not authenticated:
+        throw new functions.https.HttpsError(code, message)
+    }
 
-          .catch(function(error) {
-              console.error("Error adding document: ", error);
-          });
+    
+
+    
+
+     
 
 
 });

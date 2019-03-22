@@ -181,5 +181,9 @@ class _RootPageState extends State<RootPage> {
       default:
         return _buildWaitingScreen();
     }
+    return FrontPage(
+      readyToLogIn: _readyToLogIn,
+      readyToSignUp: _readyToSignUp,
+    );
   }
 }

@@ -46,3 +46,4 @@ function getXpCap(level) {
     });
 }
 
+//const userId = '0EWvvdAUc2QEJn6ChySZU0iTXmF2';
