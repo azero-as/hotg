@@ -30,35 +30,24 @@ async function getUserInfo(userId) {
 
 
 // Returns updated level info: xp, level and xp cap
-async function updateUserLevelInfo(userId) {
+async function updateUserLevelInfo(userId, userXp, xpCap, userLevel) {
 
-    var userCollection = await getUsersCollection(userId)
-    var userLevel = userCollection[0]
-    var userXp = userCollection[1]
+    var newUserLevel = await increaseLevel(userLevel, userId)
+    var newUserXp = await resetUserXp(xpCap, userXp, userId)
 
-    let userLevelString = userLevel.toString()
-    var xpCap = await getLevelXpCap(userLevelString)
+    let newUserLevelString = newUserLevel.toString()
+    var newXpCap = await getLevelXpCap(newUserLevelString)
 
-    var updateLevel = await checkUpdateLevel(xpCap, userXp) //True or False
-    
-    if (updateLevel) {
-        var newUserLevel = await increaseLevel(userLevel, userId)
-        var newUserXp = await resetUserXp(xpCap, userXp, userId)
+    // Update values
+    var userXp = await newUserXp
+    var userLevel = await newUserLevel
+    var xpCap = await newXpCap
 
-        let newUserLevelString = newUserLevel.toString()
-        var newXpCap = await getLevelXpCap(newUserLevelString)
-
-        // Update values
-        var userXp = await newUserXp
-        var userLevel = await newUserLevel
-        var xpCap = await newXpCap
-    }
 
     return {
         userLevel: userLevel,
         userXp: userXp,
         xpCap: xpCap,
-        updateLevel: updateLevel // return True if level up
     }
 
 }
@@ -104,7 +93,8 @@ async function getLevelXpCap(userLevel) {
     })
 }
 
-// Check if level needs to be updated
+
+/* // Check if level needs to be updated
 function checkUpdateLevel(xpCap, userXp) {
 
     if (userXp >= xpCap) {
@@ -116,13 +106,14 @@ function checkUpdateLevel(xpCap, userXp) {
     
     }
 }
+*/
 
 // Increase level by 1
 async function increaseLevel(userLevel, userId) {
     const newUserLevel = userLevel+1
 
     return admin.firestore().collection("Users").doc(userId).update({
-        Level: newUserLevel,
+        gameLevel: newUserLevel,
     })
     .then(function() {
         return newUserLevel
@@ -137,7 +128,7 @@ async function resetUserXp(xpCap, userXp, userId) {
     const newUserXp = userXp - xpCap
 
     return admin.firestore().collection("Users").doc(userId).update({
-        XP: newUserXp,
+        xp: newUserXp,
     })
     .then(function() {
         return newUserXp

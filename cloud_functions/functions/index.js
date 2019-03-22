@@ -56,7 +56,7 @@ exports.getUserInfo = functions.https.onRequest((request, response) => {
         const userId = decoded.user_id;
         console.log('UserId: ',userId)
 
-        return helpers.updateUserLevelInfo(userId)
+        return helpers.getUserInfo(userId)
         .then(data => {
 
             return response.send({
@@ -71,11 +71,45 @@ exports.getUserInfo = functions.https.onRequest((request, response) => {
         // 401 is unauthorized.
         result.status(401).send(error)
     })
-})
+});
+
 
 
 // Updates user level info: xp, level and xpCap for current level if level is updated.
 // Returns new values.
+
+exports.updateUserLevelInfo = functions.https.onCall((data, context) => {
+
+    // Check if user is authenticated: 
+    if (context.auth.uid != null) {
+
+        var userId = context.auth.uid
+
+        // parameters
+        const userXp = data.xp
+        const xpCap = data.xpCap
+        const userLevel = data.level
+
+        console.log('xp:', userXp, ' xpCap: ', xpCap, ' userLevel: ', userLevel)
+
+        return helpers.updateUserLevelInfo(userId, userXp, xpCap, userLevel)
+        .then(data => {
+            console.log(data)
+            return data
+        }).catch(error => {
+            console.log(error)
+        }) 
+          
+            
+    
+    } else {
+        // not authenticated: 
+        throw new functions.https.HttpsError(code, message)
+
+    }
+})
+
+/*
 exports.updateUserLevelInfo = functions.https.onRequest((request, response) => {
 
     const tokenId = request.get('Authorization').split('Bearer ')[1];
@@ -101,6 +135,7 @@ exports.updateUserLevelInfo = functions.https.onRequest((request, response) => {
         result.status(401).send(error)
     })
 })
+*/
 
 // Get total_xp and bonus_xp from finished workout, and updates the
 // total amount of XP in the User collection

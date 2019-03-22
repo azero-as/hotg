@@ -6,24 +6,26 @@ class User extends Model {
 
   Auth auth = new Auth();
 
-  int _xpCap = 1;
-  int _xp = 0;
+  int _xpCap;
+  int _xp;
   int _level;
   String _characterName;
   String _className;
+  bool _levelUp = false;
 
   int get xpCap => _xpCap;
   int get xp => _xp;
   int get level => _level;
   String get characterName => _characterName;
   String get className => _className;
+  bool get levelUp => _levelUp;
 
   void startState(String username, int userLevel, int userXp, int xpCap, String className) {
     _characterName = username;
     _level = userLevel;
     _xp = userXp;
     _xpCap = xpCap;
-    _className =className;
+     _className =className;
     notifyListeners();
   }
   //Methods just for setting in the beginning
@@ -50,13 +52,12 @@ class User extends Model {
   void setClassName(String className) {
     this._className =_className;
     notifyListeners();
-  }
+}
 
   // Methods used by other widgets:
-  void incrementXP(int bonus_xp, int total_xp) {
-    print("incrementXP");
+  void incrementXP(int bonus_xp, int total_xp) async {
 
-    CloudFunctions.instance.
+    await CloudFunctions.instance.
         call(
         functionName: 'updateUserXpWorkout',
         parameters: {
@@ -65,14 +66,14 @@ class User extends Model {
         }
     )
     .then((response){
+      print('updateXp');
       setXP(response['updatedXp']);
     }).catchError((error) {
       print(error);
     });
+    await checkLevelUp();
 
-    checkLevelUp();
     notifyListeners();
-    //TODO: Also change value in database
   }
 
   void incrementLevelByOne() {
@@ -80,10 +81,15 @@ class User extends Model {
     CloudFunctions.instance.
       call(
         functionName: 'updateUserLevelInfo',
+        parameters: {
+          "xp": xp,
+          "xpCap": xpCap,
+          "level": level,
+        }
     )
     .then((response){
       setLevel(response['userLevel']);
-      setXP(response['userXP']);
+      setXP(response['userXp']);
       setXpCap(response['xpCap']);
 
     }).catchError((error) {
@@ -95,9 +101,19 @@ class User extends Model {
   }
 
   checkLevelUp(){
-    print("checkLevelUp");
-    if(this._xp >= this._xpCap){
+    if(xp >= xpCap){
       incrementLevelByOne();
+      setLevelUpTrue();
     }
+  }
+
+  void setLevelUpTrue() {
+    this._levelUp = true;
+    print(_levelUp);
+  }
+
+  void setLevelUpFalse() {
+    this._levelUp = false;
+    print(_levelUp);
   }
 }

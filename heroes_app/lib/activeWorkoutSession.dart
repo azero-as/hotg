@@ -4,6 +4,8 @@ import 'timer_page.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
+import 'models/user.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class activeWorkoutSession extends StatefulWidget{
 
@@ -170,18 +172,24 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         Widget _returnFinishWorkoutButton(){
             return new Padding(
                 padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40.0),
-                child: RaisedButton(
+                child:  ScopedModelDescendant<User>(builder: (context, child, model) {
+                   return RaisedButton(
+
                     elevation: 5.0,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                     ),
                     onPressed: () {
                       _saveWorkout();
+                      model.incrementXP(_XpEarned, _BonusXP);
                     },
                     padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
                     color: const Color(0xFF612A30),
                     child: Text('Finish workout', style: TextStyle(color: Colors.white),),
-                ),
+                );
+
+                })
+                
             );}
 
 
