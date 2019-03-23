@@ -9,34 +9,14 @@ import 'levelUp.dart';
 import 'models/user.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-//This is code for bottom navigation menu
-
-class Dashboard extends StatelessWidget {
-  //Used for navigation
-  static String tag = 'dashboard';
-
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Flutter Bottom Navigation',
-      debugShowCheckedModeBanner: false, //Turns of the "DEBUG" banner in the simulator
-      theme: new ThemeData(
-        primaryColor: const Color(0xFF612A30),
-      ),
-      home: new DashboardScreen(title: 'Heroes of the Gym'),
-    );
-  }
-}
-
 class DashboardScreen extends StatefulWidget {
-  DashboardScreen({Key key, this.auth, this.userId, this.onSignedOut, this.title, this.readyToSignOut, this.onSignedIn})
+  DashboardScreen({Key key, this.auth, this.userId, this.onSignedOut, this.readyToSignOut, this.onSignedIn})
       : super(key: key);
 
   final BaseAuth auth;
   final VoidCallback readyToSignOut;
   final VoidCallback onSignedOut;
   final String userId;
-  final String title;
   final VoidCallback onSignedIn;
 
   @override

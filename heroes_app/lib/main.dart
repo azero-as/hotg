@@ -21,7 +21,6 @@ class Heroes extends StatelessWidget {
   //Navigation between pages
   final routes = <String, WidgetBuilder>{
     LoginPage.tag: (context) => LoginPage(),
-    Dashboard.tag: (context) => Dashboard(),
     FrontPage.tag: (context) => FrontPage(),
     SignupPage.tag: (context) => SignupPage(),
     SignupLevelPage.tag: (context) => SignupLevelPage(),

@@ -9,6 +9,9 @@ import 'settings.dart';
 import 'models/user.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'startWorkout.dart';
+import 'activeWorkoutSession.dart';
+import 'summary.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({this.auth, this.user});
@@ -28,7 +31,10 @@ enum AuthStatus {
   READY_TO_LOG_IN,
   READY_TO_SIGN_UP,
   FINISHED_SIGNED_UP,
-  READY_TO_SIGN_OUT
+  READY_TO_SIGN_OUT,
+  START_WORKOUT,
+  ACTIVE_WORKOUT_SESSION,
+  SUMMARY,
 }
 
 class _RootPageState extends State<RootPage> {
@@ -92,6 +98,24 @@ class _RootPageState extends State<RootPage> {
     });
     setState(() {
       authStatus = AuthStatus.FINISHED_SIGNED_UP;
+    });
+  }
+
+  void _startWorkout(){
+    setState(() {
+      authStatus = AuthStatus.START_WORKOUT;
+    });
+  }
+
+  void _activeWorkout() {
+    setState(() {
+      authStatus = AuthStatus.ACTIVE_WORKOUT_SESSION;
+    });
+  }
+
+  void _summary() {
+    setState(() {
+      authStatus = AuthStatus.SUMMARY;
     });
   }
 
@@ -167,7 +191,6 @@ class _RootPageState extends State<RootPage> {
             userId: _userId,
             auth: widget.auth,
             onSignedOut: _onSignedOut,
-            title: 'Heroes of the Gym',
             readyToSignOut: _readyToSignOut,
             onSignedIn: _onLoggedIn,
           );
@@ -183,9 +206,6 @@ class _RootPageState extends State<RootPage> {
       default:
         return _buildWaitingScreen();
     }
-    return FrontPage(
-      readyToLogIn: _readyToLogIn,
-      readyToSignUp: _readyToSignUp,
-    );
+    return _buildWaitingScreen();
   }
 }
