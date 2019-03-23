@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'startWorkout.dart';
 
 class Plan extends StatefulWidget {
 
@@ -157,6 +158,16 @@ class _PlanPageState extends State<Plan> {
                         RaisedButton(
                           padding: EdgeInsets.all(10.0),
                           onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        StartWorkout(
+                                            exercises:  _workouts[index]["exercises"],
+                                            duration: _workouts[index]["duration"],
+                                            intensity: _workouts[index]["intensity"],
+                                            xp: _workouts[index]["xp"],
+                                            workoutName: _workouts[index]["workoutName"])));
                           },
                           elevation: 5.0,
                           color: Color(0xFF612A30),
