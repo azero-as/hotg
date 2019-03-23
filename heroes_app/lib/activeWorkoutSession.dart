@@ -41,7 +41,6 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             }));
   }
 
-
   @override
   void dispose() {
     _timer.cancel();
@@ -78,17 +77,14 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       }
 
       _XpEarned = _XpEarned + _BonusXP;
-      
+
       CloudFunctions.instance.call(functionName: 'addWorkout', parameters: {
         "bonus_xp": _BonusXP,
         "total_xp": _XpEarned,
         "workoutType": widget.workoutName,
         "exercises": _exercises
       });
-
-
     }
-
 
     //Information about the different exercises in the workout
     Widget _showInformationWorkout() {
@@ -98,6 +94,27 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         itemCount: widget.exercises.length,
         itemBuilder: (BuildContext context, int index) => ExpansionTile(
                 key: PageStorageKey<int>(index),
+                leading: IconButton(
+                  icon: Icon(Icons.info_outline),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(widget.exercises[index]["name"]),
+                            content:
+                                Text(widget.exercises[index]["description"]),
+                            actions: <Widget>[
+                              FlatButton(
+                                  child: Text('Close'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  })
+                            ],
+                          );
+                        });
+                  },
+                ),
                 title: new CheckboxListTile(
                   value: _selectedExercises
                       .contains(widget.exercises[index]["name"]),
@@ -174,7 +191,14 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
           ),
           onPressed: () {
             _saveWorkout();
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Summary(exercises: _exercises, bonus: _BonusXP, total_xp: _XpEarned, workoutType: widget.workoutName)));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => Summary(
+                        exercises: _exercises,
+                        bonus: _BonusXP,
+                        total_xp: _XpEarned,
+                        workoutType: widget.workoutName)));
           },
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
           color: const Color(0xFF612A30),

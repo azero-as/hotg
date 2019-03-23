@@ -9,7 +9,12 @@ class StartWorkout extends StatefulWidget {
   final int xp;
   final String workoutName;
 
-  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName});
+  StartWorkout(
+      {this.exercises,
+      this.duration,
+      this.intensity,
+      this.xp,
+      this.workoutName});
 
   @override
   _StartWorkoutPage createState() => new _StartWorkoutPage();
@@ -30,8 +35,9 @@ class _StartWorkoutPage extends State<StartWorkout> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        activeWorkoutSession(exercises: widget.exercises, workoutName: widget.workoutName)));
+                    builder: (BuildContext context) => activeWorkoutSession(
+                        exercises: widget.exercises,
+                        workoutName: widget.workoutName)));
           },
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
           color: const Color(0xFF212838),
@@ -57,7 +63,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
                 new TextSpan(
                     text: 'Duration: ',
                     style: new TextStyle(fontWeight: FontWeight.bold)),
-                new TextSpan(text: widget.duration.toString() + " min"),
+                new TextSpan(text: widget.duration.toString() + " min\n\n"),
                 new TextSpan(
                     text: ' XP: ',
                     style: new TextStyle(fontWeight: FontWeight.bold)),
@@ -76,6 +82,27 @@ class _StartWorkoutPage extends State<StartWorkout> {
         itemCount: widget.exercises.length,
         itemBuilder: (BuildContext context, int index) => ExpansionTile(
                 key: PageStorageKey<int>(index),
+                leading: IconButton(
+                  icon: Icon(Icons.info_outline),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(widget.exercises[index]["name"]),
+                            content:
+                                Text(widget.exercises[index]["description"]),
+                            actions: <Widget>[
+                              FlatButton(
+                                  child: Text('Close'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  })
+                            ],
+                          );
+                        });
+                  },
+                ),
                 title: new Text(
                   (widget.exercises[index]["name"]),
                 ),
