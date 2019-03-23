@@ -7,6 +7,7 @@ import 'frontpage.dart';
 import 'signuplevel.dart';
 import 'settings.dart';
 import 'models/user.dart';
+import 'models/workout.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'startWorkout.dart';
@@ -63,7 +64,6 @@ class _RootPageState extends State<RootPage> {
     });
     setState(() {
       authStatus = AuthStatus.LOGGED_IN;
-
     });
   }
 
@@ -147,6 +147,24 @@ class _RootPageState extends State<RootPage> {
     });
   }
 
+  void _setWorkoutInfo(BuildContext context) {
+    var workout = ScopedModel.of<Workout>(context);
+
+    CloudFunctions.instance
+        .call(
+      functionName: 'getWorkout',
+    )
+        .then((response) {
+        workout.setIntensity(response['intensity']);
+        workout.setWorkOutName(response['workoutName']);
+        workout.setDuration(response['duration']);
+        workout.setXp(response['xp']);
+        workout.setExercises(response['exercises']);
+    }).catchError((error) {
+      print(error);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     switch (authStatus) {
@@ -187,6 +205,7 @@ class _RootPageState extends State<RootPage> {
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
           _setUserInfo(context);
+          _setWorkoutInfo(context);
           return new DashboardScreen(
             userId: _userId,
             auth: widget.auth,
