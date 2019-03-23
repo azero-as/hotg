@@ -2,7 +2,8 @@ var admin = require("firebase-admin");
 
 module.exports = {
     getUserInfo: getUserInfo,
-    getAllUserWorkouts: getAllUserWorkouts
+    getAllUserWorkouts: getAllUserWorkouts,
+    getAllWorkouts: getAllWorkouts
 }
 
 async function getUserInfo(userId) {
@@ -60,19 +61,33 @@ async function getLevelXpCap(userLevel) {
 // Get all workouts ordered by date (newest first)
 // Limit = 5
 async function getAllUserWorkouts(userId) {
-  workouts = []
-  return admin.firestore().collection('Users').doc(userId)
-  .collection('Workouts').orderBy('date', 'desc').limit(5)
-  .get()
-  .then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-          workouts.push(doc.data())
-      })
-      return workouts
-  })
-  .catch(function(error) {
-      console.log('Error: ',error)
-  })
-}
+   workouts = []
+   return admin.firestore().collection('Users').doc(userId)
+   .collection('Workouts').orderBy('date', 'desc').limit(5)
+   .get()
+   .then(function(querySnapshot) {
+       querySnapshot.forEach(function(doc) {
+           workouts.push(doc.data())
+       })
+       return workouts
+   })
+   .catch(function(error) {
+       console.log('Error: ',error)
+   })
+ }
+
+ async function getAllWorkouts() {
+   workouts = []
+   return admin.firestore().collection('Workouts').get()
+   .then(function(querySnapshot) {
+       querySnapshot.forEach(function(doc) {
+           workouts.push(doc.data())
+       })
+       return workouts
+   })
+   .catch(function(error) {
+       console.log('Error: ',error)
+   })
+ }
 
 

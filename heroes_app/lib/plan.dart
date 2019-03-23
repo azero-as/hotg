@@ -13,28 +13,30 @@ class Plan extends StatefulWidget {
 class _PlanPageState extends State<Plan> {
 
   int _userLevel = 0;
-  int _userXP = -1;
+   List _workouts = [];
   int _levelCap;
 
   @override
   void initState(){
     super.initState();
 
-    CloudFunctions.instance.call(
+    CloudFunctions.instance
+        .call(
       functionName: 'getAllWorkouts',
     ).then((response) {
-      _userXP = response[0];
+      setState(() {
+        _workouts = response;
+      });
     }).catchError((error) {
       print(error);
+      print("error");
     });
   }
-
-
 
   @override
     Widget build(BuildContext context) {
 
-    Widget _workout() {
+    Widget _workout(int index) {
       return new Container(
         // add border for the workout info box
         margin: new EdgeInsets.symmetric(horizontal: 55.0, vertical: 12.0),
@@ -67,7 +69,7 @@ class _PlanPageState extends State<Plan> {
                     alignment: Alignment.centerLeft,
                     child: Container(
                       child: Text(
-                        "WorkoutName",
+                        _workouts[index]["workoutName"],
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -125,7 +127,7 @@ class _PlanPageState extends State<Plan> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            "3",
+                            _workouts[index]["xp"].toString(),
                             style: TextStyle(color: Color(0xFF434242)),
                           ),
                           // add space between lines
@@ -133,7 +135,7 @@ class _PlanPageState extends State<Plan> {
                             height: 10,
                           ),
                           Text(
-                            "intensity",
+                              _workouts[index]["intensity"].toString(),
                             style: TextStyle(color: Color(0xFF434242)),
                           ),
                           // add space between lines
@@ -141,7 +143,7 @@ class _PlanPageState extends State<Plan> {
                             height: 18,
                           ),
                           Text(
-                            "1 hour",
+                            _workouts[index]["duration"].toString() + " min",
                             style: TextStyle(color: Color(0xFF434242)),
                           ),
                         ]),
@@ -181,42 +183,22 @@ class _PlanPageState extends State<Plan> {
     }
 
     Widget _listOfWorkouts() {
-      return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints viewportConstraints) {
-          return SingleChildScrollView(
+      if(_workouts.isEmpty){
+        return Text("");
+      }
 
-            child:   ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: viewportConstraints.maxHeight,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Container(
-                    child: _workout(),
-                  ),
-                  Container(
-                    child: _workout(),
-                  ),
-                  Container(
-                    child: _workout(),
-                  ),
-                  Container(
-                    child: _workout(),
-                  ),
-                  Container(
-                    child: _workout(),
-                  ),
-                  Container(
-                    child: _workout(),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
+      else {
+        return new ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: _workouts.length,
+          itemBuilder: (BuildContext context, int index){
+            return _workout(index);
+            //children: root["info"]
+          },
+        );
+
+      }
     }
 
     return Scaffold(
