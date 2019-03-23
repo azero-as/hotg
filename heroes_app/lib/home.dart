@@ -70,6 +70,14 @@ class _AvatarOverviewState extends State<AvatarOverview> {
               color: Color(0xFF212838),
               padding: EdgeInsets.fromLTRB(20, 30, 20, 15),
               child: ScopedModelDescendant<User>(builder: (context, child, model) {
+                // Percent should not exceed 1.0: 
+                double xpPercent; 
+                 if (model.xp >= model.xpCap) {
+                   xpPercent = 1.0;
+                   }
+                else {
+                  xpPercent = model.xp / model.xpCap;
+                }
                 return Row(
                   children: <Widget>[
                     // Column for half bar, only image
@@ -130,7 +138,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                             lineHeight: 15,
                             backgroundColor: Colors.white,
                             progressColor: Color(0xFF4D3262),
-                            percent: model.xp / model.xpCap,
+                            percent: xpPercent,
                             //bar shape
                             linearStrokeCap: LinearStrokeCap.roundAll,
                             animationDuration: 2000,
