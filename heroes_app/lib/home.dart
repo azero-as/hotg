@@ -11,12 +11,13 @@ import 'package:cloud_functions/cloud_functions.dart';
 // build the home page and call on the stateful classes
 class Home extends StatelessWidget {
 
-  Home({this.auth, this.onSignedOut, this.onLoggedIn, this.readyToSignOut});
+  Home({this.auth, this.onSignedOut, this.onLoggedIn, this.readyToSignOut, this.onStartWorkout});
 
   final BaseAuth auth;
   final VoidCallback onSignedOut;
   final VoidCallback onLoggedIn;
   final VoidCallback readyToSignOut;
+  final VoidCallback onStartWorkout;
 
   static String tag = 'home-page';
 
@@ -32,7 +33,7 @@ class Home extends StatelessWidget {
           children: <Widget>[
             AvatarOverview(auth: auth, onSignedOut: onSignedOut, onLoggedIn: onLoggedIn, readyToSignOut: readyToSignOut),
             SizedBox(height: 20.0),
-            WorkoutOverview(),
+            WorkoutOverview(onStartWorkout: onStartWorkout),
           ],
         ));
   }
@@ -160,6 +161,11 @@ class _AvatarOverviewState extends State<AvatarOverview> {
 class WorkoutOverview extends StatefulWidget {
   @override
   _WorkoutOverviewState createState() => _WorkoutOverviewState();
+
+  WorkoutOverview({this.onStartWorkout});
+
+  final VoidCallback onStartWorkout;
+
 }
 
 // class for workout overview
@@ -322,16 +328,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       RaisedButton(
                         padding: EdgeInsets.all(10.0),
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      StartWorkout(
-                                          exercises: model.exercises,
-                                          duration: model.duration,
-                                          intensity: model.intensity,
-                                          xp: model.xp,
-                                          workoutName: model.workoutName)));
+                          widget.onStartWorkout();
                         },
                         elevation: 5.0,
                         color: Color(0xFF612A30),

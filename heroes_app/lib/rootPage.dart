@@ -102,6 +102,7 @@ class _RootPageState extends State<RootPage> {
   }
 
   void _startWorkout(){
+    print("Start workout!!");
     setState(() {
       authStatus = AuthStatus.START_WORKOUT;
     });
@@ -167,6 +168,7 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
+    var workout = ScopedModel.of<Workout>(context);
     switch (authStatus) {
       case AuthStatus.NOT_DETERMINED:
         return _buildWaitingScreen();
@@ -212,6 +214,7 @@ class _RootPageState extends State<RootPage> {
             onSignedOut: _onSignedOut,
             readyToSignOut: _readyToSignOut,
             onSignedIn: _onLoggedIn,
+            onStartWorkout: _startWorkout,
           );
         } else return _buildWaitingScreen();
         break;
@@ -222,6 +225,16 @@ class _RootPageState extends State<RootPage> {
           onSignedIn: _onLoggedIn,
         );
         break;
+      case AuthStatus.START_WORKOUT:
+        print("On start workout!!");
+        return new StartWorkout(
+          exercises: workout.exercises,
+          duration: workout.duration,
+          intensity: workout.intensity,
+          xp: workout.xp,
+          workoutName: workout.workoutName,
+          onLoggedIn: _onLoggedIn,
+        );
       default:
         return _buildWaitingScreen();
     }

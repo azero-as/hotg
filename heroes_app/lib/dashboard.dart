@@ -10,7 +10,7 @@ import 'models/user.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class DashboardScreen extends StatefulWidget {
-  DashboardScreen({Key key, this.auth, this.userId, this.onSignedOut, this.readyToSignOut, this.onSignedIn})
+  DashboardScreen({Key key, this.auth, this.userId, this.onSignedOut, this.readyToSignOut, this.onSignedIn, this.onStartWorkout})
       : super(key: key);
 
   final BaseAuth auth;
@@ -18,6 +18,7 @@ class DashboardScreen extends StatefulWidget {
   final VoidCallback onSignedOut;
   final String userId;
   final VoidCallback onSignedIn;
+  final VoidCallback onStartWorkout;
 
   @override
   _DashboardScreenState createState() => new _DashboardScreenState();
@@ -81,7 +82,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             builder: (context, child, model){
           return new PageView(
             children: [
-              new Home(auth: widget.auth, onSignedOut: widget.onSignedOut, onLoggedIn: widget.onSignedIn, readyToSignOut: widget.readyToSignOut),
+              new Home(auth: widget.auth, onSignedOut: widget.onSignedOut, onLoggedIn: widget.onSignedIn, readyToSignOut: widget.readyToSignOut, onStartWorkout: widget.onStartWorkout),
               new Plan(),
               new History("History screen"),
             ],

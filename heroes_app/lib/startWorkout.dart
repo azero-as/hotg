@@ -8,8 +8,9 @@ class StartWorkout extends StatefulWidget {
   final String intensity;
   final int xp;
   final String workoutName;
+  final VoidCallback onLoggedIn;
 
-  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName});
+  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName, this.onLoggedIn});
 
   @override
   _StartWorkoutPage createState() => new _StartWorkoutPage();
@@ -117,12 +118,13 @@ class _StartWorkoutPage extends State<StartWorkout> {
 
     return Scaffold(
       appBar: AppBar(
-        actions: <Widget>[
-          new Center(
-            child: new Text('',
-                style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-          )
-        ],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            widget.onLoggedIn();
+          },
+          color: Colors.white,
+        ),
       ),
       body: Container(
         child: _returnBody(),
