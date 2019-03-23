@@ -43,7 +43,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
       );
     }
 
-    //Information about workout
+    //General informaiton about the workout
     Widget _showInfo() {
       return Container(
           margin: EdgeInsets.fromLTRB(100, 0, 100, 40),
@@ -69,32 +69,67 @@ class _StartWorkoutPage extends State<StartWorkout> {
               ])));
     }
 
+    //Show information about a workout using minutes
+    Widget _showInfoExerciseWithMin(int index){
+      return ExpansionTile(
+          title: new Text(
+            (widget.exercises[index]["name"]),
+          ),
+          children: <Widget>[
+            ListTile(
+                title: new Text(
+                    "Sets: " + widget.exercises[index]["targetSets"])),
+            ListTile(
+                title: new Text(
+                    "Duration: " + widget.exercises[index]["targetMin"] + " min")),
+            ListTile(
+                title: new Text("Rest between sets: " +
+                    widget.exercises[index]["restBetweenSets"])),
+            ListTile(
+                title: new Text(
+                    "XP: " + widget.exercises[index]["xp"].toString())),
+          ]
+        //children: root["info"]
+      );
+    }
+
+    //Show information about a workout using reps
+    Widget _showInfoExerciseWithReps(int index){
+      return ExpansionTile(
+          title: new Text(
+            (widget.exercises[index]["name"]),
+          ),
+          children: <Widget>[
+            ListTile(
+                title: new Text(
+                    "Sets: " + widget.exercises[index]["targetSets"])),
+            ListTile(
+                title: new Text(
+                    "Reps: " + widget.exercises[index]["targetReps"])),
+            ListTile(
+                title: new Text("Rest between sets: " +
+                    widget.exercises[index]["restBetweenSets"])),
+            ListTile(
+                title: new Text(
+                    "XP: " + widget.exercises[index]["xp"].toString())),
+          ]
+        //children: root["info"]
+      );
+    }
+
+
+    //Display list of all the exercises in the workout
     Widget _showInformationWorkout() {
       return new ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: widget.exercises.length,
-        itemBuilder: (BuildContext context, int index) => ExpansionTile(
-                key: PageStorageKey<int>(index),
-                title: new Text(
-                  (widget.exercises[index]["name"]),
-                ),
-                children: <Widget>[
-                  ListTile(
-                      title: new Text(
-                          "Sets: " + widget.exercises[index]["targetSets"])),
-                  ListTile(
-                      title: new Text(
-                          "Reps: " + widget.exercises[index]["targetReps"])),
-                  ListTile(
-                      title: new Text("Rest between sets: " +
-                          widget.exercises[index]["restBetweenSets"])),
-                  ListTile(
-                      title: new Text(
-                          "XP: " + widget.exercises[index]["xp"].toString())),
-                ]
-                //children: root["info"]
-                ),
+        itemBuilder: (BuildContext context, int index){
+            if(widget.exercises[index]["targetReps"] == null){
+              return _showInfoExerciseWithMin(index);
+            }
+            return _showInfoExerciseWithReps(index);
+        }
       );
     }
 
