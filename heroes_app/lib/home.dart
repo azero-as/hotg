@@ -9,6 +9,14 @@ import 'package:cloud_functions/cloud_functions.dart';
 
 // build the home page and call on the stateful classes
 class Home extends StatelessWidget {
+
+  Home({this.auth, this.onSignedOut, this.onLoggedIn, this.readyToSignOut});
+
+  final BaseAuth auth;
+  final VoidCallback onSignedOut;
+  final VoidCallback onLoggedIn;
+  final VoidCallback readyToSignOut;
+
   static String tag = 'home-page';
 
   //Settings icon button with navigation to settings page
@@ -21,7 +29,7 @@ class Home extends StatelessWidget {
         ),
         child: Column(
           children: <Widget>[
-            AvatarOverview(),
+            AvatarOverview(auth: auth, onSignedOut: onSignedOut, onLoggedIn: onLoggedIn, readyToSignOut: readyToSignOut),
             SizedBox(height: 20.0),
             WorkoutOverview(),
           ],
@@ -32,19 +40,24 @@ class Home extends StatelessWidget {
 // create state for appbar of home page
 class AvatarOverview extends StatefulWidget {
   AvatarOverview(
-      {Key key,
-      this.auth,
-      this.userId,
-      this.onSignedOut,
-      this.title,
-      this.signOut})
-      : super(key: key);
 
+      {this.auth,
+//      Key key,
+//      this.userId,
+      this.onSignedOut,
+//      this.title,
+//      this.signOut,
+      this.onLoggedIn,
+      this.readyToSignOut});
+//      : super(key: key);
+//
   final BaseAuth auth;
-  final VoidCallback signOut;
+//  final VoidCallback signOut;
   final VoidCallback onSignedOut;
-  final String userId;
-  final String title;
+//  final String userId;
+//  final String title;
+  final VoidCallback onLoggedIn;
+  final VoidCallback readyToSignOut;
 
   @override
   State createState() => new _AvatarOverviewState();
@@ -89,13 +102,13 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         //Settings symbol and onPressed functionality
-                        /*IconButton(
+                        IconButton(
                           icon: Icon(Icons.settings),
                           color: Colors.white,
                           padding: EdgeInsets.fromLTRB((barWidth / 2) - 44, 0, 0, 0),
                           onPressed: () {
-                            widget.signOut();
-                          }),*/
+                            widget.readyToSignOut();
+                          }),
 
                         //Username
                         Padding(

@@ -28,7 +28,7 @@ enum AuthStatus {
   READY_TO_LOG_IN,
   READY_TO_SIGN_UP,
   FINISHED_SIGNED_UP,
-  SIGN_OUT
+  READY_TO_SIGN_OUT
 }
 
 class _RootPageState extends State<RootPage> {
@@ -67,9 +67,9 @@ class _RootPageState extends State<RootPage> {
       _userId = "";
     });
   }
-  void _signOut() {
+  void _readyToSignOut() {
     setState(() {
-      authStatus = AuthStatus.SIGN_OUT;
+      authStatus = AuthStatus.READY_TO_SIGN_OUT;
     });
   }
   void _readyToLogIn() {
@@ -168,11 +168,12 @@ class _RootPageState extends State<RootPage> {
             auth: widget.auth,
             onSignedOut: _onSignedOut,
             title: 'Heroes of the Gym',
-            signOut: _signOut,
+            readyToSignOut: _readyToSignOut,
+            onSignedIn: _onLoggedIn,
           );
         } else return _buildWaitingScreen();
         break;
-      case AuthStatus.SIGN_OUT:
+      case AuthStatus.READY_TO_SIGN_OUT:
         return new Settings(
           auth: widget.auth,
           onSignedOut: _onSignedOut,

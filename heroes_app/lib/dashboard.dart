@@ -29,14 +29,15 @@ class Dashboard extends StatelessWidget {
 }
 
 class DashboardScreen extends StatefulWidget {
-  DashboardScreen({Key key, this.auth, this.userId, this.onSignedOut, this.title, this.signOut})
+  DashboardScreen({Key key, this.auth, this.userId, this.onSignedOut, this.title, this.readyToSignOut, this.onSignedIn})
       : super(key: key);
 
   final BaseAuth auth;
-  final VoidCallback signOut;
+  final VoidCallback readyToSignOut;
   final VoidCallback onSignedOut;
   final String userId;
   final String title;
+  final VoidCallback onSignedIn;
 
   @override
   _DashboardScreenState createState() => new _DashboardScreenState();
@@ -95,23 +96,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
 //
  Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          new IconButton(
-              icon: Icon(Icons.settings),
-              key: Key("settings"),
-              onPressed: () {
-                widget.signOut();
-              }
-          )
-        ],
-      ),
       body: Center(
         child: ScopedModelDescendant<User>(
             builder: (context, child, model){
           return new PageView(
             children: [
-              new Home(),
+              new Home(auth: widget.auth, onSignedOut: widget.onSignedOut, onLoggedIn: widget.onSignedIn, readyToSignOut: widget.readyToSignOut),
               new Plan(),
               new History("History screen"),
             ],

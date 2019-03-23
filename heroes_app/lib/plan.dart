@@ -17,7 +17,10 @@ class _PlanPageState extends State<Plan> {
   @override
     Widget build(BuildContext context) {
         return Scaffold(
-
+          appBar: AppBar(
+            actions: <Widget>[
+            ],
+          ),
               body: Container(
                 child: new Text("Plan"),
               ),

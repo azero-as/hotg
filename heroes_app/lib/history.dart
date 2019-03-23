@@ -9,6 +9,10 @@ class History extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      appBar: AppBar(
+        actions: <Widget>[
+        ],
+      ),
       body: new Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
