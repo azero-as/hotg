@@ -70,7 +70,13 @@ class _StartWorkoutPage extends State<StartWorkout> {
     }
 
     //Show information about a workout using minutes
-    Widget _showInfoExerciseWithMin(int index){
+    Widget _showInfoExercises(int index){
+      String exercise = "targetReps";
+      String name = "Reps: ";
+      if(widget.exercises[index]["targetReps"] == null){
+        exercise = "targetMin";
+        name = "Minutes: ";
+      }
       return ExpansionTile(
           title: new Text(
             (widget.exercises[index]["name"]),
@@ -81,31 +87,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
                     "Sets: " + widget.exercises[index]["targetSets"])),
             ListTile(
                 title: new Text(
-                    "Duration: " + widget.exercises[index]["targetMin"] + " min")),
-            ListTile(
-                title: new Text("Rest between sets: " +
-                    widget.exercises[index]["restBetweenSets"])),
-            ListTile(
-                title: new Text(
-                    "XP: " + widget.exercises[index]["xp"].toString())),
-          ]
-        //children: root["info"]
-      );
-    }
-
-    //Show information about a workout using reps
-    Widget _showInfoExerciseWithReps(int index){
-      return ExpansionTile(
-          title: new Text(
-            (widget.exercises[index]["name"]),
-          ),
-          children: <Widget>[
-            ListTile(
-                title: new Text(
-                    "Sets: " + widget.exercises[index]["targetSets"])),
-            ListTile(
-                title: new Text(
-                    "Reps: " + widget.exercises[index]["targetReps"])),
+                    name + widget.exercises[index][exercise])),
             ListTile(
                 title: new Text("Rest between sets: " +
                     widget.exercises[index]["restBetweenSets"])),
@@ -125,10 +107,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
         shrinkWrap: true,
         itemCount: widget.exercises.length,
         itemBuilder: (BuildContext context, int index){
-            if(widget.exercises[index]["targetReps"] == null){
-              return _showInfoExerciseWithMin(index);
-            }
-            return _showInfoExerciseWithReps(index);
+            return _showInfoExercises(index);
         }
       );
     }
