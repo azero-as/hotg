@@ -49,12 +49,16 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
     if (_workouts.isEmpty) {
       return Center(child: CircularProgressIndicator());
     } else {
-      return ListView.builder(
-          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-          itemCount: _workouts.length,
-          itemBuilder: (context, index) {
-            return _workoutCard(context, _workouts[index]);
-          });
+      return Scaffold(
+          /*appBar: AppBar(
+            title: Text("Workout history"),
+          ),*/
+          body: ListView.builder(
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              itemCount: _workouts.length,
+              itemBuilder: (context, index) {
+                return _workoutCard(context, _workouts[index]);
+              }));
     }
   }
 
@@ -209,7 +213,7 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
             color: Color(0xFFE7E9ED),
             child: custom.ExpansionTile(
                 headerBackgroundColor: Color(0xFF212838),
-                title: Text("$_workoutDate: $_workoutType workout",
+                title: Text("$_workoutDate: $_workoutType",
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold)),
                 children: _cardContent)));
