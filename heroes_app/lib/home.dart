@@ -74,13 +74,14 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                     // Column for half bar, only image
                     Column(children: <Widget>[
                       Container(
+                        width:imageWidth,
+                        height: imageHeight,
                         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: Image.asset(
                           'assets/avatar-test.png',
-                          height: imageHeight,
-                          width: imageWidth,
                           fit: BoxFit.fill,
                         ),
+
                       )
                     ]),
 
