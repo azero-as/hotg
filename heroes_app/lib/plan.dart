@@ -12,9 +12,7 @@ class Plan extends StatefulWidget {
 
 class _PlanPageState extends State<Plan> {
 
-  int _userLevel = 0;
-   List _workouts = [];
-  int _levelCap;
+  List _workouts = [];
 
   @override
   void initState(){
@@ -29,7 +27,6 @@ class _PlanPageState extends State<Plan> {
       });
     }).catchError((error) {
       print(error);
-      print("error");
     });
   }
 
@@ -186,7 +183,6 @@ class _PlanPageState extends State<Plan> {
       if(_workouts.isEmpty){
         return Text("");
       }
-
       else {
         return new ListView.builder(
           scrollDirection: Axis.vertical,
