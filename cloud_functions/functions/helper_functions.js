@@ -5,7 +5,8 @@ module.exports = {
     getAllUserWorkouts: getAllUserWorkouts
 }
 
-async function getUserInfo(userId) {
+// Get level, xp, username, class and email from logged in user
+async function getUserInfo(userId, email) {
     var userCollection = await getUsersCollection(userId)
     var userLevel = userCollection[0]
     var userXp = userCollection[1]
@@ -21,7 +22,8 @@ async function getUserInfo(userId) {
         userLevel: userLevel,
         userXp: userXp,
         xpCap: xpCap,
-        className: className
+        className: className,
+        email: email
     }
 
 }
