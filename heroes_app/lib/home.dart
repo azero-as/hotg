@@ -39,23 +39,10 @@ class Home extends StatelessWidget {
 
 // create state for appbar of home page
 class AvatarOverview extends StatefulWidget {
-  AvatarOverview(
+  AvatarOverview({this.auth, this.onSignedOut, this.onLoggedIn, this.readyToSignOut});
 
-      {this.auth,
-//      Key key,
-//      this.userId,
-      this.onSignedOut,
-//      this.title,
-//      this.signOut,
-      this.onLoggedIn,
-      this.readyToSignOut});
-//      : super(key: key);
-//
   final BaseAuth auth;
-//  final VoidCallback signOut;
   final VoidCallback onSignedOut;
-//  final String userId;
-//  final String title;
   final VoidCallback onLoggedIn;
   final VoidCallback readyToSignOut;
 
