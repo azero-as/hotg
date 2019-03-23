@@ -214,8 +214,7 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
             child: custom.ExpansionTile(
                 headerBackgroundColor: Color(0xFF212838),
                 title: Text("$_workoutDate: $_workoutType",
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
+                    style: TextStyle(color: Colors.white)),
                 children: _cardContent)));
   }
 }
