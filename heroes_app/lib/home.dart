@@ -97,11 +97,14 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                             widget.signOut();
                           }),*/
 
-                        //Username
-                        Padding(
+                        //Character name
+                        Container(
                           padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                          width: imageWidth,
                           child: Text(
                             model.characterName.toString(),
+                            softWrap: true,
+                            overflow: TextOverflow.clip,
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
