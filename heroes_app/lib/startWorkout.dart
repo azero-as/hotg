@@ -82,13 +82,13 @@ class _StartWorkoutPage extends State<StartWorkout> {
           children: <Widget>[
             ListTile(
                 title: new Text(
-                    "Sets: " + widget.exercises[index]["targetSets"])),
+                    "Sets: " + widget.exercises[index]["targetSets"].toString())),
             ListTile(
                 title: new Text(
-                    name + widget.exercises[index][exercise])),
+                    name + widget.exercises[index][exercise].toString())),
             ListTile(
                 title: new Text("Rest between sets: " +
-                    widget.exercises[index]["restBetweenSets"])),
+                    widget.exercises[index]["restBetweenSets"].toString())),
             ListTile(
                 title: new Text(
                     "XP: " + widget.exercises[index]["xp"].toString())),
