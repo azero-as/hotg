@@ -209,6 +209,7 @@ exports.updateUserXpWorkout = functions.https.onCall((data, context) => {
         
         console.log(userId)
 
+
         return helpers.updateUserXpWorkout(userId, totalWorkoutXp)
         .then(data => {
             console.log(data)
@@ -226,9 +227,30 @@ exports.updateUserXpWorkout = functions.https.onCall((data, context) => {
     }
 })
 
+
 exports.getExercises  = functions.https.onRequest((request, response) => {
 
         return admin.firestore().collection('Users').doc("CC9zGkKATIf5JPndq197B68QMc92").collection("Workouts").doc("2sBmiDB5vBMnWLswuCnz").get()
+                .then(querySnapshot => {
+
+                    const data = querySnapshot.data();
+
+                    return response.send({data})
+                })
+                .catch(error => {
+                    response.status(400).send(error) // 400 bad request
+                })
+
+        .catch( error => {
+            // 401 is unauthorized.
+            result.status(401).send(error)
+        })
+});
+
+
+exports.getWorkout  = functions.https.onRequest((request, response) => {
+
+        return admin.firestore().collection("Workouts").doc("w7ujyNOojW4QAE4GV4wc").get()
                 .then(querySnapshot => {
 
                     const data = querySnapshot.data();
@@ -276,23 +298,21 @@ exports.addWorkout= functions.https.onCall((data, context) => {
         // Not authenticated:
         throw new functions.https.HttpsError(code, message)
     }
-
 });
 
-// Returns a list of all user workouts objects 
+
+// Returns a list of all user workouts objects
 exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {
-    
+
     const tokenId = request.get('Authorization').split('Bearer ')[1];
-    
+
     return admin.auth().verifyIdToken(tokenId)
     .then( decoded => {
 
         const userId = decoded.user_id;
 
-
         return helpers.getAllUserWorkouts(userId)
         .then(workouts => {
-
             return response.send({
                 data : {
                     workouts: workouts
@@ -308,3 +328,19 @@ exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {
         result.status(401).send(error)
     })
 })
+
+
+exports.getAllWorkouts = functions.https.onRequest((request, response) => {
+    return helpers.getAllWorkouts()
+    .then(data => {
+        return response.send({
+            data
+        })
+    })
+    .catch(error => {
+        response.status(400).send(error) // 400 bad request
+    })
+
+})
+
+

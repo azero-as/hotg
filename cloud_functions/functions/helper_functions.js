@@ -2,7 +2,8 @@ var admin = require("firebase-admin");
 
 module.exports = {
     getUserInfo: getUserInfo,
-    getAllUserWorkouts: getAllUserWorkouts
+    getAllUserWorkouts: getAllUserWorkouts,
+    getAllWorkouts: getAllWorkouts
 }
 
 async function getUserInfo(userId) {
@@ -73,5 +74,21 @@ async function getAllUserWorkouts(userId) {
         console.log('Error: ',error)
     })
   }
+
+
+ async function getAllWorkouts() {
+   workouts = []
+   return admin.firestore().collection('Workouts').get()
+   .then(function(querySnapshot) {
+       querySnapshot.forEach(function(doc) {
+           workouts.push(doc.data())
+       })
+       return workouts
+   })
+   .catch(function(error) {
+       console.log('Error: ',error)
+   })
+ }
+
 
 
