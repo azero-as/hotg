@@ -11,13 +11,15 @@ import 'package:cloud_functions/cloud_functions.dart';
 // build the home page and call on the stateful classes
 class Home extends StatelessWidget {
 
-  Home({this.auth, this.onSignedOut, this.onLoggedIn, this.readyToSignOut, this.onStartWorkout});
+  Home({this.auth, this.onSignedOut, this.onLoggedIn, this.readyToSignOut, this.onStartWorkout, this.onActiveWorkout, this.onSummary});
 
   final BaseAuth auth;
   final VoidCallback onSignedOut;
   final VoidCallback onLoggedIn;
   final VoidCallback readyToSignOut;
   final VoidCallback onStartWorkout;
+  final VoidCallback onActiveWorkout;
+  final VoidCallback onSummary;
 
   static String tag = 'home-page';
 
@@ -33,7 +35,7 @@ class Home extends StatelessWidget {
           children: <Widget>[
             AvatarOverview(auth: auth, onSignedOut: onSignedOut, onLoggedIn: onLoggedIn, readyToSignOut: readyToSignOut),
             SizedBox(height: 20.0),
-            WorkoutOverview(onStartWorkout: onStartWorkout),
+            WorkoutOverview(onStartWorkout: onStartWorkout, onActiveWorkout: onActiveWorkout, onSummary: onSummary),
           ],
         ));
   }
@@ -162,9 +164,11 @@ class WorkoutOverview extends StatefulWidget {
   @override
   _WorkoutOverviewState createState() => _WorkoutOverviewState();
 
-  WorkoutOverview({this.onStartWorkout});
+  WorkoutOverview({this.onStartWorkout, this.onActiveWorkout, this.onSummary});
 
   final VoidCallback onStartWorkout;
+  final VoidCallback onActiveWorkout;
+  final VoidCallback onSummary;
 
 }
 

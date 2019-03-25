@@ -9,8 +9,11 @@ class StartWorkout extends StatefulWidget {
   final int xp;
   final String workoutName;
   final VoidCallback onLoggedIn;
+  final VoidCallback onStartWorkout;
+  final VoidCallback onActiveWorkout;
+  final VoidCallback onSummary;
 
-  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName, this.onLoggedIn});
+  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName, this.onLoggedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary});
 
   @override
   _StartWorkoutPage createState() => new _StartWorkoutPage();
@@ -28,11 +31,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
             borderRadius: BorderRadius.circular(15.0),
           ),
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        activeWorkoutSession(exercises: widget.exercises, workoutName: widget.workoutName)));
+            widget.onActiveWorkout();
           },
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
           color: const Color(0xFF212838),

@@ -215,6 +215,8 @@ class _RootPageState extends State<RootPage> {
             readyToSignOut: _readyToSignOut,
             onSignedIn: _onLoggedIn,
             onStartWorkout: _startWorkout,
+            onActiveWorkout: _activeWorkout,
+            onSummary: _summary,
           );
         } else return _buildWaitingScreen();
         break;
@@ -233,6 +235,25 @@ class _RootPageState extends State<RootPage> {
           intensity: workout.intensity,
           xp: workout.xp,
           workoutName: workout.workoutName,
+          onLoggedIn: _onLoggedIn,
+          onStartWorkout: _startWorkout,
+          onActiveWorkout: _activeWorkout,
+          onSummary: _summary,
+        );
+      case AuthStatus.ACTIVE_WORKOUT_SESSION:
+        return new activeWorkoutSession(
+          exercises: workout.exercises,
+          workoutName: workout.workoutName,
+          onLoggedIn: _onLoggedIn,
+          onStartWorkout: _startWorkout,
+          onSummary: _summary,
+        );
+      case AuthStatus.SUMMARY:
+        return new Summary(
+          exercises: workout.selectedExercises,
+          bonus: workout.BonusXP,
+          total_xp: workout.XpEarned,
+          workoutType: workout.workoutName,
           onLoggedIn: _onLoggedIn,
         );
       default:
