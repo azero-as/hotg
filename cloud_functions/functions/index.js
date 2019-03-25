@@ -329,22 +329,20 @@ exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {
     })
 })
 
-
+// Get all workouts from the Workouts collection
 exports.getAllWorkouts = functions.https.onRequest((request, response) => {
-
-
-
-        return helpers.getAllWorkouts()
-        .then(data => {
-
-            return response.send({
-                data
-            })
+    
+    return helpers.getAllWorkouts()
+    .then(workoutList => {
+        return response.send({
+            data: {
+                workoutList: workoutList
+            }
         })
-        .catch(error => {
-            response.status(400).send(error) // 400 bad request
-        })
-
+    })
+    .catch(error => {
+        response.status(400).send(error) // 400 bad request
+    })
 })
 
 

@@ -24,7 +24,7 @@ class _PlanPageState extends State<Plan> {
       functionName: 'getAllWorkouts',
     ).then((response) {
       setState(() {
-        _workouts = response;
+        _workouts = response['workoutList'];
       });
     }).catchError((error) {
       print(error);
