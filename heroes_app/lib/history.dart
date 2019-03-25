@@ -34,8 +34,9 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
         .call(functionName: 'getAllUserWorkouts')
         .then((response) {
       setState(() {
-        _workouts = response;
+        _workouts = response['workouts'];
       });
+      
     }).catchError((error) {
       print(error);
     });

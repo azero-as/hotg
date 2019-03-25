@@ -277,12 +277,34 @@ exports.addWorkout= functions.https.onCall((data, context) => {
         throw new functions.https.HttpsError(code, message)
     }
 
-    
-
-    
-
-     
-
-
 });
 
+// Returns a list of all user workouts objects 
+exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {
+    
+    const tokenId = request.get('Authorization').split('Bearer ')[1];
+    
+    return admin.auth().verifyIdToken(tokenId)
+    .then( decoded => {
+
+        const userId = decoded.user_id;
+
+
+        return helpers.getAllUserWorkouts(userId)
+        .then(workouts => {
+
+            return response.send({
+                data : {
+                    workouts: workouts
+                }
+            })
+        })
+        .catch(error => {
+            response.status(400).send(error) // 400 bad request
+        })
+    })
+    .catch( error => {
+        // 401 is unauthorized.
+        result.status(401).send(error)
+    })
+})
