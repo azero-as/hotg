@@ -179,6 +179,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             borderRadius: BorderRadius.circular(15.0),
           ),
           onPressed: () {
+            _saveWorkout();
             widget.onSummary();
             },
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
