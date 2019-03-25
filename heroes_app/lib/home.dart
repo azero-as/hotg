@@ -95,6 +95,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                         //Settings symbol and onPressed functionality
                         IconButton(
                           icon: Icon(Icons.settings),
+                          key: Key("settingsButton"),
                           color: Colors.white,
                           padding: EdgeInsets.fromLTRB((barWidth / 2) - 44, 0, 0, 0),
                           onPressed: () {
