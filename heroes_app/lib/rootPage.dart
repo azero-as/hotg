@@ -4,11 +4,11 @@ import 'dashboard.dart';
 import 'authentication.dart';
 import 'signup.dart';
 import 'frontpage.dart';
-import 'signuplevel.dart';
 import 'settings.dart';
 import 'models/user.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'signupSwiper.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({this.auth, this.user});
@@ -44,20 +44,19 @@ class _RootPageState extends State<RootPage> {
           _userId = user?.uid;
         }
         authStatus =
-        user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
+            user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
       });
     });
   }
 
   void _onLoggedIn() {
-    widget.auth.getCurrentUser().then((user){
+    widget.auth.getCurrentUser().then((user) {
       setState(() {
         _userId = user.uid.toString();
       });
     });
     setState(() {
       authStatus = AuthStatus.LOGGED_IN;
-
     });
   }
 
@@ -67,11 +66,13 @@ class _RootPageState extends State<RootPage> {
       _userId = "";
     });
   }
+
   void _signOut() {
     setState(() {
       authStatus = AuthStatus.SIGN_OUT;
     });
   }
+
   void _readyToLogIn() {
     setState(() {
       authStatus = AuthStatus.READY_TO_LOG_IN;
@@ -85,7 +86,7 @@ class _RootPageState extends State<RootPage> {
   }
 
   void _finishedSignedUp() {
-    widget.auth.getCurrentUser().then((user){
+    widget.auth.getCurrentUser().then((user) {
       setState(() {
         _userId = user.uid.toString();
       });
@@ -112,12 +113,8 @@ class _RootPageState extends State<RootPage> {
       functionName: 'getUserInfo',
     )
         .then((response) {
-          user.startState(
-              response['username'],
-              response['userLevel'],
-              response['userXp'],
-              response['xpCap'],
-              response['className']);
+      user.startState(response['username'], response['userLevel'],
+          response['userXp'], response['xpCap'], response['className']);
     }).catchError((error) {
       print(error);
     });
@@ -131,8 +128,8 @@ class _RootPageState extends State<RootPage> {
         break;
       case AuthStatus.NOT_LOGGED_IN:
         return FrontPage(
-            readyToLogIn: _readyToLogIn,
-            readyToSignUp: _readyToSignUp,
+          readyToLogIn: _readyToLogIn,
+          readyToSignUp: _readyToSignUp,
         );
       case AuthStatus.READY_TO_LOG_IN:
         return new LoginPage(
@@ -143,14 +140,15 @@ class _RootPageState extends State<RootPage> {
         );
       case AuthStatus.FINISHED_SIGNED_UP:
         if (_userId.length > 0 && _userId != null) {
-          return new SignupLevelPage(
+          return new SignupSwiperPage(
             auth: widget.auth,
             onSignedIn: _onLoggedIn,
             userId: _userId,
             onSignedOut: _onSignedOut,
             title: 'Heroes of the Gym',
           );
-      } break;
+        }
+        break;
       case AuthStatus.READY_TO_SIGN_UP:
         return new SignupPage(
           auth: widget.auth,
@@ -170,7 +168,8 @@ class _RootPageState extends State<RootPage> {
             title: 'Heroes of the Gym',
             signOut: _signOut,
           );
-        } else return _buildWaitingScreen();
+        } else
+          return _buildWaitingScreen();
         break;
       case AuthStatus.SIGN_OUT:
         return new Settings(

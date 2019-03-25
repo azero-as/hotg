@@ -3,11 +3,10 @@ import 'authentication.dart';
 import 'rootPage.dart';
 import 'login.dart';
 import 'dashboard.dart';
-
 import 'frontpage.dart';
-
 import 'signup.dart';
 import 'signuplevel.dart';
+import 'signupSwiper.dart';
 
 import 'package:scoped_model/scoped_model.dart';
 import 'models/user.dart';
@@ -15,7 +14,6 @@ import 'models/user.dart';
 void main() => runApp(new Heroes());
 
 class Heroes extends StatelessWidget {
-
   final User user = new User();
 
   //Navigation between pages
@@ -25,22 +23,23 @@ class Heroes extends StatelessWidget {
     FrontPage.tag: (context) => FrontPage(),
     SignupPage.tag: (context) => SignupPage(),
     SignupLevelPage.tag: (context) => SignupLevelPage(),
+    SignupSwiperPage.tag: (context) => SignupSwiperPage(),
   };
 
   @override
   Widget build(BuildContext context) {
     return ScopedModel<User>(
-      model: user,
-      child: new MaterialApp(
-        title: 'Heroes of the gym',
-        debugShowCheckedModeBanner: false,
-        theme: new ThemeData(
-          primaryColor: const Color(0xFF212838),
-          secondaryHeaderColor: const Color(0xFF612A30),
-          accentColor: const Color(0xFF4D3262),
-        ),
-        routes: routes,
-        home: new RootPage(auth: new Auth(), user: user),
-      ));
+        model: user,
+        child: new MaterialApp(
+          title: 'Heroes of the gym',
+          debugShowCheckedModeBanner: false,
+          theme: new ThemeData(
+            primaryColor: const Color(0xFF212838),
+            secondaryHeaderColor: const Color(0xFF612A30),
+            accentColor: const Color(0xFF4D3262),
+          ),
+          routes: routes,
+          home: new RootPage(auth: new Auth(), user: user),
+        ));
   }
 }
