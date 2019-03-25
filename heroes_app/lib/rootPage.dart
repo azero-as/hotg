@@ -102,7 +102,6 @@ class _RootPageState extends State<RootPage> {
   }
 
   void _startWorkout(){
-    print("Start workout!!");
     setState(() {
       authStatus = AuthStatus.START_WORKOUT;
     });
@@ -228,7 +227,6 @@ class _RootPageState extends State<RootPage> {
         );
         break;
       case AuthStatus.START_WORKOUT:
-        print("On start workout!!");
         return new StartWorkout(
           exercises: workout.exercises,
           duration: workout.duration,
