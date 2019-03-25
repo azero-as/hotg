@@ -54,9 +54,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
-                new TextSpan(
-                    text: 'Duration: ',
-                    style: new TextStyle(fontWeight: FontWeight.bold)),
+
                 new TextSpan(text: widget.duration.toString() + " min"),
                 new TextSpan(
                     text: ' XP: ',
