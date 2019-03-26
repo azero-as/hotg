@@ -175,6 +175,7 @@ class _RootPageState extends State<RootPage> {
           setState(() {
             _dataLoadedFromFireBase = null;
           });
+          workout.setListOfWorkouts(null);
           return FrontPage(
             readyToLogIn: _readyToLogIn,
             readyToSignUp: _readyToSignUp,
