@@ -22,6 +22,8 @@ class Plan extends StatefulWidget {
 
 class _PlanPageState extends State<Plan> {
 
+  String _dataLoadedFromFireBase; //if this is null, it is still loading data from firebase.
+
   @override
   void initState(){
     super.initState();
@@ -32,8 +34,9 @@ class _PlanPageState extends State<Plan> {
         .call(
       functionName: 'getAllWorkouts',
     ).then((response) {
-      setState(() {
         workout.setListOfWorkouts(response['workoutList']);
+      setState(() {
+        _dataLoadedFromFireBase = "done";
       });
     }).catchError((error) {
       print(error);
@@ -42,6 +45,15 @@ class _PlanPageState extends State<Plan> {
 
   @override
     Widget build(BuildContext context) {
+
+    Widget _buildWaitingScreen() {
+      return Scaffold(
+        body: Container(
+          alignment: Alignment.center,
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
     Widget _workout(int index) {
       return new Container(
@@ -212,12 +224,25 @@ class _PlanPageState extends State<Plan> {
         );
       }
     }
+    if (_dataLoadedFromFireBase == null) {
+      return Scaffold(
+        appBar: new AppBar(
+          centerTitle: true ,
+          title: new Text("Workouts"),
+        ),
+        body:
+        _buildWaitingScreen(),
+      );
+    }
+    else {
+      return Scaffold(
+        appBar: new AppBar(
+          centerTitle: true ,
+          title: new Text("Workouts"),
+        ),
+        body:
+        _listOfWorkouts(),
+      );
+    }
 
-    return Scaffold(
-      appBar: new AppBar(
-        centerTitle: true ,
-        title: new Text("Workouts"),
-      ),
-      body: _listOfWorkouts(),
-    );
   }}
