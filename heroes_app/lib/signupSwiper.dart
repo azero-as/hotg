@@ -52,14 +52,13 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
   Widget build(BuildContext context) {
     //CharacterName input field
     final characterName = TextFormField(
+        maxLength: 27,
         keyboardType: TextInputType.text,
         autofocus: false,
-        validator: (value) => value.isEmpty
-            ? 'You need to have a name for your character.'
-            : null,
+        validator: (value) => value.isEmpty ? 'Every hero needs a name' : null,
         controller: charactername,
         decoration: InputDecoration(
-          hintStyle: TextStyle(color: Colors.white),
+          errorStyle: TextStyle(fontSize: 14),
           labelText: 'Character Name',
           contentPadding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
           border: UnderlineInputBorder(),
@@ -251,7 +250,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                           _descriptionText(
                               'Every hero needs a suitable name! Start your journey by picking a character name.'),
                           _space(40),
-                          Container(width: 200, child: characterName),
+                          Container(width: 250, child: characterName),
                         ],
                       ),
                       onChanged: () {
@@ -303,6 +302,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                         _headerText("Select your current fitness level"),
                         _descriptionText(
                             "Everyone starts in different places. Select your current fitness level in order to receive workouts tailored to your current level."),
+                        _space(10.0),
                         beginner,
                         intermediate,
                         advanced,
@@ -322,7 +322,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
 // -----------------------TEXT BOXES AND SPACING--------------------------
   Widget _headerText(String text) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 10.0),
+      padding: EdgeInsets.fromLTRB(0.0, 40.0, 0.0, 10.0),
       child: new Text(
         text,
         style: TextStyle(
@@ -354,7 +354,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         style: TextStyle(
           fontSize: 16.0,
         ),
-        textAlign: TextAlign.left,
+        textAlign: TextAlign.center,
       ),
     );
   }
