@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:heroes_app/custom_expansion_tile.dart' as custom;
+import 'models/user.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class History extends StatelessWidget {
   History(this.listType);
@@ -26,17 +28,28 @@ class ListOfTrainingSessions extends StatefulWidget {
 class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
   // Container for every workout registered on the user in the database.
   List _workouts = [];
+  bool _noWorkoutCompleted;
+  int _usernameLength = 10;
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      //int _length = ScopedModel.of<User>(context).characterName.length;
+      //_usernameLength = _length;
+    });
     CloudFunctions.instance
         .call(functionName: 'getAllUserWorkouts')
         .then((response) {
-      setState(() {
-        _workouts = response['workouts'];
-      });
-      
+      if (response == null) {
+        setState(() {
+          _noWorkoutCompleted = true;
+        });
+      } else {
+        setState(() {
+          _workouts = response['workouts'];
+        });
+      }
     }).catchError((error) {
       print(error);
     });
@@ -47,7 +60,24 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
 // Builds a List View of the workout history.
   @override
   Widget build(BuildContext context) {
-    if (_workouts.isEmpty) {
+    if (_noWorkoutCompleted == null) {
+      return ScopedModelDescendant<User>(builder: (context, child, model) {
+        return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _noTrainingMessage(model),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                  //padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  constraints: BoxConstraints(maxHeight: 300, maxWidth: 280),
+                  child: Text("Go to Home or Plan begin your adventure!",
+                      overflow: TextOverflow.clip))
+            ]);
+      });
+    } else if (_workouts.isEmpty) {
       return Center(child: CircularProgressIndicator());
     } else {
       return Scaffold(
@@ -60,6 +90,28 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
               itemBuilder: (context, index) {
                 return _workoutCard(context, _workouts[index]);
               }));
+    }
+  }
+
+  // Conditional build of the empty workout screen
+
+  Widget _noTrainingMessage(userModel) {
+    if (_usernameLength > 8) {
+      return Container(
+          //padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          constraints: BoxConstraints(maxHeight: 300, maxWidth: 290),
+          child: Text(
+            "You haven't done any training yet, ${userModel.characterName.toString()}sddfstthstrhstrhdgj",
+            overflow: TextOverflow.clip,
+          ));
+    } else {
+      return Container(
+          //padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          constraints: BoxConstraints(maxHeight: 300, maxWidth: 290),
+          child: Text(
+            "You haven't done any training yet, ${userModel.characterName.toString()}",
+            overflow: TextOverflow.clip,
+          ));
     }
   }
 
