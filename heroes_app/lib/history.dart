@@ -12,7 +12,6 @@ class History extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     return ListOfTrainingSessions();
   }
 }
@@ -29,16 +28,12 @@ class ListOfTrainingSessions extends StatefulWidget {
 class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
   // Container for every workout registered on the user in the database.
   List _workouts = [];
-  bool _noWorkoutCompleted;
-  int _usernameLength = 10;
+  bool _noWorkoutCompleted = false;
+  //int _usernameLength = 10;
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      //int _length = ScopedModel.of<User>(context).characterName.length;
-      //_usernameLength = _length;
-    });
     CloudFunctions.instance
         .call(functionName: 'getAllUserWorkouts')
         .then((response) {
@@ -61,30 +56,33 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
 // Builds a List View of the workout history.
   @override
   Widget build(BuildContext context) {
-    if (_noWorkoutCompleted == null) {
+    if (_noWorkoutCompleted == true) {
       return ScopedModelDescendant<User>(builder: (context, child, model) {
-        return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _noTrainingMessage(model),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                  //padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  constraints: BoxConstraints(maxHeight: 300, maxWidth: 280),
-                  child: Text("Go to Home or Plan begin your adventure!",
-                      overflow: TextOverflow.clip))
-            ]);
+        return Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text("Workout History"),
+            ),
+            body: Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                  _noTrainingMessage(model),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  _motivationalQuote()
+                ])));
       });
     } else if (_workouts.isEmpty) {
       return Center(child: CircularProgressIndicator());
     } else {
       return Scaffold(
-          /*appBar: AppBar(
-            title: Text("Workout history"),
-          ),*/
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text("Workout History"),
+          ),
           body: ListView.builder(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
               itemCount: _workouts.length,
@@ -97,23 +95,25 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
   // Conditional build of the empty workout screen
 
   Widget _noTrainingMessage(userModel) {
-    if (_usernameLength > 8) {
-      return Container(
-          //padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-          constraints: BoxConstraints(maxHeight: 300, maxWidth: 290),
+    return Column(children: [
+      Container(
           child: Text(
-            "You haven't done any training yet, ${userModel.characterName.toString()}sddfstthstrhstrhdgj",
-            overflow: TextOverflow.clip,
-          ));
-    } else {
-      return Container(
-          //padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-          constraints: BoxConstraints(maxHeight: 300, maxWidth: 290),
-          child: Text(
-            "You haven't done any training yet, ${userModel.characterName.toString()}",
-            overflow: TextOverflow.clip,
-          ));
-    }
+        "You haven't done any training yet,",
+      )),
+      SizedBox(
+        height: 5,
+      ),
+      Container(
+        constraints: BoxConstraints(maxHeight: 300, maxWidth: 300),
+        child: Text("${userModel.characterName.toString()}."),
+      )
+    ]);
+  }
+
+  Widget _motivationalQuote() {
+    return Container(
+        constraints: BoxConstraints(maxHeight: 300, maxWidth: 300),
+        child: Text("Go to Home or Plan to begin your adventure!"));
   }
 
   // Builds a single workout card.
@@ -270,21 +270,5 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
                 title: Text("$_workoutDate: $_workoutType",
                     style: TextStyle(color: Colors.white)),
                 children: _cardContent)));
-=======
-    return new Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-        ],
-      ),
-      body: new Center(
-        child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('HISTORY'),
-          ],
-        ),
-      ),
-    );
->>>>>>> develop
   }
 }
