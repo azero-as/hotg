@@ -98,18 +98,15 @@ exports.updateUserLevelInfo = functions.https.onCall((data, context) => {
         }).catch(error => {
             console.log(error)
         }) 
-          
-            
-    
-    } else {
+    }
+    else {
         // not authenticated: 
         throw new functions.https.HttpsError(code, message)
-
     }
 })
 
-// Get total_xp and bonus_xp from finished workout, and updates the
-// total amount of XP in the User collection
+// Get xpEarned from finished workout, and updates the
+// total amount of xp in the User collection
 
 exports.updateUserXpWorkout = functions.https.onCall((data, context) => {
 
@@ -117,28 +114,20 @@ exports.updateUserXpWorkout = functions.https.onCall((data, context) => {
     if (context.auth.uid != null) {
 
         var userId = context.auth.uid
-        const total_xp = data.total_xp
-        const bonus_xp = data.bonus_xp
-     
-        const totalWorkoutXp = total_xp + bonus_xp
-        
-        console.log(userId)
+        // parameter
+        const xpEarned = data.xpEarned
 
-
-        return helpers.updateUserXpWorkout(userId, totalWorkoutXp)
+        return helpers.updateUserXpWorkout(userId, xpEarned)
         .then(data => {
             console.log(data)
             return data
         })
         .catch(error => {
             console.log(error)
-            // return error
-            return {}
         })  
     } else {
         // not authenticated: 
         throw new functions.https.HttpsError(code, message)
-
     }
 })
 

@@ -55,14 +55,13 @@ class User extends Model {
 }
 
   // Methods used by other widgets:
-  void incrementXP(int bonus_xp, int total_xp) async {
+  void incrementXP(int xpEarned) async {
 
     await CloudFunctions.instance.
         call(
         functionName: 'updateUserXpWorkout',
         parameters: {
-          "bonus_xp": bonus_xp,
-          "total_xp": total_xp
+          "xpEarned": xpEarned,
         }
     )
     .then((response){

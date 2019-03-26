@@ -52,12 +52,12 @@ async function updateUserLevelInfo(userId, userXp, xpCap, userLevel) {
     }
 
 }
-// Update user xp with totalWorkoutXP
+// Update user xp with xp earned from finishing a workout
 
-async function updateUserXpWorkout(userId, totalWorkoutXp) {
+async function updateUserXpWorkout(userId, xpEarned) {
     var userCollection = await getUsersCollection(userId)
     var currentXp = userCollection[1]
-    var updatedXp = await updateUserXP(currentXp, totalWorkoutXp, userId)
+    var updatedXp = await updateUserXP(currentXp, xpEarned, userId)
 
     return {
         updatedXp: updatedXp // New XP
@@ -125,8 +125,8 @@ async function resetUserXp(xpCap, userXp, userId) {
     
 }
 
-async function updateUserXP(currentXP, totalWorkoutXp, userId) {
-    const updatedXp = currentXP + totalWorkoutXp
+async function updateUserXP(currentXP, xpEarned, userId) {
+    const updatedXp = currentXP + xpEarned
     return admin.firestore().collection("Users").doc(userId).update({
         xp: updatedXp,
     })
