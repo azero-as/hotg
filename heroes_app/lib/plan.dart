@@ -29,6 +29,9 @@ class _PlanPageState extends State<Plan> {
     super.initState();
 
     var workout = ScopedModel.of<Workout>(context);
+    if (workout.listOfWorkouts != null) {
+      _dataLoadedFromFireBase = "done";
+    }
 
     CloudFunctions.instance
         .call(
