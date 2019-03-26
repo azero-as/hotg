@@ -7,7 +7,7 @@ class User extends Model {
 
   int _xpCap = 1;
   int _xp = 0;
-  int _level; //Used in rootpage to check that state is not set, has to be null to start.
+  int _level;
   String _characterName;
   String _className;
   String _email;

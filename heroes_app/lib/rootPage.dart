@@ -42,6 +42,7 @@ enum AuthStatus {
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
+  String _dataLoadedFromFireBase; //if this is null, it is still loading data from firebase.
 
   @override
   void initState() {
@@ -153,6 +154,9 @@ class _RootPageState extends State<RootPage> {
         workout.setDuration(response['duration']);
         workout.setXp(response['xp']);
         workout.setExercises(response['exercises']);
+        setState(() {
+          _dataLoadedFromFireBase = "done";
+        });
     }).catchError((error) {
       print(error);
     });
@@ -161,13 +165,16 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) {
     var workout = ScopedModel.of<Workout>(context);
-    return ScopedModelDescendant<User>(builder: (context, child, model)
+    //var user = ScopedModel.of<User>(context);
     {
       switch (authStatus) {
         case AuthStatus.NOT_DETERMINED:
           return new LoadingScreen();
           break;
         case AuthStatus.NOT_LOGGED_IN:
+          setState(() {
+            _dataLoadedFromFireBase = null;
+          });
           return FrontPage(
             readyToLogIn: _readyToLogIn,
             readyToSignUp: _readyToSignUp,
@@ -203,19 +210,20 @@ class _RootPageState extends State<RootPage> {
           if (_userId.length > 0 && _userId != null) {
             _setUserInfo(context);
             _setWorkoutInfo(context);
-            if (model.level == null) {
-              return new LoadingScreen();
-            } else {
+            if (this._dataLoadedFromFireBase == "done") {
               return new DashboardScreen(
-                userId: _userId,
-                auth: widget.auth,
-                onSignedOut: _onSignedOut,
-                readyToSignOut: _readyToSignOut,
-                onSignedIn: _onLoggedIn,
-                onStartWorkout: _startWorkout,
-                onActiveWorkout: _activeWorkout,
-                onSummary: _summary,
+                  userId: _userId,
+                  auth: widget.auth,
+                  onSignedOut: _onSignedOut,
+                  readyToSignOut: _readyToSignOut,
+                  onSignedIn: _onLoggedIn,
+                  onStartWorkout: _startWorkout,
+                  onActiveWorkout: _activeWorkout,
+                  onSummary: _summary,
               );
+            }
+            else {
+              return new LoadingScreen();
             }
           } else
             return new LoadingScreen();
@@ -259,7 +267,6 @@ class _RootPageState extends State<RootPage> {
           return new LoadingScreen();
       }
       return new LoadingScreen();
-    });
+    }
   }
-
 }
