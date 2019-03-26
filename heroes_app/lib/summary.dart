@@ -174,7 +174,8 @@ class _SummaryState extends State<Summary> {
               new Container(
                 padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
                 color: Colors.white,
-                child: Column(
+                child: ScopedModelDescendant<User>(builder: (context, child, model) {
+                  return Column (
                   children: <Widget>[
                     RichText(
                       text: TextSpan(
@@ -188,7 +189,7 @@ class _SummaryState extends State<Summary> {
                     SizedBox(height: 10),
                     RichText(
                       text: TextSpan(
-                        text: 'Level ...', //TODO: Get current level 
+                        text: 'Level ${model.level}',
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -197,10 +198,10 @@ class _SummaryState extends State<Summary> {
                       ),
                     ),
                   ],
-                ),
-              ),
+                );
+              })
               //SizedBox(height: 100.0),
-            ],
+            )],
           )),
 
       ],
