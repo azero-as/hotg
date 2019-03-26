@@ -9,41 +9,6 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
 
-// Get username and email for settings page
-exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
-  const tokenId = request.get("Authorization").split("Bearer ")[1];
-
-  return admin
-    .auth()
-    .verifyIdToken(tokenId)
-    .then(decoded => {
-      const userId = decoded.user_id;
-
-      return admin
-        .firestore()
-        .collection("Users")
-        .doc(userId)
-        .get()
-        .then(querySnapshot => {
-          const data = querySnapshot.data();
-
-          return response.send({
-            data: {
-              username: data.characterName,
-              email: decoded.email
-            }
-          });
-        })
-        .catch(error => {
-          response.status(400).send(error); // 400 bad request
-        });
-    })
-    .catch(error => {
-      // 401 is unauthorized.
-      result.status(401).send(error);
-    });
-});
-
 exports.getUserXP = functions.https.onRequest((request, response) => {
   /**
    * The token id is sent like this in the request:
@@ -146,15 +111,17 @@ const helpers = require("./helper_functions.js");
 exports.getUserInfo = functions.https.onRequest((request, response) => {
   const tokenId = request.get("Authorization").split("Bearer ")[1];
 
+  const tokenId = request.get("Authorization").split("Bearer ")[1];
+
   return admin
     .auth()
     .verifyIdToken(tokenId)
     .then(decoded => {
+      const email = decoded.email;
       const userId = decoded.user_id;
-      console.log("UserId: ", userId);
 
       return helpers
-        .getUserInfo(userId)
+        .getUserInfo(userId, email)
         .then(data => {
           return response.send({
             data

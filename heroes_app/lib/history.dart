@@ -12,6 +12,7 @@ class History extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return ListOfTrainingSessions();
   }
 }
@@ -269,5 +270,21 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
                 title: Text("$_workoutDate: $_workoutType",
                     style: TextStyle(color: Colors.white)),
                 children: _cardContent)));
+=======
+    return new Scaffold(
+      appBar: AppBar(
+        actions: <Widget>[
+        ],
+      ),
+      body: new Center(
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('HISTORY'),
+          ],
+        ),
+      ),
+    );
+>>>>>>> develop
   }
 }

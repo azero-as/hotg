@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'authentication.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'models/user.dart';
 
 class Settings extends StatefulWidget {
   //For signing out
@@ -16,34 +17,10 @@ class Settings extends StatefulWidget {
 }
 
 class SettingsState extends State<Settings> {
-  String _username = '';
-  String _email = '';
-
-  @override
-  void initState() {
-    super.initState();
-
-    //Getting username (charactername) and email from logged in user in Firebase
-
-    CloudFunctions.instance
-        .call(
-      functionName: 'getSettingsUserInfo',
-    )
-        .then((response) {
-      setState(() {
-        _username = response['username'];
-        _email = response['email'];
-      });
-    }).catchError((error) {
-      print(error);
-    });
-  }
-
+ 
   @override
   Widget build(BuildContext context) {
-    if (_username == '') {
-      return new Container();
-    } else {
+
       return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -57,12 +34,12 @@ class SettingsState extends State<Settings> {
           ),
           body: Container(
             padding: EdgeInsets.only(left: 24.0, right: 24.0),
-            margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
+            margin: EdgeInsets.fromLTRB(20, 0, 20, 35),
             child: new ListView(
               shrinkWrap: true,
               children: <Widget>[
                 SizedBox(height: 50.0),
-                usernameField(),
+                characterNameField(),
                 emailField(),
                 SizedBox(height: 125.0),
                 logOutButton()
@@ -70,26 +47,37 @@ class SettingsState extends State<Settings> {
             ),
           ));
     }
-  }
 
-  Widget usernameField() {
+  // Displays characterName 
+  Widget characterNameField() {
     return Padding(
       padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 3.0),
-      child: ListTile(
-        leading: Icon(Icons.person),
-        title: Text(_username),
-      ),
-    );
+      child: ScopedModelDescendant<User>(builder: (context, child, model) {
+        if (model.characterName.isEmpty) {
+          return new Container();
+        }
+        return ListTile(
+          leading: Icon(Icons.person),
+          title: Text(model.characterName),
+        );
+        }),
+      );
   }
 
+  // Displays email address
   Widget emailField() {
     return Padding(
       padding: EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 0.0),
-      child: ListTile(
-        leading: Icon(Icons.email),
-        title: Text(_email),
-      ),
-    );
+      child: ScopedModelDescendant<User>(builder: (context, child, model) {
+        if (model.email.isEmpty) {
+          return new Container();
+        }
+        return ListTile(
+          leading: Icon(Icons.email),
+          title: Text(model.email),
+        );
+      })
+      );
   }
 
   _signOut() async {
