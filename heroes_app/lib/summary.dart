@@ -7,8 +7,9 @@ class Summary extends StatefulWidget {
   final int bonus;
   final int total_xp;
   final String workoutType;
+  final VoidCallback onLoggedIn;
 
-  Summary({this.exercises, this.bonus, this.total_xp, this.workoutType});
+  Summary({this.exercises, this.bonus, this.total_xp, this.workoutType, this.onLoggedIn});
 
   @override
   State createState() => new _SummaryState();
@@ -26,7 +27,7 @@ class _SummaryState extends State<Summary> {
           leading: new IconButton(
               icon: Icon(Icons.close),
               onPressed: () {
-                // TO-DO: Add navigation back to home page
+                widget.onLoggedIn();
               }),
           title: Text(
             "Summary",

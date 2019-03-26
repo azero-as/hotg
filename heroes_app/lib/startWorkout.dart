@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'activeWorkoutSession.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'models/workout.dart';
+import 'plan.dart';
 
 class StartWorkout extends StatefulWidget {
   final List exercises;
@@ -8,8 +11,12 @@ class StartWorkout extends StatefulWidget {
   final String intensity;
   final int xp;
   final String workoutName;
+  final VoidCallback onLoggedIn;
+  final VoidCallback onStartWorkout;
+  final VoidCallback onActiveWorkout;
+  final VoidCallback onSummary;
 
-  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName});
+  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName, this.onLoggedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary});
 
   @override
   _StartWorkoutPage createState() => new _StartWorkoutPage();
@@ -27,11 +34,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
             borderRadius: BorderRadius.circular(15.0),
           ),
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        activeWorkoutSession(exercises: widget.exercises, workoutName: widget.workoutName)));
+            widget.onActiveWorkout();
           },
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
           color: const Color(0xFF212838),
@@ -127,14 +130,22 @@ class _StartWorkoutPage extends State<StartWorkout> {
           ));
     }
 
+    var workout = ScopedModel.of<Workout>(context);
     return Scaffold(
       appBar: AppBar(
-        actions: <Widget>[
-          new Center(
-            child: new Text('',
-                style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-          )
-        ],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            if (workout.isFromHomePage == true) {
+              widget.onLoggedIn();
+            }
+            else {
+              // TODO: Make it go to pla page instead of widget.onLoggedIn();
+              widget.onLoggedIn();
+          }
+          },
+          color: Colors.white,
+        ),
       ),
       body: Container(
         child: _returnBody(),

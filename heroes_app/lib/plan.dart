@@ -2,29 +2,38 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'startWorkout.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'models/workout.dart';
 
 class Plan extends StatefulWidget {
 
     @override
     _PlanPageState createState() => new _PlanPageState();
 
+    Plan({this.onLoggedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary});
+
+    final VoidCallback onLoggedIn;
+    final VoidCallback onStartWorkout;
+    final VoidCallback onActiveWorkout;
+    final VoidCallback onSummary;
+
 }
 
 
 class _PlanPageState extends State<Plan> {
 
-  List _workouts = [];
-
   @override
   void initState(){
     super.initState();
+
+    var workout = ScopedModel.of<Workout>(context);
 
     CloudFunctions.instance
         .call(
       functionName: 'getAllWorkouts',
     ).then((response) {
       setState(() {
-        _workouts = response;
+        workout.setListOfWorkouts(response['workoutList']);
       });
     }).catchError((error) {
       print(error);
@@ -42,7 +51,8 @@ class _PlanPageState extends State<Plan> {
           border: Border.all(color: Colors.black, width: 0.25),
           color: Color(0xFFE7E9ED),
         ),
-        child: Column(
+        child: ScopedModelDescendant<Workout>(builder: (context, child, model) {
+          return Column(
           // Text starts on the left, instead of centered as is the default
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -67,7 +77,7 @@ class _PlanPageState extends State<Plan> {
                     alignment: Alignment.centerLeft,
                     child: Container(
                       child: Text(
-                        _workouts[index]["workoutName"],
+                        model.listOfWorkouts[index]["workoutName"],
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -125,7 +135,7 @@ class _PlanPageState extends State<Plan> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            _workouts[index]["xp"].toString(),
+                            model.listOfWorkouts[index]["xp"].toString(),
                             style: TextStyle(color: Color(0xFF434242)),
                           ),
                           // add space between lines
@@ -133,7 +143,7 @@ class _PlanPageState extends State<Plan> {
                             height: 10,
                           ),
                           Text(
-                              _workouts[index]["intensity"].toString(),
+                              model.listOfWorkouts[index]["intensity"].toString(),
                             style: TextStyle(color: Color(0xFF434242)),
                           ),
                           // add space between lines
@@ -141,7 +151,7 @@ class _PlanPageState extends State<Plan> {
                             height: 18,
                           ),
                           Text(
-                            _workouts[index]["duration"].toString() + " min",
+                            model.listOfWorkouts[index]["duration"].toString() + " min",
                             style: TextStyle(color: Color(0xFF434242)),
                           ),
                         ]),
@@ -150,61 +160,56 @@ class _PlanPageState extends State<Plan> {
                   Expanded(
                     flex: 3,
                     child: Column(
-                      children: <Widget>[
-                        // add space to make the button stay at the bottom of the box
-                        SizedBox(
-                          height: 50,
-                        ),
-                        RaisedButton(
-                          padding: EdgeInsets.all(10.0),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        StartWorkout(
-                                            exercises:  _workouts[index]["exercises"],
-                                            duration: _workouts[index]["duration"],
-                                            intensity: _workouts[index]["intensity"],
-                                            xp: _workouts[index]["xp"],
-                                            workoutName: _workouts[index]["workoutName"])));
-                          },
-                          elevation: 5.0,
-                          color: Color(0xFF612A30),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.67),
+                        children: <Widget>[
+                          // add space to make the button stay at the bottom of the box
+                          SizedBox(
+                            height: 50,
                           ),
-                          child: Text(
-                            'See workout',
-                            style: TextStyle(color: Colors.white, fontSize: 13.0),
+                          RaisedButton(
+                            padding: EdgeInsets.all(10.0),
+                            onPressed: () {
+                              model.isFromHomePage = false;
+                              model.changeActiveWorkout(model.listOfWorkouts, index);
+                              widget.onStartWorkout();
+                            },
+                            elevation: 5.0,
+                            color: Color(0xFF612A30),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.67),
+                            ),
+                            child: Text(
+                              'See workout',
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 13.0),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
                   ),
                 ],
               ),
             ),
           ],
-        ),
+        );
+          }),
       );
     }
 
     Widget _listOfWorkouts() {
-      if(_workouts.isEmpty){
+      var workout = ScopedModel.of<Workout>(context);
+      if(workout.listOfWorkouts.isEmpty){
         return Text("");
       }
       else {
         return new ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: _workouts.length,
+          itemCount: workout.listOfWorkouts.length,
           itemBuilder: (BuildContext context, int index){
             return _workout(index);
             //children: root["info"]
           },
         );
-
       }
     }
 

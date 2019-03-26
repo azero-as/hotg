@@ -19,7 +19,7 @@ void main() {
       final loginBackButton = find.byValueKey("loginBackButton");
 
       //Widgets from dashboard
-      final settingsButton = find.byValueKey("settings");
+      final settingsButton = find.byValueKey("settingsButton");
       final signOutButton = find.byValueKey("signOutButton");
 
     FlutterDriver driver;

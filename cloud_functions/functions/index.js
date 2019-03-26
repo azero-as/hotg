@@ -10,40 +10,6 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
 
- // Get username and email for settings page
-exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
-
-
-    const tokenId = request.get('Authorization').split('Bearer ')[1];
-
-    return admin.auth().verifyIdToken(tokenId)
-    .then( decoded => {
-
-        const userId = decoded.user_id;
-
-        return admin.firestore().collection('Users').doc(userId).get()
-        .then(querySnapshot => {
-
-            const data = querySnapshot.data();
-
-            return response.send({
-                data: {
-                    username: data.characterName,
-                    email: decoded.email
-                }
-            })
-        })
-        .catch(error => {
-            response.status(400).send(error) // 400 bad request
-        })
-    })
-    .catch( error => {
-        // 401 is unauthorized.
-        result.status(401).send(error)
-    })
-});
-
-
 exports.getUserXP = functions.https.onRequest((request, response) => {
     /**
      * The token id is sent like this in the request:
@@ -144,10 +110,10 @@ exports.getUserInfo = functions.https.onRequest((request, response) => {
     return admin.auth().verifyIdToken(tokenId)
     .then( decoded => {
 
-        const userId = decoded.user_id;
-        console.log('UserId: ',userId)
+        const email = decoded.email
+        const userId = decoded.user_id
 
-        return helpers.getUserInfo(userId)
+        return helpers.getUserInfo(userId, email)
         .then(data => {
 
             return response.send({
@@ -329,22 +295,20 @@ exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {
     })
 })
 
-
+// Get all workouts from the Workouts collection
 exports.getAllWorkouts = functions.https.onRequest((request, response) => {
-
-
-
-        return helpers.getAllWorkouts()
-        .then(data => {
-
-            return response.send({
-                data
-            })
+    
+    return helpers.getAllWorkouts()
+    .then(workoutList => {
+        return response.send({
+            data: {
+                workoutList: workoutList
+            }
         })
-        .catch(error => {
-            response.status(400).send(error) // 400 bad request
-        })
-
+    })
+    .catch(error => {
+        response.status(400).send(error) // 400 bad request
+    })
 })
 
 
