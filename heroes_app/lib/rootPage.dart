@@ -6,6 +6,7 @@ import 'signup.dart';
 import 'frontpage.dart';
 import 'signuplevel.dart';
 import 'settings.dart';
+import 'loadingScreen.dart';
 import 'models/user.dart';
 import 'models/workout.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -119,15 +120,6 @@ class _RootPageState extends State<RootPage> {
     });
   }
 
-  Widget _buildWaitingScreen() {
-    return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        child: CircularProgressIndicator(),
-      ),
-    );
-  }
-
   //Sets the start state with userInfo.
   void _setUserInfo(BuildContext context) {
     var user = ScopedModel.of<User>(context);
@@ -171,7 +163,7 @@ class _RootPageState extends State<RootPage> {
     var workout = ScopedModel.of<Workout>(context);
     switch (authStatus) {
       case AuthStatus.NOT_DETERMINED:
-        return _buildWaitingScreen();
+        return new LoadingScreen();
         break;
       case AuthStatus.NOT_LOGGED_IN:
         return FrontPage(
@@ -218,7 +210,7 @@ class _RootPageState extends State<RootPage> {
             onActiveWorkout: _activeWorkout,
             onSummary: _summary,
           );
-        } else return _buildWaitingScreen();
+        } else return new LoadingScreen();
         break;
       case AuthStatus.READY_TO_SIGN_OUT:
         return new Settings(
@@ -256,8 +248,8 @@ class _RootPageState extends State<RootPage> {
           onLoggedIn: _onLoggedIn,
         );
       default:
-        return _buildWaitingScreen();
+        return new LoadingScreen();
     }
-    return _buildWaitingScreen();
+    return new LoadingScreen();
   }
 }
