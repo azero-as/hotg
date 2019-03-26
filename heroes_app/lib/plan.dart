@@ -10,6 +10,13 @@ class Plan extends StatefulWidget {
     @override
     _PlanPageState createState() => new _PlanPageState();
 
+    Plan({this.onLoggedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary});
+
+    final VoidCallback onLoggedIn;
+    final VoidCallback onStartWorkout;
+    final VoidCallback onActiveWorkout;
+    final VoidCallback onSummary;
+
 }
 
 
@@ -163,16 +170,8 @@ class _PlanPageState extends State<Plan> {
                           RaisedButton(
                             padding: EdgeInsets.all(10.0),
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          StartWorkout(
-                                              exercises: model.listOfWorkouts[index]["exercises"],
-                                              duration: model.listOfWorkouts[index]["duration"],
-                                              intensity: model.listOfWorkouts[index]["intensity"],
-                                              xp: model.listOfWorkouts[index]["xp"],
-                                              workoutName: model.listOfWorkouts[index]["workoutName"])));
+                              //TODO: change state in workout to the chosen workout.
+                              widget.onStartWorkout();
                             },
                             elevation: 5.0,
                             color: Color(0xFF612A30),

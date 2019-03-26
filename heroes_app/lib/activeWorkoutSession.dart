@@ -208,6 +208,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
+            //TODO: Check if you came from the planpage or from the homepage. Then decide whether to use onStartWorkout or onLoggedIn.
             widget.onStartWorkout();
           },
           color: Colors.white,

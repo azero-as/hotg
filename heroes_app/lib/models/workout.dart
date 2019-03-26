@@ -28,7 +28,7 @@ class Workout extends Model {
   int get BonusXP => _BonusXP;
 
   // Belongs to plan
-  List<dynamic> _listOfWorkouts;
+  List<dynamic> _listOfWorkouts = [];
 
   List<dynamic> get listOfWorkouts => _listOfWorkouts;
 

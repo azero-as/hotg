@@ -85,7 +85,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           return new PageView(
             children: [
               new Home(auth: widget.auth, onSignedOut: widget.onSignedOut, onLoggedIn: widget.onSignedIn, readyToSignOut: widget.readyToSignOut, onStartWorkout: widget.onStartWorkout, onActiveWorkout: widget.onActiveWorkout, onSummary: widget.onSummary),
-              new Plan(),
+              new Plan(onLoggedIn: widget.onSignedIn, onStartWorkout: widget.onStartWorkout, onActiveWorkout: widget.onActiveWorkout, onSummary: widget.onSummary),
               new History("History screen"),
             ],
             onPageChanged: onPageChanged,
