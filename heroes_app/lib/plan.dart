@@ -168,7 +168,8 @@ class _PlanPageState extends State<Plan> {
                           RaisedButton(
                             padding: EdgeInsets.all(10.0),
                             onPressed: () {
-                              model.changeActiveWorkout(model.listOfWorkouts, index); //This function has a todo.
+                              model.isFromHomePage = false;
+                              model.changeActiveWorkout(model.listOfWorkouts, index);
                               widget.onStartWorkout();
                             },
                             elevation: 5.0,

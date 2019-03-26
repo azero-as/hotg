@@ -340,6 +340,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       RaisedButton(
                         padding: EdgeInsets.all(10.0),
                         onPressed: () {
+                          model.isFromHomePage = true;
                           widget.onStartWorkout();
                         },
                         elevation: 5.0,

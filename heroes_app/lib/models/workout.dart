@@ -32,6 +32,9 @@ class Workout extends Model {
 
   List<dynamic> get listOfWorkouts => _listOfWorkouts;
 
+  //To check whether to go back to home or to plan
+  bool isFromHomePage;
+
   void setListOfWorkouts(List<dynamic> workouts) {
     this._listOfWorkouts = workouts;
     notifyListeners();
