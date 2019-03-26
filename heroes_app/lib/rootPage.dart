@@ -62,6 +62,10 @@ class _RootPageState extends State<RootPage> {
           authStatus =
           user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
         });
+      } else {
+        setState(() {
+          authStatus = AuthStatus.NOT_LOGGED_IN;
+        });
       }
     });
   }
@@ -71,6 +75,12 @@ class _RootPageState extends State<RootPage> {
       setState(() {
         _userId = user.uid.toString();
       });
+
+      new Future.delayed(Duration.zero,() {
+        _setUserInfo(context);
+        _setWorkoutInfo(context);
+      });
+      
     });
     setState(() {
       authStatus = AuthStatus.LOGGED_IN;
