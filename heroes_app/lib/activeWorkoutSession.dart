@@ -95,6 +95,57 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
     }
 
+    Widget _showInfoExercises(int index){
+      String exercise = "targetReps";
+      String name = "Reps: ";
+      if(widget.exercises[index]["targetReps"] == null){
+        exercise = "targetMin";
+        name = "Minutes: ";
+      }
+      return ExpansionTile(
+          key: PageStorageKey<int>(index),
+          title: new CheckboxListTile(
+            value: _selectedExercises
+                .contains(widget.exercises[index]["name"]),
+            onChanged: (bool selected) {
+              _onCategorySelected(
+                  selected,
+                  widget.exercises[index],
+                  widget.exercises[index]["name"],
+                  widget.exercises[index]["xp"],
+                  widget.exercises[index]["name"]);
+            },
+            title: Text(widget.exercises[index]["name"]),
+          ),
+          children: <Widget>[
+            ListTile(
+              title: new Padding(
+                  padding: EdgeInsets.all(20),
+                  child: new Text(
+                      "Sets: " + widget.exercises[index]["targetSets"])),
+            ),
+            ListTile(
+              title: new Padding(
+                  padding: EdgeInsets.all(20),
+                  child: new Text(
+                  name + widget.exercises[index][exercise])),
+        ),
+            ListTile(
+              title: new Padding(
+                  padding: EdgeInsets.all(20),
+                  child: new Text("Rest between sets: " +
+                      widget.exercises[index]["restBetweenSets"])),
+            ),
+            ListTile(
+              title: new Padding(
+                  padding: EdgeInsets.all(20),
+                  child: new Text(
+                      "XP: " + widget.exercises[index]["xp"].toString())),
+            ),
+          ]
+        //children: root["info"]
+      );
+    }
 
     //Information about the different exercises in the workout
     Widget _showInformationWorkout() {
@@ -102,49 +153,9 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: widget.exercises.length,
-        itemBuilder: (BuildContext context, int index) => ExpansionTile(
-                key: PageStorageKey<int>(index),
-                title: new CheckboxListTile(
-                  value: _selectedExercises
-                      .contains(widget.exercises[index]["name"]),
-                  onChanged: (bool selected) {
-                    _onCategorySelected(
-                        selected,
-                        widget.exercises[index],
-                        widget.exercises[index]["name"],
-                        widget.exercises[index]["xp"],
-                        widget.exercises[index]["name"]);
-                  },
-                  title: Text(widget.exercises[index]["name"]),
-                ),
-                children: <Widget>[
-                  ListTile(
-                    title: new Padding(
-                        padding: EdgeInsets.all(20),
-                        child: new Text(
-                            "Sets: " + widget.exercises[index]["targetSets"])),
-                  ),
-                  ListTile(
-                    title: new Padding(
-                        padding: EdgeInsets.all(20),
-                        child: new Text(
-                            "Reps: " + widget.exercises[index]["targetReps"])),
-                  ),
-                  ListTile(
-                    title: new Padding(
-                        padding: EdgeInsets.all(20),
-                        child: new Text("Rest between sets: " +
-                            widget.exercises[index]["restBetweenSets"])),
-                  ),
-                  ListTile(
-                    title: new Padding(
-                        padding: EdgeInsets.all(20),
-                        child: new Text(
-                            "XP: " + widget.exercises[index]["xp"].toString())),
-                  ),
-                ]
-                //children: root["info"]
-                ),
+        itemBuilder: (BuildContext context, int index){
+          return _showInfoExercises(index);
+        }
       );
     }
 
