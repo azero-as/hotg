@@ -6,8 +6,8 @@ class User extends Model {
 
   Auth auth = new Auth();
 
-  int _xpCap;
-  int _xp;
+  int _xpCap = 1;
+  int _xp = 0;
   int _level;
   String _characterName;
   String _className;
@@ -25,7 +25,7 @@ class User extends Model {
     _level = userLevel;
     _xp = userXp;
     _xpCap = xpCap;
-     _className =className;
+    _className =className;
     notifyListeners();
   }
   //Methods just for setting in the beginning
@@ -35,8 +35,8 @@ class User extends Model {
   }
 
   setXP(int number) {
-    this._xp = number;
-    notifyListeners();
+  this._xp = number;
+  notifyListeners();
   }
 
   setXpCap(int number) {
@@ -52,30 +52,29 @@ class User extends Model {
   void setClassName(String className) {
     this._className =_className;
     notifyListeners();
-}
+  }
 
   // Methods used by other widgets:
   void incrementXP(int xpEarned) async {
+      await CloudFunctions.instance.
+          call(
+          functionName: 'updateUserXpWorkout',
+          parameters: {
+            "xpEarned": xpEarned,
+          }
+      )
+      .then((response){
+        setXP(response['updatedXp']);
+      }).catchError((error) {
+        print(error);
+      });
+      await checkLevelUp();
 
-    await CloudFunctions.instance.
-        call(
-        functionName: 'updateUserXpWorkout',
-        parameters: {
-          "xpEarned": xpEarned,
-        }
-    )
-    .then((response){
-      setXP(response['updatedXp']);
-    }).catchError((error) {
-      print(error);
-    });
-    await checkLevelUp();
-
-    notifyListeners();
+      notifyListeners();
   }
 
-  void incrementLevelByOne() {
-    CloudFunctions.instance.
+  void incrementLevelByOne() async {
+    await CloudFunctions.instance.
       call(
         functionName: 'updateUserLevelInfo',
         parameters: {
@@ -94,9 +93,7 @@ class User extends Model {
     });
 
     notifyListeners();
-    //TODO: Make the pop up appear?
   }
-
   checkLevelUp(){
     if(xp >= xpCap){
       incrementLevelByOne();

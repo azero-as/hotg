@@ -28,10 +28,8 @@ class _SummaryState extends State<Summary> {
               onPressed: () {
                 // Check if levelUp pop-up should appear
                 if(model.levelUp) {
-                  // Get userinfo and pass to _onLevelUp 
-                  String userLevel = model.level.toString(); 
                   // Display pop-up
-                  showDialog(context: context,builder: (context) => _onLevelUp(context,userLevel)); // Call the Dialog. 
+                  showDialog(context: context,builder: (context) => _onLevelUp(context)); // Call the Dialog. 
                   // Set levelUp back to fase
                   model.setLevelUpFalse();
                 }
@@ -128,7 +126,7 @@ class _SummaryState extends State<Summary> {
     }
 
      //Pop-up window when a user level up
-  Widget _onLevelUp(BuildContext context, String level) {
+  Widget _onLevelUp(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
@@ -190,7 +188,7 @@ class _SummaryState extends State<Summary> {
                     SizedBox(height: 10),
                     RichText(
                       text: TextSpan(
-                        text: 'Level $level',
+                        text: 'Level ...', //TODO: Get current level 
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
