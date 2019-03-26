@@ -65,7 +65,6 @@ class User extends Model {
         }
     )
     .then((response){
-      print('updateXp');
       setXP(response['updatedXp']);
     }).catchError((error) {
       print(error);
@@ -76,7 +75,6 @@ class User extends Model {
   }
 
   void incrementLevelByOne() {
-    print("incrementLevel");
     CloudFunctions.instance.
       call(
         functionName: 'updateUserLevelInfo',
@@ -108,11 +106,9 @@ class User extends Model {
 
   void setLevelUpTrue() {
     this._levelUp = true;
-    print(_levelUp);
   }
 
   void setLevelUpFalse() {
     this._levelUp = false;
-    print(_levelUp);
   }
 }

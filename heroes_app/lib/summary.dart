@@ -1,5 +1,6 @@
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
+import 'models/user.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class Summary extends StatefulWidget {
 
@@ -18,14 +19,23 @@ class _SummaryState extends State<Summary> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.exercises);
-
+    return ScopedModelDescendant<User>(builder: (context, child, model) {
     return Scaffold(
         backgroundColor: Colors.grey[300],
         appBar: AppBar(
           leading: new IconButton(
               icon: Icon(Icons.close),
               onPressed: () {
+                // Check if levelUp pop-up should appear
+                if(model.levelUp) {
+                  // Get userinfo and pass to _onLevelUp 
+                  String userLevel = model.level.toString(); 
+                  // Display pop-up
+                  showDialog(context: context,builder: (context) => _onLevelUp(context,userLevel)); // Call the Dialog. 
+                  // Set levelUp back to fase
+                  model.setLevelUpFalse();
+                }
+
                 // TO-DO: Add navigation back to home page
               }),
           title: Text(
@@ -46,6 +56,7 @@ class _SummaryState extends State<Summary> {
             )
           ],
         )));
+    });
   }
 
   Widget _buildExerciseListItem(BuildContext context, exercise) {
@@ -115,5 +126,87 @@ class _SummaryState extends State<Summary> {
             _buildScore(),
           ]));
     }
+
+     //Pop-up window when a user level up
+  Widget _onLevelUp(BuildContext context, String level) {
+    return Stack(
+      alignment: Alignment.center,
+      children: <Widget>[
+        new Container(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
+          //decoration: new BoxDecoration(                  //border if we want
+            //color: Colors.white,
+            //border: new Border.all(color: Colors.black)),
+          child:
+            new ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              new Container(
+                padding: EdgeInsets.fromLTRB(30, 8, 0, 8),
+                color: const Color(0xFF212838),
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    RichText(
+                      text: TextSpan(
+                        text: 'Level up!',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    Align(
+                      //alignment: Alignment.topRight,
+                      child: RaisedButton(
+                          color: Theme.of(context).primaryColor,
+                          textColor: Colors.white,
+                          onPressed: () => Navigator.pop(context),
+                          child: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            ),
+                      ),
+                    ),
+                  ],
+                )
+              ),
+              new Container(
+                padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    RichText(
+                      text: TextSpan(
+                        text: 'Congratulations! You are now: ',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    RichText(
+                      text: TextSpan(
+                        text: 'Level $level',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              //SizedBox(height: 100.0),
+            ],
+          )),
+
+      ],
+    );
+  }
   }
 

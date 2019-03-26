@@ -89,14 +89,11 @@ exports.updateUserLevelInfo = functions.https.onCall((data, context) => {
         const xpCap = data.xpCap
         const userLevel = data.level
 
-        console.log('xp:', userXp, ' xpCap: ', xpCap, ' userLevel: ', userLevel)
-
         return helpers.updateUserLevelInfo(userId, userXp, xpCap, userLevel)
         .then(data => {
-            console.log(data)
             return data
-        }).catch(error => {
-            console.log(error)
+        }).catch((error) => { 
+            throw new functions.https.HttpsError(error.code, error.message)
         }) 
     }
     else {
@@ -119,11 +116,10 @@ exports.updateUserXpWorkout = functions.https.onCall((data, context) => {
 
         return helpers.updateUserXpWorkout(userId, xpEarned)
         .then(data => {
-            console.log(data)
             return data
         })
-        .catch(error => {
-            console.log(error)
+        .catch((error) => { 
+            throw new functions.https.HttpsError(error.code, error.message)
         })  
     } else {
         // not authenticated: 

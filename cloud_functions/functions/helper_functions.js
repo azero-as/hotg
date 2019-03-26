@@ -97,9 +97,9 @@ async function getLevelXpCap(userLevel) {
 // Increase level by 1
 async function increaseLevel(userLevel, userId) {
     const newUserLevel = userLevel+1
-
     return admin.firestore().collection("Users").doc(userId).update({
         gameLevel: newUserLevel,
+       
     })
     .then(function() {
         return newUserLevel
