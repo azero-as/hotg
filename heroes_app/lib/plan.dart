@@ -45,6 +45,7 @@ class _PlanPageState extends State<Plan> {
 
     Widget _workout(int index) {
       return new Container(
+
         // add border for the workout info box
         margin: new EdgeInsets.symmetric(horizontal: 55.0, vertical: 12.0),
         decoration: BoxDecoration(
@@ -77,7 +78,7 @@ class _PlanPageState extends State<Plan> {
                     alignment: Alignment.centerLeft,
                     child: Container(
                       child: Text(
-                        model.listOfWorkouts[index]["workoutName"],
+                        model.listOfWorkouts[index]["workoutName"] ?? '',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -135,7 +136,7 @@ class _PlanPageState extends State<Plan> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            model.listOfWorkouts[index]["xp"].toString(),
+                            model.listOfWorkouts[index]["xp"].toString() ?? '',
                             style: TextStyle(color: Color(0xFF434242)),
                           ),
                           // add space between lines
@@ -143,7 +144,7 @@ class _PlanPageState extends State<Plan> {
                             height: 10,
                           ),
                           Text(
-                              model.listOfWorkouts[index]["intensity"].toString(),
+                              model.listOfWorkouts[index]["intensity"].toString() ?? '',
                             style: TextStyle(color: Color(0xFF434242)),
                           ),
                           // add space between lines
@@ -151,7 +152,7 @@ class _PlanPageState extends State<Plan> {
                             height: 18,
                           ),
                           Text(
-                            model.listOfWorkouts[index]["duration"].toString() + " min",
+                            model.listOfWorkouts[index]["duration"].toString() + " min" ?? '',
                             style: TextStyle(color: Color(0xFF434242)),
                           ),
                         ]),
