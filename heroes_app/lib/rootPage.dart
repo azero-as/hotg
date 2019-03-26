@@ -7,8 +7,12 @@ import 'frontpage.dart';
 import 'signuplevel.dart';
 import 'settings.dart';
 import 'models/user.dart';
+import 'models/workout.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'startWorkout.dart';
+import 'activeWorkoutSession.dart';
+import 'summary.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({this.auth, this.user});
@@ -28,7 +32,10 @@ enum AuthStatus {
   READY_TO_LOG_IN,
   READY_TO_SIGN_UP,
   FINISHED_SIGNED_UP,
-  SIGN_OUT
+  READY_TO_SIGN_OUT,
+  START_WORKOUT,
+  ACTIVE_WORKOUT_SESSION,
+  SUMMARY,
 }
 
 class _RootPageState extends State<RootPage> {
@@ -57,7 +64,6 @@ class _RootPageState extends State<RootPage> {
     });
     setState(() {
       authStatus = AuthStatus.LOGGED_IN;
-
     });
   }
 
@@ -67,9 +73,9 @@ class _RootPageState extends State<RootPage> {
       _userId = "";
     });
   }
-  void _signOut() {
+  void _readyToSignOut() {
     setState(() {
-      authStatus = AuthStatus.SIGN_OUT;
+      authStatus = AuthStatus.READY_TO_SIGN_OUT;
     });
   }
   void _readyToLogIn() {
@@ -92,6 +98,24 @@ class _RootPageState extends State<RootPage> {
     });
     setState(() {
       authStatus = AuthStatus.FINISHED_SIGNED_UP;
+    });
+  }
+
+  void _startWorkout(){
+    setState(() {
+      authStatus = AuthStatus.START_WORKOUT;
+    });
+  }
+
+  void _activeWorkout() {
+    setState(() {
+      authStatus = AuthStatus.ACTIVE_WORKOUT_SESSION;
+    });
+  }
+
+  void _summary() {
+    setState(() {
+      authStatus = AuthStatus.SUMMARY;
     });
   }
 
@@ -124,8 +148,27 @@ class _RootPageState extends State<RootPage> {
     });
   }
 
+  void _setWorkoutInfo(BuildContext context) {
+    var workout = ScopedModel.of<Workout>(context);
+
+    CloudFunctions.instance
+        .call(
+      functionName: 'getWorkout',
+    )
+        .then((response) {
+        workout.setIntensity(response['intensity']);
+        workout.setWorkOutName(response['workoutName']);
+        workout.setDuration(response['duration']);
+        workout.setXp(response['xp']);
+        workout.setExercises(response['exercises']);
+    }).catchError((error) {
+      print(error);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    var workout = ScopedModel.of<Workout>(context);
     switch (authStatus) {
       case AuthStatus.NOT_DETERMINED:
         return _buildWaitingScreen();
@@ -164,28 +207,57 @@ class _RootPageState extends State<RootPage> {
       case AuthStatus.LOGGED_IN:
         if (_userId.length > 0 && _userId != null) {
           _setUserInfo(context);
+          _setWorkoutInfo(context);
           return new DashboardScreen(
             userId: _userId,
             auth: widget.auth,
             onSignedOut: _onSignedOut,
-            title: 'Heroes of the Gym',
-            signOut: _signOut,
+            readyToSignOut: _readyToSignOut,
+            onSignedIn: _onLoggedIn,
+            onStartWorkout: _startWorkout,
+            onActiveWorkout: _activeWorkout,
+            onSummary: _summary,
           );
         } else return _buildWaitingScreen();
         break;
-      case AuthStatus.SIGN_OUT:
+      case AuthStatus.READY_TO_SIGN_OUT:
         return new Settings(
           auth: widget.auth,
           onSignedOut: _onSignedOut,
           onSignedIn: _onLoggedIn,
         );
         break;
+      case AuthStatus.START_WORKOUT:
+        return new StartWorkout(
+          exercises: workout.exercises,
+          duration: workout.duration,
+          intensity: workout.intensity,
+          xp: workout.xp,
+          workoutName: workout.workoutName,
+          onLoggedIn: _onLoggedIn,
+          onStartWorkout: _startWorkout,
+          onActiveWorkout: _activeWorkout,
+          onSummary: _summary,
+        );
+      case AuthStatus.ACTIVE_WORKOUT_SESSION:
+        return new activeWorkoutSession(
+          exercises: workout.exercises,
+          workoutName: workout.workoutName,
+          onLoggedIn: _onLoggedIn,
+          onStartWorkout: _startWorkout,
+          onSummary: _summary,
+        );
+      case AuthStatus.SUMMARY:
+        return new Summary(
+          exercises: workout.selectedExercises,
+          bonus: workout.BonusXP,
+          total_xp: workout.XpEarned,
+          workoutType: workout.workoutName,
+          onLoggedIn: _onLoggedIn,
+        );
       default:
         return _buildWaitingScreen();
     }
-    return FrontPage(
-      readyToLogIn: _readyToLogIn,
-      readyToSignUp: _readyToSignUp,
-    );
+    return _buildWaitingScreen();
   }
 }
