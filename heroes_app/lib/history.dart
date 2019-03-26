@@ -28,7 +28,7 @@ class ListOfTrainingSessions extends StatefulWidget {
 class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
   // Container for every workout registered on the user in the database.
   List _workouts = [];
-  bool _noWorkoutCompleted = false;
+  bool _noWorkoutCompleted;
   //int _usernameLength = 10;
 
   @override
@@ -37,7 +37,8 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
     CloudFunctions.instance
         .call(functionName: 'getAllUserWorkouts')
         .then((response) {
-      if (response == null) {
+      print(response);
+      if (response["workouts"].isEmpty) {
         setState(() {
           _noWorkoutCompleted = true;
         });
