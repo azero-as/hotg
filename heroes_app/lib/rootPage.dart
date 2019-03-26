@@ -42,19 +42,27 @@ enum AuthStatus {
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
-  String _dataLoadedFromFireBase; //if this is null, it is still loading data from firebase.
+  bool _dataLoadedFromFireBase = false; //if this is null, it is still loading data from firebase.
 
   @override
   void initState() {
     super.initState();
     widget.auth.getCurrentUser().then((user) {
-      setState(() {
-        if (user != null) {
-          _userId = user?.uid;
-        }
-        authStatus =
-        user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
-      });
+
+      if (user != null) {
+        new Future.delayed(Duration.zero,() {
+          _setUserInfo(context);
+          _setWorkoutInfo(context);
+        });
+        
+        setState(() {
+          if (user != null) {
+            _userId = user?.uid;
+          }
+          authStatus =
+          user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
+        });
+      }
     });
   }
 
@@ -124,39 +132,39 @@ class _RootPageState extends State<RootPage> {
   //Sets the start state with userInfo.
   void _setUserInfo(BuildContext context) {
     var user = ScopedModel.of<User>(context);
-    CloudFunctions.instance
-        .call(
+    CloudFunctions.instance.call(
       functionName: 'getUserInfo',
     )
-        .then((response) {
-          user.startState(
-              response['username'],
-              response['userLevel'],
-              response['userXp'],
-              response['xpCap'],
-              response['className'],
-              response['email']);
-    }).catchError((error) {
+    .then((response) {
+      user.startState(
+        response['username'],
+        response['userLevel'],
+        response['userXp'],
+        response['xpCap'],
+        response['className'],
+        response['email']);
+    })
+    .catchError((error) {
       print(error);
     });
   }
 
   void _setWorkoutInfo(BuildContext context) {
     var workout = ScopedModel.of<Workout>(context);
-
+    
     CloudFunctions.instance
-        .call(
+    .call(
       functionName: 'getWorkout',
     )
-        .then((response) {
-        workout.setIntensity(response['intensity']);
-        workout.setWorkOutName(response['workoutName']);
-        workout.setDuration(response['duration']);
-        workout.setXp(response['xp']);
-        workout.setExercises(response['exercises']);
-        setState(() {
-          _dataLoadedFromFireBase = "done";
-        });
+    .then((response) {
+      workout.setIntensity(response['intensity']);
+      workout.setWorkOutName(response['workoutName']);
+      workout.setDuration(response['duration']);
+      workout.setXp(response['xp']);
+      workout.setExercises(response['exercises']);
+      setState(() {
+        _dataLoadedFromFireBase = true;
+      });
     }).catchError((error) {
       print(error);
     });
@@ -173,7 +181,7 @@ class _RootPageState extends State<RootPage> {
           break;
         case AuthStatus.NOT_LOGGED_IN:
           setState(() {
-            _dataLoadedFromFireBase = null;
+            _dataLoadedFromFireBase = false;
           });
           return FrontPage(
             readyToLogIn: _readyToLogIn,
@@ -208,9 +216,7 @@ class _RootPageState extends State<RootPage> {
           break;
         case AuthStatus.LOGGED_IN:
           if (_userId.length > 0 && _userId != null) {
-            _setUserInfo(context);
-            _setWorkoutInfo(context);
-            if (this._dataLoadedFromFireBase == "done") {
+            if (_dataLoadedFromFireBase) {
               return new DashboardScreen(
                   userId: _userId,
                   auth: widget.auth,
