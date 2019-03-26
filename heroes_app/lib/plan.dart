@@ -22,8 +22,6 @@ class Plan extends StatefulWidget {
 
 class _PlanPageState extends State<Plan> {
 
-  List _workouts = [];
-
   @override
   void initState(){
     super.initState();
@@ -170,7 +168,7 @@ class _PlanPageState extends State<Plan> {
                           RaisedButton(
                             padding: EdgeInsets.all(10.0),
                             onPressed: () {
-                              //TODO: change state in workout to the chosen workout.
+                              model.changeActiveWorkout(model.listOfWorkouts, index); //This function has a todo.
                               widget.onStartWorkout();
                             },
                             elevation: 5.0,

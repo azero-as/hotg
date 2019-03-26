@@ -37,6 +37,14 @@ class Workout extends Model {
     notifyListeners();
   }
 
+  void changeActiveWorkout(List<dynamic> workout, int index) {
+    this._xp = workout[index]["xp"];
+    this._duration = workout[index]["duration"];
+    this._intensity = workout[index]["intensity"];
+    this._workoutName = workout[index]["workoutName"];
+    this._exercises = workout[index]["exercises"];
+  }
+
   void setFinishedWorkout(List<dynamic> selectedExercises, int XpEarned, int BonusXP) {
     this._selectedExercises = selectedExercises;
     this._XpEarned = XpEarned;
