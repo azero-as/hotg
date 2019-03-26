@@ -12,6 +12,7 @@ class User extends Model {
   String _characterName;
   String _className;
   bool _levelUp = false;
+  String _email;
 
   int get xpCap => _xpCap;
   int get xp => _xp;
@@ -19,13 +20,15 @@ class User extends Model {
   String get characterName => _characterName;
   String get className => _className;
   bool get levelUp => _levelUp;
+  String get email => _email;
 
-  void startState(String username, int userLevel, int userXp, int xpCap, String className) {
+  void startState(String username, int userLevel, int userXp, int xpCap, String className, String email) {
     _characterName = username;
     _level = userLevel;
     _xp = userXp;
     _xpCap = xpCap;
     _className =className;
+    _email = email;
     notifyListeners();
   }
   //Methods just for setting in the beginning
@@ -99,6 +102,11 @@ class User extends Model {
       incrementLevelByOne();
       setLevelUpTrue();
     }
+  }
+
+    void setEmail(String email) {
+    this._email = this._email;
+    notifyListeners();
   }
 
   void setLevelUpTrue() {

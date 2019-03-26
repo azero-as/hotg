@@ -8,8 +8,9 @@ class Summary extends StatefulWidget {
   final int bonus;
   final int total_xp;
   final String workoutType;
+  final VoidCallback onLoggedIn;
 
-  Summary({this.exercises, this.bonus, this.total_xp, this.workoutType});
+  Summary({this.exercises, this.bonus, this.total_xp, this.workoutType, this.onLoggedIn});
 
   @override
   State createState() => new _SummaryState();
@@ -33,8 +34,8 @@ class _SummaryState extends State<Summary> {
                   // Set levelUp back to fase
                   model.setLevelUpFalse();
                 }
-
-                // TO-DO: Add navigation back to home page
+                // Navigate to homepage
+                widget.onLoggedIn();
               }),
           title: Text(
             "Summary",
