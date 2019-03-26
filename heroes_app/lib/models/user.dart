@@ -10,19 +10,22 @@ class User extends Model {
   int _level;
   String _characterName;
   String _className;
+  String _email;
 
   int get xpCap => _xpCap;
   int get xp => _xp;
   int get level => _level;
   String get characterName => _characterName;
   String get className => _className;
+  String get email => _email;
 
-  void startState(String username, int userLevel, int userXp, int xpCap, String className) {
+  void startState(String username, int userLevel, int userXp, int xpCap, String className, String email) {
     _characterName = username;
     _level = userLevel;
     _xp = userXp;
     _xpCap = xpCap;
     _className =className;
+    _email = email;
     notifyListeners();
   }
   //Methods just for setting in the beginning
@@ -58,6 +61,11 @@ class User extends Model {
     notifyListeners();
     //TODO: Also change value in database
     //TODO: Make the pop up appear?
+  }
+
+  void setEmail(String email) {
+    this._email = this._email;
+    notifyListeners();
   }
 
 

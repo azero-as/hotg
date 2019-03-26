@@ -117,7 +117,8 @@ class _RootPageState extends State<RootPage> {
               response['userLevel'],
               response['userXp'],
               response['xpCap'],
-              response['className']);
+              response['className'],
+              response['email']);
     }).catchError((error) {
       print(error);
     });
