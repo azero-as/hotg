@@ -292,6 +292,9 @@ class _SignupPageState extends State<SignupPage> {
             _errorMessage = e.message;
           } else
             _errorMessage = e.message;
+          if (_errorMessage == "The given password is invalid. [ Password should be at least 6 characters ]") {
+            _errorMessage  = "The password must be 6 characters long or more.";
+          }
         });
       }
     }

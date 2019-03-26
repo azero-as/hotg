@@ -3,12 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/user.dart';
+import 'models/workout.dart';
 import 'authentication.dart';
 import 'startWorkout.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
 // build the home page and call on the stateful classes
 class Home extends StatelessWidget {
+
+  Home({this.auth, this.onSignedOut, this.onLoggedIn, this.readyToSignOut, this.onStartWorkout, this.onActiveWorkout, this.onSummary});
+
+  final BaseAuth auth;
+  final VoidCallback onSignedOut;
+  final VoidCallback onLoggedIn;
+  final VoidCallback readyToSignOut;
+  final VoidCallback onStartWorkout;
+  final VoidCallback onActiveWorkout;
+  final VoidCallback onSummary;
+
   static String tag = 'home-page';
 
   //Settings icon button with navigation to settings page
@@ -21,9 +33,9 @@ class Home extends StatelessWidget {
         ),
         child: Column(
           children: <Widget>[
-            AvatarOverview(),
+            AvatarOverview(auth: auth, onSignedOut: onSignedOut, onLoggedIn: onLoggedIn, readyToSignOut: readyToSignOut),
             SizedBox(height: 20.0),
-            WorkoutOverview(),
+            WorkoutOverview(onStartWorkout: onStartWorkout, onActiveWorkout: onActiveWorkout, onSummary: onSummary),
           ],
         ));
   }
@@ -31,20 +43,12 @@ class Home extends StatelessWidget {
 
 // create state for appbar of home page
 class AvatarOverview extends StatefulWidget {
-  AvatarOverview(
-      {Key key,
-      this.auth,
-      this.userId,
-      this.onSignedOut,
-      this.title,
-      this.signOut})
-      : super(key: key);
+  AvatarOverview({this.auth, this.onSignedOut, this.onLoggedIn, this.readyToSignOut});
 
   final BaseAuth auth;
-  final VoidCallback signOut;
   final VoidCallback onSignedOut;
-  final String userId;
-  final String title;
+  final VoidCallback onLoggedIn;
+  final VoidCallback readyToSignOut;
 
   @override
   State createState() => new _AvatarOverviewState();
@@ -67,8 +71,15 @@ class _AvatarOverviewState extends State<AvatarOverview> {
               width: barWidth,
               color: Color(0xFF212838),
               padding: EdgeInsets.fromLTRB(20, 30, 20, 15),
-              child:
-                  ScopedModelDescendant<User>(builder: (context, child, model) {
+              child: ScopedModelDescendant<User>(builder: (context, child, model) {
+                // Percent should not exceed 1.0: 
+                double xpPercent; 
+                 if (model.xp >= model.xpCap) {
+                   xpPercent = 1.0;
+                   }
+                else {
+                  xpPercent = model.xp / model.xpCap;
+                }
                 return Row(
                   children: <Widget>[
                     // Column for half bar, only image
@@ -89,13 +100,14 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         //Settings symbol and onPressed functionality
-                        /*IconButton(
+                        IconButton(
                           icon: Icon(Icons.settings),
+                          key: Key("settingsButton"),
                           color: Colors.white,
                           padding: EdgeInsets.fromLTRB((barWidth / 2) - 44, 0, 0, 0),
                           onPressed: () {
-                            widget.signOut();
-                          }),*/
+                            widget.readyToSignOut();
+                          }),
 
                         //Username
                         Padding(
@@ -129,7 +141,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                             lineHeight: 15,
                             backgroundColor: Colors.white,
                             progressColor: Color(0xFF4D3262),
-                            percent: model.xp / model.xpCap,
+                            percent: xpPercent,
                             //bar shape
                             linearStrokeCap: LinearStrokeCap.roundAll,
                             animationDuration: 2000,
@@ -159,45 +171,26 @@ class _AvatarOverviewState extends State<AvatarOverview> {
 class WorkoutOverview extends StatefulWidget {
   @override
   _WorkoutOverviewState createState() => _WorkoutOverviewState();
+
+  WorkoutOverview({this.onStartWorkout, this.onActiveWorkout, this.onSummary});
+
+  final VoidCallback onStartWorkout;
+  final VoidCallback onActiveWorkout;
+  final VoidCallback onSummary;
+
 }
 
 // class for workout overview
 class _WorkoutOverviewState extends State<WorkoutOverview> {
-  static String _intensity = "";
-  static String _workoutName = "";
-  static int _duration = -1;
-  static int _xp = -1;
-  static List exercises = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    CloudFunctions.instance
-        .call(
-      functionName: 'getWorkout',
-    )
-        .then((response) {
-      setState(() {
-        _intensity = response['intensity'];
-        _workoutName = response['workoutName'];
-        _duration = response['duration'];
-        _xp = response['xp'];
-        exercises = response['exercises'];
-      });
-    }).catchError((error) {
-      print(error);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+  var workout = ScopedModel.of<Workout>(context);
     return LayoutBuilder(builder: (context, constraints) {
-      if (_intensity == "" ||
-          _workoutName == "" ||
-          _duration == -1 ||
-          _xp == -1 ||
-          exercises == []) {
+      if (workout.intensity == "" ||
+          workout.workoutName == "" ||
+          workout.duration == -1 ||
+          workout.xp == -1 ||
+          workout.exercises == []) {
         return new Text("");
       } else {
         return Container(
@@ -230,7 +223,8 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
         border: Border.all(color: Colors.black, width: 0.25),
         color: Color(0xFFE7E9ED),
       ),
-      child: Column(
+      child: ScopedModelDescendant<Workout>(builder: (context, child, model) {
+      return Column(
         // Text starts on the left, instead of centered as is the default
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -255,7 +249,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                   alignment: Alignment.centerLeft,
                   child: Container(
                     child: Text(
-                      _workoutName,
+                      model.workoutName,
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -313,7 +307,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          _xp.toString(),
+                          model.xp.toString(),
                           style: TextStyle(color: Color(0xFF434242)),
                         ),
                         // add space between lines
@@ -321,7 +315,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                           height: 10,
                         ),
                         Text(
-                          _intensity,
+                          model.intensity,
                           style: TextStyle(color: Color(0xFF434242)),
                         ),
                         // add space between lines
@@ -329,7 +323,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                           height: 18,
                         ),
                         Text(
-                          _duration.toString(),
+                          model.duration.toString(),
                           style: TextStyle(color: Color(0xFF434242)),
                         ),
                       ]),
@@ -346,16 +340,8 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       RaisedButton(
                         padding: EdgeInsets.all(10.0),
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      StartWorkout(
-                                          exercises: exercises,
-                                          duration: _duration,
-                                          intensity: _intensity,
-                                          xp: _xp,
-                                          workoutName: _workoutName)));
+                          model.isFromHomePage = true;
+                          widget.onStartWorkout();
                         },
                         elevation: 5.0,
                         color: Color(0xFF612A30),
@@ -374,7 +360,8 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
             ),
           ),
         ],
-      ),
+      );
+      })
     );
   }
 }
