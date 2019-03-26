@@ -2,30 +2,24 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 
 class Summary extends StatefulWidget {
+
+  final List<dynamic> exercises;
+  final int bonus;
+  final int total_xp;
+  final String workoutType;
+
+  Summary({this.exercises, this.bonus, this.total_xp, this.workoutType});
+
   @override
   State createState() => new _SummaryState();
 }
 
 class _SummaryState extends State<Summary> {
-  List _workouts = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    CloudFunctions.instance
-        .call(functionName: 'getAllUserWorkouts')
-        .then((response) {
-      setState(() {
-        _workouts = response;
-      });
-    }).catchError((error) {
-      print(error);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+    print(widget.exercises);
+
     return Scaffold(
         backgroundColor: Colors.grey[300],
         appBar: AppBar(
@@ -63,23 +57,23 @@ class _SummaryState extends State<Summary> {
     );
   }
 
-  Widget _buildListHeader(BuildContext context, workouts) {
+  Widget _buildListHeader() {
     return Container(
         child: ListTile(
       title: Text(
-        workouts[0]['workoutType'],
+        widget.workoutType,
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
       ),
     ));
   }
 
-  Widget _buildScore(BuildContext context, workout) {
+  Widget _buildScore() {
     return Column(
       children: <Widget>[
         ListTile(
           title: Text("Bonus: ", style: TextStyle(fontSize: 22)),
-          trailing: Text(workout[0]["bonus_xp"].toString() + " xp",
+          trailing: Text(widget.bonus.toString() + " xp",
               style: TextStyle(fontSize: 22)),
           contentPadding:
               EdgeInsetsDirectional.only(top: 10.0, start: 70.0, end: 70.0),
@@ -87,7 +81,7 @@ class _SummaryState extends State<Summary> {
         ListTile(
           title: Text("Total: ",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          trailing: Text(workout[0]["total_xp"].toString() + " xp",
+          trailing: Text(widget.total_xp.toString() + " xp",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
           contentPadding: EdgeInsetsDirectional.only(start: 70.0, end: 70.0),
         ),
@@ -100,31 +94,26 @@ class _SummaryState extends State<Summary> {
         child: ListView.builder(
             //spacing between items
             itemExtent: 45.0,
-            itemCount: _workouts[0]['exercises'].length,
+            itemCount: widget.exercises.length,
             itemBuilder: (context, index) {
               return _buildExerciseListItem(
-                  context, _workouts[0]['exercises'][index]);
+                  context, widget.exercises[index]);
             }));
   }
 
   Widget _buildWorkoutCard() {
     var appScreenHeight = MediaQuery.of(context).size.height;
-    if (_workouts.length == 0) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    } else {
       return Card(
           elevation: 2.0,
           child: Column(children: <Widget>[
-            _buildListHeader(context, _workouts),
+            _buildListHeader(),
             Container(
               height: appScreenHeight * 0.45,
               child: _buildExerciseList(),
             ),
             Divider(color: Colors.black),
-            _buildScore(context, _workouts),
+            _buildScore(),
           ]));
     }
   }
-}
+

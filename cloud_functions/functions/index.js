@@ -74,7 +74,6 @@ exports.getUserInfo = functions.https.onRequest((request, response) => {
 });
 
 
-
 // Updates user level info: xp, level and xpCap for current level if level is updated.
 // Returns new values.
 
@@ -109,34 +108,6 @@ exports.updateUserLevelInfo = functions.https.onCall((data, context) => {
     }
 })
 
-/*
-exports.updateUserLevelInfo = functions.https.onRequest((request, response) => {
-
-    const tokenId = request.get('Authorization').split('Bearer ')[1];
-
-    return admin.auth().verifyIdToken(tokenId)
-    .then( decoded => {
-
-        const userId = decoded.user_id;
-
-        return helpers.updateUserLevelInfo(userId)
-        .then(data => {
-
-            return response.send({
-                data
-            })
-        })
-        .catch(error => {
-            response.status(400).send(error) // 400 bad request
-        })
-    })
-    .catch( error => {
-        // 401 is unauthorized.
-        result.status(401).send(error)
-    })
-})
-*/
-
 // Get total_xp and bonus_xp from finished workout, and updates the
 // total amount of XP in the User collection
 
@@ -152,6 +123,7 @@ exports.updateUserXpWorkout = functions.https.onCall((data, context) => {
         const totalWorkoutXp = total_xp + bonus_xp
         
         console.log(userId)
+
 
         return helpers.updateUserXpWorkout(userId, totalWorkoutXp)
         .then(data => {
@@ -169,6 +141,7 @@ exports.updateUserXpWorkout = functions.https.onCall((data, context) => {
 
     }
 })
+
 
 exports.getExercises  = functions.https.onRequest((request, response) => {
 
@@ -188,6 +161,26 @@ exports.getExercises  = functions.https.onRequest((request, response) => {
             result.status(401).send(error)
         })
 })
+
+
+exports.getWorkout  = functions.https.onRequest((request, response) => {
+
+        return admin.firestore().collection("Workouts").doc("w7ujyNOojW4QAE4GV4wc").get()
+                .then(querySnapshot => {
+
+                    const data = querySnapshot.data();
+
+                    return response.send({data})
+                })
+                .catch(error => {
+                    response.status(400).send(error) // 400 bad request
+                })
+
+        .catch( error => {
+            // 401 is unauthorized.
+            result.status(401).send(error)
+        })
+});
 
 
 
@@ -220,6 +213,52 @@ exports.addWorkout= functions.https.onCall((data, context) => {
         // Not authenticated:
         throw new functions.https.HttpsError(code, message)
     }
-
 })
+
+
+// Returns a list of all user workouts objects
+exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {
+
+    const tokenId = request.get('Authorization').split('Bearer ')[1];
+
+    return admin.auth().verifyIdToken(tokenId)
+    .then( decoded => {
+
+        const userId = decoded.user_id;
+
+        return helpers.getAllUserWorkouts(userId)
+        .then(data => {
+
+            return response.send({
+                data
+            })
+        })
+        .catch(error => {
+            response.status(400).send(error) // 400 bad request
+        })
+    })
+    .catch( error => {
+        // 401 is unauthorized.
+        result.status(401).send(error)
+    })
+})
+
+// Get all workouts from the Workouts collection
+exports.getAllWorkouts = functions.https.onRequest((request, response) => {
+    
+    return helpers.getAllWorkouts()
+    .then(workoutList => {
+        return response.send({
+            data: {
+                workoutList: workoutList
+            }
+        })
+    })
+    .catch(error => {
+        response.status(400).send(error) // 400 bad request
+    })
+})
+
+
+
 

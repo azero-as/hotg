@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'activeWorkoutSession.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'startWorkout.dart';
 
 class Plan extends StatefulWidget {
 
-    static String tag = 'plan-page';
     @override
     _PlanPageState createState() => new _PlanPageState();
 
@@ -14,183 +13,206 @@ class Plan extends StatefulWidget {
 
 class _PlanPageState extends State<Plan> {
 
+  List _workouts = [];
+
+  @override
+  void initState(){
+    super.initState();
+
+    CloudFunctions.instance
+        .call(
+      functionName: 'getAllWorkouts',
+    ).then((response) {
+      setState(() {
+        _workouts = response['workoutList'];
+      });
+    }).catchError((error) {
+      print(error);
+    });
+  }
 
   @override
     Widget build(BuildContext context) {
 
-
-        Widget _returnNewWorkoutButton(){
-            return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 0),
-                child: RaisedButton(
-                    elevation: 5.0,
-                    shape: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        borderSide: BorderSide(
-                            width: 2.0,
-                            color: const Color(0xFF212838),
-                        )
+    Widget _workout(int index) {
+      return new Container(
+        // add border for the workout info box
+        margin: new EdgeInsets.symmetric(horizontal: 55.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black, width: 0.25),
+          color: Color(0xFFE7E9ED),
+        ),
+        child: Column(
+          // Text starts on the left, instead of centered as is the default
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            // container for title box
+            Container(
+              padding: EdgeInsets.all(5),
+              // border to distinguish between the two containers within the box
+              // Colour for the entire row
+              decoration: BoxDecoration(
+                border: Border.all(color: Color(0xFF212838), width: 0.15),
+                color: Color(0xFF212838),
+              ),
+              child: Row(
+                children: <Widget>[
+                  // add some space between left-side border and beginning of text
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  ),
+                  // new container for title
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      child: Text(
+                        _workouts[index]["workoutName"],
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
-                    onPressed: () {
-                        //TODO: eventhandler on start workout button
-                    },
-                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                    color: const Color(0xFFFFFFFF),
-                    child: Text('Generate new workout', style: TextStyle(color: Colors.black54),),
-                ),
-            );
-        }
+                  ),
+                ],
+              ),
+            ),
 
-        Widget _returnStartWorkoutButton(List<dynamic> exercises){
-            return new Padding(
-                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0.0),
-
-                child: RaisedButton(
-                    elevation: 5.0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
+            // container for changing information
+            Container(
+              padding: EdgeInsets.all(5),
+              // border to distinguish between the two containers within the box
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 0.15),
+              ),
+              child: Row(
+                children: <Widget>[
+                  // Column for information declaration
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'XP:',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF434242)),
+                        ),
+                        // add space between lines
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Intensity:',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF434242)),
+                        ),
+                        // add space between lines
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Icon(
+                          Icons.alarm,
+                          color: Color(0xFF434242),
+                        ),
+                      ],
                     ),
-                    onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => activeWorkoutSession(exercises: exercises)));
-
-                    },
-                    padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-                    color: const Color(0xFF212838),
-                    child: Text('Start workout', style: TextStyle(color: Colors.white),),
-                ),
-            );}
-
-        //Information about workout
-        Widget _showInfo(){
-            return  Container(
-                margin: EdgeInsets.fromLTRB(100, 0, 100, 40),
-                child: RichText(
-                    text: new TextSpan(
-                        style: new TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.black,
+                  ),
+                  // Column for changing information
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            _workouts[index]["xp"].toString(),
+                            style: TextStyle(color: Color(0xFF434242)),
+                          ),
+                          // add space between lines
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                              _workouts[index]["intensity"].toString(),
+                            style: TextStyle(color: Color(0xFF434242)),
+                          ),
+                          // add space between lines
+                          SizedBox(
+                            height: 18,
+                          ),
+                          Text(
+                            _workouts[index]["duration"].toString() + " min",
+                            style: TextStyle(color: Color(0xFF434242)),
+                          ),
+                        ]),
+                  ),
+                  // Column for button
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      children: <Widget>[
+                        // add space to make the button stay at the bottom of the box
+                        SizedBox(
+                          height: 50,
                         ),
-                        children: <TextSpan>[
-                            //TODO: Add icon
-                            new TextSpan(text: 'Time: ', style: new TextStyle(fontWeight: FontWeight.bold)),
-                            //TODO: Add the correct time here
-                            new TextSpan(text: '1 hour '),
-                            new TextSpan(text: ' XP: ', style: new TextStyle(fontWeight: FontWeight.bold)),
-                            //TODO: Add the correct XP one gets from completing the workout
-                            new TextSpan(text: '100 \n\n'),
-                            new TextSpan(text: 'Difficulty: ', style: new TextStyle(fontWeight: FontWeight.bold)),
-                            //TODO: Add the correct difficulty
-                            new TextSpan(text: 'Beginner'),
-                        ]
-                    ))
-                );
-        }
-
-        //Information about the exercises that is apart of the workout
-        Widget _showInformationWorkout(List<dynamic> exercises){
-            return new ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: exercises.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    EntryItem(exercises[index]),
-
-            );
-
-        }
-
-        Widget _returnBody(List<dynamic> exercises){
-            return new Container(
-                padding: EdgeInsets.only(left: 24.0, right: 24.0),
-                margin: EdgeInsets.fromLTRB(0, 50, 0, 35),
-                child: Column(
-                    children: <Widget>[
-                        Container(
-                            child: _showInfo(),
-
+                        RaisedButton(
+                          padding: EdgeInsets.all(10.0),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        StartWorkout(
+                                            exercises:  _workouts[index]["exercises"],
+                                            duration: _workouts[index]["duration"],
+                                            intensity: _workouts[index]["intensity"],
+                                            xp: _workouts[index]["xp"],
+                                            workoutName: _workouts[index]["workoutName"])));
+                          },
+                          elevation: 5.0,
+                          color: Color(0xFF612A30),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.67),
+                          ),
+                          child: Text(
+                            'See workout',
+                            style: TextStyle(color: Colors.white, fontSize: 13.0),
+                          ),
                         ),
-                        Expanded(
-                            child: _showInformationWorkout(exercises),
-                        ),
-                        _returnStartWorkoutButton(exercises),
-                       // _returnNewWorkoutButton(),
-                    ],
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
 
-                )
-            );}
-
-
-        return Scaffold(
-                body: StreamBuilder<QuerySnapshot>(
-                    stream:  Firestore.instance.collection("Exercises").snapshots(),
-                    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-                        if (!snapshot.hasData) return new Text('Loading...');
-                        if(snapshot.data ==null) return new Text("no workouts");
-                        else{
-                            var exercises = [];
-                           for(var i = 0; i < snapshot.data.documents.length; i++){
-
-                                exercises.add(snapshot.data.documents[i]);
-
-
-                           }
-                             print(exercises[0]["name"]);
-
-                            return _returnBody(exercises);
-                        }
-                    }
-                ),
-             );
-        }}
-
-
-
-
-
-
-
-
-
-
-// One entry in the multilevel list displayed by this app.
-class Entry {
-    Entry(this.name, [this.info = const <Text>[]]);
-
-    final String name;
-    final List<Text> info;
-
-}
-
-// The entire multilevel list displayed by this app.
-
-
-// Displays one Entry. If the entry has children then it's displayed
-// with an ExpansionTile.
-class EntryItem extends StatelessWidget {
-    const EntryItem(this.entry);
-
-    final DocumentSnapshot entry;
-    Widget _buildTiles(DocumentSnapshot root) {
-        return ExpansionTile(
-            key: PageStorageKey<DocumentSnapshot>(root),
-            title: Text(root["name"]),
-            children: <Widget>[
-                ListTile(
-                    title: Text("Sets: 1"),
-                ),
-                ListTile(
-                    title: Text("Reps: 10-12"),
-                ),
-                ListTile(
-                    title: Text("XP: "),
-                ),
-            ]
+    Widget _listOfWorkouts() {
+      if(_workouts.isEmpty){
+        return Text("");
+      }
+      else {
+        return new ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: _workouts.length,
+          itemBuilder: (BuildContext context, int index){
+            return _workout(index);
             //children: root["info"]
+          },
         );
+
+      }
     }
 
-    @override
-    Widget build(BuildContext context) {
-        return _buildTiles(entry);
-    }
-}
+    return Scaffold(
+      appBar: new AppBar(
+        centerTitle: true ,
+        title: new Text("Workouts"),
+      ),
+      body: _listOfWorkouts(),
+    );
+  }}

@@ -4,7 +4,8 @@ module.exports = {
     getUserInfo: getUserInfo,
     updateUserLevelInfo: updateUserLevelInfo,
     updateUserXpWorkout: updateUserXpWorkout,
-    getAllUserWorkouts: getAllUserWorkouts
+    getAllUserWorkouts: getAllUserWorkouts,
+    getAllWorkouts: getAllWorkouts
 }
 
 async function getUserInfo(userId) {
@@ -93,21 +94,6 @@ async function getLevelXpCap(userLevel) {
     })
 }
 
-
-/* // Check if level needs to be updated
-function checkUpdateLevel(xpCap, userXp) {
-
-    if (userXp >= xpCap) {
-        return true
-    }
-    else {
-        console.log('ingen endring')
-        return false
-    
-    }
-}
-*/
-
 // Increase level by 1
 async function increaseLevel(userLevel, userId) {
     const newUserLevel = userLevel+1
@@ -155,19 +141,33 @@ async function updateUserXP(currentXP, totalWorkoutXp, userId) {
 // Get all workouts ordered by date (newest first)
 // Limit = 5
 async function getAllUserWorkouts(userId) {
-  workouts = []
-  return admin.firestore().collection('Users').doc(userId)
-  .collection('Workouts').orderBy('date', 'desc').limit(5)
-  .get()
-  .then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-          workouts.push(doc.data())
-      })
-      return workouts
-  })
-  .catch(function(error) {
-      console.log('Error: ',error)
-  })
-}
+   workouts = []
+   return admin.firestore().collection('Users').doc(userId)
+   .collection('Workouts').orderBy('date', 'desc').limit(5)
+   .get()
+   .then(function(querySnapshot) {
+       querySnapshot.forEach(function(doc) {
+           workouts.push(doc.data())
+       })
+       return workouts
+   })
+   .catch(function(error) {
+       console.log('Error: ',error)
+   })
+ }
+
+ async function getAllWorkouts() {
+   workouts = []
+   return admin.firestore().collection('Workouts').get()
+   .then(function(querySnapshot) {
+       querySnapshot.forEach(function(doc) {
+           workouts.push(doc.data())
+       })
+       return workouts
+   })
+   .catch(function(error) {
+       console.log('Error: ',error)
+   })
+ }
 
 
