@@ -59,24 +59,24 @@ async function getLevelXpCap(userLevel) {
     })
 }
 
-
 // Get all workouts ordered by date (newest first)
 // Limit = 5
 async function getAllUserWorkouts(userId) {
-   workouts = []
-   return admin.firestore().collection('Users').doc(userId)
-   .collection('Workouts').orderBy('date', 'desc').limit(5)
-   .get()
-   .then(function(querySnapshot) {
-       querySnapshot.forEach(function(doc) {
-           workouts.push(doc.data())
-       })
-       return workouts
-   })
-   .catch(function(error) {
-       console.log('Error: ',error)
-   })
- }
+    workouts = []
+    return admin.firestore().collection('Users').doc(userId)
+    .collection('Workouts').orderBy('date', 'desc').limit(5)
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            workouts.push(doc.data())
+        })
+        return workouts
+    })
+    .catch(function(error) {
+        console.log('Error: ',error)
+    })
+  }
+
 
  async function getAllWorkouts() {
    workouts = []
@@ -91,5 +91,6 @@ async function getAllUserWorkouts(userId) {
        console.log('Error: ',error)
    })
  }
+
 
 
