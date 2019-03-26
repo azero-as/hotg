@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "package:flutter_swiper/flutter_swiper.dart";
 import 'authentication.dart';
 import 'services/crud.dart';
+import 'modifiedSwiperControl.dart';
 
 class SignupSwiperPage extends StatefulWidget {
   SignupSwiperPage(
@@ -232,7 +233,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                     activeColor: Colors.white,
                     size: 8.5,
                     activeSize: 10.0)),
-            control: new SwiperControl(color: Colors.white),
+            control: new ModifiedSwiperControl(color: Colors.white),
             children: <Widget>[
               Center(
                   child: Container(
