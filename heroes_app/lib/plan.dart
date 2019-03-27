@@ -127,7 +127,7 @@ class _PlanPageState extends State<Plan> {
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 0.25),
             color: Color(0xFFE7E9ED),
-            borderRadius: BorderRadius.all(Radius.circular(13.0)),
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
 
           ),
           child: ScopedModelDescendant<Workout>(builder: (context, child, model) {
@@ -145,7 +145,7 @@ class _PlanPageState extends State<Plan> {
                     border: Border.all(color: Color(0xFF212838), width: 0.15),
                     color: Theme.of(context).accentColor,
                     //Border radius for workout title
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(13.0), topRight: Radius.circular(13.0)),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
                   ),
                   child: Row(
                     children: <Widget>[

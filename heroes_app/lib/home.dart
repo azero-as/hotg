@@ -244,7 +244,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
 
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 0.25),
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
           color: Color(0xFFE7E9ED),
         ),
         child: Column(
@@ -258,7 +258,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
               // border to distinguish between the two containers within the box
               // Colour for the entire row
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0)),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
                 border: Border.all(color: Color(0xFF212838), width: 0.15),
                 color: Theme.of(context).accentColor,
               ),
@@ -275,6 +275,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                    child: Text(
                         workoutModel.workoutName,
                         style: TextStyle(color: Colors.white),
+
                       ),
                     ),
                   ),
