@@ -156,8 +156,10 @@ class _PlanPageState extends State<Plan> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              model.listOfWorkouts[index]["class"].toString(),
-                              style: TextStyle(color: Color(0xFF434242)),
+                              'Class:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF434242)),
                             ),
                             // add space between lines
                             SizedBox(
@@ -197,6 +199,14 @@ class _PlanPageState extends State<Plan> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
+                                model.listOfWorkouts[index]["class"].toString(),
+                                style: TextStyle(color: Color(0xFF434242)),
+                              ),
+                              // add space between lines
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
                                 model.listOfWorkouts[index]["xp"].toString() ?? '',
                                 style: TextStyle(color: Color(0xFF434242)),
                               ),
@@ -228,7 +238,7 @@ class _PlanPageState extends State<Plan> {
                           children: <Widget>[
                             // add space to make the button stay at the bottom of the box
                             SizedBox(
-                              height: 50,
+                              height: 60,
                             ),
                             RaisedButton(
                               padding: EdgeInsets.all(10.0),
