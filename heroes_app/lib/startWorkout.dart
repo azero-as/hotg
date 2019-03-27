@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'activeWorkoutSession.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'models/workout.dart';
+import 'plan.dart';
 
 class StartWorkout extends StatefulWidget {
   final List exercises;
@@ -8,8 +11,12 @@ class StartWorkout extends StatefulWidget {
   final String intensity;
   final int xp;
   final String workoutName;
+  final VoidCallback onLoggedIn;
+  final VoidCallback onStartWorkout;
+  final VoidCallback onActiveWorkout;
+  final VoidCallback onSummary;
 
-  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName});
+  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName, this.onLoggedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary});
 
   @override
   _StartWorkoutPage createState() => new _StartWorkoutPage();
@@ -27,11 +34,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
             borderRadius: BorderRadius.circular(15.0),
           ),
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        activeWorkoutSession(exercises: widget.exercises, workoutName: widget.workoutName)));
+            widget.onActiveWorkout();
           },
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
           color: const Color(0xFF212838),
@@ -43,7 +46,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
       );
     }
 
-    //Information about workout
+    //General informaiton about the workout
     Widget _showInfo() {
       return Container(
           margin: EdgeInsets.fromLTRB(100, 0, 100, 40),
@@ -54,9 +57,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
-                new TextSpan(
-                    text: 'Duration: ',
-                    style: new TextStyle(fontWeight: FontWeight.bold)),
+
                 new TextSpan(text: widget.duration.toString() + " min"),
                 new TextSpan(
                     text: ' XP: ',
@@ -69,32 +70,46 @@ class _StartWorkoutPage extends State<StartWorkout> {
               ])));
     }
 
+    //Show information about a workout using minutes
+    Widget _showInfoExercises(int index){
+      String exercise = "targetReps";
+      String name = "Reps: ";
+      if(widget.exercises[index]["targetReps"] == null){
+        exercise = "targetMin";
+        name = "Minutes: ";
+      }
+      return ExpansionTile(
+          title: new Text(
+            (widget.exercises[index]["name"]),
+          ),
+          children: <Widget>[
+            ListTile(
+                title: new Text(
+                    "Sets: " + widget.exercises[index]["targetSets"])),
+            ListTile(
+                title: new Text(
+                    name + widget.exercises[index][exercise])),
+            ListTile(
+                title: new Text("Rest between sets: " +
+                    widget.exercises[index]["restBetweenSets"])),
+            ListTile(
+                title: new Text(
+                    "XP: " + widget.exercises[index]["xp"].toString())),
+          ]
+        //children: root["info"]
+      );
+    }
+
+
+    //Display list of all the exercises in the workout
     Widget _showInformationWorkout() {
       return new ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: widget.exercises.length,
-        itemBuilder: (BuildContext context, int index) => ExpansionTile(
-                key: PageStorageKey<int>(index),
-                title: new Text(
-                  (widget.exercises[index]["name"]),
-                ),
-                children: <Widget>[
-                  ListTile(
-                      title: new Text(
-                          "Sets: " + widget.exercises[index]["targetSets"])),
-                  ListTile(
-                      title: new Text(
-                          "Reps: " + widget.exercises[index]["targetReps"])),
-                  ListTile(
-                      title: new Text("Rest between sets: " +
-                          widget.exercises[index]["restBetweenSets"])),
-                  ListTile(
-                      title: new Text(
-                          "XP: " + widget.exercises[index]["xp"].toString())),
-                ]
-                //children: root["info"]
-                ),
+        itemBuilder: (BuildContext context, int index){
+            return _showInfoExercises(index);
+        }
       );
     }
 
@@ -115,14 +130,22 @@ class _StartWorkoutPage extends State<StartWorkout> {
           ));
     }
 
+    var workout = ScopedModel.of<Workout>(context);
     return Scaffold(
       appBar: AppBar(
-        actions: <Widget>[
-          new Center(
-            child: new Text('',
-                style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-          )
-        ],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            if (workout.isFromHomePage == true) {
+              widget.onLoggedIn();
+            }
+            else {
+              // TODO: Make it go to pla page instead of widget.onLoggedIn();
+              widget.onLoggedIn();
+          }
+          },
+          color: Colors.white,
+        ),
       ),
       body: Container(
         child: _returnBody(),
