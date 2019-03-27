@@ -111,8 +111,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 title: new Text("HOME",
                   style: new TextStyle(),)),
             new BottomNavigationBarItem(
-                icon: new Icon(Icons.calendar_today,),
-                title: new Text("PLAN",
+                icon: new Icon(Icons.fitness_center,),
+                title: new Text("WORKOUTS",
                   style: new TextStyle(),)),
             new BottomNavigationBarItem(icon: new Icon(Icons.history,),
                 title: new Text("HISTORY",
