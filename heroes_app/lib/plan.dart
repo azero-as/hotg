@@ -67,7 +67,7 @@ class _PlanPageState extends State<Plan> {
       return false;
     }
 
-    if(wo["warmUp"]["description"] == null || wo["warmUp"]["xp"] == null || wo["warmUp"]["duration"] == null ){
+    if(wo["warmUp"]["description"] == null || wo["warmUp"]["xp"] == null || wo["warmUp"]["targetMin"] == null ){
       return false;
     }
 
@@ -111,6 +111,7 @@ class _PlanPageState extends State<Plan> {
 
 
       else {
+        var workout = ScopedModel.of<Workout>(context);
         return new Container(
 
           // add border for the workout info box
@@ -270,14 +271,11 @@ class _PlanPageState extends State<Plan> {
         return Text("");
       }
       else {
-
         return new ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemCount: workout.listOfWorkouts.length,
           itemBuilder: (BuildContext context, int index){
-            print("HJHj");
-            print(workout.listOfWorkouts[index]["exercises"]);
             return _workout(index);
             //children: root["info"]
           },

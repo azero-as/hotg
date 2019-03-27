@@ -176,6 +176,7 @@ class _RootPageState extends State<RootPage> {
       workout.setDuration(response['duration']);
       workout.setXp(response['xp']);
       workout.setExercises(response['exercises']);
+      workout.setWarmUp(response['warmUp']);
       setState(() {
         _dataLoadedFromGetWorkout = true;
       });
