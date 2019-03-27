@@ -191,12 +191,7 @@ class _SignupPageState extends State<SignupPage> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         onPressed: _validateAndSubmit,
-        //() {
-        // Navigator.of(context).pushNamed(SignupSwiperPage.tag);
-        // },
-        //_validateAndSubmit,
         //TODO: Navigate to signuplevel, then sign up.
-
         padding: EdgeInsets.all(12),
         color: const Color(0xFF612A30),
         child: Text(
