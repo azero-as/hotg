@@ -95,9 +95,79 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       workout.setFinishedWorkout(_exercises, _XpEarned, _BonusXP);
     }
 
+    Widget _onNotCheckedOffButFinished(BuildContext context) {
+      return Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          new Container(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
+              //decoration: new BoxDecoration(                  //border if we want
+              //color: Colors.white,
+              //border: new Border.all(color: Colors.black)),
+              child:
+              new ListView(
+                shrinkWrap: true,
+                children: <Widget>[
+                  new Container(
+                      padding: EdgeInsets.fromLTRB(30, 8, 0, 8),
+                      color: const Color(0xFF212838),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          RichText(
+                            text: TextSpan(
+                              text: 'No exercises done',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          Align(
+                            //alignment: Alignment.topRight,
+                            child: RaisedButton(
+                              color: Theme.of(context).primaryColor,
+                              textColor: Colors.white,
+                              onPressed: () => Navigator.pop(context),
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                  ),
+                  new Container(
+                      padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+                      color: Colors.white,
+                      child: Column (
+                          children: <Widget>[
+                            RichText(
+                              text: TextSpan(
+                                text: 'Did you remember to check off the exercises you have done?',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                    //SizedBox(height: 100.0),
+                  )],
+              )),
+        ],
+      );
+    }
+
     void _validateAndSaveWorkout() {
       if (_selectedExercises.isEmpty) {
-        //TODO: Make a pop opp which tells you that you have to do at least one workout?
+        //Display pop-up
+        showDialog(context: context,builder: (context) => _onNotCheckedOffButFinished(context)); // Call the Dialog.
       } else {
         _saveWorkout();
         widget.onSummary(); // Go to summary
