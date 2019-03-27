@@ -44,8 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void navigationTapped(int page) {
     // Animating to the page.
     // You can use whatever duration and curve you like
-    _pageController.animateToPage(page,
-        duration: const Duration(milliseconds: 10), curve: Curves.ease);
+    _pageController.jumpToPage(page);
   }
 
   void onPageChanged(int page) {
@@ -88,6 +87,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
             onPageChanged: onPageChanged,
             controller: _pageController,
+            physics:new NeverScrollableScrollPhysics()
           );
         })
       ),
@@ -111,8 +111,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 title: new Text("HOME",
                   style: new TextStyle(),)),
             new BottomNavigationBarItem(
-                icon: new Icon(Icons.calendar_today,),
-                title: new Text("PLAN",
+                icon: new Icon(Icons.fitness_center,),
+                title: new Text("WORKOUTS",
                   style: new TextStyle(),)),
             new BottomNavigationBarItem(icon: new Icon(Icons.history,),
                 title: new Text("HISTORY",
