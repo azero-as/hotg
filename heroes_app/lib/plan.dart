@@ -45,6 +45,42 @@ class _PlanPageState extends State<Plan> {
     });
 }
 
+  //Checks to see if all the necessary fields in the database are set and correct
+  bool _validateWorkout(int index){
+    var workout = ScopedModel.of<Workout>(context);
+    var intensity = -1;
+    var xp = -1;
+    //if the workout does not have a list of exercises, do not display it as an option
+    var wo = workout.listOfWorkouts[index];
+
+    if(wo["exercises"]  == null || wo["exercises"].length == 0){
+      return false;
+    }
+
+    if(wo["workoutName"] == null || wo["duration"] == null || wo["intensity"] == null || wo["xp"] == null){
+      return false;
+    }
+    if(!(wo["duration"] is int || wo["xp"] is int)){
+      return false;
+    }
+    else{
+      for(var exercise in wo["exercises"] ){
+        if(exercise["name"] == null || exercise["targetSets"] == null || exercise["restBetweenSets"] == null || exercise["xp"] == null){
+          return false;
+        }
+        if(!(exercise["xp"] is int)){
+          return false;
+        }
+        if(exercise["targetReps"] == null && exercise["targetMin"] == null){
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+  }
+
   @override
     Widget build(BuildContext context) {
 
@@ -58,13 +94,12 @@ class _PlanPageState extends State<Plan> {
     }
 
     Widget _workout(int index) {
-      //if the workout does not have a list of exercises, do not display it as an option
-      var workout = ScopedModel.of<Workout>(context);
-      if(workout.listOfWorkouts[index]["exercises"]  == null || workout.listOfWorkouts[index]["exercises"].length == 0){
-        print("null");
-        print(workout.listOfWorkouts[index]["exercises"]);
+
+      if(_validateWorkout(index) == false){
         return Text("");
       }
+
+
       else {
         return new Container(
 
