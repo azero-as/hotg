@@ -144,19 +144,20 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             ListTile(
               title: new Padding(
                   padding: EdgeInsets.all(20),
-                  child: new Text(
-                      "Sets: " + widget.exercises[index]["targetSets"])),
+                  child: new Text("Sets: " +
+                      widget.exercises[index]["targetSets"].toString())),
             ),
             ListTile(
               title: new Padding(
                   padding: EdgeInsets.all(20),
-                  child: new Text(name + widget.exercises[index][exercise])),
+                  child: new Text(
+                      name + widget.exercises[index][exercise].toString())),
             ),
             ListTile(
               title: new Padding(
                   padding: EdgeInsets.all(20),
                   child: new Text("Rest between sets: " +
-                      widget.exercises[index]["restBetweenSets"])),
+                      widget.exercises[index]["restBetweenSets"].toString())),
             ),
             ListTile(
               title: new Padding(
