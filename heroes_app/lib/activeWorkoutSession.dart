@@ -227,8 +227,11 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
           }));
     }
 
+    var workout = ScopedModel.of<Workout>(context);
+
     return new Scaffold(
       appBar: AppBar(
+        title: new Text(workout.workoutName),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {

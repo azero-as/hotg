@@ -77,7 +77,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: widget.xp.toString() + ' \n\n'),
                     TextSpan(
-                      text: 'Intensity: ',
+                      text: ' Intensity: ',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: widget.intensity.toString() + ' \n\n'),
                     TextSpan(
@@ -166,6 +166,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
     var workout = ScopedModel.of<Workout>(context);
     return Scaffold(
       appBar: AppBar(
+        title: new Text(workout.workoutName),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
