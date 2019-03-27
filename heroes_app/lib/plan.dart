@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
-import 'startWorkout.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
 
@@ -22,28 +21,41 @@ class Plan extends StatefulWidget {
 
 class _PlanPageState extends State<Plan> {
 
+  bool _dataLoadedFromFireBase = false; //if this is null, it is still loading data from firebase.
+
   @override
   void initState(){
     super.initState();
 
     var workout = ScopedModel.of<Workout>(context);
+    if (workout.listOfWorkouts != null) {
+      _dataLoadedFromFireBase = true;
+    }
 
     CloudFunctions.instance
         .call(
       functionName: 'getAllWorkouts',
     ).then((response) {
-      if (this.mounted) {
-      setState(() {
         workout.setListOfWorkouts(response['workoutList']);
+      setState(() {
+        _dataLoadedFromFireBase = true;
       });
-      }
     }).catchError((error) {
       print(error);
     });
-  }
+}
 
   @override
     Widget build(BuildContext context) {
+
+    Widget _buildWaitingScreen() {
+      return Scaffold(
+        body: Container(
+          alignment: Alignment.center,
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
     Widget _workout(int index) {
       return new Container(
@@ -214,12 +226,25 @@ class _PlanPageState extends State<Plan> {
         );
       }
     }
+    if (!_dataLoadedFromFireBase) {
+      return Scaffold(
+        appBar: new AppBar(
+          centerTitle: true ,
+          title: new Text("Workouts"),
+        ),
+        body:
+        _buildWaitingScreen(),
+      );
+    }
+    else {
+      return Scaffold(
+        appBar: new AppBar(
+          centerTitle: true ,
+          title: new Text("Workouts"),
+        ),
+        body:
+        _listOfWorkouts(),
+      );
+    }
 
-    return Scaffold(
-      appBar: new AppBar(
-        centerTitle: true ,
-        title: new Text("Workouts"),
-      ),
-      body: _listOfWorkouts(),
-    );
   }}
