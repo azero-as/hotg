@@ -6,7 +6,6 @@ import 'models/user.dart';
 import 'models/workout.dart';
 import 'authentication.dart';
 import 'startWorkout.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 // build the home page and call on the stateful classes
@@ -57,6 +56,19 @@ class AvatarOverview extends StatefulWidget {
 
 // class for appbar of home page
 class _AvatarOverviewState extends State<AvatarOverview> {
+
+  String _imageUrl = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    setState(() {
+     getImageUrl();
+    });
+    
+  }
+
   Widget build(BuildContext context) {
     // variables for size, for best view across platforms
     var barHeight = (MediaQuery.of(context).size.height) / 3;
@@ -64,8 +76,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
     var imageHeight = (barHeight - 55);
     var imageWidth = (barWidth / 2) - 20;
     var progressBar = (imageWidth - 15);
-//    final ref = FirebaseStorage.instance.ref().child('avatar-test');
-//    var url =  ref.getDownloadURL();
+
     return Stack(
       children: <Widget>[
         ClipPath(
@@ -92,7 +103,10 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                         width:imageWidth,
                         height: imageHeight,
                         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        //child: Image.network(url),
+                          child: Image.network(
+                          _imageUrl,
+                          fit: BoxFit.fill,
+                        ),
 
                       )
                     ]),
@@ -166,6 +180,19 @@ class _AvatarOverviewState extends State<AvatarOverview> {
         )
       ],
     );
+  }
+
+  // Get ImageUrl based on className.
+  getImageUrl() async {
+    var user = ScopedModel.of<User>(context);
+    String className = user.className; 
+    String imageUrl = className+'.png';
+
+    StorageReference ref = FirebaseStorage.instance.ref().child(imageUrl);
+    String location = await ref.getDownloadURL();
+    setState(() {
+      _imageUrl = location;
+  });
   }
 }
 
