@@ -111,6 +111,32 @@ exports.getWorkout = functions.https.onRequest((request, response) => {
     });
 });
 
+// Get workout object based on className
+exports.getWorkout2 = functions.https.onCall((data, context) => {
+
+    // Check if user is authenticated: 
+    if (context.auth.uid != null) {
+
+        // parameters
+        const className = data.className
+
+        return helpers.getWorkout2(className)
+        .then(data => {
+            return data
+        })
+        .catch((error) => { 
+            throw new functions.https.HttpsError(error.code, error.message)
+        }) 
+    }
+    else {
+        // not authenticated: 
+        throw new functions.https.HttpsError(code, message)
+    }
+})
+
+
+
+
 // Listen for updates to any `user` document.
 exports.addWorkout = functions.https.onCall((data, context) => {
   if (context.auth.uid != null) {

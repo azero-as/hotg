@@ -2,10 +2,11 @@ var admin = require("firebase-admin");
 
 module.exports = {
     getUserInfo: getUserInfo,
+    getAllUserWorkouts: getAllUserWorkouts,
+    getWorkout2: getWorkout2,
+    getAllWorkouts: getAllWorkouts,
     updateUserLevelInfo: updateUserLevelInfo,
     updateUserXpWorkout: updateUserXpWorkout,
-    getAllUserWorkouts: getAllUserWorkouts,
-    getAllWorkouts: getAllWorkouts
 }
 
 // Get user info from Users collection, email and xpCap based on current gameLevel
@@ -94,13 +95,17 @@ async function getLevelXpCap(gameLevel) {
     .doc(gameLevel)
     .get()
     .then(querySnapshot => {
-        const levelXpCap = querySnapshot.data().xpCap
-        return levelXpCap
+      const levelXpCap = querySnapshot.data().xpCap;
+      return levelXpCap;
     })
     .catch(function(error) {
         console.log('Error getting data from Levels collection. ', error)
     })
+    .catch(function(error) {
+      console.log("Error: ", error);
+    });
 }
+
 
 // Increase level by 1
 async function increaseLevel(userLevel, userId) {
@@ -179,5 +184,19 @@ async function getAllUserWorkouts(userId) {
    })
  }
 
+// Get workout based on className
+async function getWorkout2(className) {
+  var workout;
 
-
+  return admin.firestore().collection("Workouts").where("class", "==", className)
+    .limit(1).get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        workout = doc.data();
+      });
+      return workout;
+    })
+    .catch(function(error) {
+      console.log("Error getting documents: ", error);
+    });
+}
