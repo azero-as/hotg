@@ -117,13 +117,19 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
           children: <Widget>[
             ListTile(
-                title: new Text(
-                    "Minutes: " + workout.warmUp["targetMin"].toString())),
+                title: new Padding(
+                    padding: EdgeInsets.all(20),
+                    child: new Text(
+                    "Minutes: " + workout.warmUp["targetMin"].toString()))),
             ListTile(
-                title: new Text(
-                    "Description: " +  workout.warmUp["description"].toString())),
+                title: new Padding(
+                    padding: EdgeInsets.all(20),
+                    child: new Text(
+                    "Description: " +  workout.warmUp["description"].toString()))),
             ListTile(
-                title: new Text("XP: " + workout.warmUp["xp"].toString())),
+                title: new Padding(
+                    padding: EdgeInsets.all(20),
+                    child: new Text("XP: " + workout.warmUp["xp"].toString()))),
 
             //children: root["info"]
           ]);
