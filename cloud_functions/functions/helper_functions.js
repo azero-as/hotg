@@ -9,25 +9,27 @@ module.exports = {
     updateUserXpWorkout: updateUserXpWorkout,
 }
 
-// Get level, xp, username, class and email from logged in user
+// Get user info from Users collection, email and xpCap based on current gameLevel
 async function getUserInfo(userId, email) {
-  var userCollection = await getUsersCollection(userId);
-  var userLevel = userCollection[0];
-  var userXp = userCollection[1];
-  var username = userCollection[2];
-  var className = userCollection[3];
 
-  let userLevelString = userLevel.toString();
-  var xpCap = await getLevelXpCap(userLevelString);
+    // Array from getUserCollection
+    var userCollection = await getUsersCollection(userId)
+    var gameLevel = userCollection[0]
+    var userXp = userCollection[1]
+    var characterName = userCollection[2]
+    var className = userCollection[3]
 
-  return {
-    username: username,
-    userLevel: userLevel,
-    userXp: userXp,
-    xpCap: xpCap,
-    className: className,
-    email: email
-  };
+    let gameLevelString = gameLevel.toString()
+    var xpCap = await getLevelXpCap(gameLevelString)
+
+    return {
+        characterName: characterName,
+        gameLevel: gameLevel,
+        userXp: userXp,
+        xpCap: xpCap,
+        className: className,
+        email: email
+    }
 }
 
 
@@ -65,67 +67,46 @@ async function updateUserXpWorkout(userId, xpEarned) {
     }
 }
       
-// Get current user level, xp, charactername and class from "Users" collection
+// Get gameLevel, xp, charactername and class from Users collection
 async function getUsersCollection(userId) {
-  return admin
-    .firestore()
-    .collection("Users")
+
+    return admin.firestore()
+    .collection('Users')
     .doc(userId)
     .get()
     .then(querySnapshot => {
-      var userLevel = querySnapshot.data().gameLevel;
-      var userXp = querySnapshot.data().xp;
-      var username = querySnapshot.data().characterName;
-      var className = querySnapshot.data().class;
+        var gameLevel = querySnapshot.data().gameLevel
+        var userXp = querySnapshot.data().xp
+        var characterName = querySnapshot.data().characterName
+        var className = querySnapshot.data().class
 
-      return [userLevel, userXp, username, className];
+        return [gameLevel, userXp, characterName, className]
     })
     .catch(function(error) {
-      console.log("Error: ", error);
-    });
+        console.log('Error getting data from User collection. ', error)
+    })
 }
 
-// Get xp cap for current user level from "Levels" collection
-async function getLevelXpCap(userLevel) {
-  return admin
-    .firestore()
-    .collection("Levels")
-    .doc(userLevel)
+
+// Get xpCap for current gameLevel from Levels collection
+async function getLevelXpCap(gameLevel) {
+    return admin.firestore()
+    .collection('Levels')
+    .doc(gameLevel)
     .get()
     .then(querySnapshot => {
       const levelXpCap = querySnapshot.data().xpCap;
       return levelXpCap;
     })
     .catch(function(error) {
-      console.log("Error:", error);
-    });
-}
-
-/*
-// Get all workouts ordered by date (newest first)
-// Limit = 5
-async function getAllUserWorkouts(userId) {
-  workouts = [];
-  return admin
-    .firestore()
-    .collection("Users")
-    .doc(userId)
-    .collection("Workouts")
-    .orderBy("date", "desc")
-    .limit(5)
-    .get()
-    .then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-        workouts.push(doc.data());
-      });
-      return workouts;
+        console.log('Error getting data from Levels collection. ', error)
     })
     .catch(function(error) {
       console.log("Error: ", error);
     });
 }
 
-*/
+
 // Increase level by 1
 async function increaseLevel(userLevel, userId) {
     const newUserLevel = userLevel+1
