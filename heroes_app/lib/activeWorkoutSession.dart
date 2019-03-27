@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'dart:async';
-import 'summary.dart';
+import 'models/user.dart';
 import 'models/workout.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -184,14 +184,16 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     Widget _returnFinishWorkoutButton() {
       return new Padding(
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40.0),
-        child: RaisedButton(
+        child: ScopedModelDescendant<User>(builder: (context, child, model) {
+        return RaisedButton(
           elevation: 5.0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
           onPressed: () {
             _saveWorkout();
-            widget.onSummary();
+            model.incrementXP(_XpEarned); // Increase use xp total in database
+            widget.onSummary(); // Go to summary
             },
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
           color: const Color(0xFF612A30),
@@ -199,7 +201,8 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             'Finish workout',
             style: TextStyle(color: Colors.white),
           ),
-        ),
+        );
+        })
       );
     }
 
