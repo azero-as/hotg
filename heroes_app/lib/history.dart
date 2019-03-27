@@ -179,7 +179,7 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
     // Adds the top row widget as the first element.
     _cardContent.add(_showColumnNames());
 
-    // Reneders both repeitions and duration in the sets row.
+    // Renders both repetitions and duration in the sets row.
     Widget _showRepsOrDuration(exercise) {
       if (exercise["repetitions"] == null) {
         return Expanded(
