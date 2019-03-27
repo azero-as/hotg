@@ -21,7 +21,8 @@ class Plan extends StatefulWidget {
 }
 
 class _PlanPageState extends State<Plan> {
-  bool _dataLoadedFromFireBase = false; //if this is null, it is still loading data from firebase.
+  bool _dataLoadedFromFireBase =
+      false; //if this is null, it is still loading data from firebase.
 
   @override
   void initState() {
@@ -32,9 +33,11 @@ class _PlanPageState extends State<Plan> {
       _dataLoadedFromFireBase = true;
     }
 
-    CloudFunctions.instance.call(
+    CloudFunctions.instance
+        .call(
       functionName: 'getAllWorkouts',
-    ).then((response) {
+    )
+        .then((response) {
       workout.setListOfWorkouts(response['workoutList']);
       setState(() {
         _dataLoadedFromFireBase = true;
@@ -47,8 +50,6 @@ class _PlanPageState extends State<Plan> {
   //Checks to see if all the necessary fields in the database are set and correct
   bool _validateWorkout(int index) {
     var workout = ScopedModel.of<Workout>(context);
-    var intensity = -1;
-    var xp = -1;
     //if the workout does not have a list of exercises, do not display it as an option
     var wo = workout.listOfWorkouts[index];
 
@@ -105,7 +106,8 @@ class _PlanPageState extends State<Plan> {
             border: Border.all(color: Colors.black, width: 0.25),
             color: Color(0xFFE7E9ED),
           ),
-          child: ScopedModelDescendant<Workout>(builder: (context, child, model) {
+          child:
+              ScopedModelDescendant<Workout>(builder: (context, child, model) {
             return Column(
               // Text starts on the left, instead of centered as is the default
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,7 +209,8 @@ class _PlanPageState extends State<Plan> {
                                 height: 10,
                               ),
                               Text(
-                                model.listOfWorkouts[index]["xp"].toString() ?? '',
+                                model.listOfWorkouts[index]["xp"].toString() ??
+                                    '',
                                 style: TextStyle(color: Color(0xFF434242)),
                               ),
                               // add space between lines
@@ -226,7 +229,9 @@ class _PlanPageState extends State<Plan> {
                               ),
                               Text(
                                 model.listOfWorkouts[index]["duration"]
-                                            .toString() + " min" ?? '',
+                                            .toString() +
+                                        " min" ??
+                                    '',
                                 style: TextStyle(color: Color(0xFF434242)),
                               ),
                             ]),

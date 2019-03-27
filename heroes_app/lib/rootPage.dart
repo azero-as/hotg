@@ -147,14 +147,11 @@ class _RootPageState extends State<RootPage> {
   void _setUserInfo(BuildContext context) {
     var user = ScopedModel.of<User>(context);
     String _className;
-    CloudFunctions.instance
-        .call(
-      functionName: 'getUserInfo',
-    )
-        .then((response) {
+
+    CloudFunctions.instance.call(functionName: 'getUserInfo').then((response) {
       user.startState(
-          response['username'],
-          response['userLevel'],
+          response['characterName'],
+          response['gameLevel'],
           response['userXp'],
           response['xpCap'],
           response['className'],

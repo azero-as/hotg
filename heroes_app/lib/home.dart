@@ -5,7 +5,6 @@ import 'package:scoped_model/scoped_model.dart';
 import 'models/user.dart';
 import 'models/workout.dart';
 import 'authentication.dart';
-import 'dart:io' show Platform;
 
 // build the home page and call on the stateful classes
 class Home extends StatelessWidget {
@@ -175,7 +174,6 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                               textAlign: TextAlign.left),
                         ),
                       ],
-
                     ),
                   ],
                 );
@@ -242,7 +240,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
 
   Widget _workout(workoutModel) {
     return new Container(
-      // add border for the workout info box
+        // add border for the workout info box
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 0.25),
           color: Color(0xFFE7E9ED),
@@ -391,7 +389,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                           child: Text(
                             'See workout',
                             style:
-                            TextStyle(color: Colors.white, fontSize: 13.0),
+                                TextStyle(color: Colors.white, fontSize: 13.0),
                           ),
                         ),
                       ],
