@@ -110,9 +110,6 @@ const helpers = require("./helper_functions.js");
 // Get characterName, gameLevel, xp, class and xpCap for current level for home page
 exports.getUserInfo = functions.https.onRequest((request, response) => {
   const tokenId = request.get("Authorization").split("Bearer ")[1];
-
-  const tokenId = request.get("Authorization").split("Bearer ")[1];
-
   return admin
     .auth()
     .verifyIdToken(tokenId)
@@ -224,15 +221,13 @@ exports.getWorkout2 = functions.https.onCall((data, context) => {
         .then(data => {
             return data
         })
-        .catch(error => {
-            console.log(error)
-            // return error
-            return {}
-        })
-    } else {
+        .catch((error) => { 
+            throw new functions.https.HttpsError(error.code, error.message)
+        }) 
+    }
+    else {
         // not authenticated: 
         throw new functions.https.HttpsError(code, message)
-
     }
 })
 

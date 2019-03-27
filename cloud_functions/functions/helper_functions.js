@@ -206,12 +206,9 @@ async function getAllUserWorkouts(userId) {
 // Get workout based on className
 async function getWorkout2(className) {
   var workout;
-  return admin
-    .firestore()
-    .collection("Workouts")
-    .where("class", "==", className)
-    .limit(1)
-    .get()
+
+  return admin.firestore().collection("Workouts").where("class", "==", className)
+    .limit(1).get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
         workout = doc.data();
