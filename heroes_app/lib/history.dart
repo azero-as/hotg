@@ -29,7 +29,6 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
   // Container for every workout registered on the user in the database.
   List _workouts = [];
   bool _noWorkoutCompleted;
-  //int _usernameLength = 10;
 
   @override
   void initState() {
