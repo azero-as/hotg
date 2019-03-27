@@ -5,8 +5,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'models/user.dart';
 import 'models/workout.dart';
 import 'authentication.dart';
-import 'startWorkout.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+import 'dart:io' show Platform;
 
 // build the home page and call on the stateful classes
 class Home extends StatelessWidget {
@@ -131,12 +130,13 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                           child: Text(
                             model.characterName.toString(),
                             softWrap: true,
-                            overflow: TextOverflow.clip,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
+                            maxLines: 1,
                             //textAlign: TextAlign.left,
                           ),
                         ),
@@ -175,6 +175,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                               textAlign: TextAlign.left),
                         ),
                       ],
+
                     ),
                   ],
                 );
@@ -199,6 +200,11 @@ class WorkoutOverview extends StatefulWidget {
 
 // class for workout overview
 class _WorkoutOverviewState extends State<WorkoutOverview> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var workout = ScopedModel.of<Workout>(context);
@@ -227,177 +233,174 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                   ),
                 ),
                 // call on workout widget
-                _workout(),
+                _workout(workout),
               ],
             ));
       }
     });
   }
 
-  Widget _workout() {
+  Widget _workout(workoutModel) {
     return new Container(
-        // add border for the workout info box
+      // add border for the workout info box
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 0.25),
           color: Color(0xFFE7E9ED),
         ),
-        child: ScopedModelDescendant<Workout>(builder: (context, child, model) {
-          return Column(
-            // Text starts on the left, instead of centered as is the default
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              // container for title box
-              Container(
-                padding: EdgeInsets.all(5),
-                // border to distinguish between the two containers within the box
-                // Colour for the entire row
-                decoration: BoxDecoration(
-                  border: Border.all(color: Color(0xFF212838), width: 0.15),
-                  color: Color(0xFF212838),
-                ),
-                child: Row(
-                  children: <Widget>[
-                    // add some space between left-side border and beginning of text
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    ),
-                    // new container for title
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        child: Text(
-                          model.workoutName,
-                          style: TextStyle(color: Colors.white),
-                        ),
+        child: Column(
+          // Text starts on the left, instead of centered as is the default
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            // container for title box
+            Container(
+              padding: EdgeInsets.all(5),
+              // border to distinguish between the two containers within the box
+              // Colour for the entire row
+              decoration: BoxDecoration(
+                border: Border.all(color: Color(0xFF212838), width: 0.15),
+                color: Color(0xFF212838),
+              ),
+              child: Row(
+                children: <Widget>[
+                  // add some space between left-side border and beginning of text
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  ),
+                  // new container for title
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      child: Text(
+                        workoutModel.workoutName,
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
 
-              // container for changing information
-              Container(
-                padding: EdgeInsets.all(5),
-                // border to distinguish between the two containers within the box
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 0.15),
-                ),
-                child: Row(
-                  children: <Widget>[
-                    // Column for information declaration
-                    Expanded(
-                      flex: 2,
-                      child: Column(
+            // container for changing information
+            Container(
+              padding: EdgeInsets.all(5),
+              // border to distinguish between the two containers within the box
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 0.15),
+              ),
+              child: Row(
+                children: <Widget>[
+                  // Column for information declaration
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Class:',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF434242)),
+                        ),
+                        // add space between lines
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'XP:',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF434242)),
+                        ),
+                        // add space between lines
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Intensity:',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF434242)),
+                        ),
+                        // add space between lines
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Icon(
+                          Icons.alarm,
+                          color: Color(0xFF434242),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Column for changing information
+                  Expanded(
+                    flex: 3,
+                    child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Class:',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF434242)),
+                            workoutModel.workoutClass,
+                            style: TextStyle(color: Color(0xFF434242)),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            workoutModel.xp.toString(),
+                            style: TextStyle(color: Color(0xFF434242)),
                           ),
                           // add space between lines
                           SizedBox(
                             height: 10,
                           ),
                           Text(
-                            'XP:',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF434242)),
+                            workoutModel.intensity,
+                            style: TextStyle(color: Color(0xFF434242)),
                           ),
                           // add space between lines
                           SizedBox(
-                            height: 10,
+                            height: 18,
                           ),
                           Text(
-                            'Intensity:',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF434242)),
+                            workoutModel.duration.toString(),
+                            style: TextStyle(color: Color(0xFF434242)),
                           ),
-                          // add space between lines
-                          SizedBox(
-                            height: 10,
+                        ]),
+                  ),
+                  // Column for button
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      children: <Widget>[
+                        // add space to make the button stay at the bottom of the box
+                        SizedBox(
+                          height: 70,
+                        ),
+                        RaisedButton(
+                          padding: EdgeInsets.all(10.0),
+                          onPressed: () {
+                            workoutModel.isFromHomePage = true;
+                            widget.onStartWorkout();
+                          },
+                          elevation: 5.0,
+                          color: Color(0xFF612A30),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.67),
                           ),
-                          Icon(
-                            Icons.alarm,
-                            color: Color(0xFF434242),
+                          child: Text(
+                            'See workout',
+                            style:
+                            TextStyle(color: Colors.white, fontSize: 13.0),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    // Column for changing information
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              model.workoutClass,
-                              style: TextStyle(color: Color(0xFF434242)),
-                            ),
-                            // add space between lines
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              model.xp.toString(),
-                              style: TextStyle(color: Color(0xFF434242)),
-                            ),
-                            // add space between lines
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              model.intensity,
-                              style: TextStyle(color: Color(0xFF434242)),
-                            ),
-                            // add space between lines
-                            SizedBox(
-                              height: 18,
-                            ),
-                            Text(
-                              model.duration.toString(),
-                              style: TextStyle(color: Color(0xFF434242)),
-                            ),
-                          ]),
-                    ),
-                    // Column for button
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        children: <Widget>[
-                          // add space to make the button stay at the bottom of the box
-                          SizedBox(
-                            height: 70,
-                          ),
-                          RaisedButton(
-                            padding: EdgeInsets.all(10.0),
-                            onPressed: () {
-                              model.isFromHomePage = true;
-                              widget.onStartWorkout();
-                            },
-                            elevation: 5.0,
-                            color: Color(0xFF612A30),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.67),
-                            ),
-                            child: Text(
-                              'See workout',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 13.0),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          );
-        }));
+            ),
+          ],
+        ));
   }
 }

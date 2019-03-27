@@ -110,9 +110,6 @@ const helpers = require("./helper_functions.js");
 // Get characterName, gameLevel, xp, class and xpCap for current level for home page
 exports.getUserInfo = functions.https.onRequest((request, response) => {
   const tokenId = request.get("Authorization").split("Bearer ")[1];
-
-  const tokenId = request.get("Authorization").split("Bearer ")[1];
-
   return admin
     .auth()
     .verifyIdToken(tokenId)
@@ -210,6 +207,32 @@ exports.getWorkout = functions.https.onRequest((request, response) => {
       result.status(401).send(error);
     });
 });
+
+// Get workout object based on className
+exports.getWorkout2 = functions.https.onCall((data, context) => {
+
+    // Check if user is authenticated: 
+    if (context.auth.uid != null) {
+
+        // parameters
+        const className = data.className
+
+        return helpers.getWorkout2(className)
+        .then(data => {
+            return data
+        })
+        .catch((error) => { 
+            throw new functions.https.HttpsError(error.code, error.message)
+        }) 
+    }
+    else {
+        // not authenticated: 
+        throw new functions.https.HttpsError(code, message)
+    }
+})
+
+
+
 
 // Listen for updates to any `user` document.
 exports.addWorkout = functions.https.onCall((data, context) => {
