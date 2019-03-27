@@ -241,8 +241,10 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
   Widget _workout(workoutModel) {
     return new Container(
         // add border for the workout info box
+
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 0.25),
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
           color: Color(0xFFE7E9ED),
         ),
         child: Column(
@@ -252,10 +254,11 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
           children: <Widget>[
             // container for title box
             Container(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(15),
               // border to distinguish between the two containers within the box
               // Colour for the entire row
               decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0)),
                 border: Border.all(color: Color(0xFF212838), width: 0.15),
                 color: Theme.of(context).accentColor,
               ),
@@ -269,7 +272,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
-                      child: Text(
+                   child: Text(
                         workoutModel.workoutName,
                         style: TextStyle(color: Colors.white),
                       ),
@@ -281,10 +284,11 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
 
             // container for changing information
             Container(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(15),
               // border to distinguish between the two containers within the box
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black, width: 0.15),
+
               ),
               child: Row(
                 children: <Widget>[

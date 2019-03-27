@@ -127,6 +127,8 @@ class _PlanPageState extends State<Plan> {
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 0.25),
             color: Color(0xFFE7E9ED),
+            borderRadius: BorderRadius.all(Radius.circular(13.0)),
+
           ),
           child: ScopedModelDescendant<Workout>(builder: (context, child, model) {
             return Column(
@@ -136,12 +138,14 @@ class _PlanPageState extends State<Plan> {
               children: <Widget>[
                 // container for title box
                 Container(
-                  padding: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(15),
                   // border to distinguish between the two containers within the box
                   // Colour for the entire row
                   decoration: BoxDecoration(
                     border: Border.all(color: Color(0xFF212838), width: 0.15),
                     color: Theme.of(context).accentColor,
+                    //Border radius for workout title
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(13.0), topRight: Radius.circular(13.0)),
                   ),
                   child: Row(
                     children: <Widget>[
@@ -165,10 +169,11 @@ class _PlanPageState extends State<Plan> {
 
                 // container for changing information
                 Container(
-                  padding: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(15),
                   // border to distinguish between the two containers within the box
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black, width: 0.15),
+
                   ),
                   child: Row(
                     children: <Widget>[
