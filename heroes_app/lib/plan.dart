@@ -101,13 +101,12 @@ class _PlanPageState extends State<Plan> {
       } else {
         return new Container(
           // add border for the workout info box
-          margin: new EdgeInsets.symmetric(horizontal: 55.0, vertical: 12.0),
+          margin: new EdgeInsets.symmetric(horizontal: 50.0, vertical: 12.0),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 0.25),
             color: Color(0xFFE7E9ED),
           ),
-          child:
-              ScopedModelDescendant<Workout>(builder: (context, child, model) {
+          child: ScopedModelDescendant<Workout>(builder: (context, child, model) {
             return Column(
               // Text starts on the left, instead of centered as is the default
               crossAxisAlignment: CrossAxisAlignment.start,
