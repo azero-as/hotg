@@ -90,9 +90,18 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         "exercises": _exercises
       });
 
+      //Adds workout to state, which the summary page gets its content from.
       var workout = ScopedModel.of<Workout>(context);
       workout.setFinishedWorkout(_exercises, _XpEarned, _BonusXP);
+    }
 
+    void _validateAndSaveWorkout() {
+      if (_selectedExercises.isEmpty) {
+        //TODO: Make a pop opp which tells you that you have to do at least one workout?
+      } else {
+        _saveWorkout();
+        widget.onSummary(); // Go to summary
+      }
     }
 
     Widget _showInfoExercises(int index){
@@ -191,9 +200,8 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             borderRadius: BorderRadius.circular(15.0),
           ),
           onPressed: () {
-            _saveWorkout();
+            _validateAndSaveWorkout();
             model.incrementXP(_XpEarned); // Increase use xp total in database
-            widget.onSummary(); // Go to summary
             },
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
           color: const Color(0xFF612A30),
