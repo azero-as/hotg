@@ -94,15 +94,31 @@ class _StartWorkoutPage extends State<StartWorkout> {
     Widget _showInfoWarmUp(){
       var workout = ScopedModel.of<Workout>(context);
       return ExpansionTile(
-          title: new Text("Warm-up",
-          ),
+          leading: IconButton(
+          icon: Icon(Icons.info_outline),
+          onPressed: () {
+              showDialog(
+                  context: context,
+                      builder: (BuildContext context) {
+                          return AlertDialog(
+                              title: Text("Warm-up"),
+                              content: Text( workout.warmUp["description"].toString()),
+                              actions: <Widget>[
+                              FlatButton(
+                              child: Text('Close'),
+                              onPressed: () {
+                                  Navigator.of(context).pop();
+                              })
+                      ],
+                  );
+              });
+          }, // title: new Text("Warm-up",
+      ),
+      title: new Text("Warm-up",),
           children: <Widget>[
             ListTile(
                 title: new Text(
                     "Minutes: " + workout.warmUp["targetMin"].toString())),
-            ListTile(
-                title: new Text(
-                    "Description: " +  workout.warmUp["description"].toString())),
             ListTile(
                 title: new Text("XP: " + workout.warmUp["xp"].toString())),
 

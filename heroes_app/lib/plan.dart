@@ -4,6 +4,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
 
+
 class Plan extends StatefulWidget {
   @override
   _PlanPageState createState() => new _PlanPageState();
@@ -72,7 +73,10 @@ class _PlanPageState extends State<Plan> {
       return false;
     }
 
-    if(wo["warmUp"]["description"] == null || wo["warmUp"]["xp"] == null || wo["warmUp"]["targetMin"] == null ){
+    if(wo["warmUp"]["description"] == null ||
+       wo["warmUp"]["xp"] == null ||
+       wo["warmUp"]["targetMin"] == null ){
+
       return false;
     }
 

@@ -63,7 +63,6 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     void _onCategorySelected(bool selected, t,  xp, String name) {
 
       if (selected == true) {
-        print(true);
         setState(() {
           _selectedExercises.add(name);
           _exercises.add({"xp": xp, "name": name});
@@ -189,6 +188,26 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     Widget _showInfoWarmUp(int index){
       var workout = ScopedModel.of<Workout>(context);
       return ExpansionTile(
+          leading: IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Warm-up"),
+                      content: Text( workout.warmUp["description"].toString()),
+                      actions: <Widget>[
+                        FlatButton(
+                            child: Text('Close'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            })
+                      ],
+                    );
+                  });
+            }, // title: new Text("Warm-up",
+          ),
           key: PageStorageKey<int>(index),
           title: new CheckboxListTile(
             value: _selectedExercises
