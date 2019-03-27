@@ -42,7 +42,8 @@ enum AuthStatus {
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
-  bool _dataLoadedFromFireBase = false; //if this is null, it is still loading data from firebase.
+  bool _dataLoadedFromGetUserInfo = false;
+  bool _dataLoadedFromGetWorkout = false; //if this is null, it is still loading data from firebase.
 
   @override
   void initState() {
@@ -153,6 +154,9 @@ class _RootPageState extends State<RootPage> {
         response['xpCap'],
         response['className'],
         response['email']);
+          setState(() {
+        _dataLoadedFromGetUserInfo = true;
+      });
     })
     .catchError((error) {
       print(error);
@@ -173,7 +177,7 @@ class _RootPageState extends State<RootPage> {
       workout.setXp(response['xp']);
       workout.setExercises(response['exercises']);
       setState(() {
-        _dataLoadedFromFireBase = true;
+        _dataLoadedFromGetWorkout = true;
       });
     }).catchError((error) {
       print(error);
@@ -191,7 +195,8 @@ class _RootPageState extends State<RootPage> {
           break;
         case AuthStatus.NOT_LOGGED_IN:
           setState(() {
-            _dataLoadedFromFireBase = false;
+            _dataLoadedFromGetUserInfo = false;
+            _dataLoadedFromGetWorkout = false;
           });
           workout.setListOfWorkouts(null);
           return FrontPage(
@@ -227,7 +232,7 @@ class _RootPageState extends State<RootPage> {
           break;
         case AuthStatus.LOGGED_IN:
           if (_userId.length > 0 && _userId != null) {
-            if (_dataLoadedFromFireBase) {
+            if (_dataLoadedFromGetUserInfo && _dataLoadedFromGetWorkout) {
               return new DashboardScreen(
                   userId: _userId,
                   auth: widget.auth,

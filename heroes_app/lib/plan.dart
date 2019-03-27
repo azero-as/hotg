@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
-import 'startWorkout.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
 
@@ -22,7 +21,7 @@ class Plan extends StatefulWidget {
 
 class _PlanPageState extends State<Plan> {
 
-  String _dataLoadedFromFireBase; //if this is null, it is still loading data from firebase.
+  bool _dataLoadedFromFireBase = false; //if this is null, it is still loading data from firebase.
 
   @override
   void initState(){
@@ -30,7 +29,7 @@ class _PlanPageState extends State<Plan> {
 
     var workout = ScopedModel.of<Workout>(context);
     if (workout.listOfWorkouts != null) {
-      _dataLoadedFromFireBase = "done";
+      _dataLoadedFromFireBase = true;
     }
 
     CloudFunctions.instance
@@ -39,12 +38,12 @@ class _PlanPageState extends State<Plan> {
     ).then((response) {
         workout.setListOfWorkouts(response['workoutList']);
       setState(() {
-        _dataLoadedFromFireBase = "done";
+        _dataLoadedFromFireBase = true;
       });
     }).catchError((error) {
       print(error);
     });
-  }
+}
 
   @override
     Widget build(BuildContext context) {
@@ -227,7 +226,7 @@ class _PlanPageState extends State<Plan> {
         );
       }
     }
-    if (_dataLoadedFromFireBase == null) {
+    if (!_dataLoadedFromFireBase) {
       return Scaffold(
         appBar: new AppBar(
           centerTitle: true ,
