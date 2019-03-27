@@ -83,7 +83,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
       _XpEarned = _XpEarned + _BonusXP;
       
-      CloudFunctions.instance.call(functionName: 'addWorkout', parameters: {
+      CloudFunctions.instance.call(functionName: 'saveCompletedWorkout', parameters: {
         "bonus_xp": _BonusXP,
         "total_xp": _XpEarned,
         "workoutType": widget.workoutName,
