@@ -37,7 +37,6 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
     CloudFunctions.instance
         .call(functionName: 'getAllUserWorkouts')
         .then((response) {
-      print(response);
       if (response["workouts"].isEmpty) {
         setState(() {
           _noWorkoutCompleted = true;
