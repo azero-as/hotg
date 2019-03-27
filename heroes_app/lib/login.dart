@@ -71,10 +71,21 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _showErrorMessage() {
+    print(_errorMessage);
     if (_errorMessage.length > 0 && _errorMessage != null) {
       if (_errorMessage == "Network error (such as timeout, interrupted connection or unreachable host) has occurred." || _errorMessage == "A network error (such as timeout, interrupted connection or unreachable host) has occurred.") {
         return new Text(
           _errorMessage,
+          key: Key("LogInErrorMessage"),
+          style: TextStyle(
+              fontSize: 13.0,
+              color: Colors.red,
+              height: 1.0,
+              fontWeight: FontWeight.w300),
+        );
+      } else if (_errorMessage == "There is no user record corresponding to this identifier. The user may have been deleted."){
+        return new Text(
+          _errorMessage = "Not able to find a user with this email and password combination.",
           key: Key("LogInErrorMessage"),
           style: TextStyle(
               fontSize: 13.0,
