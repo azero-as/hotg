@@ -122,16 +122,20 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                               widget.readyToSignOut();
                             }),
 
-                        //Username
-                        Padding(
+                        //Character name
+                        Container(
                           padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                          width: imageWidth,
                           child: Text(
                             model.characterName.toString(),
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
+                            maxLines: 1,
                             //textAlign: TextAlign.left,
                           ),
                         ),
@@ -205,6 +209,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
     return LayoutBuilder(builder: (context, constraints) {
       if (workout.intensity == "" ||
           workout.workoutName == "" ||
+          workout.workoutClass == "" ||
           workout.duration == -1 ||
           workout.xp == -1 ||
           workout.exercises == []) {
@@ -290,6 +295,16 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
+                          'Class:',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF434242)),
+                        ),
+                        // add space between lines
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
                           'XP:',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -323,6 +338,13 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
+                            workoutModel.workoutClass,
+                            style: TextStyle(color: Color(0xFF434242)),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
                             workoutModel.xp.toString(),
                             style: TextStyle(color: Color(0xFF434242)),
                           ),
@@ -351,7 +373,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                       children: <Widget>[
                         // add space to make the button stay at the bottom of the box
                         SizedBox(
-                          height: 50,
+                          height: 70,
                         ),
                         RaisedButton(
                           padding: EdgeInsets.all(10.0),
