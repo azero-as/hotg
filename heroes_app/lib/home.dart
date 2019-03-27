@@ -5,8 +5,6 @@ import 'package:scoped_model/scoped_model.dart';
 import 'models/user.dart';
 import 'models/workout.dart';
 import 'authentication.dart';
-import 'startWorkout.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 
 // build the home page and call on the stateful classes
 class Home extends StatelessWidget {
