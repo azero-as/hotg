@@ -2,10 +2,12 @@ var admin = require("firebase-admin");
 
 module.exports = {
     getUserInfo: getUserInfo,
-    getAllUserWorkouts: getAllUserWorkouts
+    getAllUserWorkouts: getAllUserWorkouts,
+    getAllWorkouts: getAllWorkouts
 }
 
-async function getUserInfo(userId) {
+// Get level, xp, username, class and email from logged in user
+async function getUserInfo(userId, email) {
     var userCollection = await getUsersCollection(userId)
     var userLevel = userCollection[0]
     var userXp = userCollection[1]
@@ -21,7 +23,8 @@ async function getUserInfo(userId) {
         userLevel: userLevel,
         userXp: userXp,
         xpCap: xpCap,
-        className: className
+        className: className,
+        email: email
     }
 
 }
@@ -56,23 +59,38 @@ async function getLevelXpCap(userLevel) {
     })
 }
 
-
 // Get all workouts ordered by date (newest first)
 // Limit = 5
 async function getAllUserWorkouts(userId) {
-  workouts = []
-  return admin.firestore().collection('Users').doc(userId)
-  .collection('Workouts').orderBy('date', 'desc').limit(5)
-  .get()
-  .then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-          workouts.push(doc.data())
-      })
-      return workouts
-  })
-  .catch(function(error) {
-      console.log('Error: ',error)
-  })
-}
+    workouts = []
+    return admin.firestore().collection('Users').doc(userId)
+    .collection('Workouts').orderBy('date', 'desc').limit(5)
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            workouts.push(doc.data())
+        })
+        return workouts
+    })
+    .catch(function(error) {
+        console.log('Error: ',error)
+    })
+  }
+
+
+ async function getAllWorkouts() {
+   workouts = []
+   return admin.firestore().collection('Workouts').get()
+   .then(function(querySnapshot) {
+       querySnapshot.forEach(function(doc) {
+           workouts.push(doc.data())
+       })
+       return workouts
+   })
+   .catch(function(error) {
+       console.log('Error: ',error)
+   })
+ }
+
 
 

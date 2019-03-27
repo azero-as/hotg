@@ -3,12 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'dart:async';
 import 'summary.dart';
+import 'models/workout.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class activeWorkoutSession extends StatefulWidget {
   final List<dynamic> exercises;
   final String workoutName;
+  final VoidCallback onLoggedIn;
+  final VoidCallback onStartWorkout;
+  final VoidCallback onSummary;
 
-  activeWorkoutSession({this.exercises, this.workoutName});
+  activeWorkoutSession({this.exercises, this.workoutName, this.onLoggedIn, this.onStartWorkout, this.onSummary});
 
   @override
   _activeWorkoutSession createState() => new _activeWorkoutSession();
@@ -41,11 +46,12 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             }));
   }
 
-  @override
+/*  @override
+>>>>>>> 36a3ba87b8e597a043a2a1cc679474ded795aa0e
   void dispose() {
     _timer.cancel();
     super.dispose();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +90,83 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         "workoutType": widget.workoutName,
         "exercises": _exercises
       });
+
+      var workout = ScopedModel.of<Workout>(context);
+      workout.setFinishedWorkout(_exercises, _XpEarned, _BonusXP);
+
+    }
+
+    Widget _showInfoExercises(int index){
+      String exercise = "targetReps";
+      String name = "Reps: ";
+      if(widget.exercises[index]["targetReps"] == null){
+        exercise = "targetMin";
+        name = "Minutes: ";
+      }
+      return ExpansionTile(
+          key: PageStorageKey<int>(index),
+          leading: IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(widget.exercises[index]["name"]),
+                      content:
+                      Text(widget.exercises[index]["description"]),
+                      actions: <Widget>[
+                        FlatButton(
+                            child: Text('Close'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            })
+                      ],
+                    );
+                  });
+            },
+          ),
+          title: new CheckboxListTile(
+            value: _selectedExercises
+                .contains(widget.exercises[index]["name"]),
+            onChanged: (bool selected) {
+              _onCategorySelected(
+                  selected,
+                  widget.exercises[index],
+                  widget.exercises[index]["name"],
+                  widget.exercises[index]["xp"],
+                  widget.exercises[index]["name"]);
+            },
+            title: Text(widget.exercises[index]["name"]),
+          ),
+          children: <Widget>[
+            ListTile(
+              title: new Padding(
+                  padding: EdgeInsets.all(20),
+                  child: new Text(
+                      "Sets: " + widget.exercises[index]["targetSets"])),
+            ),
+            ListTile(
+              title: new Padding(
+                  padding: EdgeInsets.all(20),
+                  child: new Text(
+                  name + widget.exercises[index][exercise])),
+        ),
+            ListTile(
+              title: new Padding(
+                  padding: EdgeInsets.all(20),
+                  child: new Text("Rest between sets: " +
+                      widget.exercises[index]["restBetweenSets"])),
+            ),
+            ListTile(
+              title: new Padding(
+                  padding: EdgeInsets.all(20),
+                  child: new Text(
+                      "XP: " + widget.exercises[index]["xp"].toString())),
+            ),
+          ]
+        //children: root["info"]
+      );
     }
 
     //Information about the different exercises in the workout
@@ -92,70 +175,9 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: widget.exercises.length,
-        itemBuilder: (BuildContext context, int index) => ExpansionTile(
-                key: PageStorageKey<int>(index),
-                leading: IconButton(
-                  icon: Icon(Icons.info_outline),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(widget.exercises[index]["name"]),
-                            content:
-                                Text(widget.exercises[index]["description"]),
-                            actions: <Widget>[
-                              FlatButton(
-                                  child: Text('Close'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  })
-                            ],
-                          );
-                        });
-                  },
-                ),
-                title: new CheckboxListTile(
-                  value: _selectedExercises
-                      .contains(widget.exercises[index]["name"]),
-                  onChanged: (bool selected) {
-                    _onCategorySelected(
-                        selected,
-                        widget.exercises[index],
-                        widget.exercises[index]["name"],
-                        widget.exercises[index]["xp"],
-                        widget.exercises[index]["name"]);
-                  },
-                  title: Text(widget.exercises[index]["name"]),
-                ),
-                children: <Widget>[
-                  ListTile(
-                    title: new Padding(
-                        padding: EdgeInsets.all(20),
-                        child: new Text(
-                            "Sets: " + widget.exercises[index]["targetSets"])),
-                  ),
-                  ListTile(
-                    title: new Padding(
-                        padding: EdgeInsets.all(20),
-                        child: new Text(
-                            "Reps: " + widget.exercises[index]["targetReps"])),
-                  ),
-                  ListTile(
-                    title: new Padding(
-                        padding: EdgeInsets.all(20),
-                        child: new Text("Rest between sets: " +
-                            widget.exercises[index]["restBetweenSets"])),
-                  ),
-                  ListTile(
-                    title: new Padding(
-                        padding: EdgeInsets.all(20),
-                        child: new Text(
-                            "XP: " + widget.exercises[index]["xp"].toString())),
-                  ),
-                ]
-                //children: root["info"]
-                ),
+        itemBuilder: (BuildContext context, int index){
+          return _showInfoExercises(index);
+        }
       );
     }
 
@@ -191,15 +213,9 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
           ),
           onPressed: () {
             _saveWorkout();
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => Summary(
-                        exercises: _exercises,
-                        bonus: _BonusXP,
-                        total_xp: _XpEarned,
-                        workoutType: widget.workoutName)));
-          },
+
+            widget.onSummary();
+            },
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
           color: const Color(0xFF612A30),
           child: Text(
@@ -212,12 +228,14 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
     return new Scaffold(
       appBar: AppBar(
-        actions: <Widget>[
-          new Center(
-            child: new Text('',
-                style: new TextStyle(fontSize: 17.0, color: Colors.white)),
-          )
-        ],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            //TODO: Check if you came from the planpage or from the homepage. Then decide whether to use onStartWorkout or onLoggedIn.
+            widget.onStartWorkout();
+          },
+          color: Colors.white,
+        ),
       ),
       body: new Container(
           child: Column(

@@ -9,34 +9,18 @@ import 'levelUp.dart';
 import 'models/user.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-//This is code for bottom navigation menu
-
-class Dashboard extends StatelessWidget {
-  //Used for navigation
-  static String tag = 'dashboard';
-
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Flutter Bottom Navigation',
-      debugShowCheckedModeBanner: false, //Turns of the "DEBUG" banner in the simulator
-      theme: new ThemeData(
-        primaryColor: const Color(0xFF612A30),
-      ),
-      home: new DashboardScreen(title: 'Heroes of the Gym'),
-    );
-  }
-}
-
 class DashboardScreen extends StatefulWidget {
-  DashboardScreen({Key key, this.auth, this.userId, this.onSignedOut, this.title, this.signOut})
+  DashboardScreen({Key key, this.auth, this.userId, this.onSignedOut, this.readyToSignOut, this.onSignedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary})
       : super(key: key);
 
   final BaseAuth auth;
-  final VoidCallback signOut;
+  final VoidCallback readyToSignOut;
   final VoidCallback onSignedOut;
   final String userId;
-  final String title;
+  final VoidCallback onSignedIn;
+  final VoidCallback onStartWorkout;
+  final VoidCallback onActiveWorkout;
+  final VoidCallback onSummary;
 
   @override
   _DashboardScreenState createState() => new _DashboardScreenState();
@@ -95,24 +79,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
 //
  Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          new IconButton(
-              icon: Icon(Icons.settings),
-              key: Key("settings"),
-              onPressed: () {
-                widget.signOut();
-              }
-          )
-        ],
-      ),
       body: Center(
         child: ScopedModelDescendant<User>(
             builder: (context, child, model){
           return new PageView(
             children: [
-              new Home(),
-              new Plan(),
+              new Home(auth: widget.auth, onSignedOut: widget.onSignedOut, onLoggedIn: widget.onSignedIn, readyToSignOut: widget.readyToSignOut, onStartWorkout: widget.onStartWorkout, onActiveWorkout: widget.onActiveWorkout, onSummary: widget.onSummary),
+              new Plan(onLoggedIn: widget.onSignedIn, onStartWorkout: widget.onStartWorkout, onActiveWorkout: widget.onActiveWorkout, onSummary: widget.onSummary),
               new History("History screen"),
             ],
             onPageChanged: onPageChanged,
