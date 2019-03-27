@@ -241,11 +241,9 @@ exports.getWorkout2 = functions.https.onCall((data, context) => {
 
         // parameters
         const className = data.className
-        console.log('Classname: ', className)
 
         return helpers.getWorkout2(className)
         .then(data => {
-            console.log('data:',data)
             return data
         })
         .catch(error => {
@@ -307,10 +305,12 @@ exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {
         const userId = decoded.user_id;
 
         return helpers.getAllUserWorkouts(userId)
-        .then(data => {
+        .then(workouts => {
 
             return response.send({
-                data
+                data : {
+                    workouts: workouts
+                }
             })
         })
         .catch(error => {
