@@ -109,7 +109,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                             widget.readyToSignOut();
                           }),
 
-                        //Username
+                        //CharacterName
                         Padding(
                           padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                           child: Text(

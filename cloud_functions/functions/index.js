@@ -1,116 +1,17 @@
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-
-//The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
 const functions = require("firebase-functions");
-
-// The Firebase Admin SDK to access the Firebase Realtime Database.
 const admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
 
-exports.getUserXP = functions.https.onRequest((request, response) => {
-  /**
-   * The token id is sent like this in the request:
-   * 'Authorization': 'Bearer xxxxxxxxxx'
-   * so we need to find it and split it in two.
-   */
-  const tokenId = request.get("Authorization").split("Bearer ")[1];
-
-  return admin
-    .auth()
-    .verifyIdToken(tokenId)
-    .then(decoded => {
-      const userId = decoded.user_id;
-
-      return admin
-        .firestore()
-        .collection("Users")
-        .doc(userId)
-        .get()
-        .then(querySnapshot => {
-          const data = querySnapshot.data();
-
-          return response.send({
-            data: {
-              XP: data.XP
-            }
-          });
-        })
-        .catch(error => {
-          response.status(400).send(error); // 400 bad request
-        });
-    })
-    .catch(error => {
-      // 401 is unauthorized.
-      result.status(401).send(error);
-    });
-});
-
-exports.getUserLevel = functions.https.onRequest((request, response) => {
-  /**
-   * The token id is sent like this in the request:
-   * 'Authorization': 'Bearer xxxxxxxxxx'
-   * so we need to find it and split it in two.
-   */
-  const tokenId = request.get("Authorization").split("Bearer ")[1];
-
-  return admin
-    .auth()
-    .verifyIdToken(tokenId)
-    .then(decoded => {
-      const userId = decoded.user_id;
-
-      return admin
-        .firestore()
-        .collection("Users")
-        .doc(userId)
-        .get()
-        .then(querySnapshot => {
-          const data = querySnapshot.data();
-
-          return response.send({
-            data: {
-              Level: data.Level
-            }
-          });
-        })
-        .catch(error => {
-          response.status(400).send(error); // 400 bad request
-        });
-    })
-    .catch(error => {
-      // 401 is unauthorized.
-      result.status(401).send(error);
-    });
-});
-
-exports.getLevelCaps = functions.https.onRequest((req, res) => {
-  var list = [];
-  var ref = admin.firestore.collection("Levels");
-  var allLevels = ref
-    .get()
-    .then(snapshot => {
-      snapshot.forEach(doc => {
-        list.add(doc.id);
-        console.log(doc.id, "=>", doc.data());
-      });
-      return response.send({});
-    })
-    .catch(error => {
-      // 401 is unauthorized.
-      result.status(401).send(error);
-    });
-});
-
-exports.setLevel = functions.https.onRequest((req, res) => {});
-
+// Helper functions: 
 const helpers = require("./helper_functions.js");
 
-// Get characterName, gameLevel, xp, class and xpCap for current level for home page
+/* getUserInfo()
+  Get characterName, gameLevel, xp, className from Users Collection
+  Get email from Firebase Authentication
+  Get xpCap based on what gameLevel the current user is in from Levels Collection
+*/
 exports.getUserInfo = functions.https.onRequest((request, response) => {
-  const tokenId = request.get("Authorization").split("Bearer ")[1];
-
+  
   const tokenId = request.get("Authorization").split("Bearer ")[1];
 
   return admin
@@ -119,23 +20,22 @@ exports.getUserInfo = functions.https.onRequest((request, response) => {
     .then(decoded => {
       const email = decoded.email;
       const userId = decoded.user_id;
-
+      
       return helpers
-        .getUserInfo(userId, email)
-        .then(data => {
-          return response.send({
-            data
-          });
+      .getUserInfo(userId, email)
+      .then(data => {
+        return response.send({
+          data
         })
-        .catch(error => {
-          response.status(400).send(error); // 400 bad request
-        });
+      })
+      .catch(error => {
+        response.status(400).send(error) // 400 bad request
+      })
     })
     .catch(error => {
-      // 401 is unauthorized.
-      result.status(401).send(error);
-    });
-});
+      result.status(401).send(error) // 401 is unauthorized.
+    })
+})
 
 // Updates user level info: xp, level and xpCap for current level if level is updated.
 // Returns new values.
