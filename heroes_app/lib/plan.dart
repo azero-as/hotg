@@ -5,26 +5,27 @@ import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
 
 class Plan extends StatefulWidget {
+  @override
+  _PlanPageState createState() => new _PlanPageState();
 
-    @override
-    _PlanPageState createState() => new _PlanPageState();
+  Plan(
+      {this.onLoggedIn,
+      this.onStartWorkout,
+      this.onActiveWorkout,
+      this.onSummary});
 
-    Plan({this.onLoggedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary});
-
-    final VoidCallback onLoggedIn;
-    final VoidCallback onStartWorkout;
-    final VoidCallback onActiveWorkout;
-    final VoidCallback onSummary;
-
+  final VoidCallback onLoggedIn;
+  final VoidCallback onStartWorkout;
+  final VoidCallback onActiveWorkout;
+  final VoidCallback onSummary;
 }
 
-
 class _PlanPageState extends State<Plan> {
-
-  bool _dataLoadedFromFireBase = false; //if this is null, it is still loading data from firebase.
+  bool _dataLoadedFromFireBase =
+      false; //if this is null, it is still loading data from firebase.
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
     var workout = ScopedModel.of<Workout>(context);
@@ -35,33 +36,36 @@ class _PlanPageState extends State<Plan> {
     CloudFunctions.instance
         .call(
       functionName: 'getAllWorkouts',
-    ).then((response) {
-        workout.setListOfWorkouts(response['workoutList']);
+    )
+        .then((response) {
+      workout.setListOfWorkouts(response['workoutList']);
       setState(() {
         _dataLoadedFromFireBase = true;
       });
     }).catchError((error) {
       print(error);
     });
-}
+  }
 
   //Checks to see if all the necessary fields in the database are set and correct
-  bool _validateWorkout(int index){
+  bool _validateWorkout(int index) {
     var workout = ScopedModel.of<Workout>(context);
-    var intensity = -1;
-    var xp = -1;
     //if the workout does not have a list of exercises, do not display it as an option
     var wo = workout.listOfWorkouts[index];
 
-    if(wo["exercises"]  == null || wo["exercises"].length == 0){
+    if (wo["exercises"] == null || wo["exercises"].length == 0) {
       return false;
     }
 
-    if(wo["workoutName"] == null || wo["duration"] == null || wo["intensity"] == null || wo["xp"] == null){
+    if (wo["workoutName"] == null ||
+        wo["duration"] == null ||
+        wo["intensity"] == null ||
+        wo["xp"] == null) {
       return false;
     }
-    if(!(wo["duration"] is int || wo["xp"] is int)){
+    if (!(wo["duration"] is int || wo["xp"] is int)) {
       return false;
+
     }
 
     if(wo["warmUp"] == null || wo["warmUp"].length == 0){
@@ -76,27 +80,29 @@ class _PlanPageState extends State<Plan> {
       return false;
     }
 
-    else{
-      for(var exercise in wo["exercises"] ){
-        if(exercise["name"] == null || exercise["targetSets"] == null || exercise["restBetweenSets"] == null || exercise["xp"] == null){
+
+    else {
+      for (var exercise in wo["exercises"]) {
+        if (exercise["name"] == null ||
+            exercise["targetSets"] == null ||
+            exercise["restBetweenSets"] == null ||
+            exercise["xp"] == null) {
+
           return false;
         }
-        if(!(exercise["xp"] is int)){
+        if (!(exercise["xp"] is int)) {
           return false;
         }
-        if(exercise["targetReps"] == null && exercise["targetMin"] == null){
+        if (exercise["targetReps"] == null && exercise["targetMin"] == null) {
           return false;
         }
       }
-
       return true;
     }
-
   }
 
   @override
-    Widget build(BuildContext context) {
-
+  Widget build(BuildContext context) {
     Widget _buildWaitingScreen() {
       return Scaffold(
         body: Container(
@@ -107,17 +113,12 @@ class _PlanPageState extends State<Plan> {
     }
 
     Widget _workout(int index) {
-
-      if(_validateWorkout(index) == false){
+      if (_validateWorkout(index) == false) {
         return Text("");
-      }
-
-
-      else {
-
+      } else {
         return new Container(
           // add border for the workout info box
-          margin: new EdgeInsets.symmetric(horizontal: 55.0, vertical: 12.0),
+          margin: new EdgeInsets.symmetric(horizontal: 50.0, vertical: 12.0),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 0.25),
             color: Color(0xFFE7E9ED),
@@ -173,6 +174,16 @@ class _PlanPageState extends State<Plan> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
+                              'Class:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF434242)),
+                            ),
+                            // add space between lines
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
                               'XP:',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -206,7 +217,7 @@ class _PlanPageState extends State<Plan> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                model.listOfWorkouts[index]["xp"].toString() ?? '',
+                                model.listOfWorkouts[index]["class"].toString(),
                                 style: TextStyle(color: Color(0xFF434242)),
                               ),
                               // add space between lines
@@ -214,7 +225,18 @@ class _PlanPageState extends State<Plan> {
                                 height: 10,
                               ),
                               Text(
-                                model.listOfWorkouts[index]["intensity"].toString() ?? '',
+                                model.listOfWorkouts[index]["xp"].toString() ??
+                                    '',
+                                style: TextStyle(color: Color(0xFF434242)),
+                              ),
+                              // add space between lines
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                model.listOfWorkouts[index]["intensity"]
+                                        .toString() ??
+                                    '',
                                 style: TextStyle(color: Color(0xFF434242)),
                               ),
                               // add space between lines
@@ -222,7 +244,10 @@ class _PlanPageState extends State<Plan> {
                                 height: 18,
                               ),
                               Text(
-                                model.listOfWorkouts[index]["duration"].toString() + " min" ?? '',
+                                model.listOfWorkouts[index]["duration"]
+                                            .toString() +
+                                        " min" ??
+                                    '',
                                 style: TextStyle(color: Color(0xFF434242)),
                               ),
                             ]),
@@ -234,13 +259,14 @@ class _PlanPageState extends State<Plan> {
                           children: <Widget>[
                             // add space to make the button stay at the bottom of the box
                             SizedBox(
-                              height: 50,
+                              height: 70,
                             ),
                             RaisedButton(
                               padding: EdgeInsets.all(10.0),
                               onPressed: () {
                                 model.isFromHomePage = false;
-                                model.changeActiveWorkout(model.listOfWorkouts, index);
+                                model.changeActiveWorkout(
+                                    model.listOfWorkouts, index);
                                 widget.onStartWorkout();
                               },
                               elevation: 5.0,
@@ -269,10 +295,9 @@ class _PlanPageState extends State<Plan> {
 
     Widget _listOfWorkouts() {
       var workout = ScopedModel.of<Workout>(context);
-      if(workout.listOfWorkouts.isEmpty){
+      if (workout.listOfWorkouts.isEmpty) {
         return Text("");
-      }
-      else {
+      } else {
         return new ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
@@ -284,25 +309,23 @@ class _PlanPageState extends State<Plan> {
         );
       }
     }
+
     if (!_dataLoadedFromFireBase) {
       return Scaffold(
         appBar: new AppBar(
-          centerTitle: true ,
+          centerTitle: true,
           title: new Text("Workouts"),
         ),
-        body:
-        _buildWaitingScreen(),
+        body: _buildWaitingScreen(),
       );
-    }
-    else {
+    } else {
       return Scaffold(
         appBar: new AppBar(
-          centerTitle: true ,
+          centerTitle: true,
           title: new Text("Workouts"),
         ),
-        body:
-        _listOfWorkouts(),
+        body: _listOfWorkouts(),
       );
     }
-
-  }}
+  }
+}

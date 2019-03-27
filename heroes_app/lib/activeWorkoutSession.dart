@@ -13,7 +13,12 @@ class activeWorkoutSession extends StatefulWidget {
   final VoidCallback onStartWorkout;
   final VoidCallback onSummary;
 
-  activeWorkoutSession({this.exercises, this.workoutName, this.onLoggedIn, this.onStartWorkout, this.onSummary});
+  activeWorkoutSession(
+      {this.exercises,
+      this.workoutName,
+      this.onLoggedIn,
+      this.onStartWorkout,
+      this.onSummary});
 
   @override
   _activeWorkoutSession createState() => new _activeWorkoutSession();
@@ -85,7 +90,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       }
 
       _XpEarned = _XpEarned + _BonusXP;
-      
+
       CloudFunctions.instance.call(functionName: 'addWorkout', parameters: {
         "bonus_xp": _BonusXP,
         "total_xp": _XpEarned,
@@ -108,8 +113,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
               //decoration: new BoxDecoration(                  //border if we want
               //color: Colors.white,
               //border: new Border.all(color: Colors.black)),
-              child:
-              new ListView(
+              child: new ListView(
                 shrinkWrap: true,
                 children: <Widget>[
                   new Container(
@@ -141,27 +145,28 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                             ),
                           ),
                         ],
-                      )
-                  ),
+                      )),
                   new Container(
-                      padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
-                      color: Colors.white,
-                      child: Column (
-                          children: <Widget>[
-                            RichText(
-                              text: TextSpan(
-                                text: 'Did you remember to check off the exercises you have done?',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                ),
-                              ),
+                    padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+                    color: Colors.white,
+                    child: Column(
+                      children: <Widget>[
+                        RichText(
+                          text: TextSpan(
+                            text:
+                                'Did you remember to check off the exercises you have done?',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
                             ),
-                            SizedBox(height: 10),
-                          ],
+                          ),
                         ),
+                        SizedBox(height: 10),
+                      ],
+                    ),
                     //SizedBox(height: 100.0),
-                  )],
+                  )
+                ],
               )),
         ],
       );
@@ -170,12 +175,16 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     void _validateAndSaveWorkout() {
       if (_selectedExercises.isEmpty) {
         //Display pop-up
-        showDialog(context: context,builder: (context) => _onNotCheckedOffButFinished(context)); // Call the Dialog.
+        showDialog(
+            context: context,
+            builder: (context) =>
+                _onNotCheckedOffButFinished(context)); // Call the Dialog.
       } else {
         _saveWorkout();
         widget.onSummary(); // Go to summary
       }
     }
+
 
     Widget _showInfoWarmUp(int index){
       var workout = ScopedModel.of<Workout>(context);
@@ -209,23 +218,42 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                 title: new Padding(
                     padding: EdgeInsets.all(20),
                     child: new Text("XP: " + workout.warmUp["xp"].toString()))),
-
             //children: root["info"]
           ]);
     }
 
-    Widget _showInfoExercises(int index){
+
+    Widget _showInfoExercises(int index) {
       String exercise = "targetReps";
       String name = "Reps: ";
-      if(widget.exercises[index]["targetReps"] == null){
+      if (widget.exercises[index]["targetReps"] == null) {
         exercise = "targetMin";
         name = "Minutes: ";
       }
       return ExpansionTile(
           key: PageStorageKey<int>(index),
+          leading: IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(widget.exercises[index]["name"]),
+                      content: Text(widget.exercises[index]["description"]),
+                      actions: <Widget>[
+                        FlatButton(
+                            child: Text('Close'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            })
+                      ],
+                    );
+                  });
+            },
+          ),
           title: new CheckboxListTile(
-            value: _selectedExercises
-                .contains(widget.exercises[index]["name"]),
+            value: _selectedExercises.contains(widget.exercises[index]["name"]),
             onChanged: (bool selected) {
               _onCategorySelected(
                   selected,
@@ -239,15 +267,15 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             ListTile(
               title: new Padding(
                   padding: EdgeInsets.all(20),
-                  child: new Text(
-                      "Sets: " + widget.exercises[index]["targetSets"].toString())),
+                  child: new Text("Sets: " +
+                      widget.exercises[index]["targetSets"].toString())),
             ),
             ListTile(
               title: new Padding(
                   padding: EdgeInsets.all(20),
                   child: new Text(
-                  name + widget.exercises[index][exercise].toString())),
-        ),
+                      name + widget.exercises[index][exercise].toString())),
+            ),
             ListTile(
               title: new Padding(
                   padding: EdgeInsets.all(20),
@@ -261,8 +289,8 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                       "XP: " + widget.exercises[index]["xp"].toString())),
             ),
           ]
-        //children: root["info"]
-      );
+          //children: root["info"]
+          );
     }
 
     //Information about the different exercises in the workout
@@ -283,7 +311,6 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
               index = index -1;
               return _showInfoExercises(index);
             }
-
           }
       );
     }
@@ -291,26 +318,26 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
     Widget _returnFinishWorkoutButton() {
       return new Padding(
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40.0),
-        child: ScopedModelDescendant<User>(builder: (context, child, model) {
-        return RaisedButton(
-          elevation: 5.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          onPressed: () {
-            _validateAndSaveWorkout();
-            model.incrementXP(_XpEarned); // Increase use xp total in database
-            },
-          padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-          color: const Color(0xFF612A30),
-          child: Text(
-            'Finish workout',
-            style: TextStyle(color: Colors.white),
-          ),
-        );
-        })
-      );
+          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40.0),
+          child: ScopedModelDescendant<User>(builder: (context, child, model) {
+            return RaisedButton(
+              elevation: 5.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              onPressed: () {
+                _validateAndSaveWorkout();
+                model.incrementXP(
+                    _XpEarned); // Increase use xp total in database
+              },
+              padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
+              color: const Color(0xFF612A30),
+              child: Text(
+                'Finish workout',
+                style: TextStyle(color: Colors.white),
+              ),
+            );
+          }));
     }
 
     var workout = ScopedModel.of<Workout>(context);

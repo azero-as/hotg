@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'activeWorkoutSession.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
-import 'plan.dart';
 
 class StartWorkout extends StatefulWidget {
   final List exercises;
@@ -12,12 +10,24 @@ class StartWorkout extends StatefulWidget {
   final int xp;
   final Map warmUp;
   final String workoutName;
+  final String workoutClass;
   final VoidCallback onLoggedIn;
   final VoidCallback onStartWorkout;
   final VoidCallback onActiveWorkout;
   final VoidCallback onSummary;
 
-  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName, this.onLoggedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary, this.warmUp});
+  StartWorkout(
+      {this.exercises,
+      this.duration,
+      this.intensity,
+      this.xp,
+      this.workoutName,
+      this.onLoggedIn,
+      this.onStartWorkout,
+      this.onActiveWorkout,
+      this.onSummary,
+      this.workoutClass,
+      this.warmUp});
 
   @override
   _StartWorkoutPage createState() => new _StartWorkoutPage();
@@ -27,8 +37,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
   @override
   Widget build(BuildContext context) {
     Widget _returnStartWorkoutButton() {
-
-      if(widget.exercises == null){
+      if (widget.exercises == null) {
         return Text("");
       }
       return new Padding(
@@ -51,26 +60,34 @@ class _StartWorkoutPage extends State<StartWorkout> {
       );
     }
 
-    //General informaiton about the workout
+    //General information about the workout
     Widget _showInfo() {
       return Container(
           margin: EdgeInsets.fromLTRB(100, 0, 100, 40),
           child: RichText(
-              text: new TextSpan(
-                  style: new TextStyle(
+              text: TextSpan(
+                  style: TextStyle(
                     fontSize: 14.0,
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
-                new TextSpan(text: widget.duration.toString() + " min"),
-                new TextSpan(
+
+                TextSpan(
+                    text: ' Class: ',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: widget.workoutClass.toString() + ' \n\n'),
+                TextSpan(
                     text: ' XP: ',
-                    style: new TextStyle(fontWeight: FontWeight.bold)),
-                new TextSpan(text: widget.xp.toString() + ' \n\n'),
-                new TextSpan(
-                    text: 'Intensity: ',
-                    style: new TextStyle(fontWeight: FontWeight.bold)),
-                new TextSpan(text: widget.intensity.toString()),
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: widget.xp.toString() + ' \n\n'),
+                TextSpan(
+                    text: ' Intensity: ',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: widget.intensity.toString() + ' \n\n'),
+                TextSpan(
+                    text: ' Time: ',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: widget.duration.toString() + " min"),
               ])));
     }
 
@@ -94,22 +111,42 @@ class _StartWorkoutPage extends State<StartWorkout> {
     }
 
     //Show information about a workout using minutes
-    Widget _showInfoExercises(int index){
+    Widget _showInfoExercises(int index) {
       String exercise = "targetReps";
       String name = "Reps: ";
-      if(widget.exercises[index]["targetReps"] == null){
+      if (widget.exercises[index]["targetReps"] == null) {
         exercise = "targetMin";
         name = "Minutes: ";
       }
 
       return ExpansionTile(
+          leading: IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(widget.exercises[index]["name"]),
+                      content: Text(widget.exercises[index]["description"]),
+                      actions: <Widget>[
+                        FlatButton(
+                            child: Text('Close'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            })
+                      ],
+                    );
+                  });
+            },
+          ),
           title: new Text(
             (widget.exercises[index]["name"]),
           ),
           children: <Widget>[
             ListTile(
-                title: new Text(
-                    "Sets: " + widget.exercises[index]["targetSets"].toString())),
+                title: new Text("Sets: " +
+                    widget.exercises[index]["targetSets"].toString())),
             ListTile(
                 title: new Text(
                     name + widget.exercises[index][exercise].toString())),
@@ -120,10 +157,9 @@ class _StartWorkoutPage extends State<StartWorkout> {
                 title: new Text(
                     "XP: " + widget.exercises[index]["xp"].toString())),
           ]
-        //children: root["info"]
-      );
+          //children: root["info"]
+          );
     }
-
 
     //Display list of all the exercises in the workout
     Widget _showInformationWorkout() {
@@ -143,6 +179,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
 
         }
       );
+
     }
 
     Widget _returnBody() {
@@ -171,11 +208,10 @@ class _StartWorkoutPage extends State<StartWorkout> {
           onPressed: () {
             if (workout.isFromHomePage == true) {
               widget.onLoggedIn();
-            }
-            else {
+            } else {
               // TODO: Make it go to pla page instead of widget.onLoggedIn();
               widget.onLoggedIn();
-          }
+            }
           },
           color: Colors.white,
         ),
