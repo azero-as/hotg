@@ -15,6 +15,8 @@ import 'startWorkout.dart';
 import 'activeWorkoutSession.dart';
 import 'summary.dart';
 
+import './logic/recommendedWorkoutLogic.dart';
+
 class RootPage extends StatefulWidget {
   RootPage({this.auth, this.user});
 
@@ -162,7 +164,8 @@ class _RootPageState extends State<RootPage> {
         _dataLoadedFromGetUserInfo = true;
       });
     }).then((response) {
-      _setWorkoutInfo(_className);
+      String _convertedClass = convertClassName(_className);
+      _setWorkoutInfo(_convertedClass);
     }).catchError((error) {
       print(error);
     });
