@@ -35,7 +35,7 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
   void initState() {
     super.initState();
     CloudFunctions.instance
-        .call(functionName: 'getCompletedUserWorkouts')
+        .call(functionName: 'getAllUserWorkouts')
         .then((response) {
       print(response);
       if (response["workouts"].isEmpty) {
@@ -105,16 +105,22 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
         height: 5,
       ),
       Container(
-        constraints: BoxConstraints(maxHeight: 300, maxWidth: 300),
         child: Text("${userModel.characterName.toString()}."),
       )
     ]);
   }
 
   Widget _motivationalQuote() {
-    return Container(
-        constraints: BoxConstraints(maxHeight: 300, maxWidth: 300),
-        child: Text("Go to Home or Plan to begin your adventure!"));
+    return Column(children: [
+      Container(
+          child: Text(
+        "Go to Home or Workouts to begin",
+      )),
+      SizedBox(
+        height: 5,
+      ),
+      Container(child: Text("your adventure!"))
+    ]);
   }
 
   // Builds a single workout card.
