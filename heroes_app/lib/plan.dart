@@ -63,6 +63,17 @@ class _PlanPageState extends State<Plan> {
     if(!(wo["duration"] is int || wo["xp"] is int)){
       return false;
     }
+    if(wo["warmUp"] == null || wo["warmUp"].length == 0){
+      return false;
+    }
+
+    if(wo["warmUp"]["description"] == null || wo["warmUp"]["xp"] == null || wo["warmUp"]["duration"] == null ){
+      return false;
+    }
+
+    if(!(wo["warmUp"]["xp"] is int)){
+      return false;
+    }
     else{
       for(var exercise in wo["exercises"] ){
         if(exercise["name"] == null || exercise["targetSets"] == null || exercise["restBetweenSets"] == null || exercise["xp"] == null){
@@ -75,7 +86,6 @@ class _PlanPageState extends State<Plan> {
           return false;
         }
       }
-
       return true;
     }
 
