@@ -2,6 +2,8 @@ var admin = require("firebase-admin");
 
 module.exports = {
     getUserInfo: getUserInfo,
+    updateUserLevelInfo: updateUserLevelInfo,
+    updateUserXpWorkout: updateUserXpWorkout,
     getAllUserWorkouts: getAllUserWorkouts,
     getAllWorkouts: getAllWorkouts
 }
@@ -27,6 +29,41 @@ async function getUserInfo(userId, email) {
         email: email
     }
 
+}
+
+
+// Returns updated level info: xp, level and xp cap
+async function updateUserLevelInfo(userId, userXp, xpCap, userLevel) {
+
+    var newUserLevel = await increaseLevel(userLevel, userId)
+    var newUserXp = await resetUserXp(xpCap, userXp, userId)
+
+    let newUserLevelString = newUserLevel.toString()
+    var newXpCap = await getLevelXpCap(newUserLevelString)
+
+    // Update values
+    var userXp = await newUserXp
+    var userLevel = await newUserLevel
+    var xpCap = await newXpCap
+
+
+    return {
+        userLevel: userLevel,
+        userXp: userXp,
+        xpCap: xpCap,
+    }
+
+}
+// Update user xp with xp earned from finishing a workout
+
+async function updateUserXpWorkout(userId, xpEarned) {
+    var userCollection = await getUsersCollection(userId)
+    var currentXp = userCollection[1]
+    var updatedXp = await updateUserXP(currentXp, xpEarned, userId)
+
+    return {
+        updatedXp: updatedXp // New XP
+    }
 }
       
 // Get current user level, xp, charactername and class from "Users" collection
@@ -59,24 +96,68 @@ async function getLevelXpCap(userLevel) {
     })
 }
 
+// Increase level by 1
+async function increaseLevel(userLevel, userId) {
+    const newUserLevel = userLevel+1
+    return admin.firestore().collection("Users").doc(userId).update({
+        gameLevel: newUserLevel,
+       
+    })
+    .then(function() {
+        return newUserLevel
+    })
+    .catch(function(error) {
+        console.error("Error writing document: ", error)
+    })
+
+}
+// Returns new user XP if level is updated
+async function resetUserXp(xpCap, userXp, userId) {
+    const newUserXp = userXp - xpCap
+
+    return admin.firestore().collection("Users").doc(userId).update({
+        xp: newUserXp,
+    })
+    .then(function() {
+        return newUserXp
+    })
+    .catch(function(error) {
+        console.error("Error writing document: ", error)
+    })
+    
+}
+
+async function updateUserXP(currentXP, xpEarned, userId) {
+    const updatedXp = currentXP + xpEarned
+    return admin.firestore().collection("Users").doc(userId).update({
+        xp: updatedXp,
+    })
+    .then(function() {
+        return updatedXp
+    })
+    .catch(function(error) {
+        console.error("Error writing document: ", error)
+    })
+}
 
 // Get all workouts ordered by date (newest first)
 // Limit = 5
 async function getAllUserWorkouts(userId) {
-   workouts = []
-   return admin.firestore().collection('Users').doc(userId)
-   .collection('Workouts').orderBy('date', 'desc').limit(5)
-   .get()
-   .then(function(querySnapshot) {
-       querySnapshot.forEach(function(doc) {
-           workouts.push(doc.data())
-       })
-       return workouts
-   })
-   .catch(function(error) {
-       console.log('Error: ',error)
-   })
- }
+    workouts = []
+    return admin.firestore().collection('Users').doc(userId)
+    .collection('Workouts').orderBy('date', 'desc').limit(5)
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            workouts.push(doc.data())
+        })
+        return workouts
+    })
+    .catch(function(error) {
+        console.log('Error: ',error)
+    })
+  }
+
 
  async function getAllWorkouts() {
    workouts = []
@@ -91,5 +172,6 @@ async function getAllUserWorkouts(userId) {
        console.log('Error: ',error)
    })
  }
+
 
 
