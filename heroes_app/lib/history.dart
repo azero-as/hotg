@@ -179,23 +179,25 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
       if (exercise["repetitions"] == null) {
         return Expanded(
             flex: 1,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(exercise["sets"].toString() +
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Padding(
+                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  child: Text(exercise["sets"].toString() +
                       "x" +
-                      exercise["duration"].toString())
-                ]));
+                      exercise["duration"].toString()))
+            ]));
       } else {
         return Expanded(
             flex: 1,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(exercise["sets"].toString() +
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Padding(
+                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  child: Text(exercise["sets"].toString() +
                       "x" +
-                      exercise["repetitions"].toString())
-                ]));
+                      exercise["repetitions"].toString()))
+            ]));
       }
     }
 
@@ -206,22 +208,24 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
             children: <Widget>[
               Expanded(
                   flex: 2,
-                  child: Padding(
-                      padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                                child: Text(exercise["name"]))
-                          ]))),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(30, 5, 0, 5),
+                            child: Text(
+                              exercise["name"],
+                            ))
+                      ])),
               _showRepsOrDuration(exercise),
               Expanded(
                   flex: 1,
                   child: Column(children: [
-                    Text(
-                      exercise["xp"].toString(),
-                    )
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        child: Text(
+                          exercise["xp"].toString(),
+                        ))
                   ]))
             ],
           ))
@@ -241,7 +245,7 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
 
     // Adds a divider between the exercises and bonus/totalXP.
     _cardContent.add(Padding(
-        padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+        padding: EdgeInsets.fromLTRB(30, 5, 30, 0),
         child: Divider(height: 10.0, color: Colors.black38)));
 
     // Adds the bonusXP widget if there is a bonus.
