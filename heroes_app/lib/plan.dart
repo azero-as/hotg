@@ -32,9 +32,11 @@ class _PlanPageState extends State<Plan> {
         .call(
       functionName: 'getAllWorkouts',
     ).then((response) {
+      if (this.mounted) {
       setState(() {
         workout.setListOfWorkouts(response['workoutList']);
       });
+      }
     }).catchError((error) {
       print(error);
     });
