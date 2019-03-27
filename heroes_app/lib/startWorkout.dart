@@ -133,6 +133,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
     var workout = ScopedModel.of<Workout>(context);
     return Scaffold(
       appBar: AppBar(
+        title: new Text(workout.workoutName),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
