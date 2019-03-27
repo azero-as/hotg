@@ -44,8 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void navigationTapped(int page) {
     // Animating to the page.
     // You can use whatever duration and curve you like
-    _pageController.animateToPage(page,
-        duration: const Duration(milliseconds: 10), curve: Curves.ease);
+    _pageController.jumpToPage(page);
   }
 
   void onPageChanged(int page) {
@@ -88,6 +87,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
             onPageChanged: onPageChanged,
             controller: _pageController,
+            physics:new NeverScrollableScrollPhysics()
           );
         })
       ),
