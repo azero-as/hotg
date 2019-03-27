@@ -2,18 +2,22 @@ import 'package:flutter/material.dart';
 import 'authentication.dart';
 import 'rootPage.dart';
 import 'login.dart';
-import 'dashboard.dart';
-
+import 'package:flutter/services.dart';
 import 'frontpage.dart';
-
 import 'signup.dart';
 import 'signuplevel.dart';
-
 import 'package:scoped_model/scoped_model.dart';
 import 'models/user.dart';
 import 'models/workout.dart';
 
-void main() => runApp(new Heroes());
+void main() async {
+  // Lock screen in portrait mode
+   await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
+  runApp(new Heroes());
+}
 
 class Heroes extends StatelessWidget {
 
