@@ -26,6 +26,9 @@ class _StartWorkoutPage extends State<StartWorkout> {
   @override
   Widget build(BuildContext context) {
     Widget _returnStartWorkoutButton() {
+      if(widget.exercises == null){
+        return Text("");
+      }
       return new Padding(
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0.0),
         child: RaisedButton(
@@ -85,13 +88,13 @@ class _StartWorkoutPage extends State<StartWorkout> {
           children: <Widget>[
             ListTile(
                 title: new Text(
-                    "Sets: " + widget.exercises[index]["targetSets"])),
+                    "Sets: " + widget.exercises[index]["targetSets"].toString())),
             ListTile(
                 title: new Text(
-                    name + widget.exercises[index][exercise])),
+                    name + widget.exercises[index][exercise].toString())),
             ListTile(
                 title: new Text("Rest between sets: " +
-                    widget.exercises[index]["restBetweenSets"])),
+                    widget.exercises[index]["restBetweenSets"].toString())),
             ListTile(
                 title: new Text(
                     "XP: " + widget.exercises[index]["xp"].toString())),
@@ -103,10 +106,13 @@ class _StartWorkoutPage extends State<StartWorkout> {
 
     //Display list of all the exercises in the workout
     Widget _showInformationWorkout() {
+      if(widget.exercises == null){
+        return Text("no exercises");
+      }
       return new ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        itemCount: widget.exercises.length,
+        itemCount: widget.exercises.length ?? 0,
         itemBuilder: (BuildContext context, int index){
             return _showInfoExercises(index);
         }
