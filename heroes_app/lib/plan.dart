@@ -243,7 +243,7 @@ class _PlanPageState extends State<Plan> {
                           children: <Widget>[
                             // add space to make the button stay at the bottom of the box
                             SizedBox(
-                              height: 60,
+                              height: 70,
                             ),
                             RaisedButton(
                               padding: EdgeInsets.all(10.0),
