@@ -11,12 +11,23 @@ class StartWorkout extends StatefulWidget {
   final String intensity;
   final int xp;
   final String workoutName;
+  final String workoutClass;
   final VoidCallback onLoggedIn;
   final VoidCallback onStartWorkout;
   final VoidCallback onActiveWorkout;
   final VoidCallback onSummary;
 
-  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName, this.onLoggedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary});
+  StartWorkout(
+      {this.exercises,
+      this.duration,
+      this.intensity,
+      this.xp,
+      this.workoutName,
+      this.onLoggedIn,
+      this.onStartWorkout,
+      this.onActiveWorkout,
+      this.onSummary,
+      this.workoutClass});
 
   @override
   _StartWorkoutPage createState() => new _StartWorkoutPage();
@@ -46,35 +57,41 @@ class _StartWorkoutPage extends State<StartWorkout> {
       );
     }
 
-    //General informaiton about the workout
+    //General information about the workout
     Widget _showInfo() {
       return Container(
           margin: EdgeInsets.fromLTRB(100, 0, 100, 40),
           child: RichText(
-              text: new TextSpan(
-                  style: new TextStyle(
+              text: TextSpan(
+                  style:  TextStyle(
                     fontSize: 14.0,
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
-
-                new TextSpan(text: widget.duration.toString() + " min"),
-                new TextSpan(
-                    text: ' XP: ',
-                    style: new TextStyle(fontWeight: FontWeight.bold)),
-                new TextSpan(text: widget.xp.toString() + ' \n\n'),
-                new TextSpan(
-                    text: 'Intensity: ',
-                    style: new TextStyle(fontWeight: FontWeight.bold)),
-                new TextSpan(text: widget.intensity.toString()),
+                    TextSpan(
+                      text: ' Class: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: widget.workoutClass.toString() + ' \n\n'),
+                    TextSpan(
+                      text: ' XP: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: widget.xp.toString() + ' \n\n'),
+                    TextSpan(
+                      text: 'Intensity: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: widget.intensity.toString() + ' \n\n'),
+                    TextSpan(
+                      text: ' Time: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: widget.duration.toString() + " min"),
               ])));
     }
 
     //Show information about a workout using minutes
-    Widget _showInfoExercises(int index){
+    Widget _showInfoExercises(int index) {
       String exercise = "targetReps";
       String name = "Reps: ";
-      if(widget.exercises[index]["targetReps"] == null){
+      if (widget.exercises[index]["targetReps"] == null) {
         exercise = "targetMin";
         name = "Minutes: ";
       }
@@ -87,8 +104,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: Text(widget.exercises[index]["name"]),
-                      content:
-                      Text(widget.exercises[index]["description"]),
+                      content: Text(widget.exercises[index]["description"]),
                       actions: <Widget>[
                         FlatButton(
                             child: Text('Close'),
@@ -105,11 +121,9 @@ class _StartWorkoutPage extends State<StartWorkout> {
           ),
           children: <Widget>[
             ListTile(
-                title: new Text(
-                    "Sets: " + widget.exercises[index]["targetSets"])),
-            ListTile(
-                title: new Text(
-                    name + widget.exercises[index][exercise])),
+                title:
+                    new Text("Sets: " + widget.exercises[index]["targetSets"])),
+            ListTile(title: new Text(name + widget.exercises[index][exercise])),
             ListTile(
                 title: new Text("Rest between sets: " +
                     widget.exercises[index]["restBetweenSets"])),
@@ -117,21 +131,19 @@ class _StartWorkoutPage extends State<StartWorkout> {
                 title: new Text(
                     "XP: " + widget.exercises[index]["xp"].toString())),
           ]
-        //children: root["info"]
-      );
+          //children: root["info"]
+          );
     }
-
 
     //Display list of all the exercises in the workout
     Widget _showInformationWorkout() {
       return new ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: widget.exercises.length,
-        itemBuilder: (BuildContext context, int index){
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: widget.exercises.length,
+          itemBuilder: (BuildContext context, int index) {
             return _showInfoExercises(index);
-        }
-      );
+          });
     }
 
     Widget _returnBody() {
@@ -159,11 +171,10 @@ class _StartWorkoutPage extends State<StartWorkout> {
           onPressed: () {
             if (workout.isFromHomePage == true) {
               widget.onLoggedIn();
-            }
-            else {
+            } else {
               // TODO: Make it go to pla page instead of widget.onLoggedIn();
               widget.onLoggedIn();
-          }
+            }
           },
           color: Colors.white,
         ),
