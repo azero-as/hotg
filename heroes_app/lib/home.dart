@@ -33,7 +33,7 @@ class Home extends StatelessWidget {
     return new Container(
         // general background color for the page
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).primaryColor,
         ),
         child: Column(
           children: <Widget>[
@@ -81,7 +81,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
           child: Container(
               height: barHeight,
               width: barWidth,
-              color: Color(0xFF212838),
+              color: Theme.of(context).accentColor,
               padding: EdgeInsets.fromLTRB(20, 30, 20, 15),
               child:
                   ScopedModelDescendant<User>(builder: (context, child, model) {
@@ -157,7 +157,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                             width: progressBar,
                             lineHeight: 15,
                             backgroundColor: Colors.white,
-                            progressColor: Color(0xFF4D3262),
+                            progressColor: Theme.of(context).secondaryHeaderColor,
                             percent: xpPercent,
                             //bar shape
                             linearStrokeCap: LinearStrokeCap.roundAll,
@@ -226,7 +226,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                   child: Container(
                     child: Text('Next planned workout:\n',
                         style: TextStyle(
-                          color: Color(0xFF525050),
+                          color: Colors.white,
                         )),
                   ),
                 ),
@@ -257,7 +257,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
               // Colour for the entire row
               decoration: BoxDecoration(
                 border: Border.all(color: Color(0xFF212838), width: 0.15),
-                color: Color(0xFF212838),
+                color: Theme.of(context).accentColor,
               ),
               child: Row(
                 children: <Widget>[
@@ -382,7 +382,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                             widget.onStartWorkout();
                           },
                           elevation: 5.0,
-                          color: Color(0xFF612A30),
+                          color: Theme.of(context).secondaryHeaderColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.67),
                           ),

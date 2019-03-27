@@ -109,6 +109,7 @@ class _PlanPageState extends State<Plan> {
   Widget build(BuildContext context) {
     Widget _buildWaitingScreen() {
       return Scaffold(
+
         body: Container(
           alignment: Alignment.center,
           child: CircularProgressIndicator(),
@@ -140,7 +141,7 @@ class _PlanPageState extends State<Plan> {
                   // Colour for the entire row
                   decoration: BoxDecoration(
                     border: Border.all(color: Color(0xFF212838), width: 0.15),
-                    color: Color(0xFF212838),
+                    color: Theme.of(context).accentColor,
                   ),
                   child: Row(
                     children: <Widget>[
@@ -316,18 +317,22 @@ class _PlanPageState extends State<Plan> {
 
     if (!_dataLoadedFromFireBase) {
       return Scaffold(
+
         appBar: new AppBar(
           centerTitle: true,
           title: new Text("Workouts"),
         ),
+        backgroundColor: Theme.of(context).primaryColor,
         body: _buildWaitingScreen(),
       );
     } else {
       return Scaffold(
+
         appBar: new AppBar(
           centerTitle: true,
           title: new Text("Workouts"),
         ),
+        backgroundColor: Theme.of(context).primaryColor,
         body: _listOfWorkouts(),
       );
     }
