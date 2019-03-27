@@ -4,39 +4,21 @@ import 'authentication.dart';
 import 'home.dart';
 import 'plan.dart';
 import 'history.dart';
-import 'settings.dart';
-import 'levelUp.dart';
 import 'models/user.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-//This is code for bottom navigation menu
-
-class Dashboard extends StatelessWidget {
-  //Used for navigation
-  static String tag = 'dashboard';
-
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Flutter Bottom Navigation',
-      debugShowCheckedModeBanner: false, //Turns of the "DEBUG" banner in the simulator
-      theme: new ThemeData(
-        primaryColor: const Color(0xFF612A30),
-      ),
-      home: new DashboardScreen(title: 'Heroes of the Gym'),
-    );
-  }
-}
-
 class DashboardScreen extends StatefulWidget {
-  DashboardScreen({Key key, this.auth, this.userId, this.onSignedOut, this.title, this.signOut})
+  DashboardScreen({Key key, this.auth, this.userId, this.onSignedOut, this.readyToSignOut, this.onSignedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary})
       : super(key: key);
 
   final BaseAuth auth;
-  final VoidCallback signOut;
+  final VoidCallback readyToSignOut;
   final VoidCallback onSignedOut;
   final String userId;
-  final String title;
+  final VoidCallback onSignedIn;
+  final VoidCallback onStartWorkout;
+  final VoidCallback onActiveWorkout;
+  final VoidCallback onSummary;
 
   @override
   _DashboardScreenState createState() => new _DashboardScreenState();
@@ -62,8 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void navigationTapped(int page) {
     // Animating to the page.
     // You can use whatever duration and curve you like
-    _pageController.animateToPage(page,
-        duration: const Duration(milliseconds: 10), curve: Curves.ease);
+    _pageController.jumpToPage(page);
   }
 
   void onPageChanged(int page) {
@@ -95,28 +76,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
 //
  Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          new IconButton(
-              icon: Icon(Icons.settings),
-              key: Key("settings"),
-              onPressed: () {
-                widget.signOut();
-              }
-          )
-        ],
-      ),
       body: Center(
         child: ScopedModelDescendant<User>(
             builder: (context, child, model){
           return new PageView(
             children: [
-              new Home(),
-              new Plan(),
+              new Home(auth: widget.auth, onSignedOut: widget.onSignedOut, onLoggedIn: widget.onSignedIn, readyToSignOut: widget.readyToSignOut, onStartWorkout: widget.onStartWorkout, onActiveWorkout: widget.onActiveWorkout, onSummary: widget.onSummary),
+              new Plan(onLoggedIn: widget.onSignedIn, onStartWorkout: widget.onStartWorkout, onActiveWorkout: widget.onActiveWorkout, onSummary: widget.onSummary),
               new History("History screen"),
             ],
             onPageChanged: onPageChanged,
             controller: _pageController,
+            physics:new NeverScrollableScrollPhysics()
           );
         })
       ),
@@ -140,8 +111,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 title: new Text("HOME",
                   style: new TextStyle(),)),
             new BottomNavigationBarItem(
-                icon: new Icon(Icons.calendar_today,),
-                title: new Text("PLAN",
+                icon: new Icon(Icons.fitness_center,),
+                title: new Text("WORKOUTS",
                   style: new TextStyle(),)),
             new BottomNavigationBarItem(icon: new Icon(Icons.history,),
                 title: new Text("HISTORY",
