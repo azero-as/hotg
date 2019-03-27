@@ -30,9 +30,8 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
   int _fitnessLevel = 1;
   int _rpgClassValue = 1;
   var _charNameFormKey = GlobalKey<FormState>();
-  var _classFormKey = GlobalKey<FormState>();
-  var _fitnessLevelFormKey = GlobalKey<FormState>();
 
+  // Descriptions for choosing a class
   String _chooseClassDescription =
       "Find your band of brothers and sistes by choosing a class for your character. Your choice will determine the type of workouts that are recommended for you.";
   String _strengthDescription =
@@ -40,14 +39,30 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
   String _dexterityDescription =
       "If instead you want to receive a mix of strength and stamina workouts one of these might be a better choice.";
 
-  // Adding start states for level and xp
+  // Adding start states for level, xp and rpgClass
   int _gameLevel = 1;
   int _xp = 0;
-  String rpgClass = '';
-  String charName = '';
+  String rpgClass = 'Barbarian';
 
+  bool _charNameIsValid = false;
   final charactername = TextEditingController();
   CrudMethods crudObj = new CrudMethods();
+
+  void _validateAndSave() {
+    if (_charNameFormKey.currentState.validate()) {
+      _charNameFormKey.currentState.save();
+      crudObj.addFitnessLevel({
+        'fitnessLevel': _fitnessLevel,
+        'characterName': charactername.text,
+        'gameLevel': _gameLevel,
+        'xp': _xp,
+        'class': rpgClass,
+      }, widget.userId).catchError((e) {
+        print(e);
+      });
+      widget.onSignedIn();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +71,8 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         maxLength: 27,
         keyboardType: TextInputType.text,
         autofocus: false,
-        validator: (value) => value.isEmpty ? 'Every hero needs a name' : null,
+        validator: (value) =>
+            value.length == 0 ? 'Every hero needs a name' : null,
         controller: charactername,
         decoration: InputDecoration(
           errorStyle: TextStyle(fontSize: 14),
@@ -198,18 +214,8 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
-        onPressed: () {
-          crudObj.addFitnessLevel({
-            'fitnessLevel': _fitnessLevel,
-            'characterName': charactername.text,
-            'gameLevel': _gameLevel,
-            'xp': _xp,
-            'class': rpgClass,
-          }, widget.userId).catchError((e) {
-            print(e);
-          });
-          widget.onSignedIn();
-        },
+        // disables button if character name is not valid
+        onPressed: !_charNameIsValid ? null : _validateAndSave,
         padding: EdgeInsets.all(12),
         color: const Color(0xFF612A30),
         child: Text(
@@ -255,8 +261,12 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                         ],
                       ),
                       onChanged: () {
+                        setState(() {});
                         if (_charNameFormKey.currentState.validate()) {
+                          _charNameIsValid = true;
                           _charNameFormKey.currentState.save();
+                        } else {
+                          _charNameIsValid = false;
                         }
                       },
                     )
@@ -264,11 +274,9 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                 ),
               )),
               Center(
-                  child: Container(
-                margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
-                padding: EdgeInsets.only(left: 24.0, right: 24.0),
-                child: Form(
-                  key: _classFormKey,
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
+                  padding: EdgeInsets.only(left: 24.0, right: 24.0),
                   child: SingleChildScrollView(
                       child: Column(
                     children: <Widget>[
@@ -286,17 +294,12 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                       ranger
                     ],
                   )),
-                  onChanged: () {
-                    _classFormKey.currentState.save();
-                  },
                 ),
-              )),
+              ),
               Container(
                   margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
                   padding: EdgeInsets.only(left: 24.0, right: 24.0),
                   child: Center(
-                      child: Form(
-                    key: _fitnessLevelFormKey,
                     child: Column(
                       children: <Widget>[
                         _space(20),
@@ -308,13 +311,11 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                         intermediate,
                         advanced,
                         _space(20.0),
+                        _errorMessage(),
                         letsGoButton,
                       ],
                     ),
-                    onChanged: () {
-                      _fitnessLevelFormKey.currentState.save();
-                    },
-                  )))
+                  ))
             ],
           ),
         ));
@@ -358,6 +359,16 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         textAlign: TextAlign.center,
       ),
     );
+  }
+
+  Widget _errorMessage() {
+    if (!_charNameIsValid) {
+      return Text(
+          "You shall not pass.. without a character name. Please go back and create one!",
+          style: TextStyle(color: Colors.red),
+          textAlign: TextAlign.center);
+    }
+    return Container(height: 0.0, width: 0.0);
   }
 
   Widget _space(double height) {
