@@ -7,6 +7,7 @@ import 'models/workout.dart';
 import 'authentication.dart';
 import 'startWorkout.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 // build the home page and call on the stateful classes
 class Home extends StatelessWidget {
@@ -63,6 +64,8 @@ class _AvatarOverviewState extends State<AvatarOverview> {
     var imageHeight = (barHeight - 55);
     var imageWidth = (barWidth / 2) - 20;
     var progressBar = (imageWidth - 15);
+//    final ref = FirebaseStorage.instance.ref().child('avatar-test');
+//    var url =  ref.getDownloadURL();
     return Stack(
       children: <Widget>[
         ClipPath(
@@ -84,14 +87,12 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                   children: <Widget>[
                     // Column for half bar, only image
                     Column(children: <Widget>[
+
                       Container(
                         width:imageWidth,
                         height: imageHeight,
                         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: Image.asset(
-                          'assets/avatar-test.png',
-                          fit: BoxFit.fill,
-                        ),
+                        //child: Image.network(url),
 
                       )
                     ]),
