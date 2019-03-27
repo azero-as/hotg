@@ -55,16 +55,19 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
   @override
   Widget build(BuildContext context) {
     //Information about the exercises that is apart of the workout
-    void _onCategorySelected(bool selected, t, id, xp, String name) {
+    void _onCategorySelected(bool selected, t,  xp, String name) {
+
       if (selected == true) {
+        print(true);
         setState(() {
-          _selectedExercises.add(id);
+          _selectedExercises.add(name);
           _exercises.add({"xp": xp, "name": name});
           _XpEarned += xp;
         });
       } else {
+        print(false);
         setState(() {
-          _selectedExercises.remove(id);
+          _selectedExercises.remove(name);
           _exercises.removeWhere((item) => item["name"] == name);
           _XpEarned -= xp;
         });
@@ -75,7 +78,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     void _saveWorkout() {
       DateTime date = new DateTime.now();
 
-      if (_selectedExercises.length == widget.exercises.length) {
+      if (_selectedExercises.length == widget.exercises.length + 1) {
         _BonusXP = 1;
       } else {
         _BonusXP = 0;
@@ -95,6 +98,37 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
     }
 
+    Widget _showInfoWarmUp(int index){
+      var workout = ScopedModel.of<Workout>(context);
+      return ExpansionTile(
+          key: PageStorageKey<int>(index),
+          title: new CheckboxListTile(
+            value: _selectedExercises
+                .contains("Warm-up"),
+            onChanged: (bool selected) {
+              _onCategorySelected(
+                  selected,
+                  workout.warmUp[index],
+                  workout.warmUp["xp"],
+                  "Warm-up");
+            },
+            title: new Text("Warm-up",),
+          ),
+
+          children: <Widget>[
+            ListTile(
+                title: new Text(
+                    "Minutes: " + workout.warmUp["targetMin"].toString())),
+            ListTile(
+                title: new Text(
+                    "Description: " +  workout.warmUp["description"].toString())),
+            ListTile(
+                title: new Text("XP: " + workout.warmUp["xp"].toString())),
+
+            //children: root["info"]
+          ]);
+    }
+
     Widget _showInfoExercises(int index){
       String exercise = "targetReps";
       String name = "Reps: ";
@@ -111,7 +145,6 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
               _onCategorySelected(
                   selected,
                   widget.exercises[index],
-                  widget.exercises[index]["name"],
                   widget.exercises[index]["xp"],
                   widget.exercises[index]["name"]);
             },
@@ -149,37 +182,24 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
     //Information about the different exercises in the workout
     Widget _showInformationWorkout() {
+      var workout = ScopedModel.of<Workout>(context);
       return new ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: widget.exercises.length,
-        itemBuilder: (BuildContext context, int index){
-          return _showInfoExercises(index);
-        }
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: widget.exercises.length + 1 ?? 0,
+          itemBuilder: (BuildContext context, int index){
+            if(index == 0){
+              return _showInfoWarmUp(index);
+            }
+            else{
+              index = index -1;
+              return _showInfoExercises(index);
+            }
+
+          }
       );
     }
 
-    //Timer for warm-up
-    Widget _returnTimer() {
-      int _min = num.parse(_minutes.toStringAsFixed(0));
-      return Container(
-        padding: EdgeInsets.all(30),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text("Warm-up"),
-            RaisedButton(
-                onPressed: () {
-                  startTimer();
-                },
-                child: Container(
-                  padding: EdgeInsets.all(1.0),
-                  child: Text("$_min" + ":" + "$_seconds" + " min"),
-                ))
-          ],
-        ),
-      );
-    }
 
     Widget _returnFinishWorkoutButton() {
       return new Padding(
@@ -207,7 +227,6 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     }
 
     var workout = ScopedModel.of<Workout>(context);
-
     return new Scaffold(
       appBar: AppBar(
         title: new Text(workout.workoutName),

@@ -10,13 +10,14 @@ class StartWorkout extends StatefulWidget {
   final int duration;
   final String intensity;
   final int xp;
+  final Map warmUp;
   final String workoutName;
   final VoidCallback onLoggedIn;
   final VoidCallback onStartWorkout;
   final VoidCallback onActiveWorkout;
   final VoidCallback onSummary;
 
-  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName, this.onLoggedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary});
+  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName, this.onLoggedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary, this.warmUp});
 
   @override
   _StartWorkoutPage createState() => new _StartWorkoutPage();
@@ -26,7 +27,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
   @override
   Widget build(BuildContext context) {
     Widget _returnStartWorkoutButton() {
-      if(widget.exercises == null){
+      if(widget.exercises == null ){
         return Text("");
       }
       return new Padding(
@@ -60,7 +61,6 @@ class _StartWorkoutPage extends State<StartWorkout> {
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
-
                 new TextSpan(text: widget.duration.toString() + " min"),
                 new TextSpan(
                     text: ' XP: ',
@@ -73,6 +73,25 @@ class _StartWorkoutPage extends State<StartWorkout> {
               ])));
     }
 
+    Widget _showInfoWarmUp(){
+      var workout = ScopedModel.of<Workout>(context);
+      return ExpansionTile(
+          title: new Text("Warm-up",
+          ),
+          children: <Widget>[
+            ListTile(
+                title: new Text(
+                    "Minutes: " + workout.warmUp["targetMin"].toString())),
+            ListTile(
+                title: new Text(
+                    "Description: " +  workout.warmUp["description"].toString())),
+            ListTile(
+                title: new Text("XP: " + workout.warmUp["xp"].toString())),
+
+        //children: root["info"]
+      ]);
+    }
+
     //Show information about a workout using minutes
     Widget _showInfoExercises(int index){
       String exercise = "targetReps";
@@ -81,6 +100,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
         exercise = "targetMin";
         name = "Minutes: ";
       }
+
       return ExpansionTile(
           title: new Text(
             (widget.exercises[index]["name"]),
@@ -106,15 +126,20 @@ class _StartWorkoutPage extends State<StartWorkout> {
 
     //Display list of all the exercises in the workout
     Widget _showInformationWorkout() {
-      if(widget.exercises == null){
-        return Text("no exercises");
-      }
+      var workout = ScopedModel.of<Workout>(context);
       return new ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        itemCount: widget.exercises.length ?? 0,
+        itemCount: widget.exercises.length + 1 ?? 0,
         itemBuilder: (BuildContext context, int index){
-            return _showInfoExercises(index);
+            if(index == 0){
+              return _showInfoWarmUp();
+            }
+            else{
+              index = index -1;
+              return _showInfoExercises(index);
+            }
+
         }
       );
     }
