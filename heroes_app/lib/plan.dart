@@ -63,6 +63,7 @@ class _PlanPageState extends State<Plan> {
     if(!(wo["duration"] is int || wo["xp"] is int)){
       return false;
     }
+
     if(wo["warmUp"] == null || wo["warmUp"].length == 0){
       return false;
     }
@@ -74,6 +75,7 @@ class _PlanPageState extends State<Plan> {
     if(!(wo["warmUp"]["xp"] is int)){
       return false;
     }
+
     else{
       for(var exercise in wo["exercises"] ){
         if(exercise["name"] == null || exercise["targetSets"] == null || exercise["restBetweenSets"] == null || exercise["xp"] == null){
@@ -86,6 +88,7 @@ class _PlanPageState extends State<Plan> {
           return false;
         }
       }
+
       return true;
     }
 
@@ -111,9 +114,8 @@ class _PlanPageState extends State<Plan> {
 
 
       else {
-        var workout = ScopedModel.of<Workout>(context);
-        return new Container(
 
+        return new Container(
           // add border for the workout info box
           margin: new EdgeInsets.symmetric(horizontal: 55.0, vertical: 12.0),
           decoration: BoxDecoration(

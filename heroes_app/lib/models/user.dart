@@ -22,9 +22,9 @@ class User extends Model {
   bool get levelUp => _levelUp;
   String get email => _email;
 
-  void startState(String username, int userLevel, int userXp, int xpCap, String className, String email) {
-    _characterName = username;
-    _level = userLevel;
+  void startState(String characterName, int gameLevel, int userXp, int xpCap, String className, String email) {
+    _characterName = characterName;
+    _level = gameLevel;
     _xp = userXp;
     _xpCap = xpCap;
     _className =className;

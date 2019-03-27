@@ -27,7 +27,8 @@ class _StartWorkoutPage extends State<StartWorkout> {
   @override
   Widget build(BuildContext context) {
     Widget _returnStartWorkoutButton() {
-      if(widget.exercises == null ){
+
+      if(widget.exercises == null){
         return Text("");
       }
       return new Padding(
