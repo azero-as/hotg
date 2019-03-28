@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
+import 'models/user.dart';
+
 
 class StartWorkout extends StatefulWidget {
   final List exercises;
@@ -15,6 +17,8 @@ class StartWorkout extends StatefulWidget {
   final VoidCallback onStartWorkout;
   final VoidCallback onActiveWorkout;
   final VoidCallback onSummary;
+  final VoidCallback onBackToWorkout;
+
 
   StartWorkout(
       {this.exercises,
@@ -27,6 +31,7 @@ class StartWorkout extends StatefulWidget {
       this.onActiveWorkout,
       this.onSummary,
       this.workoutClass,
+      this.onBackToWorkout,
       this.warmUp});
 
   @override
@@ -217,6 +222,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
     }
 
     var workout = ScopedModel.of<Workout>(context);
+    var user = ScopedModel.of<User>(context);
     return Scaffold(
 
       appBar: AppBar(
@@ -226,10 +232,11 @@ class _StartWorkoutPage extends State<StartWorkout> {
           onPressed: () {
             if (workout.isFromHomePage == true) {
               widget.onLoggedIn();
-            } else {
-              // TODO: Make it go to pla page instead of widget.onLoggedIn();
-              widget.onLoggedIn();
+
             }
+            else {
+              widget.onBackToWorkout();
+          }
           },
           color: Colors.white,
         ),

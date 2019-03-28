@@ -39,6 +39,7 @@ enum AuthStatus {
   START_WORKOUT,
   ACTIVE_WORKOUT_SESSION,
   SUMMARY,
+  BACK_TO_WORKOUTS,
 }
 
 class _RootPageState extends State<RootPage> {
@@ -46,7 +47,7 @@ class _RootPageState extends State<RootPage> {
   String _userId = "";
   bool _dataLoadedFromGetUserInfo = false;
   bool _dataLoadedFromGetWorkout =
-      false; //if this is null, it is still loading data from firebase.
+  false; //if this is null, it is still loading data from firebase.
 
   @override
   void initState() {
@@ -111,6 +112,12 @@ class _RootPageState extends State<RootPage> {
   void _readyToSignUp() {
     setState(() {
       authStatus = AuthStatus.READY_TO_SIGN_UP;
+    });
+  }
+
+  void _backToWorkout() {
+    setState(() {
+      authStatus = AuthStatus.BACK_TO_WORKOUTS;
     });
   }
 
@@ -248,6 +255,7 @@ class _RootPageState extends State<RootPage> {
                 onStartWorkout: _startWorkout,
                 onActiveWorkout: _activeWorkout,
                 onSummary: _summary,
+                index: 0,
               );
             } else {
               return new LoadingScreen();
@@ -274,7 +282,9 @@ class _RootPageState extends State<RootPage> {
             onStartWorkout: _startWorkout,
             onActiveWorkout: _activeWorkout,
             onSummary: _summary,
+            onBackToWorkout: _backToWorkout,
           );
+          break;
         case AuthStatus.ACTIVE_WORKOUT_SESSION:
           return new activeWorkoutSession(
             exercises: workout.exercises,
@@ -291,10 +301,25 @@ class _RootPageState extends State<RootPage> {
             workoutType: workout.workoutName,
             onLoggedIn: _onLoggedIn,
           );
+        case AuthStatus.BACK_TO_WORKOUTS:
+          if (_userId.length > 0 && _userId != null) {
+            return new DashboardScreen(
+              userId: _userId,
+              auth: widget.auth,
+              onSignedOut: _onSignedOut,
+              readyToSignOut: _readyToSignOut,
+              onSignedIn: _onLoggedIn,
+              onStartWorkout: _startWorkout,
+              onActiveWorkout: _activeWorkout,
+              onSummary: _summary,
+              index: 1,
+            );
+          } else
+            return LoadingScreen();
+          break;
         default:
-          return new LoadingScreen();
+          return LoadingScreen();
       }
-      return new LoadingScreen();
     }
   }
 }

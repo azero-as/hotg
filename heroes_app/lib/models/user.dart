@@ -1,6 +1,7 @@
 import 'package:scoped_model/scoped_model.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import '../authentication.dart';
+import 'package:flutter/cupertino.dart';
 
 class User extends Model {
 
@@ -104,16 +105,47 @@ class User extends Model {
     }
   }
 
-    void setEmail(String email) {
-    this._email = this._email;
+//page controller for navigation bar
+  PageController _pageController;
+  int _page = 0;
+
+  PageController get pageController => _pageController;
+  int get page => _page;
+
+  setPageController(PageController pageController){
+    this._pageController = pageController;
+    notifyListeners();
+  }
+
+  void navigationTapped(int page){
+    pageController.jumpToPage(page);
+    notifyListeners();
+  }
+
+  void dispose() {
+    //var user = ScopedModel.of<User>(context);
+    //super.dispose();
+    this._pageController.dispose();
+    notifyListeners();
+  }
+
+  setPage(int page){
+    this._page = page;
     notifyListeners();
   }
 
   void setLevelUpTrue() {
     this._levelUp = true;
+    notifyListeners();
+  }
+
+  void setEmail(String email) {
+    this._email = this._email;
+    notifyListeners();
   }
 
   void setLevelUpFalse() {
     this._levelUp = false;
+    notifyListeners();
   }
 }

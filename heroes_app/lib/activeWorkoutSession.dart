@@ -189,7 +189,6 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       var workout = ScopedModel.of<Workout>(context);
 
       return ExpansionTile(
-
           leading: IconButton(
             icon: Icon(Icons.info_outline),
             onPressed: () {
