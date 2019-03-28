@@ -60,20 +60,26 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
   @override
   Widget build(BuildContext context) {
     //Information about the exercises that is apart of the workout
-    void _onCategorySelected(bool selected, t,  xp, String name) {
+    void _onCategorySelected(bool selected, id, name, exercise) {
 
       if (selected == true) {
         setState(() {
           _selectedExercises.add(name);
-          _exercises.add({"xp": xp, "name": name});
-          _XpEarned += xp;
+          if(exercise["targetReps"] != null){
+            _exercises.add({"xp": exercise["xp"], "name": name, "repetitions": exercise["targetReps"], "sets": exercise["targetSets"] });
+          }else if(exercise["targetMin"] != null){
+            _exercises.add({"xp": exercise["xp"], "name": name, "repetitions": exercise["targetMin"], "sets": exercise["targetSets"] });
+          }else{
+            _exercises.add({"xp": exercise["xp"], "name": name});
+          }
+          _XpEarned += exercise["xp"];
         });
       } else {
         print(false);
         setState(() {
           _selectedExercises.remove(name);
           _exercises.removeWhere((item) => item["name"] == name);
-          _XpEarned -= xp;
+          _XpEarned -= exercise["xp"];
         });
       }
     }
@@ -82,7 +88,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     void _saveWorkout() {
       DateTime date = new DateTime.now();
 
-      if (_selectedExercises.length == widget.exercises.length + 1) {
+      if (_exercises.length == widget.exercises.length + 1) {
         _BonusXP = 1;
       } else {
         _BonusXP = 0;
@@ -216,8 +222,8 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
               _onCategorySelected(
                   selected,
                   workout.warmUp[index],
-                  workout.warmUp["xp"],
-                  "Warm-up");
+                  "Warm-up",
+                  workout.warmUp);
             },
             title: new Text("Warm-up",),
           ),
@@ -277,8 +283,8 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
               _onCategorySelected(
                   selected,
                   widget.exercises[index],
-                  widget.exercises[index]["xp"],
-                  widget.exercises[index]["name"]);
+                  widget.exercises[index]["name"],
+                  widget.exercises[index]);
             },
             title: Text(widget.exercises[index]["name"]),
           ),
