@@ -61,7 +61,7 @@ class User extends Model {
   void incrementXP(int xpEarned) async {
       await CloudFunctions.instance.
           call(
-          functionName: 'updateUserXpWorkout',
+          functionName: 'updateUserXp',
           parameters: {
             "xpEarned": xpEarned,
           }

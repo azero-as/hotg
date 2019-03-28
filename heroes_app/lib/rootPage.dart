@@ -174,7 +174,7 @@ class _RootPageState extends State<RootPage> {
     var workout = ScopedModel.of<Workout>(context);
 
     CloudFunctions.instance.call(
-        functionName: 'getWorkout2',
+        functionName: 'getRecommendedWorkout',
         parameters: {"className": className}).then((response) {
       workout.setIntensity(response['intensity']);
       workout.setWorkOutName(response['workoutName']);
