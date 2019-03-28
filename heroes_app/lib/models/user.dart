@@ -114,16 +114,19 @@ class User extends Model {
 
   setPageController(PageController pageController){
     this._pageController = pageController;
+    notifyListeners();
   }
 
   void navigationTapped(int page){
     pageController.jumpToPage(page);
+    notifyListeners();
   }
 
   void dispose() {
     //var user = ScopedModel.of<User>(context);
     //super.dispose();
     this._pageController.dispose();
+    notifyListeners();
   }
 
   setPage(int page){
@@ -133,7 +136,7 @@ class User extends Model {
 
   void setLevelUpTrue() {
     this._levelUp = true;
-
+    notifyListeners();
   }
 
   void setEmail(String email) {
@@ -143,5 +146,6 @@ class User extends Model {
 
   void setLevelUpFalse() {
     this._levelUp = false;
+    notifyListeners();
   }
 }

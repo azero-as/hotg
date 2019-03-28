@@ -35,6 +35,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     var user = ScopedModel.of<User>(context);
     super.initState();
     user.setPageController(new PageController(initialPage: widget.index));
+    user.setPage(widget.index);
   }
 
 
