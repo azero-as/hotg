@@ -45,9 +45,17 @@ enum AuthStatus {
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
+<<<<<<< HEAD
   bool _dataLoadedFromGetUserInfo = false;
   bool _dataLoadedFromGetWorkout =
       false; //if this is null, it is still loading data from firebase.
+||||||| merged common ancestors
+  bool _dataLoadedFromGetUserInfo = false;
+  bool _dataLoadedFromGetWorkout =
+  false; //if this is null, it is still loading data from firebase.
+=======
+  bool _dataLoadedFromDatabase = false; //if this is null, it is still loading data from firebase.
+>>>>>>> fixSignUpBug
 
   @override
   void initState() {
@@ -82,7 +90,7 @@ class _RootPageState extends State<RootPage> {
 
       new Future.delayed(Duration.zero, () {
         _setUserInfo(context);
-        _setWorkoutInfo(context);
+        //_setWorkoutInfo(context);
       });
     });
     setState(() {
@@ -157,20 +165,20 @@ class _RootPageState extends State<RootPage> {
 
     CloudFunctions.instance.call(functionName: 'getUserInfo').then((response) {
       user.startState(
-          response['characterName'],
-          response['gameLevel'],
-          response['userXp'],
-          response['xpCap'],
-          response['className'],
-          response['email']);
-      _className = response['className'];
-      setState(() {
-        _dataLoadedFromGetUserInfo = true;
-      });
+        response['characterName'],
+        response['gameLevel'],
+        response['userXp'],
+        response['xpCap'],
+        response['className'],
+        response['email']);
+        setState(() {
+        _className= response['className'];
+      }); 
     }).then((response) {
       String _convertedClass = convertClassName(_className);
       _setWorkoutInfo(_convertedClass);
     }).catchError((error) {
+      _setUserInfo(context);
       print(error);
     });
   }
@@ -191,7 +199,7 @@ class _RootPageState extends State<RootPage> {
       workout.setExercises(response['exercises']);
       workout.setWarmUp(response['warmUp']);
       setState(() {
-        _dataLoadedFromGetWorkout = true;
+        _dataLoadedFromDatabase = true;
       });
     }).catchError((error) {
       print(error);
@@ -208,8 +216,7 @@ class _RootPageState extends State<RootPage> {
           break;
         case AuthStatus.NOT_LOGGED_IN:
           setState(() {
-            _dataLoadedFromGetUserInfo = false;
-            _dataLoadedFromGetWorkout = false;
+            _dataLoadedFromDatabase = false;
           });
           workout.setListOfWorkouts(null);
           return FrontPage(
@@ -232,7 +239,8 @@ class _RootPageState extends State<RootPage> {
               onSignedOut: _onSignedOut,
               title: 'Heroes of the Gym',
             );
-          }
+          }else
+            return new LoadingScreen();
           break;
         case AuthStatus.READY_TO_SIGN_UP:
           return new SignupPage(
@@ -245,7 +253,7 @@ class _RootPageState extends State<RootPage> {
           break;
         case AuthStatus.LOGGED_IN:
           if (_userId.length > 0 && _userId != null) {
-            if (_dataLoadedFromGetUserInfo && _dataLoadedFromGetWorkout) {
+            if (_dataLoadedFromDatabase) {
               return new DashboardScreen(
                 userId: _userId,
                 auth: widget.auth,

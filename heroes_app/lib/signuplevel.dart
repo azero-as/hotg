@@ -30,7 +30,7 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
   // Adding start states for level and xp
   int _gameLevel = 1;
   int _xp = 0;
-  String rpgClass = '';
+  String rpgClass = 'Barbarian';
 
   final charactername = TextEditingController();
 
