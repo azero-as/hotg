@@ -33,7 +33,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
 
   // Descriptions for choosing a class
   String _chooseClassDescription =
-      "Find your band of brothers and sistes by choosing a class for your character. Your choice will determine the type of workouts that are recommended for you.";
+      "Find your band of brothers and sisters by choosing a class for your character. Your choice will determine the type of workouts that are recommended for you.";
   String _strengthDescription =
       "Pick one of these classes if your main focus to improve your strength";
   String _dexterityDescription =
@@ -49,19 +49,16 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
   CrudMethods crudObj = new CrudMethods();
 
   void _validateAndSave() {
-    if (_charNameFormKey.currentState.validate()) {
-      _charNameFormKey.currentState.save();
-      crudObj.addFitnessLevel({
-        'fitnessLevel': _fitnessLevel,
-        'characterName': charactername.text,
-        'gameLevel': _gameLevel,
-        'xp': _xp,
-        'class': rpgClass,
-      }, widget.userId).catchError((e) {
-        print(e);
-      });
-      widget.onSignedIn();
-    }
+    crudObj.addFitnessLevel({
+      'fitnessLevel': _fitnessLevel,
+      'characterName': charactername.text,
+      'gameLevel': _gameLevel,
+      'xp': _xp,
+      'class': rpgClass,
+    }, widget.userId).catchError((e) {
+      print(e);
+    });
+    widget.onSignedIn();
   }
 
   @override
