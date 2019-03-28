@@ -232,7 +232,8 @@ class _RootPageState extends State<RootPage> {
               onSignedOut: _onSignedOut,
               title: 'Heroes of the Gym',
             );
-          }
+          }else
+            return new LoadingScreen();
           break;
         case AuthStatus.READY_TO_SIGN_UP:
           return new SignupPage(
