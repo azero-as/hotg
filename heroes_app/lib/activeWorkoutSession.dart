@@ -30,32 +30,6 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
   int _XpEarned = 0;
   int _BonusXP = 0;
 
-  //TODO: Fix timer. Not in use at the moment
-  Timer _timer;
-  static int _start = 300;
-  double _minutes = _start / 60;
-  int _seconds = _start % 60;
-
-  void startTimer() {
-    const oneSec = const Duration(seconds: 1);
-    _timer = new Timer.periodic(
-        oneSec,
-        (Timer timer) => setState(() {
-              if (_start < 1) {
-                timer.cancel();
-              } else {
-                _start = _start - 1;
-                _minutes = _start / 60;
-                _seconds = _start % 60;
-              }
-            }));
-  }
-
-/*  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +62,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     void _saveWorkout() {
       DateTime date = new DateTime.now();
 
-      if (_exercises.length == widget.exercises.length + 1) {
+      if (_selectedExercises.length == widget.exercises.length + 1) {
         _BonusXP = 1;
       } else {
         _BonusXP = 0;
