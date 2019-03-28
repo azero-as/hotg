@@ -81,7 +81,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
           child: Container(
               height: barHeight,
               width: barWidth,
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).primaryColor,
               padding: EdgeInsets.fromLTRB(20, 30, 20, 15),
               child:
                   ScopedModelDescendant<User>(builder: (context, child, model) {

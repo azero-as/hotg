@@ -100,7 +100,10 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
       Container(
           child: Text(
         "You haven't done any training yet,",
-      )),
+        style: TextStyle(
+            color: Colors.white,
+          ),
+      ),),
       SizedBox(
         height: 5,
       ),
@@ -115,11 +118,16 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
       Container(
           child: Text(
         "Go to Home or Workouts to begin",
+            style: TextStyle(
+              color: Colors.white,
+            ),
       )),
       SizedBox(
         height: 5,
       ),
-      Container(child: Text("your adventure!"))
+      Container(child: Text("your adventure!", style: TextStyle(
+        color: Colors.white,
+      ),),)
     ]);
   }
 
