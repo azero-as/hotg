@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'activeWorkoutSession.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
+import 'models/user.dart';
 import 'plan.dart';
 
 class StartWorkout extends StatefulWidget {
@@ -15,8 +16,9 @@ class StartWorkout extends StatefulWidget {
   final VoidCallback onStartWorkout;
   final VoidCallback onActiveWorkout;
   final VoidCallback onSummary;
+  final VoidCallback onBackToWorkout;
 
-  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName, this.onLoggedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary});
+  StartWorkout({this.exercises, this.duration, this.intensity, this.xp, this.workoutName, this.onLoggedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary, this.onBackToWorkout});
 
   @override
   _StartWorkoutPage createState() => new _StartWorkoutPage();
@@ -131,6 +133,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
     }
 
     var workout = ScopedModel.of<Workout>(context);
+    var user = ScopedModel.of<User>(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -140,8 +143,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
               widget.onLoggedIn();
             }
             else {
-              // TODO: Make it go to pla page instead of widget.onLoggedIn();
-              widget.onLoggedIn();
+              widget.onBackToWorkout();
           }
           },
           color: Colors.white,
