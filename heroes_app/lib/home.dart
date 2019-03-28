@@ -33,7 +33,7 @@ class Home extends StatelessWidget {
     return new Container(
         // general background color for the page
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).secondaryHeaderColor,
         ),
         child: Column(
           children: <Widget>[
@@ -81,7 +81,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
           child: Container(
               height: barHeight,
               width: barWidth,
-              color: Color(0xFF212838),
+              color: Theme.of(context).primaryColor,
               padding: EdgeInsets.fromLTRB(20, 30, 20, 15),
               child:
                   ScopedModelDescendant<User>(builder: (context, child, model) {
@@ -157,7 +157,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                             width: progressBar,
                             lineHeight: 15,
                             backgroundColor: Colors.white,
-                            progressColor: Color(0xFF4D3262),
+                            progressColor: Theme.of(context).accentColor,
                             percent: xpPercent,
                             //bar shape
                             linearStrokeCap: LinearStrokeCap.roundAll,
@@ -217,7 +217,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
       } else {
         return Container(
             // make sure the placement is centered and a little away from appbar
-            padding: EdgeInsets.fromLTRB(50, 20, 50, 0),
+            padding: EdgeInsets.fromLTRB(40, 20, 40, 0),
             child: Column(
               children: <Widget>[
                 // New container for text, aligned on the left
@@ -226,7 +226,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                   child: Container(
                     child: Text('Next planned workout:\n',
                         style: TextStyle(
-                          color: Color(0xFF525050),
+                          color: Colors.white,
                         )),
                   ),
                 ),
@@ -241,8 +241,10 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
   Widget _workout(workoutModel) {
     return new Container(
         // add border for the workout info box
+
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 0.25),
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
           color: Color(0xFFE7E9ED),
         ),
         child: Column(
@@ -252,12 +254,13 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
           children: <Widget>[
             // container for title box
             Container(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(15),
               // border to distinguish between the two containers within the box
               // Colour for the entire row
               decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
                 border: Border.all(color: Color(0xFF212838), width: 0.15),
-                color: Color(0xFF212838),
+                color: Theme.of(context).accentColor,
               ),
               child: Row(
                 children: <Widget>[
@@ -269,9 +272,10 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
-                      child: Text(
+                   child: Text(
                         workoutModel.workoutName,
                         style: TextStyle(color: Colors.white),
+
                       ),
                     ),
                   ),
@@ -281,10 +285,11 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
 
             // container for changing information
             Container(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(15),
               // border to distinguish between the two containers within the box
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black, width: 0.15),
+
               ),
               child: Row(
                 children: <Widget>[
@@ -382,7 +387,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                             widget.onStartWorkout();
                           },
                           elevation: 5.0,
-                          color: Color(0xFF612A30),
+                          color: Theme.of(context).primaryColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.67),
                           ),

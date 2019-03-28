@@ -30,6 +30,7 @@ class _PlanPageState extends State<Plan> {
     super.initState();
 
     var workout = ScopedModel.of<Workout>(context);
+
     if (workout.listOfWorkouts != null) {
       _dataLoadedFromFireBase = true;
     }
@@ -48,6 +49,7 @@ class _PlanPageState extends State<Plan> {
     });
   }
 
+
   //Checks to see if all the necessary fields in the database are set and correct
   bool _validateWorkout(int index) {
     var workout = ScopedModel.of<Workout>(context);
@@ -64,7 +66,7 @@ class _PlanPageState extends State<Plan> {
         wo["xp"] == null) {
       return false;
     }
-    if (!(wo["duration"] is int || wo["xp"] is int)) {
+    if (!(wo["duration"] is int || wo["xp g"] is int)) {
       return false;
 
     }
@@ -109,6 +111,7 @@ class _PlanPageState extends State<Plan> {
   Widget build(BuildContext context) {
     Widget _buildWaitingScreen() {
       return Scaffold(
+
         body: Container(
           alignment: Alignment.center,
           child: CircularProgressIndicator(),
@@ -120,12 +123,15 @@ class _PlanPageState extends State<Plan> {
       if (_validateWorkout(index) == false) {
         return Text("");
       } else {
+
         return new Container(
           // add border for the workout info box
-          margin: new EdgeInsets.symmetric(horizontal: 50.0, vertical: 12.0),
+          margin: new EdgeInsets.symmetric(horizontal: 40.0, vertical: 12.0),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 0.25),
             color: Color(0xFFE7E9ED),
+            borderRadius: BorderRadius.all(Radius.circular(8.0)),
+
           ),
           child: ScopedModelDescendant<Workout>(builder: (context, child, model) {
             return Column(
@@ -135,12 +141,14 @@ class _PlanPageState extends State<Plan> {
               children: <Widget>[
                 // container for title box
                 Container(
-                  padding: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(15),
                   // border to distinguish between the two containers within the box
                   // Colour for the entire row
                   decoration: BoxDecoration(
                     border: Border.all(color: Color(0xFF212838), width: 0.15),
-                    color: Color(0xFF212838),
+                    color: Theme.of(context).accentColor,
+                    //Border radius for workout title
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
                   ),
                   child: Row(
                     children: <Widget>[
@@ -164,10 +172,11 @@ class _PlanPageState extends State<Plan> {
 
                 // container for changing information
                 Container(
-                  padding: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(15),
                   // border to distinguish between the two containers within the box
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black, width: 0.15),
+
                   ),
                   child: Row(
                     children: <Widget>[
@@ -316,18 +325,22 @@ class _PlanPageState extends State<Plan> {
 
     if (!_dataLoadedFromFireBase) {
       return Scaffold(
+
         appBar: new AppBar(
           centerTitle: true,
           title: new Text("Workouts"),
         ),
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
         body: _buildWaitingScreen(),
       );
     } else {
       return Scaffold(
+
         appBar: new AppBar(
           centerTitle: true,
           title: new Text("Workouts"),
         ),
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
         body: _listOfWorkouts(),
       );
     }

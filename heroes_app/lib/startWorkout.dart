@@ -33,7 +33,6 @@ class StartWorkout extends StatefulWidget {
       this.workoutClass,
       this.onBackToWorkout,
       this.warmUp});
-    
 
   @override
   _StartWorkoutPage createState() => new _StartWorkoutPage();
@@ -57,7 +56,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
             widget.onActiveWorkout();
           },
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-          color: const Color(0xFF212838),
+          color:Theme.of(context).primaryColor,
           child: Text(
             'Start workout',
             style: TextStyle(color: Colors.white),
@@ -70,6 +69,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
     Widget _showInfo() {
       return Container(
           margin: EdgeInsets.fromLTRB(100, 0, 100, 40),
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
           child: RichText(
               text: TextSpan(
                   style: TextStyle(
@@ -206,8 +206,8 @@ class _StartWorkoutPage extends State<StartWorkout> {
 
     Widget _returnBody() {
       return new Container(
-          padding: EdgeInsets.only(left: 24.0, right: 24.0),
-          margin: EdgeInsets.fromLTRB(0, 50, 0, 35),
+          color: Color(0xFFe0e4eb),
+          padding: EdgeInsets.only(left: 24.0, bottom: 25.0, top: 25.0, right: 24.0),
           child: Column(
             children: <Widget>[
               Container(
@@ -224,6 +224,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
     var workout = ScopedModel.of<Workout>(context);
     var user = ScopedModel.of<User>(context);
     return Scaffold(
+
       appBar: AppBar(
         title: new Text(workout.workoutName),
         leading: IconButton(

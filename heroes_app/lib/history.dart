@@ -58,6 +58,7 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
     if (_noWorkoutCompleted == true) {
       return ScopedModelDescendant<User>(builder: (context, child, model) {
         return Scaffold(
+            backgroundColor: Theme.of(context).secondaryHeaderColor,
             appBar: AppBar(
               centerTitle: true,
               title: Text("Workout History"),
@@ -78,6 +79,7 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
       return Center(child: CircularProgressIndicator());
     } else {
       return Scaffold(
+          backgroundColor: Theme.of(context).secondaryHeaderColor,
           appBar: AppBar(
             centerTitle: true,
             title: Text("Workout History"),
@@ -98,12 +100,19 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
       Container(
           child: Text(
         "You haven't done any training yet,",
-      )),
+        style: TextStyle(
+            color: Colors.white,
+          ),
+      ),),
       SizedBox(
         height: 5,
       ),
       Container(
-        child: Text("${userModel.characterName.toString()}."),
+        child: Text("${userModel.characterName.toString()}.",
+          style: TextStyle(
+          color: Colors.white,
+    ),
+        ),
       )
     ]);
   }
@@ -113,11 +122,16 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
       Container(
           child: Text(
         "Go to Home or Workouts to begin",
+            style: TextStyle(
+              color: Colors.white,
+            ),
       )),
       SizedBox(
         height: 5,
       ),
-      Container(child: Text("your adventure!"))
+      Container(child: Text("your adventure!", style: TextStyle(
+        color: Colors.white,
+      ),),)
     ]);
   }
 
@@ -275,7 +289,7 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             color: Color(0xFFE7E9ED),
             child: custom.ExpansionTile(
-                headerBackgroundColor: Color(0xFF212838),
+                headerBackgroundColor: Theme.of(context).accentColor,
                 title: Text("$_workoutDate: $_workoutType",
                     style: TextStyle(color: Colors.white)),
                 children: _cardContent)));

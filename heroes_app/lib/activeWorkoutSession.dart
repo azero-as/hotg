@@ -187,6 +187,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
     Widget _showInfoWarmUp(int index){
       var workout = ScopedModel.of<Workout>(context);
+
       return ExpansionTile(
           leading: IconButton(
             icon: Icon(Icons.info_outline),
@@ -338,6 +339,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     Widget _returnFinishWorkoutButton() {
       return new Padding(
           padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40.0),
+
           child: ScopedModelDescendant<User>(builder: (context, child, model) {
             return RaisedButton(
               elevation: 5.0,
@@ -373,6 +375,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         ),
       ),
       body: new Container(
+          color: Color(0xFFe0e4eb),
           child: Column(
         children: <Widget>[
           //_returnTimer(),
