@@ -39,22 +39,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
 
   @override
- /* void dispose() {
-    //var user = ScopedModel.of<User>(context);
-    super.dispose();
-    _pageController.dispose();
-  }*/
-
-
-  /*void navigationTapped(int page) {
-    // Animating to the page.
-    // You can use whatever duration and curve you like
-    _pageController.animateToPage(page,
-        duration: const Duration(milliseconds: 10), curve: Curves.ease);
-  }*/
-
-
-  @override
  Widget build(BuildContext context) {
 
     /*void onPageChanged(int page) {
@@ -74,6 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
             onPageChanged: model.setPage,
             controller: model.pageController,
+            physics:new NeverScrollableScrollPhysics()
           );
         })
       ),
@@ -93,18 +78,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: ScopedModelDescendant<User>(builder: (context, child, model) {
           return new BottomNavigationBar(
           items: [
-          new BottomNavigationBarItem(
-          icon: new Icon(Icons.home, ),
-          title: new Text("HOME",
-          style: new TextStyle(), )),
-          new BottomNavigationBarItem(
-          icon: new Icon(Icons.calendar_today, ),
-          title: new Text("PLAN",
-          style: new TextStyle(),)),
-          new BottomNavigationBarItem(icon: new Icon(Icons.history, ),
-          title: new Text("HISTORY",
-          style: new TextStyle
-          (), ))
+            new BottomNavigationBarItem(
+                icon: new Icon(Icons.home,),
+                title: new Text("HOME",
+                  style: new TextStyle(),)),
+            new BottomNavigationBarItem(
+                icon: new Icon(Icons.fitness_center,),
+                title: new Text("WORKOUTS",
+                  style: new TextStyle(),)),
+            new BottomNavigationBarItem(icon: new Icon(Icons.history,),
+                title: new Text("HISTORY",
+                  style: new TextStyle(),))
           ],
           onTap: model.navigationTapped,
           currentIndex: model.page,

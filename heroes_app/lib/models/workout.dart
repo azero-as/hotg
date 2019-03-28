@@ -8,6 +8,7 @@ class Workout extends Model {
   // Belongs to Home
   String _intensity = '';
   String _workoutName = '';
+  String _workoutClass = '';
   int _duration = -1;
   int _xp = -1;
   List<dynamic> _exercises = [];
@@ -15,6 +16,7 @@ class Workout extends Model {
   int get xp => _xp;
   String get intensity => _intensity;
   String get workoutName => _workoutName;
+  String get workoutClass => _workoutClass;
   int get duration => _duration;
   List<dynamic> get exercises => _exercises;
 
@@ -28,7 +30,7 @@ class Workout extends Model {
   int get BonusXP => _BonusXP;
 
   // Belongs to plan
-  List<dynamic> _listOfWorkouts = [];
+  List<dynamic> _listOfWorkouts;
 
   List<dynamic> get listOfWorkouts => _listOfWorkouts;
 
@@ -45,6 +47,7 @@ class Workout extends Model {
     this._duration = workout[index]["duration"];
     this._intensity = workout[index]["intensity"];
     this._workoutName = workout[index]["workoutName"];
+    this._workoutClass = workout[index]["class"];
     this._exercises = workout[index]["exercises"];
   }
 
@@ -67,6 +70,11 @@ class Workout extends Model {
 
   void setWorkOutName(String workoutName) {
     this._workoutName = workoutName;
+    notifyListeners();
+  }
+
+  void setWorkOutClass(String workoutClass) {
+    this._workoutClass = workoutClass;
     notifyListeners();
   }
 

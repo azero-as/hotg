@@ -82,6 +82,16 @@ class _LoginPageState extends State<LoginPage> {
               height: 1.0,
               fontWeight: FontWeight.w300),
         );
+      } else if (_errorMessage == "There is no user record corresponding to this identifier. The user may have been deleted."){
+        return new Text(
+          _errorMessage = "Not able to find a user with this email and password combination.",
+          key: Key("LogInErrorMessage"),
+          style: TextStyle(
+              fontSize: 13.0,
+              color: Colors.red,
+              height: 1.0,
+              fontWeight: FontWeight.w300),
+        );
       } else {
         return new Text(
           _errorMessage = "Wrong email or password",

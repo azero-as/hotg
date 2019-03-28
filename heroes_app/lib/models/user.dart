@@ -1,4 +1,5 @@
 import 'package:scoped_model/scoped_model.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import '../authentication.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -11,25 +12,35 @@ class User extends Model {
   int _level;
   String _characterName;
   String _className;
+  bool _levelUp = false;
+  String _email;
 
   int get xpCap => _xpCap;
   int get xp => _xp;
   int get level => _level;
   String get characterName => _characterName;
   String get className => _className;
+  bool get levelUp => _levelUp;
+  String get email => _email;
 
-  void startState(String username, int userLevel, int userXp, int xpCap, String className) {
-    _characterName = username;
-    _level = userLevel;
+  void startState(String characterName, int gameLevel, int userXp, int xpCap, String className, String email) {
+    _characterName = characterName;
+    _level = gameLevel;
     _xp = userXp;
     _xpCap = xpCap;
     _className =className;
+    _email = email;
     notifyListeners();
   }
   //Methods just for setting in the beginning
   setLevel(int number) {
     this._level = number;
     notifyListeners();
+  }
+
+  setXP(int number) {
+  this._xp = number;
+  notifyListeners();
   }
 
   setXpCap(int number) {
@@ -48,17 +59,50 @@ class User extends Model {
   }
 
   // Methods used by other widgets:
-  void incrementXP(int number) {
-    this._xp = this.xp + number;
-    notifyListeners();
-    //TODO: Also change value in database
+  void incrementXP(int xpEarned) async {
+      await CloudFunctions.instance.
+          call(
+          functionName: 'updateUserXp',
+          parameters: {
+            "xpEarned": xpEarned,
+          }
+      )
+      .then((response){
+        setXP(response['updatedXp']);
+      }).catchError((error) {
+        print(error);
+      });
+      await checkLevelUp();
+
+      notifyListeners();
   }
 
-  void incrementLevelByOne() {
-    this._level = this._level + 1;
+  void incrementLevelByOne() async {
+    await CloudFunctions.instance.
+      call(
+        functionName: 'updateUserLevelInfo',
+        parameters: {
+          "xp": xp,
+          "xpCap": xpCap,
+          "level": level,
+        }
+    )
+    .then((response){
+      setLevel(response['userLevel']);
+      setXP(response['userXp']);
+      setXpCap(response['xpCap']);
+
+    }).catchError((error) {
+      print(error);
+    });
+
     notifyListeners();
-    //TODO: Also change value in database
-    //TODO: Make the pop up appear?
+  }
+  checkLevelUp(){
+    if(xp >= xpCap){
+      incrementLevelByOne();
+      setLevelUpTrue();
+    }
   }
 
 //page controller for navigation bar
@@ -87,4 +131,17 @@ class User extends Model {
     notifyListeners();
   }
 
+  void setLevelUpTrue() {
+    this._levelUp = true;
+
+  }
+
+  void setEmail(String email) {
+    this._email = this._email;
+    notifyListeners();
+  }
+
+  void setLevelUpFalse() {
+    this._levelUp = false;
+  }
 }
