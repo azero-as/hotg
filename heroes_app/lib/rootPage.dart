@@ -45,17 +45,7 @@ enum AuthStatus {
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
-<<<<<<< HEAD
-  bool _dataLoadedFromGetUserInfo = false;
-  bool _dataLoadedFromGetWorkout =
-      false; //if this is null, it is still loading data from firebase.
-||||||| merged common ancestors
-  bool _dataLoadedFromGetUserInfo = false;
-  bool _dataLoadedFromGetWorkout =
-  false; //if this is null, it is still loading data from firebase.
-=======
   bool _dataLoadedFromDatabase = false; //if this is null, it is still loading data from firebase.
->>>>>>> fixSignUpBug
 
   @override
   void initState() {
