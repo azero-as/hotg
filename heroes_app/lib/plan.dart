@@ -49,21 +49,7 @@ class _PlanPageState extends State<Plan> {
     });
   }
 
-  Color chooseHeaderColor(int index){
-    var workout = ScopedModel.of<Workout>(context);
-    var color = '';
-    if(workout.listOfWorkouts[index]["class"] == "Ranger"){
-      return Color(0xFFAA6464);
-    }
 
-    if(workout.listOfWorkouts[index]["class"] == ""){
-      return Color(0xFFAA6464);
-
-    }
-    else{
-      return Color(0xFFB2826A);
-    }
-  }
   //Checks to see if all the necessary fields in the database are set and correct
   bool _validateWorkout(int index) {
     var workout = ScopedModel.of<Workout>(context);
@@ -137,7 +123,7 @@ class _PlanPageState extends State<Plan> {
       if (_validateWorkout(index) == false) {
         return Text("");
       } else {
-        var color = chooseHeaderColor(index);
+
         return new Container(
           // add border for the workout info box
           margin: new EdgeInsets.symmetric(horizontal: 50.0, vertical: 12.0),
@@ -160,7 +146,7 @@ class _PlanPageState extends State<Plan> {
                   // Colour for the entire row
                   decoration: BoxDecoration(
                     border: Border.all(color: Color(0xFF212838), width: 0.15),
-                    color: color,
+                    color: Theme.of(context).accentColor,
                     //Border radius for workout title
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
                   ),
