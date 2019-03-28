@@ -5,10 +5,11 @@ import 'home.dart';
 import 'plan.dart';
 import 'history.dart';
 import 'models/user.dart';
+import 'models/workout.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class DashboardScreen extends StatefulWidget {
-  DashboardScreen({Key key, this.auth, this.userId, this.onSignedOut, this.readyToSignOut, this.onSignedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary})
+  DashboardScreen({Key key, this.auth, this.userId, this.onSignedOut, this.readyToSignOut, this.onSignedIn, this.onStartWorkout, this.onActiveWorkout, this.onSummary, this.index})
       : super(key: key);
 
   final BaseAuth auth;
@@ -19,62 +20,33 @@ class DashboardScreen extends StatefulWidget {
   final VoidCallback onStartWorkout;
   final VoidCallback onActiveWorkout;
   final VoidCallback onSummary;
+  final int index;
 
   @override
   _DashboardScreenState createState() => new _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  PageController _pageController;
-  int _page = 0;
+  //PageController _pageController;
+  //int _page = 0;
 
   @override
   void initState() {
+    var user = ScopedModel.of<User>(context);
     super.initState();
-    _pageController = new PageController();
+    user.setPageController(new PageController(initialPage: widget.index));
+    user.setPage(widget.index);
   }
+
 
   @override
-  void dispose() {
-    super.dispose();
-    _pageController.dispose();
-  }
-
-
-  void navigationTapped(int page) {
-    // Animating to the page.
-    // You can use whatever duration and curve you like
-    _pageController.jumpToPage(page);
-  }
-
-  void onPageChanged(int page) {
-    setState(() {
-      this._page = page;
-    });
-  }
-
-  @override
-//  Widget build(BuildContext context) {
-//    return new Scaffold(
-//        appBar: new AppBar(
-//          title: new Text(widget.userId),
-//        ),
-//      body: Center(
-//        child: ScopedModelDescendant<User>(
-//          builder: (context, child, model) {
-//            return RaisedButton(
-//                onPressed: () {
-//                  model.incrementXP(45);
-//                },
-//                child: Text(model.xp.toString()),
-//                );
-//          }
-//        ),
-//      )
-//    );
-//  }
-//
  Widget build(BuildContext context) {
+
+    /*void onPageChanged(int page) {
+      var user = ScopedModel.of<User>(context);
+      user.setPage(page);
+    }*/
+
     return new Scaffold(
       body: Center(
         child: ScopedModelDescendant<User>(
@@ -85,8 +57,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               new Plan(onLoggedIn: widget.onSignedIn, onStartWorkout: widget.onStartWorkout, onActiveWorkout: widget.onActiveWorkout, onSummary: widget.onSummary),
               new History("History screen"),
             ],
-            onPageChanged: onPageChanged,
-            controller: _pageController,
+            onPageChanged: model.setPage,
+            controller: model.pageController,
             physics:new NeverScrollableScrollPhysics()
           );
         })
@@ -104,7 +76,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 .copyWith(caption: new TextStyle(
                 color: new Color.fromRGBO(255, 255, 255, 0.5)))
         ),
-        child: new BottomNavigationBar(
+        child: ScopedModelDescendant<User>(builder: (context, child, model) {
+          return new BottomNavigationBar(
           items: [
             new BottomNavigationBarItem(
                 icon: new Icon(Icons.home,),
@@ -118,10 +91,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 title: new Text("HISTORY",
                   style: new TextStyle(),))
           ],
-          onTap: navigationTapped,
-          currentIndex: _page,
-        ),
-      ),
+          onTap: model.navigationTapped,
+          currentIndex: model.page,
+          );
+        })
+      )
     );
   }
 }

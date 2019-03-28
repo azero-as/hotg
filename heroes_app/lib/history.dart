@@ -29,7 +29,6 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
   // Container for every workout registered on the user in the database.
   List _workouts = [];
   bool _noWorkoutCompleted;
-  //int _usernameLength = 10;
 
   @override
   void initState() {
@@ -37,7 +36,6 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
     CloudFunctions.instance
         .call(functionName: 'getAllUserWorkouts')
         .then((response) {
-      print(response);
       if (response["workouts"].isEmpty) {
         setState(() {
           _noWorkoutCompleted = true;
@@ -60,6 +58,7 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
     if (_noWorkoutCompleted == true) {
       return ScopedModelDescendant<User>(builder: (context, child, model) {
         return Scaffold(
+            backgroundColor: Theme.of(context).secondaryHeaderColor,
             appBar: AppBar(
               centerTitle: true,
               title: Text("Workout History"),
@@ -80,6 +79,7 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
       return Center(child: CircularProgressIndicator());
     } else {
       return Scaffold(
+          backgroundColor: Theme.of(context).secondaryHeaderColor,
           appBar: AppBar(
             centerTitle: true,
             title: Text("Workout History"),
@@ -100,21 +100,39 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
       Container(
           child: Text(
         "You haven't done any training yet,",
-      )),
+        style: TextStyle(
+            color: Colors.white,
+          ),
+      ),),
       SizedBox(
         height: 5,
       ),
       Container(
-        constraints: BoxConstraints(maxHeight: 300, maxWidth: 300),
-        child: Text("${userModel.characterName.toString()}."),
+        child: Text("${userModel.characterName.toString()}.",
+          style: TextStyle(
+          color: Colors.white,
+    ),
+        ),
       )
     ]);
   }
 
   Widget _motivationalQuote() {
-    return Container(
-        constraints: BoxConstraints(maxHeight: 300, maxWidth: 300),
-        child: Text("Go to Home or Plan to begin your adventure!"));
+    return Column(children: [
+      Container(
+          child: Text(
+        "Go to Home or Workouts to begin",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+      )),
+      SizedBox(
+        height: 5,
+      ),
+      Container(child: Text("your adventure!", style: TextStyle(
+        color: Colors.white,
+      ),),)
+    ]);
   }
 
   // Builds a single workout card.
@@ -174,28 +192,30 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
     // Adds the top row widget as the first element.
     _cardContent.add(_showColumnNames());
 
-    // Reneders both repeitions and duration in the sets row.
+    // Renders both repetitions and duration in the sets row.
     Widget _showRepsOrDuration(exercise) {
       if (exercise["repetitions"] == null) {
         return Expanded(
             flex: 1,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(exercise["sets"].toString() +
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Padding(
+                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  child: Text(exercise["sets"].toString() +
                       "x" +
-                      exercise["duration"].toString())
-                ]));
+                      exercise["duration"].toString()))
+            ]));
       } else {
         return Expanded(
             flex: 1,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(exercise["sets"].toString() +
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Padding(
+                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  child: Text(exercise["sets"].toString() +
                       "x" +
-                      exercise["repetitions"].toString())
-                ]));
+                      exercise["repetitions"].toString()))
+            ]));
       }
     }
 
@@ -206,22 +226,24 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
             children: <Widget>[
               Expanded(
                   flex: 2,
-                  child: Padding(
-                      padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                                child: Text(exercise["name"]))
-                          ]))),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(30, 5, 0, 5),
+                            child: Text(
+                              exercise["name"],
+                            ))
+                      ])),
               _showRepsOrDuration(exercise),
               Expanded(
                   flex: 1,
                   child: Column(children: [
-                    Text(
-                      exercise["xp"].toString(),
-                    )
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        child: Text(
+                          exercise["xp"].toString(),
+                        ))
                   ]))
             ],
           ))
@@ -241,7 +263,7 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
 
     // Adds a divider between the exercises and bonus/totalXP.
     _cardContent.add(Padding(
-        padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+        padding: EdgeInsets.fromLTRB(30, 5, 30, 0),
         child: Divider(height: 10.0, color: Colors.black38)));
 
     // Adds the bonusXP widget if there is a bonus.
@@ -267,7 +289,7 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             color: Color(0xFFE7E9ED),
             child: custom.ExpansionTile(
-                headerBackgroundColor: Color(0xFF212838),
+                headerBackgroundColor: Theme.of(context).accentColor,
                 title: Text("$_workoutDate: $_workoutType",
                     style: TextStyle(color: Colors.white)),
                 children: _cardContent)));
