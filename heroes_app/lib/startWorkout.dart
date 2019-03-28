@@ -8,6 +8,7 @@ class StartWorkout extends StatefulWidget {
   final int duration;
   final String intensity;
   final int xp;
+  final Map warmUp;
   final String workoutName;
   final String workoutClass;
   final VoidCallback onLoggedIn;
@@ -25,7 +26,8 @@ class StartWorkout extends StatefulWidget {
       this.onStartWorkout,
       this.onActiveWorkout,
       this.onSummary,
-      this.workoutClass});
+      this.workoutClass,
+      this.warmUp});
 
   @override
   _StartWorkoutPage createState() => new _StartWorkoutPage();
@@ -69,6 +71,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
+
                 TextSpan(
                     text: ' Class: ',
                     style: TextStyle(fontWeight: FontWeight.bold)),
@@ -88,6 +91,41 @@ class _StartWorkoutPage extends State<StartWorkout> {
               ])));
     }
 
+    Widget _showInfoWarmUp(){
+      var workout = ScopedModel.of<Workout>(context);
+      return ExpansionTile(
+          leading: IconButton(
+          icon: Icon(Icons.info_outline),
+          onPressed: () {
+              showDialog(
+                  context: context,
+                      builder: (BuildContext context) {
+                          return AlertDialog(
+                              title: Text("Warm-up"),
+                              content: Text( workout.warmUp["description"].toString()),
+                              actions: <Widget>[
+                              FlatButton(
+                              child: Text('Close'),
+                              onPressed: () {
+                                  Navigator.of(context).pop();
+                              })
+                      ],
+                  );
+              });
+          }, // title: new Text("Warm-up",
+      ),
+      title: new Text("Warm-up",),
+          children: <Widget>[
+            ListTile(
+                title: new Text(
+                    "Minutes: " + workout.warmUp["targetMin"].toString())),
+            ListTile(
+                title: new Text("XP: " + workout.warmUp["xp"].toString())),
+
+        //children: root["info"]
+      ]);
+    }
+
     //Show information about a workout using minutes
     Widget _showInfoExercises(int index) {
       String exercise = "targetReps";
@@ -96,6 +134,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
         exercise = "targetMin";
         name = "Minutes: ";
       }
+
       return ExpansionTile(
           leading: IconButton(
             icon: Icon(Icons.info_outline),
@@ -140,16 +179,23 @@ class _StartWorkoutPage extends State<StartWorkout> {
 
     //Display list of all the exercises in the workout
     Widget _showInformationWorkout() {
-      if (widget.exercises == null) {
-        return Text("no exercises");
-      }
+      var workout = ScopedModel.of<Workout>(context);
       return new ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: widget.exercises.length ?? 0,
-          itemBuilder: (BuildContext context, int index) {
-            return _showInfoExercises(index);
-          });
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: widget.exercises.length + 1 ?? 0,
+        itemBuilder: (BuildContext context, int index){
+            if(index == 0){
+              return _showInfoWarmUp();
+            }
+            else{
+              index = index -1;
+              return _showInfoExercises(index);
+            }
+
+        }
+      );
+
     }
 
     Widget _returnBody() {
