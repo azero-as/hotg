@@ -157,19 +157,21 @@ class _RootPageState extends State<RootPage> {
 
     CloudFunctions.instance.call(functionName: 'getUserInfo').then((response) {
       user.startState(
-          response['characterName'],
-          response['gameLevel'],
-          response['userXp'],
-          response['xpCap'],
-          response['className'],
-          response['email']);
-      _className = response['className'];
-      setState(() {
-        _dataLoadedFromGetUserInfo = true;
-      });
-    }).then((response) {
-      String _convertedClass = convertClassName(_className);
-      _setWorkoutInfo(_convertedClass);
+        response['characterName'],
+        response['gameLevel'],
+        response['userXp'],
+        response['xpCap'],
+        response['className'],
+        response['email']);
+
+        setState(() {
+          _className = response['className'];
+          _dataLoadedFromGetUserInfo = true;
+          });
+      })
+      .then((_) {
+        String _convertedClass = convertClassName(_className);
+        _setWorkoutInfo(_convertedClass);
     }).catchError((error) {
       print(error);
     });
