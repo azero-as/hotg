@@ -126,7 +126,7 @@ class _PlanPageState extends State<Plan> {
 
         return new Container(
           // add border for the workout info box
-          margin: new EdgeInsets.symmetric(horizontal: 50.0, vertical: 12.0),
+          margin: new EdgeInsets.symmetric(horizontal: 40.0, vertical: 12.0),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 0.25),
             color: Color(0xFFE7E9ED),

@@ -22,7 +22,7 @@ class _SummaryState extends State<Summary> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<User>(builder: (context, child, model) {
     return Scaffold(
-        backgroundColor: Colors.grey[300],
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
         appBar: AppBar(
           leading: new IconButton(
               icon: Icon(Icons.close),

@@ -108,7 +108,11 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
         height: 5,
       ),
       Container(
-        child: Text("${userModel.characterName.toString()}."),
+        child: Text("${userModel.characterName.toString()}.",
+          style: TextStyle(
+          color: Colors.white,
+    ),
+        ),
       )
     ]);
   }

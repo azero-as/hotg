@@ -157,7 +157,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                             width: progressBar,
                             lineHeight: 15,
                             backgroundColor: Colors.white,
-                            progressColor: Theme.of(context).primaryColor,
+                            progressColor: Theme.of(context).accentColor,
                             percent: xpPercent,
                             //bar shape
                             linearStrokeCap: LinearStrokeCap.roundAll,
@@ -217,7 +217,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
       } else {
         return Container(
             // make sure the placement is centered and a little away from appbar
-            padding: EdgeInsets.fromLTRB(50, 20, 50, 0),
+            padding: EdgeInsets.fromLTRB(40, 20, 40, 0),
             child: Column(
               children: <Widget>[
                 // New container for text, aligned on the left
