@@ -42,8 +42,8 @@ class Heroes extends StatelessWidget {
             title: 'Heroes of the gym',
             debugShowCheckedModeBanner: false,
             theme: new ThemeData(
-              primaryColor: const Color(0xFF212838),
-              secondaryHeaderColor: const Color(0xFF612A30),
+              primaryColor: const Color(0xFF612A30),
+              secondaryHeaderColor: const Color(0xFF212838),
               accentColor: const Color(0xFF5e72a1),
             ),
             routes: routes,

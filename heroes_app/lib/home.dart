@@ -33,7 +33,7 @@ class Home extends StatelessWidget {
     return new Container(
         // general background color for the page
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).secondaryHeaderColor,
         ),
         child: Column(
           children: <Widget>[
@@ -157,7 +157,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                             width: progressBar,
                             lineHeight: 15,
                             backgroundColor: Colors.white,
-                            progressColor: Theme.of(context).secondaryHeaderColor,
+                            progressColor: Theme.of(context).primaryColor,
                             percent: xpPercent,
                             //bar shape
                             linearStrokeCap: LinearStrokeCap.roundAll,
@@ -387,7 +387,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                             widget.onStartWorkout();
                           },
                           elevation: 5.0,
-                          color: Theme.of(context).secondaryHeaderColor,
+                          color: Theme.of(context).primaryColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.67),
                           ),
