@@ -4,6 +4,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
 
+
 class Plan extends StatefulWidget {
   @override
   _PlanPageState createState() => new _PlanPageState();
@@ -65,12 +66,32 @@ class _PlanPageState extends State<Plan> {
     }
     if (!(wo["duration"] is int || wo["xp"] is int)) {
       return false;
-    } else {
+
+    }
+
+    if(wo["warmUp"] == null || wo["warmUp"].length == 0){
+      return false;
+    }
+
+    if(wo["warmUp"]["description"] == null ||
+       wo["warmUp"]["xp"] == null ||
+       wo["warmUp"]["targetMin"] == null ){
+
+      return false;
+    }
+
+    if(!(wo["warmUp"]["xp"] is int)){
+      return false;
+    }
+
+
+    else {
       for (var exercise in wo["exercises"]) {
         if (exercise["name"] == null ||
             exercise["targetSets"] == null ||
             exercise["restBetweenSets"] == null ||
             exercise["xp"] == null) {
+
           return false;
         }
         if (!(exercise["xp"] is int)) {
@@ -285,7 +306,7 @@ class _PlanPageState extends State<Plan> {
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemCount: workout.listOfWorkouts.length,
-          itemBuilder: (BuildContext context, int index) {
+          itemBuilder: (BuildContext context, int index){
             return _workout(index);
             //children: root["info"]
           },
