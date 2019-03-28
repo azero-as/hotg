@@ -30,50 +30,30 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
   int _XpEarned = 0;
   int _BonusXP = 0;
 
-  //TODO: Fix timer. Not in use at the moment
-  Timer _timer;
-  static int _start = 300;
-  double _minutes = _start / 60;
-  int _seconds = _start % 60;
-
-  void startTimer() {
-    const oneSec = const Duration(seconds: 1);
-    _timer = new Timer.periodic(
-        oneSec,
-        (Timer timer) => setState(() {
-              if (_start < 1) {
-                timer.cancel();
-              } else {
-                _start = _start - 1;
-                _minutes = _start / 60;
-                _seconds = _start % 60;
-              }
-            }));
-  }
-
-/*  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }*/
 
   @override
   Widget build(BuildContext context) {
     //Information about the exercises that is apart of the workout
-    void _onCategorySelected(bool selected, t,  xp, String name) {
+    void _onCategorySelected(bool selected, id, name, exercise) {
 
       if (selected == true) {
         setState(() {
           _selectedExercises.add(name);
-          _exercises.add({"xp": xp, "name": name});
-          _XpEarned += xp;
+          if(exercise["targetReps"] != null){
+            _exercises.add({"xp": exercise["xp"], "name": name, "repetitions": exercise["targetReps"], "sets": exercise["targetSets"] });
+          }else if(exercise["targetMin"] != null){
+            _exercises.add({"xp": exercise["xp"], "name": name, "repetitions": exercise["targetMin"], "sets": exercise["targetSets"] });
+          }else{
+            _exercises.add({"xp": exercise["xp"], "name": name});
+          }
+          _XpEarned += exercise["xp"];
         });
       } else {
         print(false);
         setState(() {
           _selectedExercises.remove(name);
           _exercises.removeWhere((item) => item["name"] == name);
-          _XpEarned -= xp;
+          _XpEarned -= exercise["xp"];
         });
       }
     }
@@ -217,8 +197,8 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
               _onCategorySelected(
                   selected,
                   workout.warmUp[index],
-                  workout.warmUp["xp"],
-                  "Warm-up");
+                  "Warm-up",
+                  workout.warmUp);
             },
             title: new Text("Warm-up",),
           ),
@@ -278,8 +258,8 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
               _onCategorySelected(
                   selected,
                   widget.exercises[index],
-                  widget.exercises[index]["xp"],
-                  widget.exercises[index]["name"]);
+                  widget.exercises[index]["name"],
+                  widget.exercises[index]);
             },
             title: Text(widget.exercises[index]["name"]),
           ),
