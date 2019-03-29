@@ -18,6 +18,7 @@ class StartWorkout extends StatefulWidget {
   final VoidCallback onActiveWorkout;
   final VoidCallback onSummary;
   final VoidCallback onBackToWorkout;
+  final VoidCallback alreadyLoggedIn;
 
 
   StartWorkout(
@@ -32,7 +33,8 @@ class StartWorkout extends StatefulWidget {
       this.onSummary,
       this.workoutClass,
       this.onBackToWorkout,
-      this.warmUp});
+      this.warmUp,
+      this.alreadyLoggedIn});
 
   @override
   _StartWorkoutPage createState() => new _StartWorkoutPage();
@@ -231,7 +233,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
             if (workout.isFromHomePage == true) {
-              widget.onLoggedIn();
+              widget.alreadyLoggedIn();
 
             }
             else {
