@@ -97,6 +97,7 @@ class _RootPageState extends State<RootPage> {
     setState(() {
       authStatus = AuthStatus.NOT_LOGGED_IN;
       _userId = "";
+      _dataLoadedFromDatabase = false;
     });
   }
 
@@ -184,7 +185,6 @@ class _RootPageState extends State<RootPage> {
     var workout = ScopedModel.of<Workout>(context);
 
     try {
-      print(_className);
       final dynamic response = await CloudFunctions.instance.call(
         functionName: 'getRecommendedWorkout',
         parameters: <String, dynamic>{
@@ -214,9 +214,6 @@ class _RootPageState extends State<RootPage> {
           return new LoadingScreen();
           break;
         case AuthStatus.NOT_LOGGED_IN:
-          setState(() {
-            _dataLoadedFromDatabase = false;
-          });
           workout.setListOfWorkouts(null);
           return FrontPage(
             readyToLogIn: _readyToLogIn,
