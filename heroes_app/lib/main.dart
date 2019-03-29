@@ -9,7 +9,6 @@ import 'signupSwiper.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/user.dart';
 import 'models/workout.dart';
-import 'signupSwiper.dart';
 
 void main() async {
   // Lock screen in portrait mode

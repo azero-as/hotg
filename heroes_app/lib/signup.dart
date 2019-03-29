@@ -322,6 +322,7 @@ class _SignupPageState extends State<SignupPage> {
       try {
         if (_formMode == FormMode.SIGNUP) {
           userId = await widget.auth.signUp(_email, _password);
+          // TODO: Do we need this print statement?
           print('Signed up: $userId');
         }
 

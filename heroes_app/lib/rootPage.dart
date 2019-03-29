@@ -184,6 +184,7 @@ class _RootPageState extends State<RootPage> {
     var workout = ScopedModel.of<Workout>(context);
 
     try {
+      // TODO: Do we need this print statement?
       print(_className);
       final dynamic response = await CloudFunctions.instance.call(
         functionName: 'getRecommendedWorkout',

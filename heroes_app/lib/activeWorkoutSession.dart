@@ -49,6 +49,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
           _XpEarned += exercise["xp"];
         });
       } else {
+        // TODO: Do we need this print statement?
         print(false);
         setState(() {
           _selectedExercises.remove(name);
