@@ -47,7 +47,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
     //Finish workout button color
     Color _finishWorkoutColor(){
-      if(_selectedExercises.contains("Warm-up")){
+      if(_selectedExercises.contains("Warm-up") &&  !(_selectedExercises.length <= 1)){
         return Theme.of(context).primaryColor;
       }
       else{
