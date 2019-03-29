@@ -243,9 +243,8 @@ class _RootPageState extends State<RootPage> {
               title: 'Heroes of the Gym',
             );
           }
-          else {
+          else 
             return new LoadingScreen();
-          }
           break;
         case AuthStatus.READY_TO_SIGN_UP:
           return new SignupPage(
@@ -269,9 +268,8 @@ class _RootPageState extends State<RootPage> {
                 onSummary: _summary,
                 index: 0,
               );
-          } else {
+          } else
             return new LoadingScreen();
-          }
           break;
         case AuthStatus.READY_TO_SIGN_OUT:
           return new Settings(
