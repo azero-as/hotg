@@ -72,7 +72,7 @@ class _RootPageState extends State<RootPage> {
       }
     });
   }
-  
+
   void _onLoggedIn() {
     widget.auth.getCurrentUser().then((user) {
       setState(() {
@@ -242,6 +242,9 @@ class _RootPageState extends State<RootPage> {
               onSignedOut: _onSignedOut,
               title: 'Heroes of the Gym',
             );
+          }
+          else {
+            return new LoadingScreen();
           }
           break;
         case AuthStatus.READY_TO_SIGN_UP:
