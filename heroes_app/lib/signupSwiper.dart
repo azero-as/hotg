@@ -48,18 +48,23 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
   final charactername = TextEditingController();
   CrudMethods crudObj = new CrudMethods();
 
-  void _validateAndSave() {
-    crudObj.addFitnessLevel({
-      'fitnessLevel': _fitnessLevel,
-      'characterName': charactername.text,
-      'gameLevel': _gameLevel,
-      'xp': _xp,
-      'class': rpgClass,
-    }, widget.userId).catchError((e) {
-      print(e);
-    });
-    widget.onSignedIn();
-  }
+  void _validateAndSave() async {
+    try {
+      crudObj.addFitnessLevel({
+        'fitnessLevel': _fitnessLevel,
+        'characterName': charactername.text,
+        'gameLevel': _gameLevel,
+        'xp': _xp,
+        'class': rpgClass,
+        },
+        widget.userId)
+        .then((_) => {
+           widget.onSignedIn()
+        });
+      } catch(e) {
+          print(e);
+        }
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +175,6 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 1,
         groupValue: _fitnessLevel,
         onChanged: (int value) {
-          print(value);
           setState(() {
             _fitnessLevel = value;
           });
@@ -212,7 +216,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         // disables button if character name is not valid
-        onPressed: !_charNameIsValid ? null : _validateAndSave,
+        onPressed: !_charNameIsValid ? null : _validateAndSave ,
         padding: EdgeInsets.all(12),
         color: const Color(0xFF612A30),
         child: Text(
@@ -258,7 +262,6 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                         ],
                       ),
                       onChanged: () {
-                        setState(() {});
                         if (_charNameFormKey.currentState.validate()) {
                           _charNameIsValid = true;
                           _charNameFormKey.currentState.save();
