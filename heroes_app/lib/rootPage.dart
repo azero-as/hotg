@@ -4,13 +4,13 @@ import 'dashboard.dart';
 import 'authentication.dart';
 import 'signup.dart';
 import 'frontpage.dart';
-import 'signuplevel.dart';
 import 'settings.dart';
 import 'loadingScreen.dart';
 import 'models/user.dart';
 import 'models/workout.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'signupSwiper.dart';
 import 'startWorkout.dart';
 import 'activeWorkoutSession.dart';
 import 'summary.dart';
@@ -45,9 +45,7 @@ enum AuthStatus {
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
-  bool _dataLoadedFromGetUserInfo = false;
-  bool _dataLoadedFromGetWorkout =
-  false; //if this is null, it is still loading data from firebase.
+  bool _dataLoadedFromDatabase = false; //if this is null, it is still loading data from firebase.
 
   @override
   void initState() {
@@ -82,7 +80,7 @@ class _RootPageState extends State<RootPage> {
 
       new Future.delayed(Duration.zero, () {
         _setUserInfo(context);
-        _setWorkoutInfo(context);
+        //_setWorkoutInfo(context);
       });
     });
     setState(() {
@@ -157,20 +155,20 @@ class _RootPageState extends State<RootPage> {
 
     CloudFunctions.instance.call(functionName: 'getUserInfo').then((response) {
       user.startState(
-          response['characterName'],
-          response['gameLevel'],
-          response['userXp'],
-          response['xpCap'],
-          response['className'],
-          response['email']);
-      _className = response['className'];
-      setState(() {
-        _dataLoadedFromGetUserInfo = true;
-      });
+        response['characterName'],
+        response['gameLevel'],
+        response['userXp'],
+        response['xpCap'],
+        response['className'],
+        response['email']);
+        setState(() {
+        _className= response['className'];
+      }); 
     }).then((response) {
       String _convertedClass = convertClassName(_className);
       _setWorkoutInfo(_convertedClass);
     }).catchError((error) {
+      _setUserInfo(context);
       print(error);
     });
   }
@@ -191,7 +189,7 @@ class _RootPageState extends State<RootPage> {
       workout.setExercises(response['exercises']);
       workout.setWarmUp(response['warmUp']);
       setState(() {
-        _dataLoadedFromGetWorkout = true;
+        _dataLoadedFromDatabase = true;
       });
     }).catchError((error) {
       print(error);
@@ -208,8 +206,7 @@ class _RootPageState extends State<RootPage> {
           break;
         case AuthStatus.NOT_LOGGED_IN:
           setState(() {
-            _dataLoadedFromGetUserInfo = false;
-            _dataLoadedFromGetWorkout = false;
+            _dataLoadedFromDatabase = false;
           });
           workout.setListOfWorkouts(null);
           return FrontPage(
@@ -225,14 +222,15 @@ class _RootPageState extends State<RootPage> {
           );
         case AuthStatus.FINISHED_SIGNED_UP:
           if (_userId.length > 0 && _userId != null) {
-            return new SignupLevelPage(
+            return new SignupSwiperPage(
               auth: widget.auth,
               onSignedIn: _onLoggedIn,
               userId: _userId,
               onSignedOut: _onSignedOut,
               title: 'Heroes of the Gym',
             );
-          }
+          }else
+            return new LoadingScreen();
           break;
         case AuthStatus.READY_TO_SIGN_UP:
           return new SignupPage(
@@ -245,7 +243,7 @@ class _RootPageState extends State<RootPage> {
           break;
         case AuthStatus.LOGGED_IN:
           if (_userId.length > 0 && _userId != null) {
-            if (_dataLoadedFromGetUserInfo && _dataLoadedFromGetWorkout) {
+            if (_dataLoadedFromDatabase) {
               return new DashboardScreen(
                 userId: _userId,
                 auth: widget.auth,
