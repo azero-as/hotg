@@ -175,7 +175,6 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 1,
         groupValue: _fitnessLevel,
         onChanged: (int value) {
-          print(value);
           setState(() {
             _fitnessLevel = value;
           });

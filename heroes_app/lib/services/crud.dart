@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 class CrudMethods {
   bool isLoggedIn() {
     if (FirebaseAuth.instance.currentUser() != null) {
-      print(FirebaseAuth.instance.currentUser());
       return true;
     } else {
       return false;

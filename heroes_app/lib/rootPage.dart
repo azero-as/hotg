@@ -155,7 +155,6 @@ class _RootPageState extends State<RootPage> {
 
   //Sets the start state of the User-model and calls _setWorkoutInfo with the user's class.
   void _setUserInfo(BuildContext context) async {
-    print('setUserInfo');
     var user = ScopedModel.of<User>(context);
 
     try {
@@ -173,7 +172,6 @@ class _RootPageState extends State<RootPage> {
             _className = resp['className'];
         });
         } catch(error) {
-          print('getUserInfo error');
           print(error);
         }
         String _convertedClass =convertClassName(_className);
@@ -183,7 +181,6 @@ class _RootPageState extends State<RootPage> {
   // Requests a workout from the database based on the user's rpg class and
   // creates a workout-model with the data.
   void _setWorkoutInfo(className) async {
-    print('setWorkoutInfo');
     var workout = ScopedModel.of<Workout>(context);
 
     try {
@@ -205,7 +202,6 @@ class _RootPageState extends State<RootPage> {
         _dataLoadedFromDatabase = true;
       });  
     } catch (error) {
-      print('getRecommendedWorkout error');
       print(error);
     }
   }
