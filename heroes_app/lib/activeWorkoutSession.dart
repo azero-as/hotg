@@ -34,9 +34,25 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
   @override
   Widget build(BuildContext context) {
     //Information about the exercises that is apart of the workout
-    void _onCategorySelected(bool selected, id, name, exercise) {
 
+    void _warmUpSelected(bool selected, id, name, exercise) {
       if (selected == true) {
+        setState(() {
+          _selectedExercises.add(name);
+        });
+      } else {
+        print(false);
+        setState(() {
+          _selectedExercises.remove(name);
+        });
+      }
+    }
+
+    void _onCategorySelected(bool selected, id, name, exercise) {
+      if(!_selectedExercises.contains("Warm-up")){
+        return null;
+      }
+      else if (selected == true) {
         setState(() {
           _selectedExercises.add(name);
           if(exercise["targetReps"] != null){
@@ -152,7 +168,8 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     }
 
     void _validateAndSaveWorkout() {
-      if (_selectedExercises.isEmpty) {
+      //Checks to see if at least one exercise is checked off. Warm up does not count
+      if (_selectedExercises.length <= 1) {
         //Display pop-up
         showDialog(
             context: context,
@@ -194,7 +211,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             value: _selectedExercises
                 .contains("Warm-up"),
             onChanged: (bool selected) {
-              _onCategorySelected(
+              _warmUpSelected(
                   selected,
                   workout.warmUp[index],
                   "Warm-up",
@@ -253,8 +270,15 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             },
           ),
           title: new CheckboxListTile(
-            value: false,
-            onChanged: null,
+            value: _selectedExercises
+                .contains(widget.exercises[index]["name"]),
+            onChanged: (bool selected) {
+              _onCategorySelected(
+                  selected,
+                  widget.exercises[index],
+                  widget.exercises[index]["name"],
+                  widget.exercises[index]);
+            },
             title: Text(widget.exercises[index]["name"]),
           ),
           children: <Widget>[
