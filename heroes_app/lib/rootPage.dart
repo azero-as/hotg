@@ -4,13 +4,13 @@ import 'dashboard.dart';
 import 'authentication.dart';
 import 'signup.dart';
 import 'frontpage.dart';
-import 'signuplevel.dart';
 import 'settings.dart';
 import 'loadingScreen.dart';
 import 'models/user.dart';
 import 'models/workout.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'signupSwiper.dart';
 import 'startWorkout.dart';
 import 'activeWorkoutSession.dart';
 import 'summary.dart';
@@ -235,7 +235,7 @@ class _RootPageState extends State<RootPage> {
           );
         case AuthStatus.FINISHED_SIGNED_UP:
           if (_userId.length > 0 && _userId != null) {
-            return new SignupLevelPage(
+            return new SignupSwiperPage(
               auth: widget.auth,
               onSignedIn: _onLoggedIn,
               userId: _userId,
@@ -258,7 +258,6 @@ class _RootPageState extends State<RootPage> {
           break;
         case AuthStatus.LOGGED_IN:
           if (_userId.length > 0 && _userId != null && _dataLoadedFromDatabase) {
-           
               return new DashboardScreen(
                 userId: _userId,
                 auth: widget.auth,
