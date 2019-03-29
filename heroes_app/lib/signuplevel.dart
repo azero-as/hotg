@@ -215,20 +215,16 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         onPressed: () {
-          if (_formKey.currentState.validate()) {
-            _formKey.currentState.save();
-            print("Succeeded");
-            crudObj.addFitnessLevel({
-              'fitnessLevel': _fitnessLevel,
-              'characterName': charactername.text,
-              'gameLevel': _gameLevel,
-              'xp': _xp,
-              'class': rpgClass,
-            }, widget.userId).catchError((e) {
-              print(e);
-            });
-            widget.onSignedIn();
+          saveUserInfo()
+          .then ((_) => {
+            widget.onSignedIn()
+          });
+          /* 
+          while (!finishedSavingData()) {
+            return Center(child: CircularProgressIndicator());
           }
+          */
+
         },
         padding: EdgeInsets.all(12),
         color: const Color(0xFF612A30),
@@ -287,5 +283,28 @@ class _SignupLevelPageState extends State<SignupLevelPage> {
                 ))),
       )),
     );
+  }
+
+  saveUserInfo() async {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+     try{ crudObj.addFitnessLevel({
+        'fitnessLevel': _fitnessLevel,
+        'characterName': charactername.text,
+        'gameLevel': _gameLevel,
+        'xp': _xp,
+        'class': rpgClass,
+        }, widget.userId);
+      } catch(e) {
+        print(e);
+        }
+        }
+      }
+
+  finishedSavingData() {
+    if (crudObj.finishedSavingUser) {
+      return true;
+        }
+      return false;
   }
 }

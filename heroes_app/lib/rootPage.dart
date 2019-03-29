@@ -45,9 +45,8 @@ enum AuthStatus {
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
-  bool _dataLoadedFromGetUserInfo = false;
-  bool _dataLoadedFromGetWorkout =
-  false; //if this is null, it is still loading data from firebase.
+  String _className = '';
+  bool _dataLoadedFromDatabase = false; //if this is null, it is still loading data from firebase.
 
   @override
   void initState() {
@@ -73,18 +72,22 @@ class _RootPageState extends State<RootPage> {
       }
     });
   }
-
+  
   void _onLoggedIn() {
     widget.auth.getCurrentUser().then((user) {
       setState(() {
         _userId = user.uid.toString();
       });
-
       new Future.delayed(Duration.zero, () {
         _setUserInfo(context);
-        _setWorkoutInfo(context);
-      });
+      }); 
     });
+    setState(() {
+      authStatus = AuthStatus.LOGGED_IN;
+    });
+  }
+
+  void _alreadyLoggedIn() {
     setState(() {
       authStatus = AuthStatus.LOGGED_IN;
     });
@@ -151,65 +154,72 @@ class _RootPageState extends State<RootPage> {
   }
 
   //Sets the start state of the User-model and calls _setWorkoutInfo with the user's class.
-  void _setUserInfo(BuildContext context) {
+  void _setUserInfo(BuildContext context) async {
+    print('setUserInfo');
     var user = ScopedModel.of<User>(context);
-    String _className;
 
-    CloudFunctions.instance.call(functionName: 'getUserInfo').then((response) {
-      user.startState(
-          response['characterName'],
-          response['gameLevel'],
-          response['userXp'],
-          response['xpCap'],
-          response['className'],
-          response['email']);
-      _className = response['className'];
-      setState(() {
-        _dataLoadedFromGetUserInfo = true;
-      });
-    }).then((response) {
-      String _convertedClass = convertClassName(_className);
-      _setWorkoutInfo(_convertedClass);
-    }).catchError((error) {
-      print(error);
-    });
-  }
+    try {
+      final dynamic resp = await CloudFunctions.instance.call(
+        functionName: 'getUserInfo',
+        );
+        setState(() {
+          user.startState(
+            resp['characterName'],
+            resp['gameLevel'],
+            resp['userXp'],
+            resp['xpCap'],
+            resp['className'],
+            resp['email']);
+            _className = resp['className'];
+        });
+        } catch(error) {
+          print('getUserInfo error');
+          print(error);
+        }
+        String _convertedClass =convertClassName(_className);
+        _setWorkoutInfo(_convertedClass);
+        }
 
   // Requests a workout from the database based on the user's rpg class and
   // creates a workout-model with the data.
-  void _setWorkoutInfo(className) {
+  void _setWorkoutInfo(className) async {
+    print('setWorkoutInfo');
     var workout = ScopedModel.of<Workout>(context);
 
-    CloudFunctions.instance.call(
+    try {
+      print(_className);
+      final dynamic response = await CloudFunctions.instance.call(
         functionName: 'getRecommendedWorkout',
-        parameters: {"className": className}).then((response) {
-      workout.setIntensity(response['intensity']);
-      workout.setWorkOutName(response['workoutName']);
-      workout.setWorkOutClass(response['class']);
-      workout.setDuration(response['duration']);
-      workout.setXp(response['xp']);
-      workout.setExercises(response['exercises']);
-      workout.setWarmUp(response['warmUp']);
+        parameters: <String, dynamic>{
+          'className':className,
+        },
+      );
       setState(() {
-        _dataLoadedFromGetWorkout = true;
-      });
-    }).catchError((error) {
+        workout.setIntensity(response['intensity']);
+        workout.setWorkOutName(response['workoutName']);
+        workout.setWorkOutClass(response['class']);
+        workout.setDuration(response['duration']);
+        workout.setXp(response['xp']);
+        workout.setExercises(response['exercises']);
+        workout.setWarmUp(response['warmUp']);
+        _dataLoadedFromDatabase = true;
+      });  
+    } catch (error) {
+      print('getRecommendedWorkout error');
       print(error);
-    });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     var workout = ScopedModel.of<Workout>(context);
-    {
       switch (authStatus) {
         case AuthStatus.NOT_DETERMINED:
           return new LoadingScreen();
           break;
         case AuthStatus.NOT_LOGGED_IN:
           setState(() {
-            _dataLoadedFromGetUserInfo = false;
-            _dataLoadedFromGetWorkout = false;
+            _dataLoadedFromDatabase = false;
           });
           workout.setListOfWorkouts(null);
           return FrontPage(
@@ -244,8 +254,8 @@ class _RootPageState extends State<RootPage> {
           );
           break;
         case AuthStatus.LOGGED_IN:
-          if (_userId.length > 0 && _userId != null) {
-            if (_dataLoadedFromGetUserInfo && _dataLoadedFromGetWorkout) {
+          if (_userId.length > 0 && _userId != null && _dataLoadedFromDatabase) {
+           
               return new DashboardScreen(
                 userId: _userId,
                 auth: widget.auth,
@@ -257,11 +267,9 @@ class _RootPageState extends State<RootPage> {
                 onSummary: _summary,
                 index: 0,
               );
-            } else {
-              return new LoadingScreen();
-            }
-          } else
+          } else {
             return new LoadingScreen();
+          }
           break;
         case AuthStatus.READY_TO_SIGN_OUT:
           return new Settings(
@@ -283,6 +291,7 @@ class _RootPageState extends State<RootPage> {
             onActiveWorkout: _activeWorkout,
             onSummary: _summary,
             onBackToWorkout: _backToWorkout,
+            alreadyLoggedIn: _alreadyLoggedIn,
           );
           break;
         case AuthStatus.ACTIVE_WORKOUT_SESSION:
@@ -292,7 +301,7 @@ class _RootPageState extends State<RootPage> {
             onLoggedIn: _onLoggedIn,
             onStartWorkout: _startWorkout,
             onSummary: _summary,
-          );
+            );
         case AuthStatus.SUMMARY:
           return new Summary(
             exercises: workout.selectedExercises,
@@ -300,6 +309,7 @@ class _RootPageState extends State<RootPage> {
             total_xp: workout.XpEarned,
             workoutType: workout.workoutName,
             onLoggedIn: _onLoggedIn,
+            alreadyLoggedIn: _alreadyLoggedIn,
           );
         case AuthStatus.BACK_TO_WORKOUTS:
           if (_userId.length > 0 && _userId != null) {
@@ -320,6 +330,5 @@ class _RootPageState extends State<RootPage> {
         default:
           return LoadingScreen();
       }
-    }
   }
 }
