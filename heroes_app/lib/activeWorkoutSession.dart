@@ -253,14 +253,8 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             },
           ),
           title: new CheckboxListTile(
-            value: _selectedExercises.contains(widget.exercises[index]["name"]),
-            onChanged: (bool selected) {
-              _onCategorySelected(
-                  selected,
-                  widget.exercises[index],
-                  widget.exercises[index]["name"],
-                  widget.exercises[index]);
-            },
+            value: false,
+            onChanged: null,
             title: Text(widget.exercises[index]["name"]),
           ),
           children: <Widget>[
