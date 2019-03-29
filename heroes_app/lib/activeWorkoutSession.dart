@@ -96,7 +96,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                 shrinkWrap: true,
                 children: <Widget>[
                   new Container(
-                      padding: EdgeInsets.fromLTRB(30, 8, 0, 8),
+                      padding: EdgeInsets.fromLTRB(25, 8, 0, 8),
                       color: const Color(0xFF212838),
                       child: new Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,7 +114,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                           Align(
                             //alignment: Alignment.topRight,
                             child: RaisedButton(
-                              color: Theme.of(context).primaryColor,
+                              color: Theme.of(context).secondaryHeaderColor,
                               textColor: Colors.white,
                               onPressed: () => Navigator.pop(context),
                               child: Icon(
@@ -126,7 +126,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                         ],
                       )),
                   new Container(
-                    padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+                    padding: EdgeInsets.fromLTRB(25, 40, 25, 40),
                     color: Colors.white,
                     child: Column(
                       children: <Widget>[
