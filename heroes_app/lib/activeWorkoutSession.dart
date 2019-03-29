@@ -256,11 +256,6 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                     padding: EdgeInsets.all(20),
                     child: new Text(
                     "Description: " +  workout.warmUp["description"].toString()))),
-            ListTile(
-                title: new Padding(
-                    padding: EdgeInsets.all(20),
-                    child: new Text("XP: " + workout.warmUp["xp"].toString()))),
-            //children: root["info"]
           ]);
     }
 

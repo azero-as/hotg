@@ -125,9 +125,6 @@ class _StartWorkoutPage extends State<StartWorkout> {
             ListTile(
                 title: new Text(
                     "Minutes: " + workout.warmUp["targetMin"].toString())),
-            ListTile(
-                title: new Text("XP: " + workout.warmUp["xp"].toString())),
-
         //children: root["info"]
       ]);
     }
