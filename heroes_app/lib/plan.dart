@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
+import 'models/user.dart';
 
 
 class Plan extends StatefulWidget {
@@ -53,9 +54,14 @@ class _PlanPageState extends State<Plan> {
   //Checks to see if all the necessary fields in the database are set and correct
   bool _validateWorkout(int index) {
     var workout = ScopedModel.of<Workout>(context);
+    var user = ScopedModel.of<User>(context);
     //if the workout does not have a list of exercises, do not display it as an option
     var wo = workout.listOfWorkouts[index];
 
+    //checks whether the workout has a fitnessLvl and whether the workouts fitnessLvl is higher than the user's
+    if(wo["fitnessLevel"] == null || wo["fitnessLevel"] > user.fitnessLevel){
+      return false;
+    }
     if (wo["exercises"] == null || wo["exercises"].length == 0) {
       return false;
     }
@@ -66,7 +72,7 @@ class _PlanPageState extends State<Plan> {
         wo["xp"] == null) {
       return false;
     }
-    if (!(wo["duration"] is int || wo["xp g"] is int)) {
+    if (!(wo["duration"] is int || wo["xp"] is int)) {
       return false;
 
     }
@@ -85,7 +91,6 @@ class _PlanPageState extends State<Plan> {
     if(!(wo["warmUp"]["xp"] is int)){
       return false;
     }
-
 
     else {
       for (var exercise in wo["exercises"]) {

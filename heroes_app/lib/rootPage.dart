@@ -1,21 +1,21 @@
-import 'package:flutter/material.dart';
-import 'login.dart';
-import 'dashboard.dart';
-import 'authentication.dart';
-import 'signup.dart';
-import 'frontpage.dart';
-import 'signuplevel.dart';
-import 'settings.dart';
-import 'loadingScreen.dart';
-import 'models/user.dart';
-import 'models/workout.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:cloud_functions/cloud_functions.dart';
-import 'startWorkout.dart';
-import 'activeWorkoutSession.dart';
-import 'summary.dart';
+import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 import './logic/recommendedWorkoutLogic.dart';
+import 'activeWorkoutSession.dart';
+import 'authentication.dart';
+import 'dashboard.dart';
+import 'frontpage.dart';
+import 'loadingScreen.dart';
+import 'login.dart';
+import 'models/user.dart';
+import 'models/workout.dart';
+import 'settings.dart';
+import 'signup.dart';
+import 'signuplevel.dart';
+import 'startWorkout.dart';
+import 'summary.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({this.auth, this.user});
@@ -162,7 +162,9 @@ class _RootPageState extends State<RootPage> {
           response['userXp'],
           response['xpCap'],
           response['className'],
-          response['email']);
+          response['email'],
+          response["fitnessLevel"]);
+
       _className = response['className'];
       setState(() {
         _dataLoadedFromGetUserInfo = true;
