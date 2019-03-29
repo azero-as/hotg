@@ -3,15 +3,15 @@ import "package:flutter_swiper/flutter_swiper.dart";
 import 'authentication.dart';
 import 'services/crud.dart';
 import 'modifiedSwiperControl.dart';
+import 'ensureVisibleWhenFocused.dart';
 
 class SignupSwiperPage extends StatefulWidget {
-  SignupSwiperPage(
-      {Key key,
-      this.userId,
-      this.auth,
-      this.onSignedIn,
-      this.title,
-      this.onSignedOut})
+  SignupSwiperPage({Key key,
+    this.userId,
+    this.auth,
+    this.onSignedIn,
+    this.title,
+    this.onSignedOut})
       : super(key: key);
 
   final String userId;
@@ -30,6 +30,8 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
   int _fitnessLevel = 1;
   int _rpgClassValue = 1;
   var _charNameFormKey = GlobalKey<FormState>();
+
+  FocusNode _focusNodeCharacter = new FocusNode();
 
   // Descriptions for choosing a class
   String _chooseClassDescription =
@@ -64,19 +66,24 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
   @override
   Widget build(BuildContext context) {
     //CharacterName input field
-    final characterName = TextFormField(
-        maxLength: 27,
-        keyboardType: TextInputType.text,
-        autofocus: false,
-        validator: (value) =>
-            value.length == 0 ? 'Every hero needs a name' : null,
-        controller: charactername,
-        decoration: InputDecoration(
-          errorStyle: TextStyle(fontSize: 14),
-          labelText: 'Character Name',
-          contentPadding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
-          border: UnderlineInputBorder(),
-        ));
+    final characterName = EnsureVisibleWhenFocused(
+        focusNode: _focusNodeCharacter,
+        child: TextFormField(
+              maxLength: 27,
+              keyboardType: TextInputType.text,
+              autofocus: false,
+              focusNode: _focusNodeCharacter,
+              validator: (value) =>
+              value.length == 0 ? 'Every hero needs a name' : null,
+              controller: charactername,
+              decoration: InputDecoration(
+                errorStyle: TextStyle(fontSize: 14),
+                labelText: 'Character Name',
+                contentPadding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
+                border: UnderlineInputBorder(),
+              ),
+        ),
+    );
 
     // -------RADIO BUTTONS for class---------
     final barbarian = new RadioListTile(
@@ -223,7 +230,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
     );
 
     return new Theme(
-        // set theme data for this class to dark
+      // set theme data for this class to dark
         data: ThemeData.dark(),
         child: Scaffold(
           backgroundColor: const Color(0xFF212838),
@@ -240,57 +247,61 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
             children: <Widget>[
               Center(
                   child: Container(
-                margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
-                padding: EdgeInsets.only(left: 24.0, right: 24.0),
-                child: Column(
-                  children: <Widget>[
-                    Form(
-                      key: _charNameFormKey,
+                    margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
+                    padding: EdgeInsets.only(left: 24.0, right: 24.0),
+                    child: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-                          _space(60.0),
-                          _logo(),
-                          _headerText('Pick your character name'),
-                          _descriptionText(
-                              'Every hero needs a suitable name! Start your journey by picking a character name.'),
-                          _space(40),
-                          Container(width: 250, child: characterName),
+                          Form(
+                            key: _charNameFormKey,
+                            child: Column(
+                              children: <Widget>[
+                                _space(60.0),
+                                _logo(),
+                                _headerText('Pick your character name'),
+                                _descriptionText(
+                                    'Every hero needs a suitable name! Start your journey by picking a character name.'),
+                                _space(40),
+                                Container(width: 250, child: characterName),
+                                SizedBox(height: 300),
+                              ],
+                            ),
+                            onChanged: () {
+                              setState(() {});
+                              if (_charNameFormKey.currentState.validate()) {
+                                _charNameIsValid = true;
+                                _charNameFormKey.currentState.save();
+                              } else {
+                                _charNameIsValid = false;
+                              }
+                            },
+                          )
                         ],
                       ),
-                      onChanged: () {
-                        setState(() {});
-                        if (_charNameFormKey.currentState.validate()) {
-                          _charNameIsValid = true;
-                          _charNameFormKey.currentState.save();
-                        } else {
-                          _charNameIsValid = false;
-                        }
-                      },
-                    )
-                  ],
-                ),
-              )),
+                    ),
+
+                  )),
               Center(
                 child: Container(
                   margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
                   padding: EdgeInsets.only(left: 24.0, right: 24.0),
                   child: SingleChildScrollView(
                       child: Column(
-                    children: <Widget>[
-                      _headerText("Pick your class"),
-                      _descriptionText(_chooseClassDescription),
-                      _subHeaderText("STRENGTH"),
-                      _descriptionText(_strengthDescription),
-                      barbarian,
-                      fighter,
-                      paladin,
-                      _subHeaderText("DEXTERITY"),
-                      _descriptionText(_dexterityDescription),
-                      monk,
-                      rogue,
-                      ranger
-                    ],
-                  )),
+                        children: <Widget>[
+                          _headerText("Pick your class"),
+                          _descriptionText(_chooseClassDescription),
+                          _subHeaderText("STRENGTH"),
+                          _descriptionText(_strengthDescription),
+                          barbarian,
+                          fighter,
+                          paladin,
+                          _subHeaderText("DEXTERITY"),
+                          _descriptionText(_dexterityDescription),
+                          monk,
+                          rogue,
+                          ranger
+                        ],
+                      )),
                 ),
               ),
               Container(

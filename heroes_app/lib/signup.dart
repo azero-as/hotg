@@ -158,6 +158,7 @@ class _SignupPageState extends State<SignupPage> {
             maxLines: 1,
             keyboardType: TextInputType.emailAddress,
             autofocus: false,
+            focusNode: _focusNodeEmail,
             key: Key("signupEmail"),
             decoration: InputDecoration(
               icon: Icon(Icons.email),
@@ -180,6 +181,7 @@ class _SignupPageState extends State<SignupPage> {
           padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
           child: TextFormField(
             autofocus: false,
+            focusNode: _focusNodePassword,
             key: Key("signupPassword"),
             maxLines: 1,
             obscureText: true,
@@ -204,6 +206,7 @@ class _SignupPageState extends State<SignupPage> {
           padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
           child: TextFormField(
             autofocus: false,
+            focusNode: _focusNodePassword2,
             key: Key("signupPassword2"),
             maxLines: 1,
             obscureText: true,

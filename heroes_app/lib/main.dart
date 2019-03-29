@@ -9,6 +9,7 @@ import 'signupSwiper.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/user.dart';
 import 'models/workout.dart';
+import 'signupSwiper.dart';
 
 void main() async {
   // Lock screen in portrait mode
@@ -44,7 +45,8 @@ class Heroes extends StatelessWidget {
               accentColor: const Color(0xFF5e72a1),
             ),
             routes: routes,
-            home: new RootPage(auth: new Auth(), user: user),
+            //home: new RootPage(auth: new Auth(), user: user),
+            home: new SignupSwiperPage(),
           )),
     );
   }
