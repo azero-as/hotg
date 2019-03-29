@@ -45,6 +45,16 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       }
     }
 
+    //Finish workout button color
+    Color _finishWorkoutColor(){
+      if(_selectedExercises.contains("Warm-up")){
+        return Theme.of(context).primaryColor;
+      }
+      else{
+        return Colors.grey;
+      }
+    }
+
     //Checks to see if warm up is selected
     void _warmUpSelected(bool selected, id, name, exercise) {
       if (selected == true) {
@@ -369,7 +379,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                     _XpEarned); // Increase use xp total in database
               },
               padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-              color: const Color(0xFF612A30),
+              color: _finishWorkoutColor(),
               child: Text(
                 'Finish workout',
                 style: TextStyle(color: Colors.white),
