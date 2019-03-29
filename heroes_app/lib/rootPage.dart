@@ -243,7 +243,7 @@ class _RootPageState extends State<RootPage> {
               title: 'Heroes of the Gym',
             );
           }
-          else 
+          else
             return new LoadingScreen();
           break;
         case AuthStatus.READY_TO_SIGN_UP:
@@ -275,7 +275,7 @@ class _RootPageState extends State<RootPage> {
           return new Settings(
             auth: widget.auth,
             onSignedOut: _onSignedOut,
-            onSignedIn: _onLoggedIn,
+            alreadyLoggedIn: _alreadyLoggedIn,
           );
           break;
         case AuthStatus.START_WORKOUT:
