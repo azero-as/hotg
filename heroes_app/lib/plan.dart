@@ -25,6 +25,8 @@ class _PlanPageState extends State<Plan> {
   bool _dataLoadedFromFireBase =
       false; //if this is null, it is still loading data from firebase.
 
+  int _totalXP = 0;
+
   @override
   void initState() {
     super.initState();
@@ -85,8 +87,6 @@ class _PlanPageState extends State<Plan> {
     if(!(wo["warmUp"]["xp"] is int)){
       return false;
     }
-
-
     else {
       for (var exercise in wo["exercises"]) {
         if (exercise["name"] == null ||
@@ -107,6 +107,17 @@ class _PlanPageState extends State<Plan> {
     }
   }
 
+
+  void _calculateTotalXP(int index){
+      _totalXP = 0;
+      var workout = ScopedModel.of<Workout>(context);
+      var wo = workout.listOfWorkouts[index];
+      for(var i = 0; i < wo["exercises"].length; i++){
+        _totalXP += wo["exercises"][i]["xp"];
+      }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget _buildWaitingScreen() {
@@ -122,8 +133,10 @@ class _PlanPageState extends State<Plan> {
     Widget _workout(int index) {
       if (_validateWorkout(index) == false) {
         return Text("");
-      } else {
+      }
 
+      else {
+        _calculateTotalXP(index);
         return new Container(
           // add border for the workout info box
           margin: new EdgeInsets.symmetric(horizontal: 40.0, vertical: 12.0),
@@ -238,8 +251,7 @@ class _PlanPageState extends State<Plan> {
                                 height: 10,
                               ),
                               Text(
-                                model.listOfWorkouts[index]["xp"].toString() ??
-                                    '',
+                                _totalXP.toString() ?? '',
                                 style: TextStyle(color: Color(0xFF434242)),
                               ),
                               // add space between lines
@@ -310,7 +322,8 @@ class _PlanPageState extends State<Plan> {
       var workout = ScopedModel.of<Workout>(context);
       if (workout.listOfWorkouts.isEmpty) {
         return Text("");
-      } else {
+      }
+      else {
         return new ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
