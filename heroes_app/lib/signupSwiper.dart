@@ -6,12 +6,13 @@ import 'modifiedSwiperControl.dart';
 import 'ensureVisibleWhenFocused.dart';
 
 class SignupSwiperPage extends StatefulWidget {
-  SignupSwiperPage({Key key,
-    this.userId,
-    this.auth,
-    this.onSignedIn,
-    this.title,
-    this.onSignedOut})
+  SignupSwiperPage(
+      {Key key,
+      this.userId,
+      this.auth,
+      this.onSignedIn,
+      this.title,
+      this.onSignedOut})
       : super(key: key);
 
   final String userId;
@@ -46,6 +47,8 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
   int _xp = 0;
   String rpgClass = 'Barbarian';
 
+  bool _isIos;
+  bool _isAndroid;
   bool _charNameIsValid = false;
   final charactername = TextEditingController();
   CrudMethods crudObj = new CrudMethods();
@@ -65,24 +68,27 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
 
   @override
   Widget build(BuildContext context) {
+    _isIos = Theme.of(context).platform == TargetPlatform.iOS;
+    _isAndroid = Theme.of(context).platform == TargetPlatform.android;
+
     //CharacterName input field
     final characterName = EnsureVisibleWhenFocused(
+      focusNode: _focusNodeCharacter,
+      child: TextFormField(
+        maxLength: 27,
+        keyboardType: TextInputType.text,
+        autofocus: false,
         focusNode: _focusNodeCharacter,
-        child: TextFormField(
-              maxLength: 27,
-              keyboardType: TextInputType.text,
-              autofocus: false,
-              focusNode: _focusNodeCharacter,
-              validator: (value) =>
-              value.length == 0 ? 'Every hero needs a name' : null,
-              controller: charactername,
-              decoration: InputDecoration(
-                errorStyle: TextStyle(fontSize: 14),
-                labelText: 'Character Name',
-                contentPadding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
-                border: UnderlineInputBorder(),
-              ),
+        validator: (value) =>
+            value.length == 0 ? 'Every hero needs a name' : null,
+        controller: charactername,
+        decoration: InputDecoration(
+          errorStyle: TextStyle(fontSize: 14),
+          labelText: 'Character Name',
+          contentPadding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
+          border: UnderlineInputBorder(),
         ),
+      ),
     );
 
     // -------RADIO BUTTONS for class---------
@@ -93,6 +99,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 1,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _rpgClassValue = value;
             rpgClass = "Barbarian";
@@ -107,6 +114,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 2,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _rpgClassValue = value;
             rpgClass = "Fighter";
@@ -120,6 +128,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 3,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _rpgClassValue = value;
             rpgClass = "Paladin";
@@ -134,6 +143,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 4,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _rpgClassValue = value;
             rpgClass = "Monk";
@@ -148,6 +158,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 5,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _rpgClassValue = value;
             rpgClass = "Rogue";
@@ -162,6 +173,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 6,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _rpgClassValue = value;
             rpgClass = "Ranger";
@@ -177,7 +189,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 1,
         groupValue: _fitnessLevel,
         onChanged: (int value) {
-          print(value);
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _fitnessLevel = value;
           });
@@ -191,6 +203,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 2,
         groupValue: _fitnessLevel,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _fitnessLevel = value;
           });
@@ -204,6 +217,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 3,
         groupValue: _fitnessLevel,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _fitnessLevel = value;
           });
@@ -229,8 +243,82 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
       ),
     );
 
+    // Different build for character name page based on device
+    Widget _characterNameContainer() {
+      if (_isIos) {
+        return Container(
+          margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
+          padding: EdgeInsets.only(left: 24.0, right: 24.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Form(
+                  key: _charNameFormKey,
+                  child: Column(
+                    children: <Widget>[
+                      _space(60.0),
+                      _logo(),
+                      _headerText('Pick your character name'),
+                      _descriptionText(
+                          'Every hero needs a suitable name! Start your journey by picking a character name.'),
+                      _space(40),
+                      Container(width: 250, child: characterName),
+                    ],
+                  ),
+                  onChanged: () {
+                    setState(() {});
+                    if (_charNameFormKey.currentState.validate()) {
+                      _charNameIsValid = true;
+                      _charNameFormKey.currentState.save();
+                    } else {
+                      _charNameIsValid = false;
+                    }
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      } else if (_isAndroid) {
+        return Container(
+          margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
+          padding: EdgeInsets.only(left: 24.0, right: 24.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Form(
+                  key: _charNameFormKey,
+                  child: Column(
+                    children: <Widget>[
+                      _space(60.0),
+                      _logo(),
+                      _headerText('Pick your character name'),
+                      _descriptionText(
+                          'Every hero needs a suitable name! Start your journey by picking a character name.'),
+                      _space(40),
+                      Container(width: 250, child: characterName),
+                      SizedBox(height: 300),
+                    ],
+                  ),
+                  onChanged: () {
+                    setState(() {});
+                    if (_charNameFormKey.currentState.validate()) {
+                      _charNameIsValid = true;
+                      _charNameFormKey.currentState.save();
+                    } else {
+                      _charNameIsValid = false;
+                    }
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      }
+    }
+
     return new Theme(
-      // set theme data for this class to dark
+        // set theme data for this class to dark
         data: ThemeData.dark(),
         child: Scaffold(
           backgroundColor: const Color(0xFF212838),
@@ -245,69 +333,34 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                     activeSize: 10.0)),
             control: new ModifiedSwiperControl(color: Colors.white),
             children: <Widget>[
-              Center(
-                  child: Container(
-                    margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
-                    padding: EdgeInsets.only(left: 24.0, right: 24.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: <Widget>[
-                          Form(
-                            key: _charNameFormKey,
-                            child: Column(
-                              children: <Widget>[
-                                _space(60.0),
-                                _logo(),
-                                _headerText('Pick your character name'),
-                                _descriptionText(
-                                    'Every hero needs a suitable name! Start your journey by picking a character name.'),
-                                _space(40),
-                                Container(width: 250, child: characterName),
-                                SizedBox(height: 300),
-                              ],
-                            ),
-                            onChanged: () {
-                              setState(() {});
-                              if (_charNameFormKey.currentState.validate()) {
-                                _charNameIsValid = true;
-                                _charNameFormKey.currentState.save();
-                              } else {
-                                _charNameIsValid = false;
-                              }
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-
-                  )),
+              Center(child: _characterNameContainer()),
               Center(
                 child: Container(
-                  margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
+                  margin: EdgeInsets.fromLTRB(35, 20, 35, 30),
                   padding: EdgeInsets.only(left: 24.0, right: 24.0),
                   child: SingleChildScrollView(
                       child: Column(
-                        children: <Widget>[
-                          _headerText("Pick your class"),
-                          _descriptionText(_chooseClassDescription),
-                          _subHeaderText("STRENGTH"),
-                          _descriptionText(_strengthDescription),
-                          barbarian,
-                          fighter,
-                          paladin,
-                          _subHeaderText("DEXTERITY"),
-                          _descriptionText(_dexterityDescription),
-                          monk,
-                          rogue,
-                          ranger
-                        ],
-                      )),
+                    children: <Widget>[
+                      _headerText("Pick your class"),
+                      _descriptionText(_chooseClassDescription),
+                      _subHeaderText("STRENGTH"),
+                      _descriptionText(_strengthDescription),
+                      barbarian,
+                      fighter,
+                      paladin,
+                      _subHeaderText("DEXTERITY"),
+                      _descriptionText(_dexterityDescription),
+                      monk,
+                      rogue,
+                      ranger
+                    ],
+                  )),
                 ),
               ),
               Container(
-                  margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
+                  margin: EdgeInsets.fromLTRB(35, 20, 35, 30),
                   padding: EdgeInsets.only(left: 24.0, right: 24.0),
-                  child: Center(
+                  child: SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
                         _space(20),

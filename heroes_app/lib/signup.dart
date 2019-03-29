@@ -76,7 +76,7 @@ class _SignupPageState extends State<SignupPage> {
 
   // ------ FORM WIDGETS ------
   _returnForm() {
-    if (_isIos){
+    if (_isIos) {
       return new Container(
           padding: EdgeInsets.only(left: 24.0, right: 24.0),
           margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
@@ -87,7 +87,7 @@ class _SignupPageState extends State<SignupPage> {
               children: <Widget>[
                 SizedBox(height: 25.0),
                 _logo(),
-                _welcomeText('First, we need the basics'),
+                _welcomeText('First we need the basics'),
                 _emailInput(),
                 _passwordInput1(),
                 _passwordInput2(),
@@ -97,7 +97,7 @@ class _SignupPageState extends State<SignupPage> {
               ],
             ),
           ));
-    } else if (_isAndroid){
+    } else if (_isAndroid) {
       return new Container(
           padding: EdgeInsets.only(left: 24.0, right: 24.0),
           margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
@@ -108,7 +108,7 @@ class _SignupPageState extends State<SignupPage> {
               children: <Widget>[
                 SizedBox(height: 25.0),
                 _logo(),
-                _welcomeText('First, we need the basics'),
+                _welcomeText('First we need the basics'),
                 _emailInput(),
                 _passwordInput1(),
                 _passwordInput2(),
@@ -151,7 +151,7 @@ class _SignupPageState extends State<SignupPage> {
 
   Widget _emailInput() {
     return EnsureVisibleWhenFocused(
-      focusNode: _focusNodeEmail,
+        focusNode: _focusNodeEmail,
         child: Padding(
           padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
           child: TextFormField(
@@ -166,17 +166,17 @@ class _SignupPageState extends State<SignupPage> {
               contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               border: UnderlineInputBorder(),
             ),
-            validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
+            validator: (value) =>
+                value.isEmpty ? 'Email can\'t be empty' : null,
             onSaved: (value) => _email = value,
           ),
-        )
-    );
+        ));
   }
 
   //Password input field
   Widget _passwordInput1() {
     return EnsureVisibleWhenFocused(
-      focusNode: _focusNodePassword,
+        focusNode: _focusNodePassword,
         child: Padding(
           padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
           child: TextFormField(
@@ -191,17 +191,17 @@ class _SignupPageState extends State<SignupPage> {
               contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
               border: UnderlineInputBorder(),
             ),
-            validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
+            validator: (value) =>
+                value.isEmpty ? 'Password can\'t be empty' : null,
             onSaved: (value) => _password = value,
           ),
-        )
-    );
+        ));
   }
 
   //Password confirmation input field
   Widget _passwordInput2() {
     return EnsureVisibleWhenFocused(
-      focusNode: _focusNodePassword2,
+        focusNode: _focusNodePassword2,
         child: Padding(
           padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
           child: TextFormField(
@@ -217,11 +217,10 @@ class _SignupPageState extends State<SignupPage> {
               border: UnderlineInputBorder(),
             ),
             validator: (value) =>
-            value.isEmpty ? 'Password needs to be verified' : null,
+                value.isEmpty ? 'Password needs to be verified' : null,
             onSaved: (value) => _passwordVerification = value,
           ),
-        )
-    );
+        ));
   }
 
   Widget _nextButton() {
@@ -343,8 +342,9 @@ class _SignupPageState extends State<SignupPage> {
             _errorMessage = e.message;
           } else
             _errorMessage = e.message;
-          if (_errorMessage == "The given password is invalid. [ Password should be at least 6 characters ]") {
-            _errorMessage  = "The password must be 6 characters long or more.";
+          if (_errorMessage ==
+              "The given password is invalid. [ Password should be at least 6 characters ]") {
+            _errorMessage = "The password must be 6 characters long or more.";
           }
         });
       }

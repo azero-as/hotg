@@ -45,8 +45,7 @@ class Heroes extends StatelessWidget {
               accentColor: const Color(0xFF5e72a1),
             ),
             routes: routes,
-            //home: new RootPage(auth: new Auth(), user: user),
-            home: new SignupSwiperPage(),
+            home: new RootPage(auth: new Auth(), user: user),
           )),
     );
   }
