@@ -36,14 +36,16 @@ class _WorkoutsPageState extends State<Workouts> {
     }
 
     CloudFunctions.instance
-        .call(
+    .call(
       functionName: 'getAllWorkouts',
     )
-        .then((response) {
-      workout.setListOfWorkouts(response['workoutList']);
-      setState(() {
-        _dataLoadedFromFireBase = true;
-      });
+    .then((response) {
+      if (this.mounted) {
+        workout.setListOfWorkouts(response['workoutList']);
+        setState(() {
+          _dataLoadedFromFireBase = true;
+        });
+      }
     }).catchError((error) {
       print(error);
     });
