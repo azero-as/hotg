@@ -123,10 +123,12 @@ class _LoginPageState extends State<LoginPage> {
 
   // Perform login
   void _validateAndSubmit() async {
-    setState(() {
-      _errorMessage = "";
-      _isLoading = true;
-    });
+    if (this.mounted) {
+      setState(() {
+        _errorMessage = "";
+        _isLoading = true;
+      });
+    }
     if (_validateAndSave()) {
       String userId = "";
       try {
@@ -134,10 +136,11 @@ class _LoginPageState extends State<LoginPage> {
         userId = await widget.auth.signIn(_email, _password);
         print('Signed in: $userId');
         }
-
-        setState(() {
-          _isLoading = false;
-        });
+        if (this.mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
 
         if (userId.length > 0 && userId != null && _formMode == FormMode.LOGIN) {
           widget.onSignedIn();
