@@ -40,26 +40,31 @@ class _LoginPageState extends State<LoginPage> {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
 
     //Returns all the elements to the page
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: new AppBar(
+    return new Theme(
+      data: ThemeData.dark(),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
+        appBar: new AppBar(
+          backgroundColor: Theme.of(context).secondaryHeaderColor,
         //title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
-            key: Key("loginBackButton"),
-            onPressed: (){
-              widget.onSignedOut();
-            }),
+        key: Key("loginBackButton"),
+        onPressed: (){
+        widget.onSignedOut();
+        }),
         iconTheme: IconThemeData(
-          color: Colors.white, //change your color here
+        color: Colors.white, //change your color here
         ),
-      ),
-      body: Stack(
+        ),
+        body: Stack(
         children: <Widget>[
-          _returnBody(),
-          _showCircularProgress(),
+        _returnBody(),
+        _showCircularProgress(),
         ],
-      )
+    )
+    )
     );
+
   }
 
   //loading circle
@@ -214,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
       child: new Text(
-        t, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0,), textAlign: TextAlign.center,
+        t, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25.0,), textAlign: TextAlign.center,
       ),
     );
   }
@@ -284,14 +289,14 @@ class _LoginPageState extends State<LoginPage> {
     return FlatButton(
       child: RichText(
         text: TextSpan(
-          text: 'Not already a hero? Join us ', style: TextStyle(color: Colors.black54),
+          text: 'Not already a hero? Join us ', style: TextStyle(color: Colors.white),
           children: <TextSpan>[
             TextSpan(
               text: 'here!',
               style: TextStyle(
-                color: Colors.black54,
+                color: Colors.white,
                 decoration: TextDecoration.underline,
-                decorationColor: Colors.black54,
+                decorationColor: Colors.white,
                 decorationStyle: TextDecorationStyle.solid,
               ),
             ),
