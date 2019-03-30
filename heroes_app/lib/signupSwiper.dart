@@ -48,7 +48,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
   final charactername = TextEditingController();
   CrudMethods crudObj = new CrudMethods();
 
-  void _validateAndSave() async {
+  void _saveInfo() async {
     try {
       crudObj.addFitnessLevel({
         'fitnessLevel': _fitnessLevel,
@@ -56,15 +56,11 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         'gameLevel': _gameLevel,
         'xp': _xp,
         'class': rpgClass,
-        },
-        widget.userId)
-        .then((_) => {
-           widget.onSignedIn()
-        });
-      } catch(e) {
-          print(e);
-        }
+      }, widget.userId).then((_) => {widget.onSignedIn()});
+    } catch (e) {
+      print(e);
     }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +212,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         // disables button if character name is not valid
-        onPressed: !_charNameIsValid ? null : _validateAndSave ,
+        onPressed: !_charNameIsValid ? null : _saveInfo,
         padding: EdgeInsets.all(12),
         color: const Color(0xFF612A30),
         child: Text(
@@ -262,12 +258,14 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                         ],
                       ),
                       onChanged: () {
-                        if (_charNameFormKey.currentState.validate()) {
-                          _charNameIsValid = true;
-                          _charNameFormKey.currentState.save();
-                        } else {
-                          _charNameIsValid = false;
-                        }
+                        setState(() {
+                          if (_charNameFormKey.currentState.validate()) {
+                            _charNameIsValid = true;
+                            _charNameFormKey.currentState.save();
+                          } else {
+                            _charNameIsValid = false;
+                          }
+                        });
                       },
                     )
                   ],
