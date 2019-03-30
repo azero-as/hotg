@@ -8,15 +8,19 @@ class Workout extends Model {
   // Belongs to Home
   String _intensity = '';
   String _workoutName = '';
+  String _workoutClass = '';
   int _duration = -1;
   int _xp = -1;
   List<dynamic> _exercises = [];
+  Map _warmUp = {};
 
   int get xp => _xp;
   String get intensity => _intensity;
   String get workoutName => _workoutName;
+  String get workoutClass => _workoutClass;
   int get duration => _duration;
   List<dynamic> get exercises => _exercises;
+  Map get warmUp => _warmUp;
 
   // Belongs to activeWorkoutSession
   List<dynamic> _selectedExercises = []; //Same as exercises in activeWorkoutSession.
@@ -45,7 +49,9 @@ class Workout extends Model {
     this._duration = workout[index]["duration"];
     this._intensity = workout[index]["intensity"];
     this._workoutName = workout[index]["workoutName"];
+    this._workoutClass = workout[index]["class"];
     this._exercises = workout[index]["exercises"];
+    this._warmUp = workout[index]["warmUp"];
   }
 
   void setFinishedWorkout(List<dynamic> selectedExercises, int XpEarned, int BonusXP) {
@@ -70,6 +76,16 @@ class Workout extends Model {
     notifyListeners();
   }
 
+
+  void setWarmUp(Map warmUp) {
+    this._warmUp = warmUp;
+    notifyListeners();
+  }
+  void setWorkOutClass(String workoutClass) {
+    this._workoutClass = workoutClass;
+    notifyListeners();
+  }
+
   void setDuration(int duration) {
     this._duration = duration;
     notifyListeners();
@@ -79,4 +95,6 @@ class Workout extends Model {
     this._exercises = exercises;
     notifyListeners();
   }
+
+
 }

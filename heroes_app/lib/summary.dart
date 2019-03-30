@@ -9,8 +9,9 @@ class Summary extends StatefulWidget {
   final int total_xp;
   final String workoutType;
   final VoidCallback onLoggedIn;
+  final VoidCallback alreadyLoggedIn;
 
-  Summary({this.exercises, this.bonus, this.total_xp, this.workoutType, this.onLoggedIn});
+  Summary({this.exercises, this.bonus, this.total_xp, this.workoutType, this.onLoggedIn, this.alreadyLoggedIn});
 
   @override
   State createState() => new _SummaryState();
@@ -22,7 +23,7 @@ class _SummaryState extends State<Summary> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<User>(builder: (context, child, model) {
     return Scaffold(
-        backgroundColor: Colors.grey[300],
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
         appBar: AppBar(
           leading: new IconButton(
               icon: Icon(Icons.close),
@@ -35,7 +36,7 @@ class _SummaryState extends State<Summary> {
                   model.setLevelUpFalse();
                 }
                 // Navigate to homepage
-                widget.onLoggedIn();
+                widget.alreadyLoggedIn();
               }),
           title: Text(
             "Summary",
@@ -142,7 +143,7 @@ class _SummaryState extends State<Summary> {
             shrinkWrap: true,
             children: <Widget>[
               new Container(
-                padding: EdgeInsets.fromLTRB(30, 8, 0, 8),
+                padding: EdgeInsets.fromLTRB(25, 8, 0, 8),
                 color: const Color(0xFF212838),
                 child: new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,7 +161,7 @@ class _SummaryState extends State<Summary> {
                     Align(
                       //alignment: Alignment.topRight,
                       child: RaisedButton(
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).secondaryHeaderColor,
                           textColor: Colors.white,
                           onPressed: () => Navigator.pop(context),
                           child: Icon(
@@ -173,7 +174,7 @@ class _SummaryState extends State<Summary> {
                 )
               ),
               new Container(
-                padding: EdgeInsets.fromLTRB(10, 40, 10, 40),
+                padding: EdgeInsets.fromLTRB(25, 40, 25, 40),
                 color: Colors.white,
                 child: ScopedModelDescendant<User>(builder: (context, child, model) {
                   return Column (

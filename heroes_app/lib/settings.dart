@@ -6,11 +6,11 @@ import 'models/user.dart';
 class Settings extends StatefulWidget {
   //For signing out
 
-  Settings({this.auth, this.onSignedOut, this.onSignedIn});
+  Settings({this.auth, this.onSignedOut, this.alreadyLoggedIn});
 
   final BaseAuth auth;
   final VoidCallback onSignedOut;
-  final VoidCallback onSignedIn;
+  final VoidCallback alreadyLoggedIn;
 
   @override
   State createState() => new SettingsState();
@@ -22,11 +22,12 @@ class SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
 
       return Scaffold(
+          backgroundColor: Theme.of(context).secondaryHeaderColor,
           appBar: AppBar(
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
-                widget.onSignedIn();
+                widget.alreadyLoggedIn();
               },
               color: Colors.white,
             ),
@@ -57,8 +58,12 @@ class SettingsState extends State<Settings> {
           return new Container();
         }
         return ListTile(
-          leading: Icon(Icons.person),
-          title: Text(model.characterName),
+          leading: Icon(Icons.person, color: Colors.white,),
+          title: Text(model.characterName,
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
         );
         }),
       );
@@ -73,8 +78,13 @@ class SettingsState extends State<Settings> {
           return new Container();
         }
         return ListTile(
-          leading: Icon(Icons.email),
-          title: Text(model.email),
+          leading: Icon(Icons.email,
+          color: Colors.white,),
+          title: Text(model.email,
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
         );
       })
       );
