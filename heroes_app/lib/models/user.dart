@@ -2,6 +2,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import '../authentication.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class User extends Model {
 
@@ -14,6 +15,7 @@ class User extends Model {
   String _className;
   bool _levelUp = false;
   String _email;
+  String _imageUrl = '';
 
   int get xpCap => _xpCap;
   int get xp => _xp;
@@ -22,6 +24,7 @@ class User extends Model {
   String get className => _className;
   bool get levelUp => _levelUp;
   String get email => _email;
+  String get imageUrl => _imageUrl;
 
   void startState(String characterName, int gameLevel, int userXp, int xpCap, String className, String email) {
     _characterName = characterName;
@@ -148,4 +151,16 @@ class User extends Model {
     this._levelUp = false;
     notifyListeners();
   }
+
+    // Get ImageUrl based on className.
+  void setImageUrl() async {
+    String imageUrl = _className + '.png'; 
+
+    StorageReference ref = FirebaseStorage.instance.ref().child(imageUrl);
+    String location = await ref.getDownloadURL();
+    this._imageUrl = location;
+    print('ImageUrl: '+imageUrl);
+    notifyListeners();
+  }
+
 }

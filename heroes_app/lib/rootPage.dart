@@ -176,6 +176,7 @@ class _RootPageState extends State<RootPage> {
         }
         String _convertedClass =convertClassName(_className);
         _setWorkoutInfo(_convertedClass);
+        user.setImageUrl();
         }
 
   // Requests a workout from the database based on the user's rpg class and
@@ -184,7 +185,6 @@ class _RootPageState extends State<RootPage> {
     var workout = ScopedModel.of<Workout>(context);
 
     try {
-      print(_className);
       final dynamic response = await CloudFunctions.instance.call(
         functionName: 'getRecommendedWorkout',
         parameters: <String, dynamic>{

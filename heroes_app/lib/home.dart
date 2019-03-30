@@ -6,7 +6,6 @@ import 'models/user.dart';
 import 'models/workout.dart';
 import 'authentication.dart';
 import 'startWorkout.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 // build the home page and call on the stateful classes
 class Home extends StatelessWidget {
@@ -71,15 +70,9 @@ class AvatarOverview extends StatefulWidget {
 // class for appbar of home page
 class _AvatarOverviewState extends State<AvatarOverview> {
 
-  String _imageUrl = '';
-
   @override
   void initState() {
     super.initState();
-
-    setState(() {
-     getImageUrl();
-    });
     
   }
 
@@ -118,7 +111,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
                         height: imageHeight,
                         margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
                           child: Image.network(
-                          _imageUrl,
+                          model.imageUrl,
                           fit: BoxFit.fill,
                         ),
 
@@ -199,19 +192,6 @@ class _AvatarOverviewState extends State<AvatarOverview> {
         )
       ],
     );
-  }
-
-  // Get ImageUrl based on className.
-  getImageUrl() async {
-    var user = ScopedModel.of<User>(context);
-    String className = user.className; 
-    String imageUrl = className+'.png';
-
-    StorageReference ref = FirebaseStorage.instance.ref().child(imageUrl);
-    String location = await ref.getDownloadURL();
-    setState(() {
-      _imageUrl = location;
-  });
   }
 }
 
