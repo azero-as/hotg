@@ -279,17 +279,31 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text(widget.exercises[index]["name"]),
-                      content: Text(widget.exercises[index]["description"]),
-                      actions: <Widget>[
-                        FlatButton(
-                            child: Text('Close'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            })
-                      ],
-                    );
+                    if ((widget.exercises[index]["description"]) != null){
+                      return AlertDialog(
+                        title: Text(widget.exercises[index]["name"]),
+                        content: Text(widget.exercises[index]["description"]),
+                        actions: <Widget>[
+                          FlatButton(
+                              child: Text('Close'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              })
+                        ],
+                      );
+                    } else {
+                      return AlertDialog(
+                        title: Text(widget.exercises[index]["name"]),
+                        content: Text('No description given unfortuantly.'),
+                        actions: <Widget>[
+                          FlatButton(
+                              child: Text('Close'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              })
+                        ],
+                      );
+                    }
                   });
             },
           ),
