@@ -7,12 +7,13 @@ class LoginPage extends StatefulWidget {
 
   static String tag = 'login-page';
 
-  LoginPage({this.auth, this.onSignedIn, this.readyToSignUp, this.onSignedOut});
+  LoginPage({this.auth, this.onSignedIn, this.readyToSignUp, this.onSignedOut, this.forgotPassword});
 
   final BaseAuth auth;
   final VoidCallback onSignedIn;
   final VoidCallback readyToSignUp;
   final VoidCallback onSignedOut;
+  final VoidCallback forgotPassword;
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -196,6 +197,7 @@ class _LoginPageState extends State<LoginPage> {
               _passwordInput(),
               _loginButton(),
               _joinButton(),
+              _forgotPasswordButton(),
               _showErrorMessage(),
             ],
           ),
@@ -305,6 +307,31 @@ class _LoginPageState extends State<LoginPage> {
       ),
       onPressed: (){
         widget.readyToSignUp();
+      },
+    );
+  }
+
+    //Forgot password button
+  Widget _forgotPasswordButton(){
+    return FlatButton(
+      child: RichText(
+        text: TextSpan(
+          text: 'Forgot your password? Reset it ', style: TextStyle(color: Colors.white),
+          children: <TextSpan>[
+            TextSpan(
+              text: 'here.',
+              style: TextStyle(
+                color: Colors.white,
+                decoration: TextDecoration.underline,
+                decorationColor: Colors.white,
+                decorationStyle: TextDecorationStyle.solid,
+              ),
+            ),
+          ],
+        ),
+      ),
+      onPressed: (){
+        widget.forgotPassword();
       },
     );
   }

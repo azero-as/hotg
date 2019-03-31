@@ -16,6 +16,7 @@ import 'signup.dart';
 import 'signupSwiper.dart';
 import 'startWorkout.dart';
 import 'summary.dart';
+import 'resetPassword.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({this.auth, this.user});
@@ -40,6 +41,7 @@ enum AuthStatus {
   ACTIVE_WORKOUT_SESSION,
   SUMMARY,
   BACK_TO_WORKOUTS,
+  FORGOT_PASSWORD,
 }
 
 class _RootPageState extends State<RootPage> {
@@ -110,6 +112,12 @@ class _RootPageState extends State<RootPage> {
   void _readyToLogIn() {
     setState(() {
       authStatus = AuthStatus.READY_TO_LOG_IN;
+    });
+  }
+  
+  void _forgotPassword() {
+    setState(() {
+     authStatus = AuthStatus.FORGOT_PASSWORD;
     });
   }
 
@@ -226,6 +234,7 @@ class _RootPageState extends State<RootPage> {
             onSignedIn: _onLoggedIn,
             readyToSignUp: _readyToSignUp,
             onSignedOut: _onSignedOut,
+            forgotPassword: _forgotPassword,
           );
         case AuthStatus.FINISHED_SIGNED_UP:
           if (_userId.length > 0 && _userId != null) {
@@ -247,6 +256,12 @@ class _RootPageState extends State<RootPage> {
             readyToLogIn: _readyToLogIn,
             onSignedOut: _onSignedOut,
             finishedSignedUp: _finishedSignedUp,
+          );
+          break;
+        case AuthStatus.FORGOT_PASSWORD:
+          return new ResetPasswordPage(
+            auth: widget.auth,
+            readyToLogIn: _readyToLogIn,
           );
           break;
         case AuthStatus.LOGGED_IN:
