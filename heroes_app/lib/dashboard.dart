@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'authentication.dart';
 import 'home.dart';
-import 'plan.dart';
+import 'workouts.dart';
 import 'history.dart';
 import 'models/user.dart';
 import 'models/workout.dart';
@@ -54,7 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           return new PageView(
             children: [
               new Home(auth: widget.auth, onSignedOut: widget.onSignedOut, onLoggedIn: widget.onSignedIn, readyToSignOut: widget.readyToSignOut, onStartWorkout: widget.onStartWorkout, onActiveWorkout: widget.onActiveWorkout, onSummary: widget.onSummary),
-              new Plan(onLoggedIn: widget.onSignedIn, onStartWorkout: widget.onStartWorkout, onActiveWorkout: widget.onActiveWorkout, onSummary: widget.onSummary),
+              new Workouts(onLoggedIn: widget.onSignedIn, onStartWorkout: widget.onStartWorkout, onActiveWorkout: widget.onActiveWorkout, onSummary: widget.onSummary),
               new History("History screen"),
             ],
             onPageChanged: model.setPage,

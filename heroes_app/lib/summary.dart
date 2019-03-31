@@ -9,8 +9,9 @@ class Summary extends StatefulWidget {
   final int total_xp;
   final String workoutType;
   final VoidCallback onLoggedIn;
+  final VoidCallback alreadyLoggedIn;
 
-  Summary({this.exercises, this.bonus, this.total_xp, this.workoutType, this.onLoggedIn});
+  Summary({this.exercises, this.bonus, this.total_xp, this.workoutType, this.onLoggedIn, this.alreadyLoggedIn});
 
   @override
   State createState() => new _SummaryState();
@@ -35,7 +36,7 @@ class _SummaryState extends State<Summary> {
                   model.setLevelUpFalse();
                 }
                 // Navigate to homepage
-                widget.onLoggedIn();
+                widget.alreadyLoggedIn();
               }),
           title: Text(
             "Summary",

@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 class CrudMethods {
   bool isLoggedIn() {
     if (FirebaseAuth.instance.currentUser() != null) {
-      print(FirebaseAuth.instance.currentUser());
       return true;
     } else {
       return false;
@@ -15,13 +14,13 @@ class CrudMethods {
 
   Future<void> addFitnessLevel(fitnesslevel, userid) async {
     if (isLoggedIn()) {
-      Firestore.instance
-          .collection('Users')
-          .document(userid)
-          .setData(fitnesslevel)
-          .catchError((e) {
-        print(e);
-      });
+      return Firestore.instance
+        .collection('Users')
+        .document(userid)
+        .setData(fitnesslevel)
+        .catchError((e) {
+          print(e);
+        });
     } else {
       print("You need to be logged in");
     }
