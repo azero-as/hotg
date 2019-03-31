@@ -210,6 +210,16 @@ class _WorkoutsPageState extends State<Workouts> {
                               height: 10,
                             ),
                             Text(
+                              'Fitness level:',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF434242)),
+                            ),
+                            // add space between lines
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
                               'XP:',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -244,6 +254,14 @@ class _WorkoutsPageState extends State<Workouts> {
                             children: <Widget>[
                               Text(
                                 workoutModel.listOfWorkouts[index]["class"].toString(),
+                                style: TextStyle(color: Color(0xFF434242)),
+                              ),
+                              // add space between lines
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                workoutModel.listOfWorkouts[index]["fitnessLevel"].toString(),
                                 style: TextStyle(color: Color(0xFF434242)),
                               ),
                               // add space between lines

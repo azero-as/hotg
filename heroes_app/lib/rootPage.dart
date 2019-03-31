@@ -194,6 +194,7 @@ class _RootPageState extends State<RootPage> {
       );
       setState(() {
         workout.setIntensity(response['intensity']);
+        workout.setFitnessLevel(response['fitnessLevel']);
         workout.setWorkOutName(response['workoutName']);
         workout.setWorkOutClass(response['class']);
         workout.setDuration(response['duration']);

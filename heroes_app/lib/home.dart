@@ -211,6 +211,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
           workout.workoutName == "" ||
           workout.workoutClass == "" ||
           workout.duration == -1 ||
+          workout.fitnessLevel == -1 ||
           workout.xp == -1 ||
           workout.exercises == []) {
         return new Text("");
@@ -315,6 +316,16 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                           height: 10,
                         ),
                         Text(
+                          'Fitness Level:',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF434242)),
+                        ),
+                        // add space between lines
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
                           'XP:',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -349,6 +360,13 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                         children: <Widget>[
                           Text(
                             workoutModel.workoutClass,
+                            style: TextStyle(color: Color(0xFF434242)),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            workoutModel.fitnessLevel.toString(),
                             style: TextStyle(color: Color(0xFF434242)),
                           ),
                           SizedBox(
