@@ -42,26 +42,30 @@ class _LoginPageState extends State<LoginPage> {
     _isAndroid = Theme.of(context).platform == TargetPlatform.android;
 
     //Returns all the elements to the page
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: new AppBar(
-          //title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              key: Key("loginBackButton"),
-              onPressed: () {
-                widget.onSignedOut();
-              }),
-          iconTheme: IconThemeData(
-            color: Colors.white, //change your color here
-          ),
-        ),
-        body: Stack(
-          children: <Widget>[
-            _returnBody(),
-            _showCircularProgress(),
-          ],
-        ));
+
+    return new Theme(
+        data: ThemeData.dark(),
+        child: Scaffold(
+            backgroundColor: Theme.of(context).secondaryHeaderColor,
+            appBar: new AppBar(
+              backgroundColor: Theme.of(context).secondaryHeaderColor,
+              //title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              leading: IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  key: Key("loginBackButton"),
+                  onPressed: () {
+                    widget.onSignedOut();
+                  }),
+              iconTheme: IconThemeData(
+                color: Colors.white, //change your color here
+              ),
+            ),
+            body: Stack(
+              children: <Widget>[
+                _returnBody(),
+                _showCircularProgress(),
+              ],
+            )));
   }
 
   //loading circle
@@ -77,10 +81,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _showErrorMessage() {
     if (_errorMessage.length > 0 && _errorMessage != null) {
-      if (_errorMessage ==
-              "Network error (such as timeout, interrupted connection or unreachable host) has occurred." ||
-          _errorMessage ==
-              "A network error (such as timeout, interrupted connection or unreachable host) has occurred.") {
+      if (_errorMessage == "Network error (such as timeout, interrupted connection or unreachable host) has occurred." ||
+          _errorMessage == "A network error (such as timeout, interrupted connection or unreachable host) has occurred.") {
         return new Text(
           _errorMessage,
           key: Key("LogInErrorMessage"),
@@ -133,10 +135,12 @@ class _LoginPageState extends State<LoginPage> {
 
   // Perform login
   void _validateAndSubmit() async {
-    setState(() {
-      _errorMessage = "";
-      _isLoading = true;
-    });
+    if (this.mounted) {
+      setState(() {
+        _errorMessage = "";
+        _isLoading = true;
+      });
+    }
     if (_validateAndSave()) {
       String userId = "";
       try {
@@ -145,10 +149,11 @@ class _LoginPageState extends State<LoginPage> {
           // TODO: Do we need this print statement?
           print('Signed in: $userId');
         }
-
-        setState(() {
-          _isLoading = false;
-        });
+        if (this.mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
 
         if (userId.length > 0 &&
             userId != null &&
@@ -248,6 +253,7 @@ class _LoginPageState extends State<LoginPage> {
       child: new Text(
         t,
         style: TextStyle(
+          color: Colors.white,
           fontWeight: FontWeight.bold,
           fontSize: 25.0,
         ),
@@ -332,14 +338,14 @@ class _LoginPageState extends State<LoginPage> {
       child: RichText(
         text: TextSpan(
           text: 'Not already a hero? Join us ',
-          style: TextStyle(color: Colors.black54),
+          style: TextStyle(color: Colors.white),
           children: <TextSpan>[
             TextSpan(
               text: 'here!',
               style: TextStyle(
-                color: Colors.black54,
+                color: Colors.white,
                 decoration: TextDecoration.underline,
-                decorationColor: Colors.black54,
+                decorationColor: Colors.white,
                 decorationStyle: TextDecorationStyle.solid,
               ),
             ),

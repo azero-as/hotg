@@ -30,27 +30,69 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
   int _XpEarned = 0;
   int _BonusXP = 0;
 
-
   @override
   Widget build(BuildContext context) {
     //Information about the exercises that is apart of the workout
-    void _onCategorySelected(bool selected, id, name, exercise) {
 
+    //Checks to see if warm up is selected. If it is not selected, the exercises will get a grey color to make them look disabled
+    Color _exerciseColor() {
+      if (_selectedExercises.contains("Warm-up")) {
+        return Colors.black;
+      } else {
+        return Colors.grey;
+      }
+    }
+
+    //Finish workout button color
+    Color _finishWorkoutColor() {
+      if (_selectedExercises.contains("Warm-up") &&
+          !(_selectedExercises.length <= 1)) {
+        return Theme.of(context).primaryColor;
+      } else {
+        return Colors.grey;
+      }
+    }
+
+    //Checks to see if warm up is selected
+    void _warmUpSelected(bool selected, id, name, exercise) {
       if (selected == true) {
         setState(() {
           _selectedExercises.add(name);
-          if(exercise["targetReps"] != null){
-            _exercises.add({"xp": exercise["xp"], "name": name, "repetitions": exercise["targetReps"], "sets": exercise["targetSets"] });
-          }else if(exercise["targetMin"] != null){
-            _exercises.add({"xp": exercise["xp"], "name": name, "repetitions": exercise["targetMin"], "sets": exercise["targetSets"] });
-          }else{
+        });
+      } else {
+        setState(() {
+          _selectedExercises.remove(name);
+        });
+      }
+    }
+
+    //Check to see if the exercises is selected
+    void _onCategorySelected(bool selected, id, name, exercise) {
+      if (!_selectedExercises.contains("Warm-up")) {
+        return null;
+      } else if (selected == true) {
+        setState(() {
+          _selectedExercises.add(name);
+          if (exercise["targetReps"] != null) {
+            _exercises.add({
+              "xp": exercise["xp"],
+              "name": name,
+              "repetitions": exercise["targetReps"],
+              "sets": exercise["targetSets"]
+            });
+          } else if (exercise["targetMin"] != null) {
+            _exercises.add({
+              "xp": exercise["xp"],
+              "name": name,
+              "repetitions": exercise["targetMin"],
+              "sets": exercise["targetSets"]
+            });
+          } else {
             _exercises.add({"xp": exercise["xp"], "name": name});
           }
           _XpEarned += exercise["xp"];
         });
       } else {
-        // TODO: Do we need this print statement?
-        print(false);
         setState(() {
           _selectedExercises.remove(name);
           _exercises.removeWhere((item) => item["name"] == name);
@@ -70,8 +112,9 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       }
 
       _XpEarned = _XpEarned + _BonusXP;
-      
-      CloudFunctions.instance.call(functionName: 'saveCompletedWorkout', parameters: {
+
+      CloudFunctions.instance
+          .call(functionName: 'saveCompletedWorkout', parameters: {
         "bonus_xp": _BonusXP,
         "total_xp": _XpEarned,
         "workoutType": widget.workoutName,
@@ -83,6 +126,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       workout.setFinishedWorkout(_exercises, _XpEarned, _BonusXP);
     }
 
+    //When clicking the finished button, this widget will come up if you have not checked of warm up + at least one exercise
     Widget _onNotCheckedOffButFinished(BuildContext context) {
       return Stack(
         alignment: Alignment.center,
@@ -134,7 +178,8 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                         RichText(
                           text: TextSpan(
                             text:
-                                'Did you remember to check off the exercises you have done?',
+                                'Did you remember to check off the exercises you have done? '
+                                'You need to warm up and do at least one exercise to finish the workout',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
@@ -152,8 +197,11 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       );
     }
 
+    //Validates the workout when the button finished workout is clicked
+    //If not at least one exercise + the warm up is checked off, a pop up will appear. Otherwise, the user will be sent to the summary page
     void _validateAndSaveWorkout() {
-      if (_selectedExercises.isEmpty) {
+      if (_selectedExercises.length <= 1 ||
+          !_selectedExercises.contains("Warm-up")) {
         //Display pop-up
         showDialog(
             context: context,
@@ -165,8 +213,8 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       }
     }
 
-
-    Widget _showInfoWarmUp(int index){
+    //Information about the warm up + checkbox for warm up
+    Widget _showInfoWarmUp(int index) {
       var workout = ScopedModel.of<Workout>(context);
 
       return ExpansionTile(
@@ -178,7 +226,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: Text("Warm-up"),
-                      content: Text( workout.warmUp["description"].toString()),
+                      content: Text(workout.warmUp["description"].toString()),
                       actions: <Widget>[
                         FlatButton(
                             child: Text('Close'),
@@ -192,38 +240,30 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
           ),
           key: PageStorageKey<int>(index),
           title: new CheckboxListTile(
-            value: _selectedExercises
-                .contains("Warm-up"),
+            value: _selectedExercises.contains("Warm-up"),
             onChanged: (bool selected) {
-              _onCategorySelected(
-                  selected,
-                  workout.warmUp[index],
-                  "Warm-up",
-                  workout.warmUp);
+              _warmUpSelected(
+                  selected, workout.warmUp[index], "Warm-up", workout.warmUp);
             },
-            title: new Text("Warm-up",),
+            title: new Text(
+              "Warm-up",
+            ),
           ),
-
           children: <Widget>[
             ListTile(
                 title: new Padding(
                     padding: EdgeInsets.all(20),
                     child: new Text(
-                    "Minutes: " + workout.warmUp["targetMin"].toString()))),
+                        "Minutes: " + workout.warmUp["targetMin"].toString()))),
             ListTile(
                 title: new Padding(
                     padding: EdgeInsets.all(20),
-                    child: new Text(
-                    "Description: " +  workout.warmUp["description"].toString()))),
-            ListTile(
-                title: new Padding(
-                    padding: EdgeInsets.all(20),
-                    child: new Text("XP: " + workout.warmUp["xp"].toString()))),
-            //children: root["info"]
+                    child: new Text("Description: " +
+                        workout.warmUp["description"].toString()))),
           ]);
     }
 
-
+    //Information about the exercises + checkbox for exercises
     Widget _showInfoExercises(int index) {
       String exercise = "targetReps";
       String name = "Reps: ";
@@ -256,20 +296,19 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
           title: new CheckboxListTile(
             value: _selectedExercises.contains(widget.exercises[index]["name"]),
             onChanged: (bool selected) {
-              _onCategorySelected(
-                  selected,
-                  widget.exercises[index],
-                  widget.exercises[index]["name"],
-                  widget.exercises[index]);
+              _onCategorySelected(selected, widget.exercises[index],
+                  widget.exercises[index]["name"], widget.exercises[index]);
             },
-            title: Text(widget.exercises[index]["name"]),
+            title: Text(widget.exercises[index]["name"],
+                style: TextStyle(color: _exerciseColor())),
           ),
           children: <Widget>[
             ListTile(
               title: new Padding(
                   padding: EdgeInsets.all(20),
-                  child: new Text("Sets: " +
-                      widget.exercises[index]["targetSets"].toString())),
+                  child: new Text(
+                    "Sets: " + widget.exercises[index]["targetSets"].toString(),
+                  )),
             ),
             ListTile(
               title: new Padding(
@@ -297,30 +336,26 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     //Information about the different exercises in the workout
     Widget _showInformationWorkout() {
       var workout = ScopedModel.of<Workout>(context);
-      if(workout == null){
+      if (workout == null) {
         return Text("");
       }
       return new ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemCount: widget.exercises.length + 1 ?? 0,
-          itemBuilder: (BuildContext context, int index){
-            if(index == 0){
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
               return _showInfoWarmUp(index);
-            }
-            else{
-              index = index -1;
+            } else {
+              index = index - 1;
               return _showInfoExercises(index);
             }
-          }
-      );
+          });
     }
-
 
     Widget _returnFinishWorkoutButton() {
       return new Padding(
           padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40.0),
-
           child: ScopedModelDescendant<User>(builder: (context, child, model) {
             return RaisedButton(
               elevation: 5.0,
@@ -333,7 +368,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                     _XpEarned); // Increase use xp total in database
               },
               padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-              color: const Color(0xFF612A30),
+              color: _finishWorkoutColor(),
               child: Text(
                 'Finish workout',
                 style: TextStyle(color: Colors.white),
@@ -358,14 +393,14 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       body: new Container(
           color: Color(0xFFe0e4eb),
           child: Column(
-        children: <Widget>[
-          //_returnTimer(),
-          Expanded(
-            child: _showInformationWorkout(),
-          ),
-          _returnFinishWorkoutButton(),
-        ],
-      )),
+            children: <Widget>[
+              //_returnTimer(),
+              Expanded(
+                child: _showInformationWorkout(),
+              ),
+              _returnFinishWorkoutButton(),
+            ],
+          )),
     );
   }
 }

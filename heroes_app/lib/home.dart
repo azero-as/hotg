@@ -239,7 +239,12 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
   }
 
   Widget _workout(workoutModel) {
-    return new Container(
+    return new GestureDetector(
+      onTap: (){
+        workoutModel.isFromHomePage = true;
+        widget.onStartWorkout();
+        },
+      child: new Container(
         // add border for the workout info box
 
         decoration: BoxDecoration(
@@ -338,7 +343,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                   ),
                   // Column for changing information
                   Expanded(
-                    flex: 3,
+                    flex: 6,
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -372,38 +377,10 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                         ]),
                   ),
                   // Column for button
-                  Expanded(
-                    flex: 3,
-                    child: Column(
-                      children: <Widget>[
-                        // add space to make the button stay at the bottom of the box
-                        SizedBox(
-                          height: 70,
-                        ),
-                        RaisedButton(
-                          padding: EdgeInsets.all(10.0),
-                          onPressed: () {
-                            workoutModel.isFromHomePage = true;
-                            widget.onStartWorkout();
-                          },
-                          elevation: 5.0,
-                          color: Theme.of(context).primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.67),
-                          ),
-                          child: Text(
-                            'See workout',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 13.0),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),
           ],
-        ));
+        )));
   }
 }
