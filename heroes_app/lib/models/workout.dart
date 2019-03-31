@@ -102,6 +102,4 @@ class Workout extends Model {
     this._exercises = exercises;
     notifyListeners();
   }
-
-
 }
