@@ -4,10 +4,14 @@ import 'authentication.dart';
 //This is the signup page
 
 class SignupPage extends StatefulWidget {
-
   static String tag = 'signup-page';
 
-  SignupPage({this.auth, this.onSignedIn, this.readyToLogIn, this.onSignedOut, this.finishedSignedUp});
+  SignupPage(
+      {this.auth,
+      this.onSignedIn,
+      this.readyToLogIn,
+      this.onSignedOut,
+      this.finishedSignedUp});
 
   final BaseAuth auth;
   final VoidCallback onSignedIn;
@@ -17,13 +21,11 @@ class SignupPage extends StatefulWidget {
 
   @override
   _SignupPageState createState() => new _SignupPageState();
-
 }
 
-enum FormMode {SIGNUP}
+enum FormMode { SIGNUP }
 
 class _SignupPageState extends State<SignupPage> {
-
   final _formKey = new GlobalKey<FormState>();
 
   FormMode _formMode = FormMode.SIGNUP;
@@ -38,35 +40,35 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
 
     //Returns all the elements to the page
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: new AppBar(
-        //title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios),
-            key: Key("signupBackButton"),
-            onPressed: (){
-                widget.onSignedOut();
-        }),
-        iconTheme: IconThemeData(
-          color: Colors.white, //change your color here
-        ),
-      ),
-      body: Stack(
-        children: <Widget>[
-          _returnForm(),
-          _showCircularProgress(),
-          ],
-            ),
-    );
-
+    return new Theme(
+        // set theme data for this class to dark
+        data: ThemeData.dark(),
+        child: Scaffold(
+          backgroundColor: const Color(0xFF212838),
+          appBar: new AppBar(
+            backgroundColor: const Color(0xFF212838),
+            //title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios),
+                key: Key("signupBackButton"),
+                onPressed: () {
+                  widget.onSignedOut();
+                }),
+          ),
+          body: Stack(
+            children: <Widget>[
+              _returnForm(),
+              _showCircularProgress(),
+            ],
+          ),
+        ));
   }
 
   // ------ FORM WIDGETS ------
-  Widget _returnForm(){
+  Widget _returnForm() {
     return new Container(
         padding: EdgeInsets.only(left: 24.0, right: 24.0),
         margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
@@ -90,7 +92,7 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   //placeholder for logo
-  Widget _logo(){
+  Widget _logo() {
     return new Hero(
       tag: 'hero',
       child: CircleAvatar(
@@ -102,18 +104,23 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   //Welcome text
-  Widget _welcomeText(String t){
+  Widget _welcomeText(String t) {
     return Padding(
       padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
       child: new Text(
-        t, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0,), textAlign: TextAlign.center,
+        t,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 25.0,
+        ),
+        textAlign: TextAlign.center,
       ),
     );
   }
 
-  Widget _emailInput(){
+  Widget _emailInput() {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 0.0),
+      padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
       child: TextFormField(
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
@@ -132,7 +139,7 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   //Password input field
-  Widget _passwordInput1(){
+  Widget _passwordInput1() {
     return Padding(
       padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
       child: TextFormField(
@@ -153,7 +160,7 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   //Password confirmation input field
-  Widget _passwordInput2(){
+  Widget _passwordInput2() {
     return Padding(
       padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
       child: TextFormField(
@@ -167,13 +174,14 @@ class _SignupPageState extends State<SignupPage> {
           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
           border: UnderlineInputBorder(),
         ),
-        validator: (value) => value.isEmpty ? 'You need to verify your password' : null,
+        validator: (value) =>
+            value.isEmpty ? 'Password needs to be verified' : null,
         onSaved: (value) => _passwordVerification = value,
       ),
     );
   }
 
-  Widget _nextButton(){
+  Widget _nextButton() {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       key: Key("SignUp2"),
@@ -183,35 +191,35 @@ class _SignupPageState extends State<SignupPage> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         onPressed: _validateAndSubmit,
-            //TODO: Navigate to signuplevel, then sign up.
-            //Navigator.of(context).pushNamed(SignupLevelPage.tag);
+        //TODO: Navigate to signuplevel, then sign up.
         padding: EdgeInsets.all(12),
         color: const Color(0xFF612A30),
-        child: Text('Sign up and continue', style: TextStyle(color: Colors.white),),
+        child: Text(
+          'Sign up and continue',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }
 
   //Login here button
-  Widget _loginButton(){
+  Widget _loginButton() {
     return FlatButton(
       child: RichText(
         text: TextSpan(
-          text: 'Already a hero? Log in ', style: TextStyle(color: Colors.black54),
+          text: 'Already a hero? Log in ',
           children: <TextSpan>[
             TextSpan(
               text: 'here!',
               style: TextStyle(
-                color: Colors.black54,
                 decoration: TextDecoration.underline,
-                decorationColor: Colors.black54,
                 decorationStyle: TextDecorationStyle.solid,
               ),
             ),
           ],
         ),
       ),
-      onPressed: (){
+      onPressed: () {
         widget.readyToLogIn();
       },
     );
@@ -249,10 +257,9 @@ class _SignupPageState extends State<SignupPage> {
     if (form.validate()) {
       form.save();
       // Check if passwords are equal
-      if (_passwordVerification==_password) {
+      if (_passwordVerification == _password) {
         return true;
-      }
-      else {
+      } else {
         setState(() {
           _errorMessage = "Passwords are different";
         });
@@ -280,7 +287,8 @@ class _SignupPageState extends State<SignupPage> {
           _isLoading = false;
         });
 
-        if (userId.length > 0 && userId != null &&
+        if (userId.length > 0 &&
+            userId != null &&
             _formMode == FormMode.SIGNUP) {
           widget.finishedSignedUp();
         }
@@ -292,6 +300,9 @@ class _SignupPageState extends State<SignupPage> {
             _errorMessage = e.message;
           } else
             _errorMessage = e.message;
+          if (_errorMessage == "The given password is invalid. [ Password should be at least 6 characters ]") {
+            _errorMessage  = "The password must be 6 characters long or more.";
+          }
         });
       }
     }
@@ -304,11 +315,13 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   //loading circle
-  Widget _showCircularProgress(){
+  Widget _showCircularProgress() {
     if (_isLoading) {
       return Center(child: CircularProgressIndicator());
-    } return Container(height: 0.0, width: 0.0,);
-
+    }
+    return Container(
+      height: 0.0,
+      width: 0.0,
+    );
   }
-
 }

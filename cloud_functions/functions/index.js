@@ -1,102 +1,199 @@
-
-
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
-
-//The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
-const functions = require('firebase-functions');
-
-// The Firebase Admin SDK to access the Firebase Realtime Database.
-const admin = require('firebase-admin');
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
 
-/**
- * Helpful links
- * For getting the token id:            https://stackoverflow.com/questions/42751074/how-to-protect-firebase-cloud-function-http-endpoint-to-allow-only-firebase-auth
- * For authorizing with the database:   https://stackoverflow.com/questions/48575730/how-to-protect-firebase-cloud-function-http-endpoint-using-authenticated-id-toke
- */
+// Helper functions: 
+const helpers = require("./helper_functions.js");
 
-
-// Get email and username for current user
-// TODO: delete this function when we have state management in the app 
-exports.getSettingsUserInfo = functions.https.onRequest((request, response) => {
-
-    const tokenId = request.get('Authorization').split('Bearer ')[1];
-
-    return admin.auth().verifyIdToken(tokenId)
-    .then( decoded => {
-
-        const userId = decoded.user_id;
-
-        return admin.firestore().collection('Users').doc(userId).get()
-        .then(querySnapshot => {
-
-            const data = querySnapshot.data();
-
-            return response.send({
-                data: {
-                    username: data.characterName,
-                    email: decoded.email
-                }
-            })
-        })
-        .catch(error => {
-            response.status(400).send(error) // 400 bad request
-        })
-    })
-    .catch( error => {
-        // 401 is unauthorized.
-        result.status(401).send(error)
-    })
-});
-
-const helpers = require('./helper_functions.js');
-
+/*
+  Get characterName, gameLevel, xp, className from Users Collection
+  Get email from Firebase Authentication
+  Get xpCap based on what gameLevel the current user is in from Levels Collection
+*/
 exports.getUserInfo = functions.https.onRequest((request, response) => {
+  
+  const tokenId = request.get("Authorization").split("Bearer ")[1];
 
-    const tokenId = request.get('Authorization').split('Bearer ')[1];
-
-    return admin.auth().verifyIdToken(tokenId)
-    .then( decoded => {
-
-        const userId = decoded.user_id;
-
-        return helpers.getUserInfo(userId)
-        .then(data => {
-
-            return response.send({
-                data
-            })
+  return admin
+    .auth()
+    .verifyIdToken(tokenId)
+    .then(decoded => {
+      const email = decoded.email;
+      const userId = decoded.user_id;
+      
+      return helpers
+      .getUserInfo(userId, email)
+      .then(data => {
+        return response.send({
+          data
         })
-        .catch(error => {
-            response.status(400).send(error) // 400 bad request
-        })
+      })
+      .catch(error => {
+        response.status(400).send(error) // 400 bad request
+      })
     })
-    .catch( error => {
-        // 401 is unauthorized.
-        result.status(401).send(error)
+    .catch(error => {
+      result.status(401).send(error) // 401 is unauthorized.
     })
-});
+})
 
-// Returns a list of all user workouts objects 
-exports.getAllUserWorkouts = functions.https.onRequest((request, response) => {
+/*
+Updates user level info: xp, gameLevel and xpCap when user is leveling up 
+Returns new values.
+*/
+exports.updateUserLevelInfo = functions.https.onCall((data, context) => {
+  
+  // Check if user is authenticated: 
+  if (context.auth.uid != null) {
 
-        // user: lenatorresdal
-        const userId = 'TkDkU5X55RG9rNjSb6Fn'
+    var userId = context.auth.uid
+    
+    // parameters
+    const userXp = data.xp
+    const xpCap = data.xpCap
+    const gameLevel = data.level
+    
+    return helpers
+    .updateUserLevelInfo(userId, userXp, xpCap, gameLevel)
+    .then(data => {
+      return data
+    })
+    .catch((error) => { 
+      throw new functions.https.HttpsError(error.code, error.message)
+    }) 
+  }
+  else {
+    // not authenticated: 
+    throw new functions.https.HttpsError(code, message)
+  }
+})
 
-        return helpers.getAllUserWorkouts(userId)
-        .then(data => {
+/*
+Get xpEarned from finished workout, and updates the
+total amount of xp in the User collection
+*/
+exports.updateUserXp = functions.https.onCall((data, context) => {
+  
+  if (context.auth.uid != null) {
+    
+    var userId = context.auth.uid
+    
+    // parameter
+    const xpEarned = data.xpEarned
+    
+    return helpers
+    .updateUserXp(userId, xpEarned)
+    .then(data => {
+      return data
+    })
+    .catch((error) => { 
+      throw new functions.https.HttpsError(error.code, error.message)
+    })  
+  }
+  else {
+    // not authenticated: 
+    throw new functions.https.HttpsError(code, message)
+  }
+})
 
-            return response.send({
-                data
-            })
-        })
-        .catch(error => {
-            response.status(400).send(error) // 400 bad request
-        })
-   
+// Get one "recommended" workout based on className at homepage
+exports.getRecommendedWorkout = functions.https.onCall((data, context) => {
+  
+  // Check if user is authenticated: 
+  if (context.auth.uid != null) {
+    
+    // parameters
+    const className = data.className
+    
+    return helpers.getRecommendedWorkout(className)
+    .then(data => {
+      return data
+    })
+    .catch((error) => { 
+      throw new functions.https.HttpsError(error.code, error.message)
+    }) 
+  }
+  else {
+    // not authenticated: 
+    throw new functions.https.HttpsError(code, message)
+  }
+})
+
+
+// Saves finished workout in Users collection Users --> Workouts
+exports.saveCompletedWorkout = functions.https.onCall((data, context) => {
+  if (context.auth.uid != null) {
+    
+    var userId = context.auth.uid
+    
+    const workoutType = data["workoutType"] || "Unknown"
+    const bonus_xp = data["bonus_xp"]
+    const total_xp = data["total_xp"]
+    const selectedExercises = data["exercises"]
+    
+    var info = {
+      bonus_xp: bonus_xp,
+      date: admin.firestore.FieldValue.serverTimestamp(),
+      total_xp: total_xp,
+      workoutType: workoutType,
+      exercises: selectedExercises
+    }
+
+    return admin
+    .firestore()
+    .collection("Users")
+    .doc(userId)
+    .collection("Workouts")
+    .add(info)
+    .catch((error) => { 
+      throw new functions.https.HttpsError(error.code, error.message)
+    }) 
+  }
+  else {
+    // Not authenticated:
+    throw new functions.https.HttpsError(code, message)
+  }
+})
+
+// Get all completed workouts from Users --> Workouts collection
+exports.getCompletedUserWorkouts = functions.https.onRequest((request, response) => {
+
+  const tokenId = request.get("Authorization").split("Bearer ")[1];
+  
+  return admin
+  .auth()
+  .verifyIdToken(tokenId)
+  .then(decoded => {
+    const userId = decoded.user_id;
+    return helpers
+    .getCompletedUserWorkouts(userId)
+    .then(workouts => {
+      return response.send({
+        data: {
+          workouts: workouts
+        }
+      })
+    })
+    .catch(error => {
+      response.status(400).send(error) // 400 bad request
+    })
+  })
+  .catch(error => {
+    result.status(401).send(error) // 401 is unauthorized.
+  })
+})
+
+// Get all workouts from the Workouts collection
+exports.getAllWorkouts = functions.https.onRequest((request, response) => {
+  return helpers.getAllWorkouts()
+  .then(workoutList => {
+    return response.send({
+      data: {
+        workoutList: workoutList
+      }
+    })
+  })
+  .catch(error => {
+    response.status(400).send(error); // 400 bad request
+  })
 })

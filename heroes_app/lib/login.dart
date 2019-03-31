@@ -9,12 +9,13 @@ class LoginPage extends StatefulWidget {
 
   static String tag = 'login-page';
 
-  LoginPage({this.auth, this.onSignedIn, this.readyToSignUp, this.onSignedOut});
+  LoginPage({this.auth, this.onSignedIn, this.readyToSignUp, this.onSignedOut, this.forgotPassword});
 
   final BaseAuth auth;
   final VoidCallback onSignedIn;
   final VoidCallback readyToSignUp;
   final VoidCallback onSignedOut;
+  final VoidCallback forgotPassword;
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -42,26 +43,31 @@ class _LoginPageState extends State<LoginPage> {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
 
     //Returns all the elements to the page
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: new AppBar(
+    return new Theme(
+      data: ThemeData.dark(),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
+        appBar: new AppBar(
+          backgroundColor: Theme.of(context).secondaryHeaderColor,
         //title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         leading: IconButton(icon: Icon(Icons.arrow_back_ios),
-            key: Key("loginBackButton"),
-            onPressed: (){
-              widget.onSignedOut();
-            }),
+        key: Key("loginBackButton"),
+        onPressed: (){
+        widget.onSignedOut();
+        }),
         iconTheme: IconThemeData(
-          color: Colors.white, //change your color here
+        color: Colors.white, //change your color here
         ),
-      ),
-      body: Stack(
+        ),
+        body: Stack(
         children: <Widget>[
-          _returnBody(),
-          _showCircularProgress(),
+        _returnBody(),
+        _showCircularProgress(),
         ],
-      )
+    )
+    )
     );
+
   }
 
   //loading circle
@@ -74,15 +80,37 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _showErrorMessage() {
     if (_errorMessage.length > 0 && _errorMessage != null) {
-      return new Text(
-        _errorMessage  = "Wrong email or password",
-        key: Key("LogInErrorMessage"),
-        style: TextStyle(
-            fontSize: 13.0,
-            color: Colors.red,
-            height: 1.0,
-            fontWeight: FontWeight.w300),
-      );
+      if (_errorMessage == "Network error (such as timeout, interrupted connection or unreachable host) has occurred." || _errorMessage == "A network error (such as timeout, interrupted connection or unreachable host) has occurred.") {
+        return new Text(
+          _errorMessage,
+          key: Key("LogInErrorMessage"),
+          style: TextStyle(
+              fontSize: 13.0,
+              color: Colors.red,
+              height: 1.0,
+              fontWeight: FontWeight.w300),
+        );
+      } else if (_errorMessage == "There is no user record corresponding to this identifier. The user may have been deleted."){
+        return new Text(
+          _errorMessage = "Not able to find a user with this email and password combination.",
+          key: Key("LogInErrorMessage"),
+          style: TextStyle(
+              fontSize: 13.0,
+              color: Colors.red,
+              height: 1.0,
+              fontWeight: FontWeight.w300),
+        );
+      } else {
+        return new Text(
+          _errorMessage = "Wrong email or password",
+          key: Key("LogInErrorMessage"),
+          style: TextStyle(
+              fontSize: 13.0,
+              color: Colors.red,
+              height: 1.0,
+              fontWeight: FontWeight.w300),
+        );
+      }
     } else {
       return new Container(
         height: 0.0,
@@ -103,10 +131,12 @@ class _LoginPageState extends State<LoginPage> {
 
   // Perform login
   void _validateAndSubmit() async {
-    setState(() {
-      _errorMessage = "";
-      _isLoading = true;
-    });
+    if (this.mounted) {
+      setState(() {
+        _errorMessage = "";
+        _isLoading = true;
+      });
+    }
     if (_validateAndSave()) {
       String userId = "";
       try {
@@ -114,10 +144,11 @@ class _LoginPageState extends State<LoginPage> {
         userId = await widget.auth.signIn(_email, _password);
         print('Signed in: $userId');
         }
-
-        setState(() {
-          _isLoading = false;
-        });
+        if (this.mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
 
         if (userId.length > 0 && userId != null && _formMode == FormMode.LOGIN) {
           widget.onSignedIn();
@@ -168,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
               _passwordInput(),
               _loginButton(),
               _joinButton(),
-              _resetButton(),
+              _forgotPasswordButton(),
               _showErrorMessage(),
             ],
           ),
@@ -192,7 +223,7 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
       child: new Text(
-        t, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0,), textAlign: TextAlign.center,
+        t, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25.0,), textAlign: TextAlign.center,
       ),
     );
   }
@@ -262,14 +293,14 @@ class _LoginPageState extends State<LoginPage> {
     return FlatButton(
       child: RichText(
         text: TextSpan(
-          text: 'Not already a hero? Join us ', style: TextStyle(color: Colors.black54),
+          text: 'Not already a hero? Join us ', style: TextStyle(color: Colors.white),
           children: <TextSpan>[
             TextSpan(
               text: 'here!',
               style: TextStyle(
-                color: Colors.black54,
+                color: Colors.white,
                 decoration: TextDecoration.underline,
-                decorationColor: Colors.black54,
+                decorationColor: Colors.white,
                 decorationStyle: TextDecorationStyle.solid,
               ),
             ),
@@ -282,19 +313,20 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  //Reset password here button
-  Widget _resetButton(){
+
+    //Forgot password button
+  Widget _forgotPasswordButton(){
     return FlatButton(
       child: RichText(
         text: TextSpan(
-          text: 'Forgot your password? Reset ', style: TextStyle(color: Colors.black54),
+          text: 'Forgot your password? Reset it ', style: TextStyle(color: Colors.grey, fontSize: 13),
           children: <TextSpan>[
             TextSpan(
-              text: 'here!',
+              text: 'here.',
               style: TextStyle(
-                color: Colors.black54,
+                color: Colors.grey,
                 decoration: TextDecoration.underline,
-                decorationColor: Colors.black54,
+                decorationColor: Colors.grey,
                 decorationStyle: TextDecorationStyle.solid,
               ),
             ),
@@ -302,20 +334,8 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       onPressed: (){
-        resetPassword();
+        widget.forgotPassword();
       },
     );
   }
-
-  resetPassword(){
-    Future<FirebaseUser> auth = FirebaseAuth.instance.currentUser();
-
-    //var userEmail = auth.then((res){res.email;});
-
-    auth.then((res){
-      
-    });
-  }
-
-
 }
