@@ -10,6 +10,7 @@ class User extends Model {
   int _xpCap = 1;
   int _xp = 0;
   int _level;
+  int _fitnessLevel;
   String _characterName;
   String _className;
   bool _levelUp = false;
@@ -18,18 +19,20 @@ class User extends Model {
   int get xpCap => _xpCap;
   int get xp => _xp;
   int get level => _level;
+  int get fitnessLevel => _fitnessLevel;
   String get characterName => _characterName;
   String get className => _className;
   bool get levelUp => _levelUp;
   String get email => _email;
 
-  void startState(String characterName, int gameLevel, int userXp, int xpCap, String className, String email) {
+  void startState(String characterName, int gameLevel, int userXp, int xpCap, String className, String email, int fitnessLevel) {
     _characterName = characterName;
     _level = gameLevel;
     _xp = userXp;
     _xpCap = xpCap;
     _className =className;
     _email = email;
+    _fitnessLevel = fitnessLevel;
     notifyListeners();
   }
   //Methods just for setting in the beginning
@@ -47,6 +50,8 @@ class User extends Model {
     this._xpCap = number;
     notifyListeners();
   }
+
+
 
   void setCharacterName(String name) {
     this._characterName = name;
@@ -85,12 +90,14 @@ class User extends Model {
           "xp": xp,
           "xpCap": xpCap,
           "level": level,
+
         }
     )
     .then((response){
       setLevel(response['userLevel']);
       setXP(response['userXp']);
       setXpCap(response['xpCap']);
+      setFitnessLevel(response['fitnessLevel']);
 
     }).catchError((error) {
       print(error);
@@ -146,6 +153,12 @@ class User extends Model {
 
   void setLevelUpFalse() {
     this._levelUp = false;
+    notifyListeners();
+  }
+
+  void setFitnessLevel(int fitnessLevel) {
+    print(fitnessLevel);
+    this._fitnessLevel= fitnessLevel;
     notifyListeners();
   }
 }

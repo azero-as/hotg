@@ -1,21 +1,21 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
-import 'login.dart';
-import 'dashboard.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import './logic/recommendedWorkoutLogic.dart';
+import 'activeWorkoutSession.dart';
 import 'authentication.dart';
-import 'signup.dart';
+import 'dashboard.dart';
 import 'frontpage.dart';
 import 'settings.dart';
 import 'loadingScreen.dart';
+import 'login.dart';
 import 'models/user.dart';
 import 'models/workout.dart';
-import 'package:scoped_model/scoped_model.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+import 'signup.dart';
 import 'signupSwiper.dart';
 import 'startWorkout.dart';
-import 'activeWorkoutSession.dart';
 import 'summary.dart';
-
-import './logic/recommendedWorkoutLogic.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({this.auth, this.user});
@@ -169,7 +169,8 @@ class _RootPageState extends State<RootPage> {
             resp['userXp'],
             resp['xpCap'],
             resp['className'],
-            resp['email']);
+            resp['email'],
+            resp["fitnessLevel"]);
             _className = resp['className'];
         });
         } catch(error) {

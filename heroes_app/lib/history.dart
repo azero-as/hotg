@@ -35,7 +35,7 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
     super.initState();
 
     CloudFunctions.instance
-    .call(functionName: 'getAllUserWorkouts')
+    .call(functionName: 'getCompletedUserWorkouts')
     .then((response) {
       if (this.mounted) {
         if (response["workouts"].isEmpty) {
