@@ -162,7 +162,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
                     } else {
                       return AlertDialog(
                         title: Text(widget.exercises[index]["name"]),
-                        content: Text('No description given unfortuantly.'),
+                        content: Text('No description given unfortunately.'),
                         actions: <Widget>[
                           FlatButton(
                               child: Text('Close'),
