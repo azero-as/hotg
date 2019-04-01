@@ -43,6 +43,7 @@ class Home extends StatelessWidget {
             onLoggedIn: onLoggedIn,
             readyToSignOut: readyToSignOut),
           SizedBox(height: 20.0),
+          //TODO: add next planned workout text here
           WorkoutOverview(
             onStartWorkout: onStartWorkout,
             onActiveWorkout: onActiveWorkout,
@@ -301,7 +302,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                 children: <Widget>[
                   // Column for information declaration
                   Expanded(
-                    flex: 3,
+                    flex: 5,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -389,7 +390,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                           height: 18,
                         ),
                         Text(
-                          workoutModel.duration.toString(),
+                          workoutModel.duration.toString() + ' min',
                           style: TextStyle(color: Color(0xFF434242)),
                         ),
                       ]

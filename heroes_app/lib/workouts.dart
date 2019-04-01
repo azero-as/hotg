@@ -191,7 +191,7 @@ class _WorkoutsPageState extends State<Workouts> {
                   children: <Widget>[
                     // Column for information declaration
                     Expanded(
-                      flex: 3,
+                      flex: 5,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
