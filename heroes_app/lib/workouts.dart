@@ -267,9 +267,7 @@ class _WorkoutsPageState extends State<Workouts> {
                               ),
                               Text(
                                 _totalXP.toString() ?? '',
-                                //workoutModel.listOfWorkouts[index]["xp"].toString() ??,
-                                //    '',
-                                  // style: TextStyle(color: Color(0xFF434242)),
+                                style: TextStyle(color: Color(0xFF434242)),
                               ),
                               // add space between lines
                               SizedBox(
