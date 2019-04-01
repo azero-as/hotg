@@ -18,6 +18,7 @@ async function getUserInfo(userId, email) {
     var userXp = userCollection[1]
     var characterName = userCollection[2]
     var className = userCollection[3]
+    var fitnessLevel = userCollection[4]
 
     let gameLevelString = gameLevel.toString()
     var xpCap = await getLevelXpCap(gameLevelString)
@@ -28,7 +29,8 @@ async function getUserInfo(userId, email) {
         userXp: userXp,
         xpCap: xpCap,
         className: className,
-        email: email
+        email: email,
+        fitnessLevel: fitnessLevel
     }
 }
 
@@ -76,8 +78,9 @@ async function getUsersCollection(userId) {
         var userXp = querySnapshot.data().xp
         var characterName = querySnapshot.data().characterName
         var className = querySnapshot.data().class
+        var fitnessLevel = querySnapshot.data().fitnessLevel
 
-        return [gameLevel, userXp, characterName, className]
+        return [gameLevel, userXp, characterName, className, fitnessLevel]
     })
     .catch(function(error) {
         console.log('Error getting data from User collection. ', error)

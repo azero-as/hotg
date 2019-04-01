@@ -33,17 +33,20 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
   @override
   void initState() {
     super.initState();
+
     CloudFunctions.instance
-        .call(functionName: 'getAllUserWorkouts')
-        .then((response) {
-      if (response["workouts"].isEmpty) {
-        setState(() {
-          _noWorkoutCompleted = true;
-        });
-      } else {
-        setState(() {
-          _workouts = response['workouts'];
-        });
+    .call(functionName: 'getCompletedUserWorkouts')
+    .then((response) {
+      if (this.mounted) {
+        if (response["workouts"].isEmpty) {
+          setState(() {
+            _noWorkoutCompleted = true;
+          });
+        } else {
+          setState(() {
+            _workouts = response['workouts'];
+          });
+        }
       }
     }).catchError((error) {
       print(error);

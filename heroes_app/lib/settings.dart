@@ -6,11 +6,11 @@ import 'models/user.dart';
 class Settings extends StatefulWidget {
   //For signing out
 
-  Settings({this.auth, this.onSignedOut, this.onSignedIn});
+  Settings({this.auth, this.onSignedOut, this.alreadyLoggedIn});
 
   final BaseAuth auth;
   final VoidCallback onSignedOut;
-  final VoidCallback onSignedIn;
+  final VoidCallback alreadyLoggedIn;
 
   @override
   State createState() => new SettingsState();
@@ -27,7 +27,7 @@ class SettingsState extends State<Settings> {
             leading: IconButton(
               icon: Icon(Icons.arrow_back_ios),
               onPressed: () {
-                widget.onSignedIn();
+                widget.alreadyLoggedIn();
               },
               color: Colors.white,
             ),
