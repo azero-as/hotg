@@ -164,13 +164,13 @@ class _RootPageState extends State<RootPage> {
       );
       setState(() {
         user.startState(
-            resp['characterName'],
-            resp['gameLevel'],
-            resp['userXp'],
-            resp['xpCap'],
-            resp['className'],
-            resp['email'],
-            resp["fitnessLevel"]);
+          resp['characterName'],
+          resp['gameLevel'],
+          resp['userXp'],
+          resp['xpCap'],
+          resp['className'],
+          resp['email'],
+          resp["fitnessLevel"]);
         _className = resp['className'];
       });
     } catch (error) {
@@ -194,6 +194,7 @@ class _RootPageState extends State<RootPage> {
       );
       setState(() {
         workout.setIntensity(response['intensity']);
+        workout.setFitnessLevel(response['fitnessLevel']);
         workout.setWorkOutName(response['workoutName']);
         workout.setWorkOutClass(response['class']);
         workout.setDuration(response['duration']);

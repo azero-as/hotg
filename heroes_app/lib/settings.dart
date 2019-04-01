@@ -42,6 +42,7 @@ class SettingsState extends State<Settings> {
                 SizedBox(height: 50.0),
                 characterNameField(),
                 emailField(),
+                fitnessLevelField(),
                 SizedBox(height: 125.0),
                 logOutButton()
               ],
@@ -88,6 +89,27 @@ class SettingsState extends State<Settings> {
         );
       })
       );
+  }
+
+  // Displays fitness level
+  Widget fitnessLevelField() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 0.0),
+      child: ScopedModelDescendant<User>(builder: (context, child, model) {
+        if (model.fitnessLevel == null) {
+          return new Container();
+        }
+        return ListTile(
+          leading: Icon(Icons.fitness_center,
+            color: Colors.white,),
+          title: Text('Fitness level: ${model.fitnessLevel.toString()}',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        );
+      })
+    );
   }
 
   _signOut() async {

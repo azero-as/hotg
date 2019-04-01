@@ -9,6 +9,7 @@ class Workout extends Model {
   String _intensity = '';
   String _workoutName = '';
   String _workoutClass = '';
+  int _fitnessLevel = -1;
   int _duration = -1;
   int _xp = -1;
   List<dynamic> _exercises = [];
@@ -19,6 +20,7 @@ class Workout extends Model {
   String get workoutName => _workoutName;
   String get workoutClass => _workoutClass;
   int get duration => _duration;
+  int get fitnessLevel => _fitnessLevel;
   List<dynamic> get exercises => _exercises;
   Map get warmUp => _warmUp;
 
@@ -52,6 +54,7 @@ class Workout extends Model {
     this._workoutClass = workout[index]["class"];
     this._exercises = workout[index]["exercises"];
     this._warmUp = workout[index]["warmUp"];
+    this._fitnessLevel = workout[index]["fitnessLevel"];
   }
 
   void setFinishedWorkout(List<dynamic> selectedExercises, int XpEarned, int BonusXP) {
@@ -71,11 +74,15 @@ class Workout extends Model {
     notifyListeners();
   }
 
+  void setFitnessLevel(int fitnessLevel) {
+    this._fitnessLevel = fitnessLevel;
+    notifyListeners();
+  }
+
   void setWorkOutName(String workoutName) {
     this._workoutName = workoutName;
     notifyListeners();
   }
-
 
   void setWarmUp(Map warmUp) {
     this._warmUp = warmUp;
@@ -95,6 +102,4 @@ class Workout extends Model {
     this._exercises = exercises;
     notifyListeners();
   }
-
-
 }

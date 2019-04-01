@@ -8,14 +8,14 @@ import 'authentication.dart';
 
 // build the home page and call on the stateful classes
 class Home extends StatelessWidget {
-  Home(
-      {this.auth,
-      this.onSignedOut,
-      this.onLoggedIn,
-      this.readyToSignOut,
-      this.onStartWorkout,
-      this.onActiveWorkout,
-      this.onSummary});
+  Home({
+    this.auth,
+    this.onSignedOut,
+    this.onLoggedIn,
+    this.readyToSignOut,
+    this.onStartWorkout,
+    this.onActiveWorkout,
+    this.onSummary});
 
   final BaseAuth auth;
   final VoidCallback onSignedOut;
@@ -31,31 +31,31 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Container(
-        // general background color for the page
-        decoration: BoxDecoration(
-          color: Theme.of(context).secondaryHeaderColor,
-        ),
-        child: Column(
-          children: <Widget>[
-            AvatarOverview(
-                auth: auth,
-                onSignedOut: onSignedOut,
-                onLoggedIn: onLoggedIn,
-                readyToSignOut: readyToSignOut),
-            SizedBox(height: 20.0),
-            WorkoutOverview(
-                onStartWorkout: onStartWorkout,
-                onActiveWorkout: onActiveWorkout,
-                onSummary: onSummary),
-          ],
-        ));
+      // general background color for the page
+      decoration: BoxDecoration(
+        color: Theme.of(context).secondaryHeaderColor,
+      ),
+      child: Column(
+        children: <Widget>[
+          AvatarOverview(
+            auth: auth,
+            onSignedOut: onSignedOut,
+            onLoggedIn: onLoggedIn,
+            readyToSignOut: readyToSignOut),
+          SizedBox(height: 20.0),
+          WorkoutOverview(
+            onStartWorkout: onStartWorkout,
+            onActiveWorkout: onActiveWorkout,
+            onSummary: onSummary),
+        ],
+      ));
   }
 }
 
 // create state for appbar of home page
 class AvatarOverview extends StatefulWidget {
   AvatarOverview(
-      {this.auth, this.onSignedOut, this.onLoggedIn, this.readyToSignOut});
+    {this.auth, this.onSignedOut, this.onLoggedIn, this.readyToSignOut});
 
   final BaseAuth auth;
   final VoidCallback onSignedOut;
@@ -79,105 +79,104 @@ class _AvatarOverviewState extends State<AvatarOverview> {
       children: <Widget>[
         ClipPath(
           child: Container(
-              height: barHeight,
-              width: barWidth,
-              color: Theme.of(context).primaryColor,
-              padding: EdgeInsets.fromLTRB(20, 30, 20, 15),
-              child:
-                  ScopedModelDescendant<User>(builder: (context, child, model) {
-                // Percent should not exceed 1.0:
-                double xpPercent;
-                if (model.xp >= model.xpCap) {
-                  xpPercent = 1.0;
-                } else {
-                  xpPercent = model.xp / model.xpCap;
-                }
-                return Row(
-                  children: <Widget>[
-                    // Column for half bar, only image
-                    Column(children: <Widget>[
+            height: barHeight,
+            width: barWidth,
+            color: Theme.of(context).primaryColor,
+            padding: EdgeInsets.fromLTRB(20, 30, 20, 15),
+            child:
+            ScopedModelDescendant<User>(builder: (context, child, model) {
+              // Percent should not exceed 1.0:
+              double xpPercent;
+              if (model.xp >= model.xpCap) {
+                xpPercent = 1.0;
+              } else {
+                xpPercent = model.xp / model.xpCap;
+              }
+              return Row(
+                children: <Widget>[
+                  // Column for half bar, only image
+                  Column(children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Image.asset(
+                        'assets/avatar-test.png',
+                        height: imageHeight,
+                        width: imageWidth,
+                        fit: BoxFit.fill,
+                      ),
+                    )
+                  ]),
+
+                  // Column for second haf bar, character information
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      //Settings symbol and onPressed functionality
+                      IconButton(
+                        icon: Icon(Icons.settings),
+                        key: Key("settingsButton"),
+                        color: Colors.white,
+                        padding: EdgeInsets.fromLTRB(
+                          (barWidth / 2) - 44, 0, 0, 0),
+                        onPressed: () {
+                          widget.readyToSignOut();
+                        }),
+
+                      //Character name
                       Container(
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: Image.asset(
-                          'assets/avatar-test.png',
-                          height: imageHeight,
-                          width: imageWidth,
-                          fit: BoxFit.fill,
-                        ),
-                      )
-                    ]),
-
-                    // Column for second haf bar, character information
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        //Settings symbol and onPressed functionality
-                        IconButton(
-                            icon: Icon(Icons.settings),
-                            key: Key("settingsButton"),
+                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                        width: imageWidth,
+                        child: Text(
+                          model.characterName.toString(),
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
                             color: Colors.white,
-                            padding: EdgeInsets.fromLTRB(
-                                (barWidth / 2) - 44, 0, 0, 0),
-                            onPressed: () {
-                              widget.readyToSignOut();
-                            }),
-
-                        //Character name
-                        Container(
-                          padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                          width: imageWidth,
-                          child: Text(
-                            model.characterName.toString(),
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                            maxLines: 1,
-                            //textAlign: TextAlign.left,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
                           ),
+                          maxLines: 1,
+                          //textAlign: TextAlign.left,
                         ),
+                      ),
 
-                        //Level and class
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                          child: Text(
-                              'Level ${model.level.toString()} ${model.className.toString()}',
-                              // 'Level' /* + _userLevel  + ' Intermediate thing?'*/,
-                              style: TextStyle(color: Colors.white),
-                              textAlign: TextAlign.left),
-                        ),
+                      //Level and class
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
+                        child: Text(
+                          'Level ${model.level.toString()} ${model.className.toString()}',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.left),
+                      ),
 
-                        //Progress bar
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(15, 35, 0, 0),
-                          child: LinearPercentIndicator(
-                            width: progressBar,
-                            lineHeight: 15,
-                            backgroundColor: Colors.white,
-                            progressColor: Theme.of(context).accentColor,
-                            percent: xpPercent,
-                            //bar shape
-                            linearStrokeCap: LinearStrokeCap.roundAll,
-                            animationDuration: 2000,
-                          ),
+                      //Progress bar
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(15, 35, 0, 0),
+                        child: LinearPercentIndicator(
+                          width: progressBar,
+                          lineHeight: 15,
+                          backgroundColor: Colors.white,
+                          progressColor: Theme.of(context).accentColor,
+                          percent: xpPercent,
+                          //bar shape
+                          linearStrokeCap: LinearStrokeCap.roundAll,
+                          animationDuration: 2000,
                         ),
+                      ),
 
-                        // XP / XP cap
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                          child: Text(
-                              '${model.xp.toString()}/${model.xpCap.toString()}',
-                              style: TextStyle(color: Colors.white),
-                              textAlign: TextAlign.left),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-              })),
+                      // XP / XP cap
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                        child: Text(
+                          '${model.xp.toString()}/${model.xpCap.toString()}',
+                          style: TextStyle(color: Colors.white),
+                          textAlign: TextAlign.left),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            })),
         )
       ],
     );
@@ -208,14 +207,15 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
     var workout = ScopedModel.of<Workout>(context);
     return LayoutBuilder(builder: (context, constraints) {
       if (workout.intensity == "" ||
-          workout.workoutName == "" ||
-          workout.workoutClass == "" ||
-          workout.duration == -1 ||
-          workout.xp == -1 ||
-          workout.exercises == []) {
-        return new Text("");
-      } else {
-        return Container(
+        workout.workoutName == "" ||
+        workout.workoutClass == "" ||
+        workout.duration == -1 ||
+        workout.fitnessLevel == -1 ||
+        workout.xp == -1 ||
+        workout.exercises == []) {
+          return new Text("");
+        } else {
+          return Container(
             // make sure the placement is centered and a little away from appbar
             padding: EdgeInsets.fromLTRB(40, 20, 40, 0),
             child: Column(
@@ -225,17 +225,20 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                   alignment: Alignment.centerLeft,
                   child: Container(
                     child: Text('Next planned workout:\n',
-                        style: TextStyle(
-                          color: Colors.white,
-                        )),
+                      style: TextStyle(
+                        color: Colors.white,
+                      )
+                    ),
                   ),
                 ),
                 // call on workout widget
                 _workout(workout),
               ],
-            ));
+            )
+          );
+        }
       }
-    });
+    );
   }
 
   Widget _workout(workoutModel) {
@@ -243,10 +246,9 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
       onTap: (){
         workoutModel.isFromHomePage = true;
         widget.onStartWorkout();
-        },
+      },
       child: new Container(
         // add border for the workout info box
-
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 0.25),
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -277,10 +279,9 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
-                   child: Text(
+                      child: Text(
                         workoutModel.workoutName,
                         style: TextStyle(color: Colors.white),
-
                       ),
                     ),
                   ),
@@ -300,15 +301,25 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                 children: <Widget>[
                   // Column for information declaration
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
                           'Class:',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF434242)),
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF434242)),
+                        ),
+                        // add space between lines
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          'Fitness Level:',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF434242)),
                         ),
                         // add space between lines
                         SizedBox(
@@ -317,8 +328,8 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                         Text(
                           'XP:',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF434242)),
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF434242)),
                         ),
                         // add space between lines
                         SizedBox(
@@ -327,8 +338,8 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                         Text(
                           'Intensity:',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF434242)),
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF434242)),
                         ),
                         // add space between lines
                         SizedBox(
@@ -345,42 +356,51 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
                   Expanded(
                     flex: 6,
                     child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            workoutModel.workoutClass,
-                            style: TextStyle(color: Color(0xFF434242)),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            workoutModel.xp.toString(),
-                            style: TextStyle(color: Color(0xFF434242)),
-                          ),
-                          // add space between lines
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            workoutModel.intensity,
-                            style: TextStyle(color: Color(0xFF434242)),
-                          ),
-                          // add space between lines
-                          SizedBox(
-                            height: 18,
-                          ),
-                          Text(
-                            workoutModel.duration.toString(),
-                            style: TextStyle(color: Color(0xFF434242)),
-                          ),
-                        ]),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          workoutModel.workoutClass,
+                          style: TextStyle(color: Color(0xFF434242)),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          workoutModel.fitnessLevel.toString(),
+                          style: TextStyle(color: Color(0xFF434242)),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          workoutModel.xp.toString(),
+                          style: TextStyle(color: Color(0xFF434242)),
+                        ),
+                        // add space between lines
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          workoutModel.intensity,
+                          style: TextStyle(color: Color(0xFF434242)),
+                        ),
+                        // add space between lines
+                        SizedBox(
+                          height: 18,
+                        ),
+                        Text(
+                          workoutModel.duration.toString(),
+                          style: TextStyle(color: Color(0xFF434242)),
+                        ),
+                      ]
+                    ),
                   ),
-                  // Column for button
                 ],
               ),
             ),
           ],
-        )));
+        )
+      )
+    );
   }
 }

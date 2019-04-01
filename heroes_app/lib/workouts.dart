@@ -23,8 +23,7 @@ class Workouts extends StatefulWidget {
 }
 
 class _WorkoutsPageState extends State<Workouts> {
-  bool _dataLoadedFromFireBase =
-      false; //if this is null, it is still loading data from firebase.
+  bool _dataLoadedFromFireBase = false; //if this is null, it is still loading data from firebase.
 
   @override
   void initState() {
@@ -118,7 +117,6 @@ class _WorkoutsPageState extends State<Workouts> {
   Widget build(BuildContext context) {
     Widget _buildWaitingScreen() {
       return Scaffold(
-
         body: Container(
           alignment: Alignment.center,
           child: CircularProgressIndicator(),
@@ -130,7 +128,6 @@ class _WorkoutsPageState extends State<Workouts> {
       if (_validateWorkout(index) == false) {
         return Text("");
       } else {
-
         return new GestureDetector(
           onTap: (){
             workoutModel.isFromHomePage = false;
@@ -148,143 +145,159 @@ class _WorkoutsPageState extends State<Workouts> {
 
           ),
           child: Column(
-              // Text starts on the left, instead of centered as is the default
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                // container for title box
-                Container(
-                  padding: EdgeInsets.all(15),
-                  // border to distinguish between the two containers within the box
-                  // Colour for the entire row
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xFF212838), width: 0.15),
-                    color: Theme.of(context).accentColor,
-                    //Border radius for workout title
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      // add some space between left-side border and beginning of text
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            // Text starts on the left, instead of centered as is the default
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              // container for title box
+              Container(
+                padding: EdgeInsets.all(15),
+                // border to distinguish between the two containers within the box
+                // Colour for the entire row
+                decoration: BoxDecoration(
+                  border: Border.all(color: Color(0xFF212838), width: 0.15),
+                  color: Theme.of(context).accentColor,
+                  //Border radius for workout title
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    // add some space between left-side border and beginning of text
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                    ),
+                    // new container for title
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        child: Text(
+                          workoutModel.listOfWorkouts[index]["workoutName"] ?? '',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
-                      // new container for title
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          child: Text(
-                            workoutModel.listOfWorkouts[index]["workoutName"] ?? '',
-                            style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+
+              // container for changing information
+              Container(
+                padding: EdgeInsets.all(15),
+                // border to distinguish between the two containers within the box
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 0.15),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    // Column for information declaration
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Class:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF434242)
+                            ),
                           ),
-                        ),
+                          // add space between lines
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Fitness Level:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF434242)
+                            ),
+                          ),
+                          // add space between lines
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'XP:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF434242)
+                            ),
+                          ),
+                          // add space between lines
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Intensity:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF434242)
+                            ),
+                          ),
+                          // add space between lines
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Icon(
+                            Icons.alarm,
+                            color: Color(0xFF434242),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    // Column for changing information
+                    Expanded(
+                      flex: 6,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            workoutModel.listOfWorkouts[index]["class"].toString(),
+                            style: TextStyle(color: Color(0xFF434242)),
+                          ),
+                          // add space between lines
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            workoutModel.listOfWorkouts[index]["fitnessLevel"].toString(),
+                            style: TextStyle(color: Color(0xFF434242)),
+                          ),
+                          // add space between lines
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            workoutModel.listOfWorkouts[index]["xp"].toString() ??
+                              '',
+                            style: TextStyle(color: Color(0xFF434242)),
+                          ),
+                          // add space between lines
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            workoutModel.listOfWorkouts[index]["intensity"].toString() ??
+                              '',
+                            style: TextStyle(color: Color(0xFF434242)),
+                          ),
+                          // add space between lines
+                          SizedBox(
+                            height: 18,
+                          ),
+                          Text(
+                            workoutModel.listOfWorkouts[index]["duration"].toString() +
+                              " min" ?? '',
+                            style: TextStyle(color: Color(0xFF434242)),
+                          ),
+                        ]),
+                    ),
+                  ],
                 ),
-
-                // container for changing information
-                Container(
-                  padding: EdgeInsets.all(15),
-                  // border to distinguish between the two containers within the box
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 0.15),
-
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      // Column for information declaration
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Class:',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF434242)),
-                            ),
-                            // add space between lines
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'XP:',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF434242)),
-                            ),
-                            // add space between lines
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'Intensity:',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF434242)),
-                            ),
-                            // add space between lines
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Icon(
-                              Icons.alarm,
-                              color: Color(0xFF434242),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Column for changing information
-                      Expanded(
-                        flex: 6,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                workoutModel.listOfWorkouts[index]["class"].toString(),
-                                style: TextStyle(color: Color(0xFF434242)),
-                              ),
-                              // add space between lines
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                workoutModel.listOfWorkouts[index]["xp"].toString() ??
-                                    '',
-                                style: TextStyle(color: Color(0xFF434242)),
-                              ),
-                              // add space between lines
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                workoutModel.listOfWorkouts[index]["intensity"]
-                                        .toString() ??
-                                    '',
-                                style: TextStyle(color: Color(0xFF434242)),
-                              ),
-                              // add space between lines
-                              SizedBox(
-                                height: 18,
-                              ),
-                              Text(
-                                workoutModel.listOfWorkouts[index]["duration"]
-                                            .toString() +
-                                        " min" ??
-                                    '',
-                                style: TextStyle(color: Color(0xFF434242)),
-                              ),
-                            ]),
-                      ),
-                      // Column for button
-                    ],
-                  ),
-                ),
-              ],
-            ),
-        ));
+              ),
+            ],
+          ),));
       }
     }
 
@@ -307,7 +320,6 @@ class _WorkoutsPageState extends State<Workouts> {
 
     if (!_dataLoadedFromFireBase) {
       return Scaffold(
-
         appBar: new AppBar(
           centerTitle: true,
           title: new Text("Workouts"),
@@ -317,7 +329,6 @@ class _WorkoutsPageState extends State<Workouts> {
       );
     } else {
       return Scaffold(
-
         appBar: new AppBar(
           centerTitle: true,
           title: new Text("Workouts"),
