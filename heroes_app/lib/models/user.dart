@@ -94,7 +94,7 @@ class User extends Model {
         }
     )
     .then((response){
-      setLevel(response['userLevel']);
+      setLevel(response['gameLevel']);
       setXP(response['userXp']);
       setXpCap(response['xpCap']);
       setFitnessLevel(response['fitnessLevel']);
