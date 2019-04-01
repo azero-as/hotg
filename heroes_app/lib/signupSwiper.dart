@@ -298,7 +298,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                           'Every hero needs a suitable name! Start your journey by picking a character name.'),
                       _space(40),
                       Container(width: 250, child: characterName),
-                      SizedBox(height: 300),
+                      _space(300),
                     ],
                   ),
                   onChanged: () {
@@ -375,6 +375,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                         _space(20.0),
                         _errorMessage(),
                         letsGoButton,
+                        _space(150),
                       ],
                     ),
                   ))
