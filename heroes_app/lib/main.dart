@@ -1,22 +1,23 @@
-import 'package:flutter/material.dart';
-import 'authentication.dart';
-import 'rootPage.dart';
-import 'login.dart';
-import 'package:flutter/services.dart';
-import 'frontpage.dart';
-import 'signup.dart';
-import 'signupSwiper.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'models/user.dart';
 import 'models/workout.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+
+import 'authentication.dart';
+import 'frontpage.dart';
+import 'login.dart';
+import 'rootPage.dart';
+import 'signup.dart';
+import 'signupSwiper.dart';
 
 void main() async {
   // Lock screen in portrait mode
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await FlutterStatusbarcolor.setStatusBarColor(Color(0xFF612A30));
-
 
   runApp(new Heroes());
 }

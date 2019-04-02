@@ -6,7 +6,7 @@ import 'models/user.dart';
 import 'models/workout.dart';
 import 'authentication.dart';
 
-// build the home page and call on the stateful classes
+// Build the home page and call on the stateful classes
 class Home extends StatelessWidget {
   Home({
     this.auth,
@@ -27,7 +27,7 @@ class Home extends StatelessWidget {
 
   static String tag = 'home-page';
 
-  //Settings icon button with navigation to settings page
+  // Settings icon button with navigation to settings page
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -53,7 +53,7 @@ class Home extends StatelessWidget {
   }
 }
 
-// create state for appbar of home page
+// Create state for appbar of home page
 class AvatarOverview extends StatefulWidget {
   AvatarOverview(
     {this.auth, this.onSignedOut, this.onLoggedIn, this.readyToSignOut});
@@ -67,140 +67,156 @@ class AvatarOverview extends StatefulWidget {
   State createState() => new _AvatarOverviewState();
 }
 
-// class for appbar of home page
+// Class for appbar of home page
 class _AvatarOverviewState extends State<AvatarOverview> {
 
 
   @override
   Widget build(BuildContext context) {
-    // variables for size, for best view across platforms
+    // Variables for size, for best view across platforms
     var barHeight = (MediaQuery.of(context).size.height) / 3;
     var barWidth = (MediaQuery.of(context).size.width);
-    var imageHeight = (barHeight - 55);
+    var imageHeight = (barHeight - 30);
     var imageWidth = (barWidth / 2) - 20;
     var progressBar = (imageWidth - 15);
 
-    return SafeArea(
-      child: Container(
-        height: barHeight,
-        width: barWidth,
-        color: Theme.of(context).primaryColor,
-      ),
+// ============ Widget build for information ============
 
-    );
+    // Settings symbol and onPressed functionality
+    Widget _settingsButton() {
+      return IconButton(
+        icon: Icon(Icons.settings),
+        key: Key("settingsButton"),
+        color: Colors.white,
+        padding: EdgeInsets.fromLTRB(
+          (barWidth / 2) - 44, 0, 0, 0),
+        onPressed: () {
+          widget.readyToSignOut();
+        }
+      );
+    }
 
-    /*// Column for half bar, only image
-    Widget _image(){
+    // Character name
+    Widget _characterName() {
+      var user = ScopedModel.of<User>(context);
+      return new Container(
+        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+        width: imageWidth,
+        child: Text(
+          user.characterName.toString(),
+          softWrap: true,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+          maxLines: 1,
+        ),
+      );
+    }
+
+    // Level and class
+    Widget _levelAndClass() {
+      var user = ScopedModel.of<User>(context);
+      return Container(
+        padding: EdgeInsets.fromLTRB(20, 5, 0, 0),
+        child: Text(
+          'Level ${user.level.toString()} ${user.className.toString()}',
+          style: TextStyle(color: Colors.white),
+          textAlign: TextAlign.left
+        ),
+      );
+    }
+
+    // Progress bar
+    Widget _progressBar() {
+      var user = ScopedModel.of<User>(context);
+      double xpPercent;
+      if (user.xp >= user.xpCap) {
+        xpPercent = 1.0;
+      } else {
+        xpPercent = user.xp / user.xpCap;
+      }
+
+      return Container(
+        padding: EdgeInsets.fromLTRB(15, 35, 0, 0),
+        child: LinearPercentIndicator(
+          width: progressBar,
+          lineHeight: 15,
+          backgroundColor: Colors.white,
+          progressColor: Theme.of(context).accentColor,
+          percent: xpPercent,
+          //bar shape
+          linearStrokeCap: LinearStrokeCap.roundAll,
+          animationDuration: 2000,
+        ),
+      );
+    }
+
+    // XP / XP cap information
+    Widget _xpProgress() {
+      var user = ScopedModel.of<User>(context);
+      return Container (
+        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+        child: Text(
+          '${user.xp.toString()}/${user.xpCap.toString()} XP',
+          style: TextStyle(color: Colors.white),
+          textAlign: TextAlign.left),
+      );
+    }
+
+// ============ Widget build for columns ============
+
+    // Column for half bar, only image
+    Widget _image() {
       return Column(children: <Widget>[
         Container(
-          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+          height: imageHeight,
+          width: imageWidth,
           child: Image.asset(
             'assets/avatar-test.png',
-            height: imageHeight,
-            width: imageWidth,
             fit: BoxFit.fill,
           ),
         )
       ]);
     }
 
-    _characterInformation() {
-      ScopedModelDescendant<User>(builder: (context, child, model) {
-        // Percent should not exceed 1.0:
-        double xpPercent;
-        if (model.xp >= model.xpCap) {
-          xpPercent = 1.0;
-        } else {
-          xpPercent = model.xp / model.xpCap;
-        }
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            //Settings symbol and onPressed functionality
-            IconButton(
-              icon: Icon(Icons.settings),
-              key: Key("settingsButton"),
-              color: Colors.white,
-              padding: EdgeInsets.fromLTRB(
-                (barWidth / 2) - 44, 0, 0, 0),
-              onPressed: () {
-                widget.readyToSignOut();
-              }),
-
-            //Character name
-            Container(
-              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-              width: imageWidth,
-              child: Text(
-                model.characterName.toString(),
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-                maxLines: 1,
-                //textAlign: TextAlign.left,
-              ),
-            ),
-
-            //Level and class
-            Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
-              child: Text(
-                'Level ${model.level.toString()} ${model.className.toString()}',
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.left),
-            ),
-
-            //Progress bar
-            Padding(
-              padding: EdgeInsets.fromLTRB(15, 35, 0, 0),
-              child: LinearPercentIndicator(
-                width: progressBar,
-                lineHeight: 15,
-                backgroundColor: Colors.white,
-                progressColor: Theme.of(context).accentColor,
-                percent: xpPercent,
-                //bar shape
-                linearStrokeCap: LinearStrokeCap.roundAll,
-                animationDuration: 2000,
-              ),
-            ),
-
-            // XP / XP cap
-            Padding(
-              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-              child: Text(
-                '${model.xp.toString()}/${model.xpCap.toString()}',
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.left),
-            ),
-          ],
-        );
-      },);
+    // Column for second half of bar, character information
+    Widget _characterInformation() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _settingsButton(),
+          _characterName(),
+          _levelAndClass(),
+          _progressBar(),
+          _xpProgress(),
+        ]
+      );
     }
 
+// ============ Return Avatar overview build ============
 
     return SafeArea(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            height: barHeight,
-            width: barWidth,
-            color: Theme.of(context).primaryColor,
-            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-            child: Row(
+      child: Container(
+        height: barHeight,
+        width: barWidth,
+        color: Theme.of(context).primaryColor,
+        padding: EdgeInsets.fromLTRB(20, 5, 10, 5),
+        child: Stack(
+          children: <Widget>[
+            Row(
               children: <Widget>[
                 _image(),
                 _characterInformation(),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    );*/
+    );
   }
 }
 
