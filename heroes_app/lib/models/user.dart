@@ -9,7 +9,7 @@ class User extends Model {
 
   int _xpCap = 1;
   int _xp = 0;
-  int _level;
+  int _gameLevel;
   int _fitnessLevel;
   String _characterName;
   String _className;
@@ -18,7 +18,7 @@ class User extends Model {
 
   int get xpCap => _xpCap;
   int get xp => _xp;
-  int get level => _level;
+  int get gameLevel => _gameLevel;
   int get fitnessLevel => _fitnessLevel;
   String get characterName => _characterName;
   String get className => _className;
@@ -27,7 +27,7 @@ class User extends Model {
 
   void startState(String characterName, int gameLevel, int userXp, int xpCap, String className, String email, int fitnessLevel) {
     _characterName = characterName;
-    _level = gameLevel;
+    _gameLevel = gameLevel;
     _xp = userXp;
     _xpCap = xpCap;
     _className =className;
@@ -37,7 +37,7 @@ class User extends Model {
   }
   //Methods just for setting in the beginning
   setLevel(int number) {
-    this._level = number;
+    this._gameLevel = number;
     notifyListeners();
   }
 
@@ -89,7 +89,7 @@ class User extends Model {
         parameters: {
           "xp": xp,
           "xpCap": xpCap,
-          "level": level,
+          "level": gameLevel,
 
         }
     )

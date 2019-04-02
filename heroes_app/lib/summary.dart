@@ -191,7 +191,7 @@ class _SummaryState extends State<Summary> {
                     SizedBox(height: 10),
                     RichText(
                       text: TextSpan(
-                        text: 'Level ${model.level}',
+                        text: 'Level ${model.gameLevel}',
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
