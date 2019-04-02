@@ -48,7 +48,8 @@ class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
   String _className = '';
-  bool _dataLoadedFromDatabase = false; //if this is null, it is still loading data from firebase.
+  bool _dataLoadedFromDatabase =
+      false; //if this is null, it is still loading data from firebase.
 
   @override
   void initState() {
@@ -82,7 +83,7 @@ class _RootPageState extends State<RootPage> {
       });
       new Future.delayed(Duration.zero, () {
         _setUserInfo(context);
-      }); 
+      });
     });
     setState(() {
       authStatus = AuthStatus.LOGGED_IN;
@@ -169,9 +170,9 @@ class _RootPageState extends State<RootPage> {
     try {
       final dynamic resp = await CloudFunctions.instance.call(
         functionName: 'getUserInfo',
-        );
-        setState(() {
-          user.startState(
+      );
+      setState(() {
+        user.startState(
             resp['characterName'],
             resp['gameLevel'],
             resp['userXp'],
@@ -179,14 +180,14 @@ class _RootPageState extends State<RootPage> {
             resp['className'],
             resp['email'],
             resp["fitnessLevel"]);
-            _className = resp['className'];
-        });
-        } catch(error) {
-          print(error);
-        }
-        String _convertedClass =convertClassName(_className);
-        _setWorkoutInfo(_convertedClass);
-        }
+        _className = resp['className'];
+      });
+    } catch (error) {
+      print(error);
+    }
+    String _convertedClass = convertClassName(_className);
+    _setWorkoutInfo(_convertedClass);
+  }
 
   // Requests a workout from the database based on the user's rpg class and
   // creates a workout-model with the data.
@@ -197,11 +198,12 @@ class _RootPageState extends State<RootPage> {
       final dynamic response = await CloudFunctions.instance.call(
         functionName: 'getRecommendedWorkout',
         parameters: <String, dynamic>{
-          'className':className,
+          'className': className,
         },
       );
       setState(() {
         workout.setIntensity(response['intensity']);
+        workout.setFitnessLevel(response['fitnessLevel']);
         workout.setWorkOutName(response['workoutName']);
         workout.setWorkOutClass(response['class']);
         workout.setDuration(response['duration']);
@@ -209,7 +211,7 @@ class _RootPageState extends State<RootPage> {
         workout.setExercises(response['exercises']);
         workout.setWarmUp(response['warmUp']);
         _dataLoadedFromDatabase = true;
-      });  
+      });
     } catch (error) {
       print(error);
     }
@@ -218,126 +220,125 @@ class _RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) {
     var workout = ScopedModel.of<Workout>(context);
-      switch (authStatus) {
-        case AuthStatus.NOT_DETERMINED:
+    switch (authStatus) {
+      case AuthStatus.NOT_DETERMINED:
+        return new LoadingScreen();
+        break;
+      case AuthStatus.NOT_LOGGED_IN:
+        workout.setListOfWorkouts(null);
+        return FrontPage(
+          readyToLogIn: _readyToLogIn,
+          readyToSignUp: _readyToSignUp,
+        );
+      case AuthStatus.READY_TO_LOG_IN:
+        return new LoginPage(
+          auth: widget.auth,
+          onSignedIn: _onLoggedIn,
+          readyToSignUp: _readyToSignUp,
+          onSignedOut: _onSignedOut,
+          forgotPassword: _forgotPassword,
+        );
+      case AuthStatus.FINISHED_SIGNED_UP:
+        if (_userId.length > 0 && _userId != null) {
+          return new SignupSwiperPage(
+            auth: widget.auth,
+            onSignedIn: _onLoggedIn,
+            userId: _userId,
+            onSignedOut: _onSignedOut,
+            title: 'Heroes of the Gym',
+          );
+        } else
           return new LoadingScreen();
-          break;
-        case AuthStatus.NOT_LOGGED_IN:
-          workout.setListOfWorkouts(null);
-          return FrontPage(
-            readyToLogIn: _readyToLogIn,
-            readyToSignUp: _readyToSignUp,
-          );
-        case AuthStatus.READY_TO_LOG_IN:
-          return new LoginPage(
-            auth: widget.auth,
-            onSignedIn: _onLoggedIn,
-            readyToSignUp: _readyToSignUp,
-            onSignedOut: _onSignedOut,
-            forgotPassword: _forgotPassword,
-          );
-        case AuthStatus.FINISHED_SIGNED_UP:
-          if (_userId.length > 0 && _userId != null) {
-            return new SignupSwiperPage(
-              auth: widget.auth,
-              onSignedIn: _onLoggedIn,
-              userId: _userId,
-              onSignedOut: _onSignedOut,
-              title: 'Heroes of the Gym',
-            );
-          }
-          else
-            return new LoadingScreen();
-          break;
-        case AuthStatus.READY_TO_SIGN_UP:
-          return new SignupPage(
-            auth: widget.auth,
-            onSignedIn: _onLoggedIn,
-            readyToLogIn: _readyToLogIn,
-            onSignedOut: _onSignedOut,
-            finishedSignedUp: _finishedSignedUp,
-          );
-          break;
-        case AuthStatus.FORGOT_PASSWORD:
+        break;
+          case AuthStatus.FORGOT_PASSWORD:
           return new ResetPasswordPage(
             auth: widget.auth,
             readyToLogIn: _readyToLogIn,
           );
           break;
-        case AuthStatus.LOGGED_IN:
-          if (_userId.length > 0 && _userId != null && _dataLoadedFromDatabase) {
-              return new DashboardScreen(
-                userId: _userId,
-                auth: widget.auth,
-                onSignedOut: _onSignedOut,
-                readyToSignOut: _readyToSignOut,
-                onSignedIn: _onLoggedIn,
-                onStartWorkout: _startWorkout,
-                onActiveWorkout: _activeWorkout,
-                onSummary: _summary,
-                index: 0,
-              );
-          } else
-            return new LoadingScreen();
-          break;
-        case AuthStatus.READY_TO_SIGN_OUT:
-          return new Settings(
+      case AuthStatus.READY_TO_SIGN_UP:
+        return new SignupPage(
+          auth: widget.auth,
+          onSignedIn: _onLoggedIn,
+          readyToLogIn: _readyToLogIn,
+          onSignedOut: _onSignedOut,
+          finishedSignedUp: _finishedSignedUp,
+        );
+        break;
+      case AuthStatus.LOGGED_IN:
+        if (_userId.length > 0 && _userId != null && _dataLoadedFromDatabase) {
+          return new DashboardScreen(
+            userId: _userId,
             auth: widget.auth,
             onSignedOut: _onSignedOut,
-            alreadyLoggedIn: _alreadyLoggedIn,
-          );
-          break;
-        case AuthStatus.START_WORKOUT:
-          return new StartWorkout(
-            exercises: workout.exercises,
-            duration: workout.duration,
-            intensity: workout.intensity,
-            xp: workout.xp,
-            workoutName: workout.workoutName,
-            workoutClass: workout.workoutClass,
-            onLoggedIn: _onLoggedIn,
+            readyToSignOut: _readyToSignOut,
+            onSignedIn: _onLoggedIn,
             onStartWorkout: _startWorkout,
             onActiveWorkout: _activeWorkout,
             onSummary: _summary,
-            onBackToWorkout: _backToWorkout,
-            alreadyLoggedIn: _alreadyLoggedIn,
+            index: 0,
           );
-          break;
-        case AuthStatus.ACTIVE_WORKOUT_SESSION:
-          return new activeWorkoutSession(
-            exercises: workout.exercises,
-            workoutName: workout.workoutName,
-            onLoggedIn: _onLoggedIn,
+        } else
+          return new LoadingScreen();
+        break;
+      case AuthStatus.READY_TO_SIGN_OUT:
+        return new Settings(
+          auth: widget.auth,
+          onSignedOut: _onSignedOut,
+          alreadyLoggedIn: _alreadyLoggedIn,
+        );
+        break;
+      case AuthStatus.START_WORKOUT:
+        return new StartWorkout(
+          exercises: workout.exercises,
+          duration: workout.duration,
+          intensity: workout.intensity,
+          xp: workout.xp,
+          workoutName: workout.workoutName,
+          workoutClass: workout.workoutClass,
+          onLoggedIn: _onLoggedIn,
+          onStartWorkout: _startWorkout,
+          onActiveWorkout: _activeWorkout,
+          onSummary: _summary,
+          onBackToWorkout: _backToWorkout,
+          alreadyLoggedIn: _alreadyLoggedIn,
+        );
+        break;
+      case AuthStatus.ACTIVE_WORKOUT_SESSION:
+        return new activeWorkoutSession(
+          exercises: workout.exercises,
+          workoutName: workout.workoutName,
+          onLoggedIn: _onLoggedIn,
+          onStartWorkout: _startWorkout,
+          onSummary: _summary,
+        );
+      case AuthStatus.SUMMARY:
+        return new Summary(
+          exercises: workout.selectedExercises,
+          bonus: workout.BonusXP,
+          total_xp: workout.XpEarned,
+          workoutType: workout.workoutName,
+          onLoggedIn: _onLoggedIn,
+          alreadyLoggedIn: _alreadyLoggedIn,
+        );
+      case AuthStatus.BACK_TO_WORKOUTS:
+        if (_userId.length > 0 && _userId != null) {
+          return new DashboardScreen(
+            userId: _userId,
+            auth: widget.auth,
+            onSignedOut: _onSignedOut,
+            readyToSignOut: _readyToSignOut,
+            onSignedIn: _onLoggedIn,
             onStartWorkout: _startWorkout,
+            onActiveWorkout: _activeWorkout,
             onSummary: _summary,
-            );
-        case AuthStatus.SUMMARY:
-          return new Summary(
-            exercises: workout.selectedExercises,
-            bonus: workout.BonusXP,
-            total_xp: workout.XpEarned,
-            workoutType: workout.workoutName,
-            onLoggedIn: _onLoggedIn,
-            alreadyLoggedIn: _alreadyLoggedIn,
+            index: 1,
           );
-        case AuthStatus.BACK_TO_WORKOUTS:
-          if (_userId.length > 0 && _userId != null) {
-            return new DashboardScreen(
-              userId: _userId,
-              auth: widget.auth,
-              onSignedOut: _onSignedOut,
-              readyToSignOut: _readyToSignOut,
-              onSignedIn: _onLoggedIn,
-              onStartWorkout: _startWorkout,
-              onActiveWorkout: _activeWorkout,
-              onSummary: _summary,
-              index: 1,
-            );
-          } else
-            return LoadingScreen();
-          break;
-        default:
+        } else
           return LoadingScreen();
-      }
+        break;
+      default:
+        return LoadingScreen();
+    }
   }
 }

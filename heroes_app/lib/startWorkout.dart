@@ -4,7 +4,6 @@ import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
 import 'models/user.dart';
 
-
 class StartWorkout extends StatefulWidget {
   final List exercises;
   final int duration;
@@ -19,7 +18,6 @@ class StartWorkout extends StatefulWidget {
   final VoidCallback onSummary;
   final VoidCallback onBackToWorkout;
   final VoidCallback alreadyLoggedIn;
-
 
   StartWorkout(
       {this.exercises,
@@ -58,7 +56,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
             widget.onActiveWorkout();
           },
           padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-          color:Theme.of(context).primaryColor,
+          color: Theme.of(context).primaryColor,
           child: Text(
             'Start workout',
             style: TextStyle(color: Colors.white),
@@ -79,7 +77,6 @@ class _StartWorkoutPage extends State<StartWorkout> {
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
-
                 TextSpan(
                     text: ' Class: ',
                     style: TextStyle(fontWeight: FontWeight.bold)),
@@ -99,36 +96,72 @@ class _StartWorkoutPage extends State<StartWorkout> {
               ])));
     }
 
-    Widget _showInfoWarmUp(){
+    // Alert dialog to exercise description, only shown if description is in database
+    Widget _showExerciseDescription(int index) {
+      if ((widget.exercises[index]["description"]) != null) {
+        return IconButton(
+          icon: Icon(Icons.info_outline),
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(widget.exercises[index]["name"]),
+                    content: Text(widget.exercises[index]["description"]),
+                    actions: <Widget>[
+                      FlatButton(
+                          child: Text('Close'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          })
+                    ],
+                  );
+                });
+          },
+        );
+      } else {
+        return IconButton(
+          // TODO: if we change the background of this page, then change the color of this icon to the same color to keep in transparent
+          icon: Icon(
+            Icons.info_outline,
+            color: Color(0xFFe0e4eb),
+          ),
+        );
+      }
+    }
+
+    Widget _showInfoWarmUp() {
       var workout = ScopedModel.of<Workout>(context);
       return ExpansionTile(
           leading: IconButton(
-          icon: Icon(Icons.info_outline),
-          onPressed: () {
+            icon: Icon(Icons.info_outline),
+            onPressed: () {
               showDialog(
                   context: context,
-                      builder: (BuildContext context) {
-                          return AlertDialog(
-                              title: Text("Warm-up"),
-                              content: Text( workout.warmUp["description"].toString()),
-                              actions: <Widget>[
-                              FlatButton(
-                              child: Text('Close'),
-                              onPressed: () {
-                                  Navigator.of(context).pop();
-                              })
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Warm-up"),
+                      content: Text(workout.warmUp["description"].toString()),
+                      actions: <Widget>[
+                        FlatButton(
+                            child: Text('Close'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            })
                       ],
-                  );
-              });
-          }, // title: new Text("Warm-up",
-      ),
-      title: new Text("Warm-up",),
+                    );
+                  });
+            }, // title: new Text("Warm-up",
+          ),
+          title: new Text(
+            "Warm-up",
+          ),
           children: <Widget>[
             ListTile(
                 title: new Text(
                     "Minutes: " + workout.warmUp["targetMin"].toString())),
-        //children: root["info"]
-      ]);
+            //children: root["info"]
+          ]);
     }
 
     //Show information about a workout using minutes
@@ -141,26 +174,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
       }
 
       return ExpansionTile(
-          leading: IconButton(
-            icon: Icon(Icons.info_outline),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text(widget.exercises[index]["name"]),
-                      content: Text(widget.exercises[index]["description"]),
-                      actions: <Widget>[
-                        FlatButton(
-                            child: Text('Close'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            })
-                      ],
-                    );
-                  });
-            },
-          ),
+          leading: _showExerciseDescription(index),
           title: new Text(
             (widget.exercises[index]["name"]),
           ),
@@ -186,27 +200,24 @@ class _StartWorkoutPage extends State<StartWorkout> {
     Widget _showInformationWorkout() {
       var workout = ScopedModel.of<Workout>(context);
       return new ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: widget.exercises.length + 1 ?? 0,
-        itemBuilder: (BuildContext context, int index){
-            if(index == 0){
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: widget.exercises.length + 1 ?? 0,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
               return _showInfoWarmUp();
-            }
-            else{
-              index = index -1;
+            } else {
+              index = index - 1;
               return _showInfoExercises(index);
             }
-
-        }
-      );
-
+          });
     }
 
     Widget _returnBody() {
       return new Container(
           color: Color(0xFFe0e4eb),
-          padding: EdgeInsets.only(left: 24.0, bottom: 25.0, top: 25.0, right: 24.0),
+          padding:
+              EdgeInsets.only(left: 24.0, bottom: 25.0, top: 25.0, right: 24.0),
           child: Column(
             children: <Widget>[
               Container(
@@ -223,7 +234,6 @@ class _StartWorkoutPage extends State<StartWorkout> {
     var workout = ScopedModel.of<Workout>(context);
     var user = ScopedModel.of<User>(context);
     return Scaffold(
-
       appBar: AppBar(
         title: new Text(workout.workoutName),
         leading: IconButton(
@@ -231,11 +241,9 @@ class _StartWorkoutPage extends State<StartWorkout> {
           onPressed: () {
             if (workout.isFromHomePage == true) {
               widget.alreadyLoggedIn();
-
-            }
-            else {
+            } else {
               widget.onBackToWorkout();
-          }
+            }
           },
           color: Colors.white,
         ),

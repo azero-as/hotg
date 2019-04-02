@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'authentication.dart';
+import 'ensureVisibleWhenFocused.dart';
 
 //This is the signup page
 
@@ -28,6 +29,10 @@ enum FormMode { SIGNUP }
 class _SignupPageState extends State<SignupPage> {
   final _formKey = new GlobalKey<FormState>();
 
+  FocusNode _focusNodeEmail = new FocusNode();
+  FocusNode _focusNodePassword = new FocusNode();
+  FocusNode _focusNodePassword2 = new FocusNode();
+
   FormMode _formMode = FormMode.SIGNUP;
 
   String _email;
@@ -36,11 +41,13 @@ class _SignupPageState extends State<SignupPage> {
   String _errorMessage;
 
   bool _isIos;
+  bool _isAndroid;
   bool _isLoading;
 
   @override
   Widget build(BuildContext context) {
     _isIos = Theme.of(context).platform == TargetPlatform.iOS;
+    _isAndroid = Theme.of(context).platform == TargetPlatform.android;
 
     //Returns all the elements to the page
     return new Theme(
@@ -68,27 +75,51 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   // ------ FORM WIDGETS ------
-  Widget _returnForm() {
-    return new Container(
-        padding: EdgeInsets.only(left: 24.0, right: 24.0),
-        margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
-        child: new Form(
-          key: _formKey,
-          child: new ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              SizedBox(height: 25.0),
-              _logo(),
-              _welcomeText('First, we need the basics'),
-              _emailInput(),
-              _passwordInput1(),
-              _passwordInput2(),
-              _nextButton(),
-              _loginButton(),
-              _showErrorMessage(),
-            ],
-          ),
-        ));
+  _returnForm() {
+    if (_isIos) {
+      return new Container(
+          padding: EdgeInsets.only(left: 24.0, right: 24.0),
+          margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
+          child: new Form(
+            key: _formKey,
+            child: new ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                SizedBox(height: 25.0),
+                _logo(),
+                _welcomeText('First we need the basics'),
+                _emailInput(),
+                _passwordInput1(),
+                _passwordInput2(),
+                _nextButton(),
+                _loginButton(),
+                _showErrorMessage(),
+              ],
+            ),
+          ));
+    } else if (_isAndroid) {
+      return new Container(
+          padding: EdgeInsets.only(left: 24.0, right: 24.0),
+          margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
+          child: new Form(
+            key: _formKey,
+            child: new ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                SizedBox(height: 25.0),
+                _logo(),
+                _welcomeText('First we need the basics'),
+                _emailInput(),
+                _passwordInput1(),
+                _passwordInput2(),
+                _nextButton(),
+                _loginButton(),
+                _showErrorMessage(),
+                SizedBox(height: 250),
+              ],
+            ),
+          ));
+    }
   }
 
   //placeholder for logo
@@ -119,66 +150,77 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   Widget _emailInput() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
-      child: TextFormField(
-        maxLines: 1,
-        keyboardType: TextInputType.emailAddress,
-        autofocus: false,
-        key: Key("signupEmail"),
-        decoration: InputDecoration(
-          icon: Icon(Icons.email),
-          labelText: 'Email',
-          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          border: UnderlineInputBorder(),
-        ),
-        validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
-        onSaved: (value) => _email = value,
-      ),
-    );
+    return EnsureVisibleWhenFocused(
+        focusNode: _focusNodeEmail,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+          child: TextFormField(
+            maxLines: 1,
+            keyboardType: TextInputType.emailAddress,
+            autofocus: false,
+            focusNode: _focusNodeEmail,
+            key: Key("signupEmail"),
+            decoration: InputDecoration(
+              icon: Icon(Icons.email),
+              labelText: 'Email',
+              contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+              border: UnderlineInputBorder(),
+            ),
+            validator: (value) =>
+                value.isEmpty ? 'Email can\'t be empty' : null,
+            onSaved: (value) => _email = value,
+          ),
+        ));
   }
 
   //Password input field
   Widget _passwordInput1() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
-      child: TextFormField(
-        autofocus: false,
-        key: Key("signupPassword"),
-        maxLines: 1,
-        obscureText: true,
-        decoration: InputDecoration(
-          icon: Icon(Icons.lock),
-          labelText: 'Password',
-          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          border: UnderlineInputBorder(),
-        ),
-        validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
-        onSaved: (value) => _password = value,
-      ),
-    );
+    return EnsureVisibleWhenFocused(
+        focusNode: _focusNodePassword,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
+          child: TextFormField(
+            autofocus: false,
+            focusNode: _focusNodePassword,
+            key: Key("signupPassword"),
+            maxLines: 1,
+            obscureText: true,
+            decoration: InputDecoration(
+              icon: Icon(Icons.lock),
+              labelText: 'Password',
+              contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+              border: UnderlineInputBorder(),
+            ),
+            validator: (value) =>
+                value.isEmpty ? 'Password can\'t be empty' : null,
+            onSaved: (value) => _password = value,
+          ),
+        ));
   }
 
   //Password confirmation input field
   Widget _passwordInput2() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
-      child: TextFormField(
-        autofocus: false,
-        key: Key("signupPassword2"),
-        maxLines: 1,
-        obscureText: true,
-        decoration: InputDecoration(
-          icon: Icon(Icons.lock),
-          labelText: 'Verify password',
-          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-          border: UnderlineInputBorder(),
-        ),
-        validator: (value) =>
-            value.isEmpty ? 'Password needs to be verified' : null,
-        onSaved: (value) => _passwordVerification = value,
-      ),
-    );
+    return EnsureVisibleWhenFocused(
+        focusNode: _focusNodePassword2,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(0.0, 15.00, 0.0, 0.0),
+          child: TextFormField(
+            autofocus: false,
+            focusNode: _focusNodePassword2,
+            key: Key("signupPassword2"),
+            maxLines: 1,
+            obscureText: true,
+            decoration: InputDecoration(
+              icon: Icon(Icons.lock),
+              labelText: 'Verify password',
+              contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+              border: UnderlineInputBorder(),
+            ),
+            validator: (value) =>
+                value.isEmpty ? 'Password needs to be verified' : null,
+            onSaved: (value) => _passwordVerification = value,
+          ),
+        ));
   }
 
   Widget _nextButton() {
@@ -280,6 +322,7 @@ class _SignupPageState extends State<SignupPage> {
       try {
         if (_formMode == FormMode.SIGNUP) {
           userId = await widget.auth.signUp(_email, _password);
+          // TODO: Do we need this print statement?
           print('Signed up: $userId');
         }
 
@@ -300,8 +343,9 @@ class _SignupPageState extends State<SignupPage> {
             _errorMessage = e.message;
           } else
             _errorMessage = e.message;
-          if (_errorMessage == "The given password is invalid. [ Password should be at least 6 characters ]") {
-            _errorMessage  = "The password must be 6 characters long or more.";
+          if (_errorMessage ==
+              "The given password is invalid. [ Password should be at least 6 characters ]") {
+            _errorMessage = "The password must be 6 characters long or more.";
           }
         });
       }
