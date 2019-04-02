@@ -2,7 +2,6 @@ import 'package:scoped_model/scoped_model.dart';
 import '../authentication.dart';
 
 class Workout extends Model {
-
   Auth auth = new Auth();
 
   // Belongs to Home
@@ -25,7 +24,8 @@ class Workout extends Model {
   Map get warmUp => _warmUp;
 
   // Belongs to activeWorkoutSession
-  List<dynamic> _selectedExercises = []; //Same as exercises in activeWorkoutSession.
+  List<dynamic> _selectedExercises =
+      []; //Same as exercises in activeWorkoutSession.
   int _XpEarned = 0;
   int _BonusXP = 0;
 
@@ -57,7 +57,8 @@ class Workout extends Model {
     this._fitnessLevel = workout[index]["fitnessLevel"];
   }
 
-  void setFinishedWorkout(List<dynamic> selectedExercises, int XpEarned, int BonusXP) {
+  void setFinishedWorkout(
+      List<dynamic> selectedExercises, int XpEarned, int BonusXP) {
     this._selectedExercises = selectedExercises;
     this._XpEarned = XpEarned;
     this._BonusXP = BonusXP;
@@ -88,6 +89,7 @@ class Workout extends Model {
     this._warmUp = warmUp;
     notifyListeners();
   }
+
   void setWorkOutClass(String workoutClass) {
     this._workoutClass = workoutClass;
     notifyListeners();
