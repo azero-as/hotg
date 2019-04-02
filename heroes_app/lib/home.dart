@@ -69,6 +69,9 @@ class AvatarOverview extends StatefulWidget {
 
 // class for appbar of home page
 class _AvatarOverviewState extends State<AvatarOverview> {
+
+
+  @override
   Widget build(BuildContext context) {
     // variables for size, for best view across platforms
     var barHeight = (MediaQuery.of(context).size.height) / 3;
@@ -76,111 +79,128 @@ class _AvatarOverviewState extends State<AvatarOverview> {
     var imageHeight = (barHeight - 55);
     var imageWidth = (barWidth / 2) - 20;
     var progressBar = (imageWidth - 15);
-    return Stack(
-      children: <Widget>[
-        ClipPath(
-          child: Container(
+
+    return SafeArea(
+      child: Container(
+        height: barHeight,
+        width: barWidth,
+        color: Theme.of(context).primaryColor,
+      ),
+
+    );
+
+    /*// Column for half bar, only image
+    Widget _image(){
+      return Column(children: <Widget>[
+        Container(
+          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+          child: Image.asset(
+            'assets/avatar-test.png',
+            height: imageHeight,
+            width: imageWidth,
+            fit: BoxFit.fill,
+          ),
+        )
+      ]);
+    }
+
+    _characterInformation() {
+      ScopedModelDescendant<User>(builder: (context, child, model) {
+        // Percent should not exceed 1.0:
+        double xpPercent;
+        if (model.xp >= model.xpCap) {
+          xpPercent = 1.0;
+        } else {
+          xpPercent = model.xp / model.xpCap;
+        }
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            //Settings symbol and onPressed functionality
+            IconButton(
+              icon: Icon(Icons.settings),
+              key: Key("settingsButton"),
+              color: Colors.white,
+              padding: EdgeInsets.fromLTRB(
+                (barWidth / 2) - 44, 0, 0, 0),
+              onPressed: () {
+                widget.readyToSignOut();
+              }),
+
+            //Character name
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+              width: imageWidth,
+              child: Text(
+                model.characterName.toString(),
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+                maxLines: 1,
+                //textAlign: TextAlign.left,
+              ),
+            ),
+
+            //Level and class
+            Padding(
+              padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
+              child: Text(
+                'Level ${model.level.toString()} ${model.className.toString()}',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.left),
+            ),
+
+            //Progress bar
+            Padding(
+              padding: EdgeInsets.fromLTRB(15, 35, 0, 0),
+              child: LinearPercentIndicator(
+                width: progressBar,
+                lineHeight: 15,
+                backgroundColor: Colors.white,
+                progressColor: Theme.of(context).accentColor,
+                percent: xpPercent,
+                //bar shape
+                linearStrokeCap: LinearStrokeCap.roundAll,
+                animationDuration: 2000,
+              ),
+            ),
+
+            // XP / XP cap
+            Padding(
+              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+              child: Text(
+                '${model.xp.toString()}/${model.xpCap.toString()}',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.left),
+            ),
+          ],
+        );
+      },);
+    }
+
+
+    return SafeArea(
+      child: Stack(
+        children: <Widget>[
+          Container(
             height: barHeight,
             width: barWidth,
             color: Theme.of(context).primaryColor,
-            padding: EdgeInsets.fromLTRB(20, 30, 20, 15),
-            child:
-            ScopedModelDescendant<User>(builder: (context, child, model) {
-              // Percent should not exceed 1.0:
-              double xpPercent;
-              if (model.xp >= model.xpCap) {
-                xpPercent = 1.0;
-              } else {
-                xpPercent = model.xp / model.xpCap;
-              }
-              return Row(
-                children: <Widget>[
-                  // Column for half bar, only image
-                  Column(children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: Image.asset(
-                        'assets/avatar-test.png',
-                        height: imageHeight,
-                        width: imageWidth,
-                        fit: BoxFit.fill,
-                      ),
-                    )
-                  ]),
-
-                  // Column for second haf bar, character information
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      //Settings symbol and onPressed functionality
-                      IconButton(
-                        icon: Icon(Icons.settings),
-                        key: Key("settingsButton"),
-                        color: Colors.white,
-                        padding: EdgeInsets.fromLTRB(
-                          (barWidth / 2) - 44, 0, 0, 0),
-                        onPressed: () {
-                          widget.readyToSignOut();
-                        }),
-
-                      //Character name
-                      Container(
-                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        width: imageWidth,
-                        child: Text(
-                          model.characterName.toString(),
-                          softWrap: true,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                          maxLines: 1,
-                          //textAlign: TextAlign.left,
-                        ),
-                      ),
-
-                      //Level and class
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                        child: Text(
-                          'Level ${model.level.toString()} ${model.className.toString()}',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.left),
-                      ),
-
-                      //Progress bar
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15, 35, 0, 0),
-                        child: LinearPercentIndicator(
-                          width: progressBar,
-                          lineHeight: 15,
-                          backgroundColor: Colors.white,
-                          progressColor: Theme.of(context).accentColor,
-                          percent: xpPercent,
-                          //bar shape
-                          linearStrokeCap: LinearStrokeCap.roundAll,
-                          animationDuration: 2000,
-                        ),
-                      ),
-
-                      // XP / XP cap
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        child: Text(
-                          '${model.xp.toString()}/${model.xpCap.toString()}',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.left),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            })),
-        )
-      ],
-    );
+            padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            child: Row(
+              children: <Widget>[
+                _image(),
+                _characterInformation(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );*/
   }
 }
 

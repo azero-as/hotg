@@ -9,11 +9,15 @@ import 'signupSwiper.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/user.dart';
 import 'models/workout.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
 void main() async {
   // Lock screen in portrait mode
   await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  await FlutterStatusbarcolor.setStatusBarColor(Color(0xFF612A30));
+
+
   runApp(new Heroes());
 }
 
@@ -34,18 +38,19 @@ class Heroes extends StatelessWidget {
     return ScopedModel<User>(
       model: user,
       child: ScopedModel<Workout>(
-          model: workout,
-          child: new MaterialApp(
-            title: 'Heroes of the gym',
-            debugShowCheckedModeBanner: false,
-            theme: new ThemeData(
-              primaryColor: const Color(0xFF612A30),
-              secondaryHeaderColor: const Color(0xFF212838),
-              accentColor: const Color(0xFF5e72a1),
-            ),
-            routes: routes,
-            home: new RootPage(auth: new Auth(), user: user),
-          )),
+        model: workout,
+        child: new MaterialApp(
+          title: 'Heroes of the gym',
+          debugShowCheckedModeBanner: false,
+          theme: new ThemeData(
+            primaryColor: const Color(0xFF612A30),
+            secondaryHeaderColor: const Color(0xFF212838),
+            accentColor: const Color(0xFF5e72a1),
+          ),
+          routes: routes,
+          home: new RootPage(auth: new Auth(), user: user),
+        )
+      ),
     );
   }
 }

@@ -238,9 +238,8 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         );
       } else {
         return IconButton(
-          // TODO: if we change the background of this page, then change the color of this icon to the same color to keep in transparent
           icon: Icon(Icons.info_outline,
-            color: Color(0xFFe0e4eb),),
+            color: Color(0x00000000),),
         );
       }
     }
@@ -287,11 +286,6 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                 padding: EdgeInsets.all(20),
                 child: new Text(
                   "Minutes: " + workout.warmUp["targetMin"].toString()))),
-            ListTile(
-              title: new Padding(
-                padding: EdgeInsets.all(20),
-                child: new Text("Description: " +
-                  workout.warmUp["description"].toString()))),
           ]);
     }
 

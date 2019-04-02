@@ -68,7 +68,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
     //General information about the workout
     Widget _showInfo() {
       return Container(
-        margin: EdgeInsets.fromLTRB(100, 0, 100, 40),
+        margin: EdgeInsets.fromLTRB(50, 0, 50, 40),
         padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
         child: RichText(
           text: TextSpan(
@@ -121,9 +121,8 @@ class _StartWorkoutPage extends State<StartWorkout> {
         );
       } else {
         return IconButton(
-          // TODO: if we change the background of this page, then change the color of this icon to the same color to keep in transparent
           icon: Icon(Icons.info_outline,
-            color: Color(0xFFe0e4eb),),
+            color: Color(0x00000000),),
         );
       }
     }
