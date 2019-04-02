@@ -15,7 +15,6 @@ abstract class BaseAuth {
   Future<bool> isEmailVerified();
 
   Future<void> forgotPassword(String email);
-
 }
 
 class Auth implements BaseAuth {
@@ -53,7 +52,11 @@ class Auth implements BaseAuth {
   }
 
   Future<void> forgotPassword(String email) async {
-    return _firebaseAuth.sendPasswordResetEmail(email: email);
+    try {
+      return _firebaseAuth.sendPasswordResetEmail(email: email);
+    } catch (error) {
+      print('here');
+      print('Auth error: ' + error);
+    }
   }
-
 }

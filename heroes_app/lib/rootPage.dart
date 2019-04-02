@@ -115,10 +115,10 @@ class _RootPageState extends State<RootPage> {
       authStatus = AuthStatus.READY_TO_LOG_IN;
     });
   }
-  
+
   void _forgotPassword() {
     setState(() {
-     authStatus = AuthStatus.FORGOT_PASSWORD;
+      authStatus = AuthStatus.FORGOT_PASSWORD;
     });
   }
 
@@ -250,12 +250,12 @@ class _RootPageState extends State<RootPage> {
         } else
           return new LoadingScreen();
         break;
-          case AuthStatus.FORGOT_PASSWORD:
-          return new ResetPasswordPage(
-            auth: widget.auth,
-            readyToLogIn: _readyToLogIn,
-          );
-          break;
+      case AuthStatus.FORGOT_PASSWORD:
+        return new ResetPasswordPage(
+          auth: widget.auth,
+          readyToLogIn: _readyToLogIn,
+        );
+        break;
       case AuthStatus.READY_TO_SIGN_UP:
         return new SignupPage(
           auth: widget.auth,
