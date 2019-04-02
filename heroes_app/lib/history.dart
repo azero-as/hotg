@@ -35,8 +35,8 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
     super.initState();
 
     CloudFunctions.instance
-    .call(functionName: 'getCompletedUserWorkouts')
-    .then((response) {
+        .call(functionName: 'getCompletedUserWorkouts')
+        .then((response) {
       if (this.mounted) {
         if (response["workouts"].isEmpty) {
           setState(() {
@@ -101,20 +101,22 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
   Widget _noTrainingMessage(userModel) {
     return Column(children: [
       Container(
-          child: Text(
-        "You haven't done any training yet,",
-        style: TextStyle(
+        child: Text(
+          "You haven't done any training yet,",
+          style: TextStyle(
             color: Colors.white,
           ),
-      ),),
+        ),
+      ),
       SizedBox(
         height: 5,
       ),
       Container(
-        child: Text("${userModel.characterName.toString()}.",
+        child: Text(
+          "${userModel.characterName.toString()}.",
           style: TextStyle(
-          color: Colors.white,
-    ),
+            color: Colors.white,
+          ),
         ),
       )
     ]);
@@ -125,16 +127,21 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
       Container(
           child: Text(
         "Go to Home or Workouts to begin",
-            style: TextStyle(
-              color: Colors.white,
-            ),
+        style: TextStyle(
+          color: Colors.white,
+        ),
       )),
       SizedBox(
         height: 5,
       ),
-      Container(child: Text("your adventure!", style: TextStyle(
-        color: Colors.white,
-      ),),)
+      Container(
+        child: Text(
+          "your adventure!",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      )
     ]);
   }
 

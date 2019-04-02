@@ -46,7 +46,8 @@ class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
   String _className = '';
-  bool _dataLoadedFromDatabase = false; //if this is null, it is still loading data from firebase.
+  bool _dataLoadedFromDatabase =
+      false; //if this is null, it is still loading data from firebase.
 
   @override
   void initState() {
@@ -164,13 +165,13 @@ class _RootPageState extends State<RootPage> {
       );
       setState(() {
         user.startState(
-          resp['characterName'],
-          resp['gameLevel'],
-          resp['userXp'],
-          resp['xpCap'],
-          resp['className'],
-          resp['email'],
-          resp["fitnessLevel"]);
+            resp['characterName'],
+            resp['gameLevel'],
+            resp['userXp'],
+            resp['xpCap'],
+            resp['className'],
+            resp['email'],
+            resp["fitnessLevel"]);
         _className = resp['className'];
       });
     } catch (error) {

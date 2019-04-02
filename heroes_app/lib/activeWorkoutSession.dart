@@ -46,7 +46,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     //Finish workout button color
     Color _finishWorkoutColor() {
       if (_selectedExercises.contains("Warm-up") &&
-        !(_selectedExercises.length <= 1)) {
+          !(_selectedExercises.length <= 1)) {
         return Theme.of(context).primaryColor;
       } else {
         return Colors.grey;
@@ -132,67 +132,67 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         alignment: Alignment.center,
         children: <Widget>[
           new Container(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-            margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
-            //decoration: new BoxDecoration(                  //border if we want
-            //color: Colors.white,
-            //border: new Border.all(color: Colors.black)),
-            child: new ListView(
-              shrinkWrap: true,
-              children: <Widget>[
-                new Container(
-                  padding: EdgeInsets.fromLTRB(25, 8, 0, 8),
-                  color: const Color(0xFF212838),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      RichText(
-                        text: TextSpan(
-                          text: 'No exercises done',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
+              //decoration: new BoxDecoration(                  //border if we want
+              //color: Colors.white,
+              //border: new Border.all(color: Colors.black)),
+              child: new ListView(
+                shrinkWrap: true,
+                children: <Widget>[
+                  new Container(
+                      padding: EdgeInsets.fromLTRB(25, 8, 0, 8),
+                      color: const Color(0xFF212838),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          RichText(
+                            text: TextSpan(
+                              text: 'No exercises done',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          Align(
+                            //alignment: Alignment.topRight,
+                            child: RaisedButton(
+                              color: Theme.of(context).secondaryHeaderColor,
+                              textColor: Colors.white,
+                              onPressed: () => Navigator.pop(context),
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                  new Container(
+                    padding: EdgeInsets.fromLTRB(25, 40, 25, 40),
+                    color: Colors.white,
+                    child: Column(
+                      children: <Widget>[
+                        RichText(
+                          text: TextSpan(
+                            text:
+                                'Did you remember to check off the exercises you have done? '
+                                'You need to warm up and do at least one exercise to finish the workout',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                            ),
                           ),
                         ),
-                      ),
-                      Align(
-                        //alignment: Alignment.topRight,
-                        child: RaisedButton(
-                          color: Theme.of(context).secondaryHeaderColor,
-                          textColor: Colors.white,
-                          onPressed: () => Navigator.pop(context),
-                          child: Icon(
-                            Icons.close,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
-                new Container(
-                  padding: EdgeInsets.fromLTRB(25, 40, 25, 40),
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      RichText(
-                        text: TextSpan(
-                          text:
-                          'Did you remember to check off the exercises you have done? '
-                            'You need to warm up and do at least one exercise to finish the workout',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                    ],
-                  ),
-                  //SizedBox(height: 100.0),
-                )
-              ],
-            )),
+                        SizedBox(height: 10),
+                      ],
+                    ),
+                    //SizedBox(height: 100.0),
+                  )
+                ],
+              )),
         ],
       );
     }
@@ -201,12 +201,12 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     //If not at least one exercise + the warm up is checked off, a pop up will appear. Otherwise, the user will be sent to the summary page
     void _validateAndSaveWorkout() {
       if (_selectedExercises.length <= 1 ||
-        !_selectedExercises.contains("Warm-up")) {
+          !_selectedExercises.contains("Warm-up")) {
         //Display pop-up
         showDialog(
-          context: context,
-          builder: (context) =>
-            _onNotCheckedOffButFinished(context)); // Call the Dialog.
+            context: context,
+            builder: (context) =>
+                _onNotCheckedOffButFinished(context)); // Call the Dialog.
       } else {
         _saveWorkout();
         widget.onSummary(); // Go to summary
@@ -220,27 +220,29 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
           icon: Icon(Icons.info_outline),
           onPressed: () {
             showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text(widget.exercises[index]["name"]),
-                  content: Text(widget.exercises[index]["description"]),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text('Close'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      })
-                  ],
-                );
-              });
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(widget.exercises[index]["name"]),
+                    content: Text(widget.exercises[index]["description"]),
+                    actions: <Widget>[
+                      FlatButton(
+                          child: Text('Close'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          })
+                    ],
+                  );
+                });
           },
         );
       } else {
         return IconButton(
           // TODO: if we change the background of this page, then change the color of this icon to the same color to keep in transparent
-          icon: Icon(Icons.info_outline,
-            color: Color(0xFFe0e4eb),),
+          icon: Icon(
+            Icons.info_outline,
+            color: Color(0xFFe0e4eb),
+          ),
         );
       }
     }
@@ -250,24 +252,24 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       var workout = ScopedModel.of<Workout>(context);
 
       return ExpansionTile(
-        leading: IconButton(
-          icon: Icon(Icons.info_outline),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text("Warm-up"),
-                  content: Text(workout.warmUp["description"].toString()),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text('Close'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      })
-                  ],
-                );
-              });
+          leading: IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Warm-up"),
+                      content: Text(workout.warmUp["description"].toString()),
+                      actions: <Widget>[
+                        FlatButton(
+                            child: Text('Close'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            })
+                      ],
+                    );
+                  });
             }, // title: new Text("Warm-up",
           ),
           key: PageStorageKey<int>(index),
@@ -275,7 +277,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
             value: _selectedExercises.contains("Warm-up"),
             onChanged: (bool selected) {
               _warmUpSelected(
-                selected, workout.warmUp[index], "Warm-up", workout.warmUp);
+                  selected, workout.warmUp[index], "Warm-up", workout.warmUp);
             },
             title: new Text(
               "Warm-up",
@@ -283,15 +285,15 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
           ),
           children: <Widget>[
             ListTile(
-              title: new Padding(
-                padding: EdgeInsets.all(20),
-                child: new Text(
-                  "Minutes: " + workout.warmUp["targetMin"].toString()))),
+                title: new Padding(
+                    padding: EdgeInsets.all(20),
+                    child: new Text(
+                        "Minutes: " + workout.warmUp["targetMin"].toString()))),
             ListTile(
-              title: new Padding(
-                padding: EdgeInsets.all(20),
-                child: new Text("Description: " +
-                  workout.warmUp["description"].toString()))),
+                title: new Padding(
+                    padding: EdgeInsets.all(20),
+                    child: new Text("Description: " +
+                        workout.warmUp["description"].toString()))),
           ]);
     }
 
@@ -304,45 +306,46 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         name = "Minutes: ";
       }
       return ExpansionTile(
-        key: PageStorageKey<int>(index),
-        leading: _showExerciseDescription(index),
-        title: new CheckboxListTile(
-          value: _selectedExercises.contains(widget.exercises[index]["name"]),
-          onChanged: (bool selected) {
-            _onCategorySelected(selected, widget.exercises[index],
-              widget.exercises[index]["name"], widget.exercises[index]);},
-          title: Text(widget.exercises[index]["name"],
-            style: TextStyle(color: _exerciseColor())),
-        ),
-        children: <Widget>[
-          ListTile(
-            title: new Padding(
-              padding: EdgeInsets.all(20),
-              child: new Text(
-                "Sets: " + widget.exercises[index]["targetSets"].toString(),
-              )),
+          key: PageStorageKey<int>(index),
+          leading: _showExerciseDescription(index),
+          title: new CheckboxListTile(
+            value: _selectedExercises.contains(widget.exercises[index]["name"]),
+            onChanged: (bool selected) {
+              _onCategorySelected(selected, widget.exercises[index],
+                  widget.exercises[index]["name"], widget.exercises[index]);
+            },
+            title: Text(widget.exercises[index]["name"],
+                style: TextStyle(color: _exerciseColor())),
           ),
-          ListTile(
-            title: new Padding(
-              padding: EdgeInsets.all(20),
-              child: new Text(
-                name + widget.exercises[index][exercise].toString())),
-          ),
-          ListTile(
-            title: new Padding(
-              padding: EdgeInsets.all(20),
-              child: new Text("Rest between sets: " +
-                widget.exercises[index]["restBetweenSets"].toString())),
-          ),
-          ListTile(
-            title: new Padding(
-              padding: EdgeInsets.all(20),
-              child: new Text(
-                "XP: " + widget.exercises[index]["xp"].toString())),
-          ),
-        ]
-        //children: root["info"]
-      );
+          children: <Widget>[
+            ListTile(
+              title: new Padding(
+                  padding: EdgeInsets.all(20),
+                  child: new Text(
+                    "Sets: " + widget.exercises[index]["targetSets"].toString(),
+                  )),
+            ),
+            ListTile(
+              title: new Padding(
+                  padding: EdgeInsets.all(20),
+                  child: new Text(
+                      name + widget.exercises[index][exercise].toString())),
+            ),
+            ListTile(
+              title: new Padding(
+                  padding: EdgeInsets.all(20),
+                  child: new Text("Rest between sets: " +
+                      widget.exercises[index]["restBetweenSets"].toString())),
+            ),
+            ListTile(
+              title: new Padding(
+                  padding: EdgeInsets.all(20),
+                  child: new Text(
+                      "XP: " + widget.exercises[index]["xp"].toString())),
+            ),
+          ]
+          //children: root["info"]
+          );
     }
 
     //Information about the different exercises in the workout
@@ -352,32 +355,32 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         return Text("");
       }
       return new ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: widget.exercises.length + 1 ?? 0,
-        itemBuilder: (BuildContext context, int index) {
-          if (index == 0) {
-            return _showInfoWarmUp(index);
-          } else {
-            index = index - 1;
-            return _showInfoExercises(index);
-          }
-        });
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: widget.exercises.length + 1 ?? 0,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return _showInfoWarmUp(index);
+            } else {
+              index = index - 1;
+              return _showInfoExercises(index);
+            }
+          });
     }
 
     Widget _returnFinishWorkoutButton() {
       return new Padding(
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40.0),
-        child: ScopedModelDescendant<User>(builder: (context, child, model) {
-          return RaisedButton(
-            elevation: 5.0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            onPressed: () {
-              _validateAndSaveWorkout();
-              model.incrementXP(
-                _XpEarned); // Increase use xp total in database
+          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40.0),
+          child: ScopedModelDescendant<User>(builder: (context, child, model) {
+            return RaisedButton(
+              elevation: 5.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              onPressed: () {
+                _validateAndSaveWorkout();
+                model.incrementXP(
+                    _XpEarned); // Increase use xp total in database
               },
               padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
               color: _finishWorkoutColor(),
@@ -403,16 +406,16 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         ),
       ),
       body: new Container(
-        color: Color(0xFFe0e4eb),
-        child: Column(
-          children: <Widget>[
-            //_returnTimer(),
-            Expanded(
-              child: _showInformationWorkout(),
-            ),
-            _returnFinishWorkoutButton(),
-          ],
-        )),
+          color: Color(0xFFe0e4eb),
+          child: Column(
+            children: <Widget>[
+              //_returnTimer(),
+              Expanded(
+                child: _showInformationWorkout(),
+              ),
+              _returnFinishWorkoutButton(),
+            ],
+          )),
     );
   }
 }

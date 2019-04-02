@@ -68,32 +68,32 @@ class _StartWorkoutPage extends State<StartWorkout> {
     //General information about the workout
     Widget _showInfo() {
       return Container(
-        margin: EdgeInsets.fromLTRB(100, 0, 100, 40),
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-        child: RichText(
-          text: TextSpan(
-            style: TextStyle(
-              fontSize: 14.0,
-              color: Colors.black,
-            ),
-            children: <TextSpan>[
-              TextSpan(
-                text: ' Class: ',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: widget.workoutClass.toString() + ' \n\n'),
-              TextSpan(
-                text: ' XP: ',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: widget.xp.toString() + ' \n\n'),
-              TextSpan(
-                text: ' Intensity: ',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: widget.intensity.toString() + ' \n\n'),
-              TextSpan(
-                text: ' Time: ',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: widget.duration.toString() + " min"),
-            ])));
+          margin: EdgeInsets.fromLTRB(100, 0, 100, 40),
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+          child: RichText(
+              text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                TextSpan(
+                    text: ' Class: ',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: widget.workoutClass.toString() + ' \n\n'),
+                TextSpan(
+                    text: ' XP: ',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: widget.xp.toString() + ' \n\n'),
+                TextSpan(
+                    text: ' Intensity: ',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: widget.intensity.toString() + ' \n\n'),
+                TextSpan(
+                    text: ' Time: ',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: widget.duration.toString() + " min"),
+              ])));
     }
 
     // Alert dialog to exercise description, only shown if description is in database
@@ -103,27 +103,29 @@ class _StartWorkoutPage extends State<StartWorkout> {
           icon: Icon(Icons.info_outline),
           onPressed: () {
             showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text(widget.exercises[index]["name"]),
-                  content: Text(widget.exercises[index]["description"]),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text('Close'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      })
-                  ],
-                );
-              });
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(widget.exercises[index]["name"]),
+                    content: Text(widget.exercises[index]["description"]),
+                    actions: <Widget>[
+                      FlatButton(
+                          child: Text('Close'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          })
+                    ],
+                  );
+                });
           },
         );
       } else {
         return IconButton(
           // TODO: if we change the background of this page, then change the color of this icon to the same color to keep in transparent
-          icon: Icon(Icons.info_outline,
-            color: Color(0xFFe0e4eb),),
+          icon: Icon(
+            Icons.info_outline,
+            color: Color(0xFFe0e4eb),
+          ),
         );
       }
     }
@@ -131,24 +133,24 @@ class _StartWorkoutPage extends State<StartWorkout> {
     Widget _showInfoWarmUp() {
       var workout = ScopedModel.of<Workout>(context);
       return ExpansionTile(
-        leading: IconButton(
-          icon: Icon(Icons.info_outline),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text("Warm-up"),
-                  content: Text(workout.warmUp["description"].toString()),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text('Close'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      })
-                  ],
-                );
-              });
+          leading: IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Warm-up"),
+                      content: Text(workout.warmUp["description"].toString()),
+                      actions: <Widget>[
+                        FlatButton(
+                            child: Text('Close'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            })
+                      ],
+                    );
+                  });
             }, // title: new Text("Warm-up",
           ),
           title: new Text(
@@ -156,11 +158,10 @@ class _StartWorkoutPage extends State<StartWorkout> {
           ),
           children: <Widget>[
             ListTile(
-              title: new Text("Minutes: "
-                + workout.warmUp["targetMin"].toString())),
+                title: new Text(
+                    "Minutes: " + workout.warmUp["targetMin"].toString())),
             //children: root["info"]
-          ]
-      );
+          ]);
     }
 
     //Show information about a workout using minutes
@@ -173,23 +174,23 @@ class _StartWorkoutPage extends State<StartWorkout> {
       }
 
       return ExpansionTile(
-        leading: _showExerciseDescription(index),
-        title: new Text(
+          leading: _showExerciseDescription(index),
+          title: new Text(
             (widget.exercises[index]["name"]),
           ),
           children: <Widget>[
             ListTile(
-              title: new Text("Sets: " +
-                widget.exercises[index]["targetSets"].toString())),
+                title: new Text("Sets: " +
+                    widget.exercises[index]["targetSets"].toString())),
             ListTile(
-              title: new Text(
-                name + widget.exercises[index][exercise].toString())),
+                title: new Text(
+                    name + widget.exercises[index][exercise].toString())),
             ListTile(
-              title: new Text("Rest between sets: " +
-                widget.exercises[index]["restBetweenSets"].toString())),
+                title: new Text("Rest between sets: " +
+                    widget.exercises[index]["restBetweenSets"].toString())),
             ListTile(
-              title: new Text(
-                "XP: " + widget.exercises[index]["xp"].toString())),
+                title: new Text(
+                    "XP: " + widget.exercises[index]["xp"].toString())),
           ]
           //children: root["info"]
           );
@@ -199,35 +200,35 @@ class _StartWorkoutPage extends State<StartWorkout> {
     Widget _showInformationWorkout() {
       var workout = ScopedModel.of<Workout>(context);
       return new ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: widget.exercises.length + 1 ?? 0,
-        itemBuilder: (BuildContext context, int index) {
-          if (index == 0) {
-            return _showInfoWarmUp();
-          } else {
-            index = index - 1;
-            return _showInfoExercises(index);
-          }
-        });
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: widget.exercises.length + 1 ?? 0,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return _showInfoWarmUp();
+            } else {
+              index = index - 1;
+              return _showInfoExercises(index);
+            }
+          });
     }
 
     Widget _returnBody() {
       return new Container(
-        color: Color(0xFFe0e4eb),
-        padding:
-        EdgeInsets.only(left: 24.0, bottom: 25.0, top: 25.0, right: 24.0),
-        child: Column(
-          children: <Widget>[
-            Container(
-              child: _showInfo(),
-            ),
-            Expanded(
-              child: _showInformationWorkout(),
-            ),
-            _returnStartWorkoutButton(),
-          ],
-        ));
+          color: Color(0xFFe0e4eb),
+          padding:
+              EdgeInsets.only(left: 24.0, bottom: 25.0, top: 25.0, right: 24.0),
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: _showInfo(),
+              ),
+              Expanded(
+                child: _showInformationWorkout(),
+              ),
+              _returnStartWorkoutButton(),
+            ],
+          ));
     }
 
     var workout = ScopedModel.of<Workout>(context);
