@@ -1,4 +1,3 @@
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +16,6 @@ void main() async {
   // Lock screen in portrait mode
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  await FlutterStatusbarcolor.setStatusBarColor(Color(0xFF612A30));
 
   runApp(new Heroes());
 }

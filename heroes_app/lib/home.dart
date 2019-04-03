@@ -1,9 +1,12 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'models/user.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 import 'models/workout.dart';
+import 'models/user.dart';
+
 import 'authentication.dart';
 
 // Build the home page and call on the stateful classes
@@ -15,7 +18,8 @@ class Home extends StatelessWidget {
     this.readyToSignOut,
     this.onStartWorkout,
     this.onActiveWorkout,
-    this.onSummary});
+    this.onSummary,
+  });
 
   final BaseAuth auth;
   final VoidCallback onSignedOut;
@@ -27,9 +31,25 @@ class Home extends StatelessWidget {
 
   static String tag = 'home-page';
 
-  // Settings icon button with navigation to settings page
+  // Container for text, aligned on the left
+  Widget _nextWorkout() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(40, 30, 40, 0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text('Next planned workout:',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Page build
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarColor(Color(0xFF612A30));
     return new Container(
       // general background color for the page
       decoration: BoxDecoration(
@@ -41,15 +61,17 @@ class Home extends StatelessWidget {
             auth: auth,
             onSignedOut: onSignedOut,
             onLoggedIn: onLoggedIn,
-            readyToSignOut: readyToSignOut),
-          SizedBox(height: 20.0),
-          //TODO: add next planned workout text here
+            readyToSignOut: readyToSignOut
+          ),
+          _nextWorkout(),
           WorkoutOverview(
             onStartWorkout: onStartWorkout,
             onActiveWorkout: onActiveWorkout,
-            onSummary: onSummary),
+            onSummary: onSummary
+          ),
         ],
-      ));
+      )
+    );
   }
 }
 
@@ -69,7 +91,6 @@ class AvatarOverview extends StatefulWidget {
 
 // Class for appbar of home page
 class _AvatarOverviewState extends State<AvatarOverview> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +241,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
   }
 }
 
-//create state for workout overview
+// Create state for workout overview
 class WorkoutOverview extends StatefulWidget {
   @override
   _WorkoutOverviewState createState() => _WorkoutOverviewState();
@@ -232,17 +253,185 @@ class WorkoutOverview extends StatefulWidget {
   final VoidCallback onSummary;
 }
 
-// class for workout overview
+// Class for workout overview
 class _WorkoutOverviewState extends State<WorkoutOverview> {
   @override
   void initState() {
     super.initState();
   }
 
+// ============ Widget build for information ============
+
+  // Making a widget for sized box
+  Widget _space(double height){
+    return SizedBox(
+      height: height,
+    );
+  }
+
+  // Workout title container
+  Widget _workoutTitle() {
+    var workoutModel = ScopedModel.of<Workout>(context);
+    return Container(
+      padding: EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        // Border radius to round top edges
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(8.0),
+          topRight: Radius.circular(8.0)
+        ),
+        color: Theme.of(context).accentColor,
+      ),
+      child: Row(
+        children: <Widget>[
+          Container(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                workoutModel.workoutName,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Column with workout information declaration
+  Widget _declareInformation() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Class:',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF434242)),
+        ),
+        _space(10),
+        Text(
+          'Fitness Level:',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF434242)),
+        ),
+        _space(10),
+        Text(
+          'XP:',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF434242)),
+        ),
+        _space(10),
+        Text(
+          'Intensity:',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF434242)),
+        ),
+        _space(10),
+        Icon(
+          Icons.alarm,
+          color: Color(0xFF434242),
+        ),
+      ],
+    );
+  }
+
+  // Column with workout information from database
+  Widget _workoutVariables() {
+    var workoutModel = ScopedModel.of<Workout>(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          workoutModel.workoutClass,
+          style: TextStyle(color: Color(0xFF434242)),
+        ),
+        _space(10),
+        Text(
+          workoutModel.fitnessLevel.toString(),
+          style: TextStyle(color: Color(0xFF434242)),
+        ),
+        _space(10),
+        Text(
+          workoutModel.xp.toString(),
+          style: TextStyle(color: Color(0xFF434242)),
+        ),
+        // add space between lines
+        _space(10),
+        Text(
+          workoutModel.intensity,
+          style: TextStyle(color: Color(0xFF434242)),
+        ),
+        // add space between lines
+        _space(18),
+        Text(
+          workoutModel.duration.toString() + ' min',
+          style: TextStyle(color: Color(0xFF434242)),
+        ),
+      ]
+    );
+  }
+
+// ============ Widget assembly of information ============
+
+  // Assemble workout information in one container
+  Widget _workoutInformation() {
+    return Container(
+      padding: EdgeInsets.all(15),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            flex: 6,
+            child: _declareInformation(),
+          ),
+          Expanded(
+            flex: 6,
+            child: _workoutVariables(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Build workout card
+  Widget _workoutCard() {
+    return new Container(
+      decoration: BoxDecoration(
+        // Border radius to round bottom edges
+        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+        color: Color(0xFFE7E9ED),
+      ),
+      child: Column(
+        //mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          _workoutTitle(),
+          _workoutInformation()
+        ],
+      )
+    );
+  }
+
+  // Make the entire workout card clickable
+  Widget _workout(workoutModel) {
+    return new GestureDetector(
+      onTap: (){
+        workoutModel.isFromHomePage = true;
+        widget.onStartWorkout();
+      },
+      child: _workoutCard(),
+    );
+  }
+
+// ============ Return Workout overview build ============
+
   @override
   Widget build(BuildContext context) {
     var workout = ScopedModel.of<Workout>(context);
     return LayoutBuilder(builder: (context, constraints) {
+      // Check that the database has registered workouts compliant of
       if (workout.intensity == "" ||
         workout.workoutName == "" ||
         workout.workoutClass == "" ||
@@ -250,194 +439,19 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
         workout.fitnessLevel == -1 ||
         workout.xp == -1 ||
         workout.exercises == []) {
-          return new Text("");
-        } else {
-          return Container(
-            // make sure the placement is centered and a little away from appbar
-            padding: EdgeInsets.fromLTRB(40, 20, 40, 0),
-            child: Column(
-              children: <Widget>[
-                // New container for text, aligned on the left
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    child: Text('Next planned workout:\n',
-                      style: TextStyle(
-                        color: Colors.white,
-                      )
-                    ),
-                  ),
-                ),
-                // call on workout widget
-                _workout(workout),
-              ],
-            )
-          );
-        }
+          return new Text("No workout found");
+      } else {
+        return Container(
+          // Make sure the placement is centered
+          padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
+          child: Column(
+            children: <Widget>[
+              // Call on workout widget
+              _workout(workout),
+            ],
+          )
+        );
       }
-    );
-  }
-
-  Widget _workout(workoutModel) {
-    return new GestureDetector(
-      onTap: (){
-        workoutModel.isFromHomePage = true;
-        widget.onStartWorkout();
-      },
-      child: new Container(
-        // add border for the workout info box
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 0.25),
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          color: Color(0xFFE7E9ED),
-        ),
-        child: Column(
-          // Text starts on the left, instead of centered as is the default
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            // container for title box
-            Container(
-              padding: EdgeInsets.all(15),
-              // border to distinguish between the two containers within the box
-              // Colour for the entire row
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
-                border: Border.all(color: Color(0xFF212838), width: 0.15),
-                color: Theme.of(context).accentColor,
-              ),
-              child: Row(
-                children: <Widget>[
-                  // add some space between left-side border and beginning of text
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  ),
-                  // new container for title
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      child: Text(
-                        workoutModel.workoutName,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // container for changing information
-            Container(
-              padding: EdgeInsets.all(15),
-              // border to distinguish between the two containers within the box
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 0.15),
-
-              ),
-              child: Row(
-                children: <Widget>[
-                  // Column for information declaration
-                  Expanded(
-                    flex: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Class:',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF434242)),
-                        ),
-                        // add space between lines
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Fitness Level:',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF434242)),
-                        ),
-                        // add space between lines
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'XP:',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF434242)),
-                        ),
-                        // add space between lines
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Intensity:',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF434242)),
-                        ),
-                        // add space between lines
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Icon(
-                          Icons.alarm,
-                          color: Color(0xFF434242),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Column for changing information
-                  Expanded(
-                    flex: 6,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          workoutModel.workoutClass,
-                          style: TextStyle(color: Color(0xFF434242)),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          workoutModel.fitnessLevel.toString(),
-                          style: TextStyle(color: Color(0xFF434242)),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          workoutModel.xp.toString(),
-                          style: TextStyle(color: Color(0xFF434242)),
-                        ),
-                        // add space between lines
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          workoutModel.intensity,
-                          style: TextStyle(color: Color(0xFF434242)),
-                        ),
-                        // add space between lines
-                        SizedBox(
-                          height: 18,
-                        ),
-                        Text(
-                          workoutModel.duration.toString() + ' min',
-                          style: TextStyle(color: Color(0xFF434242)),
-                        ),
-                      ]
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        )
-      )
-    );
+    });
   }
 }
