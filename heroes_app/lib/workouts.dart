@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
+import 'models/user.dart';
 
 class Workouts extends StatefulWidget {
   @override
   _WorkoutsPageState createState() => new _WorkoutsPageState();
 
   Workouts(
-      {this.onLoggedIn,
+    {this.onLoggedIn,
       this.onStartWorkout,
       this.onActiveWorkout,
       this.onSummary});
@@ -32,10 +33,10 @@ class _WorkoutsPageState extends State<Workouts> {
     if (workout.listOfWorkouts != null) {
       _dataLoadedFromFireBase = true;
     }
-
     CloudFunctions.instance.call(
       functionName: 'getAllWorkouts',
-    ).then((response) {
+    )
+      .then((response) {
       if (this.mounted) {
         workout.setListOfWorkouts(response['workoutList']);
         setState(() {
@@ -50,13 +51,12 @@ class _WorkoutsPageState extends State<Workouts> {
   //Checks to see if all the necessary fields in the database are set and correct
   bool _validateWorkout(int index) {
     var workout = ScopedModel.of<Workout>(context);
-
-    int fitnessLevel = 1;
+    var user = ScopedModel.of<User>(context);
     //if the workout does not have a list of exercises, do not display it as an option
     var wo = workout.listOfWorkouts[index];
 
     //checks whether the workout has a fitnessLvl and whether the workouts fitnessLvl is higher than the user's
-    if (wo["fitnessLevel"] == null || wo["fitnessLevel"] > fitnessLevel) {
+    if(wo["fitnessLevel"] == null || wo["fitnessLevel"] > user.fitnessLevel){
       return false;
     }
     if (wo["exercises"] == null || wo["exercises"].length == 0) {
@@ -64,33 +64,38 @@ class _WorkoutsPageState extends State<Workouts> {
     }
 
     if (wo["workoutName"] == null ||
-        wo["duration"] == null ||
-        wo["intensity"] == null ||
-        wo["xp"] == null) {
+      wo["duration"] == null ||
+      wo["intensity"] == null ||
+      wo["xp"] == null) {
+
       return false;
     }
     if (!(wo["duration"] is int || wo["xp"] is int)) {
       return false;
     }
 
-    if (wo["warmUp"] == null || wo["warmUp"].length == 0) {
+    if(wo["warmUp"] == null || wo["warmUp"].length == 0){
       return false;
     }
 
-    if (wo["warmUp"]["description"] == null ||
-        wo["warmUp"]["xp"] == null ||
-        wo["warmUp"]["targetMin"] == null) {
+    if(wo["warmUp"]["description"] == null ||
+      wo["warmUp"]["xp"] == null ||
+      wo["warmUp"]["targetMin"] == null ){
+
       return false;
     }
 
-    if (!(wo["warmUp"]["xp"] is int)) {
+    if(!(wo["warmUp"]["xp"] is int)){
       return false;
-    } else {
+    }
+
+    else {
       for (var exercise in wo["exercises"]) {
         if (exercise["name"] == null ||
-            exercise["targetSets"] == null ||
-            exercise["restBetweenSets"] == null ||
-            exercise["xp"] == null) {
+          exercise["targetSets"] == null ||
+          exercise["restBetweenSets"] == null ||
+          exercise["xp"] == null) {
+
           return false;
         }
         if (!(exercise["xp"] is int)) {
@@ -182,7 +187,7 @@ class _WorkoutsPageState extends State<Workouts> {
                     children: <Widget>[
                       // Column for information declaration
                       Expanded(
-                        flex: 5,
+                        flex: 6,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -303,7 +308,7 @@ class _WorkoutsPageState extends State<Workouts> {
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemCount: workout.listOfWorkouts.length,
-          itemBuilder: (BuildContext context, int index) {
+          itemBuilder: (BuildContext context, int index){
             return _workout(workout, index);
             //children: root["info"]
           },
