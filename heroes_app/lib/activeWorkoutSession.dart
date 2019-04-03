@@ -133,7 +133,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         children: <Widget>[
           new Container(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-            margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
+            margin: EdgeInsets.fromLTRB(35, 0, 35, 10),
             //decoration: new BoxDecoration(                  //border if we want
             //color: Colors.white,
             //border: new Border.all(color: Colors.black)),
@@ -365,7 +365,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
     Widget _returnFinishWorkoutButton() {
       return new Padding(
-        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 40.0),
+        padding: EdgeInsets.symmetric(horizontal: 0, vertical: 15.0),
         child: ScopedModelDescendant<User>(builder: (context, child, model) {
           return RaisedButton(
             elevation: 5.0,

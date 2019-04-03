@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'models/workout.dart';
-import 'models/user.dart';
 
 class StartWorkout extends StatefulWidget {
   final List exercises;
@@ -42,6 +41,8 @@ class StartWorkout extends StatefulWidget {
 class _StartWorkoutPage extends State<StartWorkout> {
   @override
   Widget build(BuildContext context) {
+    var workout = ScopedModel.of<Workout>(context);
+
     Widget _returnStartWorkoutButton() {
       if (widget.exercises == null) {
         return Text("");
@@ -69,7 +70,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
     // Column with Class and xp information
     Widget _infoColumnOne() {
       return Container(
-        padding: EdgeInsets.only(right: 5),
+        padding: EdgeInsets.only(right: 5, bottom: 5),
         child: Column(
           children: <Widget>[
             RichText(
@@ -98,7 +99,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
     // Column with Intensity and Time information
     Widget _infoColumnTwo() {
       return Container(
-        padding: EdgeInsets.only(left: 5),
+        padding: EdgeInsets.only(left: 5, bottom: 5),
         child: Column(
           children: <Widget>[
             RichText(
@@ -124,7 +125,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
       );
     }
 
-    //General information about the workout
+    //General information about the workout, row placement
     Widget _showInfo() {
       return Container(
         child: Row(
@@ -222,29 +223,27 @@ class _StartWorkoutPage extends State<StartWorkout> {
       return ExpansionTile(
         leading: _showExerciseDescription(index),
         title: new Text(
-            (widget.exercises[index]["name"]),
-          ),
-          children: <Widget>[
-            ListTile(
-              title: new Text("Sets: " +
-                widget.exercises[index]["targetSets"].toString())),
-            ListTile(
-              title: new Text(
-                name + widget.exercises[index][exercise].toString())),
-            ListTile(
-              title: new Text("Rest between sets: " +
-                widget.exercises[index]["restBetweenSets"].toString())),
-            ListTile(
-              title: new Text(
-                "XP: " + widget.exercises[index]["xp"].toString())),
-          ]
-          //children: root["info"]
-          );
+          (widget.exercises[index]["name"]),
+        ),
+        children: <Widget>[
+          ListTile(
+            title: new Text("Sets: " +
+              widget.exercises[index]["targetSets"].toString())),
+          ListTile(
+            title: new Text(
+              name + widget.exercises[index][exercise].toString())),
+          ListTile(
+            title: new Text("Rest between sets: " +
+              widget.exercises[index]["restBetweenSets"].toString())),
+          ListTile(
+            title: new Text(
+              "XP: " + widget.exercises[index]["xp"].toString())),
+        ]
+      );
     }
 
     //Display list of all the exercises in the workout
     Widget _showInformationWorkout() {
-      var workout = ScopedModel.of<Workout>(context);
       return new ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
@@ -256,29 +255,27 @@ class _StartWorkoutPage extends State<StartWorkout> {
             index = index - 1;
             return _showInfoExercises(index);
           }
-        });
+        }
+      );
     }
 
     Widget _returnBody() {
       return new Container(
         color: Color(0xFFe0e4eb),
         padding:
-        EdgeInsets.only(left: 24.0, bottom: 25.0, top: 25.0, right: 24.0),
+          EdgeInsets.only(left: 24.0, bottom: 25.0, top: 25.0, right: 24.0),
         child: Column(
           children: <Widget>[
-            Container(
-              child: _showInfo(),
-            ),
+            _showInfo(),
             Expanded(
               child: _showInformationWorkout(),
             ),
             _returnStartWorkoutButton(),
           ],
-        ));
+        )
+      );
     }
 
-    var workout = ScopedModel.of<Workout>(context);
-    var user = ScopedModel.of<User>(context);
     return Scaffold(
       appBar: AppBar(
         title: new Text(workout.workoutName),
