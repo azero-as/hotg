@@ -107,22 +107,27 @@ class _StartWorkoutPage extends State<StartWorkout> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: Text(widget.exercises[index]["name"]),
-                  content: Text(widget.exercises[index]["description"]),
+                  content: SingleChildScrollView(
+                    child:Text(widget.exercises[index]["description"]),
+                  ),
                   actions: <Widget>[
                     FlatButton(
                       child: Text('Close'),
                       onPressed: () {
                         Navigator.of(context).pop();
-                      })
+                      }
+                    )
                   ],
                 );
-              });
+              },
+            );
           },
         );
       } else {
         return IconButton(
           icon: Icon(Icons.info_outline,
-            color: Color(0x00000000),),
+            color: Color(0x00000000),
+          ),
         );
       }
     }
@@ -137,15 +142,17 @@ class _StartWorkoutPage extends State<StartWorkout> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: Text("Warm-up"),
-                  content: Text(workout.warmUp["description"].toString()),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text('Close'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      })
-                  ],
+                    title: Text("Warm-up"),
+                    content: SingleChildScrollView(
+                      child: Text(workout.warmUp["description"].toString()),
+                    ),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('Close'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        })
+                    ],
                 );
               });
             }, // title: new Text("Warm-up",

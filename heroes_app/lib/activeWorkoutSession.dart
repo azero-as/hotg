@@ -224,7 +224,9 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: Text(widget.exercises[index]["name"]),
-                  content: Text(widget.exercises[index]["description"]),
+                  content: SingleChildScrollView(
+                    child:Text(widget.exercises[index]["description"]),
+                  ),
                   actions: <Widget>[
                     FlatButton(
                       child: Text('Close'),
@@ -257,7 +259,9 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: Text("Warm-up"),
-                  content: Text(workout.warmUp["description"].toString()),
+                  content: SingleChildScrollView(
+                    child: Text(workout.warmUp["description"].toString()),
+                  ),
                   actions: <Widget>[
                     FlatButton(
                       child: Text('Close'),
