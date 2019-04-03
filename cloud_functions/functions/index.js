@@ -6,6 +6,12 @@ admin.initializeApp(functions.config().firebase);
 const helpers = require("./helper_functions.js");
 
 /*
+----------------------------------------------------------------------------------------------------------
+FUNCTIONS FOR APPLICATION:
+----------------------------------------------------------------------------------------------------------
+*/
+
+/*
   Get characterName, gameLevel, xp, className from Users Collection
   Get email from Firebase Authentication
   Get xpCap based on what gameLevel the current user is in from Levels Collection
@@ -195,5 +201,46 @@ exports.getAllWorkouts = functions.https.onRequest((request, response) => {
   })
   .catch(error => {
     response.status(400).send(error); // 400 bad request
+  })
+})
+
+/*
+----------------------------------------------------------------------------------------------------------
+FUNCTIONS FOR TESTUSER: 
+Apply to user where username = testusername
+----------------------------------------------------------------------------------------------------------
+*/
+const testuserUID = 'WFi7MkzIJxgPo6WBhk3GytXs34v1'
+
+// Reset xp and level for "testusername"
+exports.resetTestUser = functions.https.onRequest((request, response) => {
+  return admin
+  .firestore()
+  .collection("Users")
+  .doc(testuserUID)
+  .update({
+      xp: 0,
+      gameLevel: 1,
+  })
+  .then(function() {
+    response.status(200).send('Document successfully updated!')
+  })
+  .catch(error => {
+    response.status(400).send(error) 
+  })
+})
+
+// Delete entire "testuser" document
+exports.deleteTestUser = functions.https.onRequest((request, response) => {
+  return admin
+  .firestore()
+  .collection("Users")
+  .doc(testuserUID)
+  .delete()
+  .then(function() {
+    response.status(200).send('Document successfully deleted!')
+  })
+  .catch(error => {
+    response.status(400).send(error) 
   })
 })
