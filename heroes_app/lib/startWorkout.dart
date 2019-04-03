@@ -1,6 +1,7 @@
+import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
+
 import 'models/workout.dart';
 import 'models/user.dart';
 
@@ -65,35 +66,75 @@ class _StartWorkoutPage extends State<StartWorkout> {
       );
     }
 
+    // Column with Class and xp information
+    Widget _infoColumnOne() {
+      return Container(
+        padding: EdgeInsets.only(right: 5),
+        child: Column(
+          children: <Widget>[
+            RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.black,
+                ),
+                children:<TextSpan>[
+                  TextSpan(
+                    text: ' Class: ',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: widget.workoutClass.toString() + ' \n\n'),
+                  TextSpan(
+                    text: ' XP: ',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: widget.xp.toString()),
+                ]
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    // Column with Intensity and Time information
+    Widget _infoColumnTwo() {
+      return Container(
+        padding: EdgeInsets.only(left: 5),
+        child: Column(
+          children: <Widget>[
+            RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.black,
+                ),
+                children:<TextSpan>[
+                  TextSpan(
+                    text: ' Intensity: ',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: widget.intensity.toString() + ' \n\n'),
+                  TextSpan(
+                    text: ' Time: ',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: widget.duration.toString() + " min"),
+                ]
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
     //General information about the workout
     Widget _showInfo() {
       return Container(
-        margin: EdgeInsets.fromLTRB(50, 0, 50, 40),
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-        child: RichText(
-          text: TextSpan(
-            style: TextStyle(
-              fontSize: 14.0,
-              color: Colors.black,
-            ),
-            children: <TextSpan>[
-              TextSpan(
-                text: ' Class: ',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: widget.workoutClass.toString() + ' \n\n'),
-              TextSpan(
-                text: ' XP: ',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: widget.xp.toString() + ' \n\n'),
-              TextSpan(
-                text: ' Intensity: ',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: widget.intensity.toString() + ' \n\n'),
-              TextSpan(
-                text: ' Time: ',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-              TextSpan(text: widget.duration.toString() + " min"),
-            ])));
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _infoColumnOne(),
+            _infoColumnTwo(),
+          ],
+        ),
+      );
     }
 
     // Alert dialog to exercise description, only shown if description is in database
