@@ -184,30 +184,33 @@ class _StartWorkoutPage extends State<StartWorkout> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                    title: Text("Warm-up"),
-                    content: SingleChildScrollView(
-                      child: Text(workout.warmUp["description"].toString()),
-                    ),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text('Close'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        })
-                    ],
+                  title: Text("Warm-up"),
+                  content: SingleChildScrollView(
+                    child: Text(workout.warmUp["description"].toString()),
+                  ),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('Close'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }
+                    )
+                  ],
                 );
-              });
-            }, // title: new Text("Warm-up",
+              }
+            );
+          }, // title: new Text("Warm-up",
+        ),
+        title: new Text(
+          "Warm-up",
+        ),
+        children: <Widget>[
+          ListTile(
+            title: new Text(
+              "Minutes: " + workout.warmUp["targetMin"].toString()
+            )
           ),
-          title: new Text(
-            "Warm-up",
-          ),
-          children: <Widget>[
-            ListTile(
-              title: new Text("Minutes: "
-                + workout.warmUp["targetMin"].toString())),
-            //children: root["info"]
-          ]
+        ]
       );
     }
 

@@ -81,8 +81,10 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _showErrorMessage() {
     if (_errorMessage.length > 0 && _errorMessage != null) {
-      if (_errorMessage == "Network error (such as timeout, interrupted connection or unreachable host) has occurred." ||
-          _errorMessage == "A network error (such as timeout, interrupted connection or unreachable host) has occurred.") {
+      if (_errorMessage ==
+              "Network error (such as timeout, interrupted connection or unreachable host) has occurred." ||
+          _errorMessage ==
+              "A network error (such as timeout, interrupted connection or unreachable host) has occurred.") {
         return new Text(
           _errorMessage,
           key: Key("LogInErrorMessage"),

@@ -18,7 +18,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Container (
+          Container(
             decoration: BoxDecoration(
               color: Theme.of(context).secondaryHeaderColor,
             ),

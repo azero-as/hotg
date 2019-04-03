@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'models/user.dart';
 
 class Summary extends StatefulWidget {
-
   final List<dynamic> exercises;
   final int bonus;
   final int total_xp;
@@ -12,14 +11,19 @@ class Summary extends StatefulWidget {
   final VoidCallback onLoggedIn;
   final VoidCallback alreadyLoggedIn;
 
-  Summary({this.exercises, this.bonus, this.total_xp, this.workoutType, this.onLoggedIn, this.alreadyLoggedIn});
+  Summary(
+      {this.exercises,
+      this.bonus,
+      this.total_xp,
+      this.workoutType,
+      this.onLoggedIn,
+      this.alreadyLoggedIn});
 
   @override
   State createState() => new _SummaryState();
 }
 
 class _SummaryState extends State<Summary> {
-
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<User>(builder: (context, child, model) {
@@ -169,7 +173,6 @@ class _SummaryState extends State<Summary> {
                       ),
                     ),
                     Align(
-                      //alignment: Alignment.topRight,
                       child: RaisedButton(
                         color: Theme.of(context).secondaryHeaderColor,
                         textColor: Colors.white,
@@ -188,32 +191,32 @@ class _SummaryState extends State<Summary> {
                 color: Colors.white,
                 child: ScopedModelDescendant<User>(builder: (context, child, model) {
                   return Column (
-                  children: <Widget>[
-                    RichText(
-                      text: TextSpan(
-                        text: 'Congratulations! You are now: ',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15,
+                    children: <Widget>[
+                      RichText(
+                        text: TextSpan(
+                          text: 'Congratulations! You are now: ',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    RichText(
-                      text: TextSpan(
-                        text: 'Level ${model.level}',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
+                      Align(
+                        child: RaisedButton(
+                          color: Theme.of(context).secondaryHeaderColor,
+                          textColor: Colors.white,
+                          onPressed: () => Navigator.pop(context),
+                          child: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    ),
-                  ],
-                );
-              })
-              //SizedBox(height: 100.0),
-            )],
+                      )
+                    ],
+                  );
+                })
+              )
+            ],
           )
         ),
       ],

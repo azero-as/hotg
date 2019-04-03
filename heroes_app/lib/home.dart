@@ -78,7 +78,7 @@ class Home extends StatelessWidget {
 // Create state for appbar of home page
 class AvatarOverview extends StatefulWidget {
   AvatarOverview(
-    {this.auth, this.onSignedOut, this.onLoggedIn, this.readyToSignOut});
+      {this.auth, this.onSignedOut, this.onLoggedIn, this.readyToSignOut});
 
   final BaseAuth auth;
   final VoidCallback onSignedOut;
@@ -143,7 +143,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
       return Container(
         padding: EdgeInsets.fromLTRB(20, 5, 0, 0),
         child: Text(
-          'Level ${user.level.toString()} ${user.className.toString()}',
+          'Level ${user.gameLevel.toString()} ${user.className.toString()}',
           style: TextStyle(color: Colors.white),
           textAlign: TextAlign.left
         ),
@@ -439,7 +439,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
         workout.fitnessLevel == -1 ||
         workout.xp == -1 ||
         workout.exercises == []) {
-          return new Text("No workout found");
+          return new Text("No workout found.");
       } else {
         return Container(
           // Make sure the placement is centered

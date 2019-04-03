@@ -29,11 +29,15 @@ class _FrontPageState extends State<FrontPage> {
         child: Image.asset('assets/logo2.png'),
       ),
     );
-    
+
     //App name
     final appName = new Text(
-      'Heroes of the Gym', style: TextStyle(
-      color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25.0,),
+      'Heroes of the Gym',
+      style: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontSize: 25.0,
+      ),
       textAlign: TextAlign.center,
     );
 
