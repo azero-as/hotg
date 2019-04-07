@@ -15,12 +15,12 @@ class CrudMethods {
   Future<void> addFitnessLevel(fitnesslevel, userid) async {
     if (isLoggedIn()) {
       return Firestore.instance
-        .collection('Users')
-        .document(userid)
-        .setData(fitnesslevel)
-        .catchError((e) {
-          print(e);
-        });
+          .collection('Users')
+          .document(userid)
+          .setData(fitnesslevel)
+          .catchError((e) {
+        print(e);
+      });
     } else {
       print("You need to be logged in");
     }

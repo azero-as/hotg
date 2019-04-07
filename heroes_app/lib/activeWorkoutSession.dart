@@ -213,6 +213,40 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       }
     }
 
+    // Alert dialog to exercise description, only shown if description is in database
+    Widget _showExerciseDescription(int index) {
+      if ((widget.exercises[index]["description"]) != null) {
+        return IconButton(
+          icon: Icon(Icons.info_outline),
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(widget.exercises[index]["name"]),
+                    content: Text(widget.exercises[index]["description"]),
+                    actions: <Widget>[
+                      FlatButton(
+                          child: Text('Close'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          })
+                    ],
+                  );
+                });
+          },
+        );
+      } else {
+        return IconButton(
+          // TODO: if we change the background of this page, then change the color of this icon to the same color to keep in transparent
+          icon: Icon(
+            Icons.info_outline,
+            color: Color(0xFFe0e4eb),
+          ),
+        );
+      }
+    }
+
     //Information about the warm up + checkbox for warm up
     Widget _showInfoWarmUp(int index) {
       var workout = ScopedModel.of<Workout>(context);
@@ -273,26 +307,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       }
       return ExpansionTile(
           key: PageStorageKey<int>(index),
-          leading: IconButton(
-            icon: Icon(Icons.info_outline),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text(widget.exercises[index]["name"]),
-                      content: Text(widget.exercises[index]["description"]),
-                      actions: <Widget>[
-                        FlatButton(
-                            child: Text('Close'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            })
-                      ],
-                    );
-                  });
-            },
-          ),
+          leading: _showExerciseDescription(index),
           title: new CheckboxListTile(
             value: _selectedExercises.contains(widget.exercises[index]["name"]),
             onChanged: (bool selected) {

@@ -46,7 +46,8 @@ class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
   String _userId = "";
   String _className = '';
-  bool _dataLoadedFromDatabase = false; //if this is null, it is still loading data from firebase.
+  bool _dataLoadedFromDatabase =
+      false; //if this is null, it is still loading data from firebase.
 
   @override
   void initState() {
@@ -194,6 +195,7 @@ class _RootPageState extends State<RootPage> {
       );
       setState(() {
         workout.setIntensity(response['intensity']);
+        workout.setFitnessLevel(response['fitnessLevel']);
         workout.setWorkOutName(response['workoutName']);
         workout.setWorkOutClass(response['class']);
         workout.setDuration(response['duration']);

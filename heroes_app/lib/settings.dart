@@ -17,39 +17,38 @@ class Settings extends StatefulWidget {
 }
 
 class SettingsState extends State<Settings> {
- 
   @override
   Widget build(BuildContext context) {
-
-      return Scaffold(
-          backgroundColor: Theme.of(context).secondaryHeaderColor,
-          appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                widget.alreadyLoggedIn();
-              },
-              color: Colors.white,
-            ),
-            title: Text("Settings"),
+    return Scaffold(
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              widget.alreadyLoggedIn();
+            },
+            color: Colors.white,
           ),
-          body: Container(
-            padding: EdgeInsets.only(left: 24.0, right: 24.0),
-            margin: EdgeInsets.fromLTRB(20, 0, 20, 35),
-            child: new ListView(
-              shrinkWrap: true,
-              children: <Widget>[
-                SizedBox(height: 50.0),
-                characterNameField(),
-                emailField(),
-                SizedBox(height: 125.0),
-                logOutButton()
-              ],
-            ),
-          ));
-    }
+          title: Text("Settings"),
+        ),
+        body: Container(
+          padding: EdgeInsets.only(left: 24.0, right: 24.0),
+          margin: EdgeInsets.fromLTRB(20, 0, 20, 35),
+          child: new ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              SizedBox(height: 50.0),
+              characterNameField(),
+              emailField(),
+              fitnessLevelField(),
+              SizedBox(height: 125.0),
+              logOutButton()
+            ],
+          ),
+        ));
+  }
 
-  // Displays characterName 
+  // Displays characterName
   Widget characterNameField() {
     return Padding(
       padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 3.0),
@@ -58,36 +57,65 @@ class SettingsState extends State<Settings> {
           return new Container();
         }
         return ListTile(
-          leading: Icon(Icons.person, color: Colors.white,),
-          title: Text(model.characterName,
+          leading: Icon(
+            Icons.person,
+            color: Colors.white,
+          ),
+          title: Text(
+            model.characterName,
             style: TextStyle(
               color: Colors.white,
             ),
           ),
         );
-        }),
-      );
+      }),
+    );
   }
 
   // Displays email address
   Widget emailField() {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 0.0),
-      child: ScopedModelDescendant<User>(builder: (context, child, model) {
-        if (model.email.isEmpty) {
-          return new Container();
-        }
-        return ListTile(
-          leading: Icon(Icons.email,
-          color: Colors.white,),
-          title: Text(model.email,
-            style: TextStyle(
+        padding: EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 0.0),
+        child: ScopedModelDescendant<User>(builder: (context, child, model) {
+          if (model.email.isEmpty) {
+            return new Container();
+          }
+          return ListTile(
+            leading: Icon(
+              Icons.email,
               color: Colors.white,
             ),
-          ),
-        );
-      })
-      );
+            title: Text(
+              model.email,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          );
+        }));
+  }
+
+  // Displays fitness level
+  Widget fitnessLevelField() {
+    return Padding(
+        padding: EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 0.0),
+        child: ScopedModelDescendant<User>(builder: (context, child, model) {
+          if (model.fitnessLevel == null) {
+            return new Container();
+          }
+          return ListTile(
+            leading: Icon(
+              Icons.fitness_center,
+              color: Colors.white,
+            ),
+            title: Text(
+              'Fitness level: ${model.fitnessLevel.toString()}',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          );
+        }));
   }
 
   _signOut() async {
