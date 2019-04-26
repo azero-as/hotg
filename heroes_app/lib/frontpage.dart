@@ -1,3 +1,4 @@
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:flutter/material.dart';
 
 class FrontPage extends StatefulWidget {
@@ -13,8 +14,12 @@ class FrontPage extends StatefulWidget {
 }
 
 class _FrontPageState extends State<FrontPage> {
+
   @override
   Widget build(BuildContext context) {
+    // Make sure status bar colour matches the rest of the page
+    FlutterStatusbarcolor.setStatusBarColor(Color(0xFF212838));
+
     //placeholder for logo
     final logo = new Hero(
       tag: 'hero',
@@ -46,17 +51,15 @@ class _FrontPageState extends State<FrontPage> {
           borderRadius: BorderRadius.circular(60),
         ),
         child: GestureDetector(
-            child: Center(
-          child: Text(
-            'Log In',
-            style: TextStyle(
-              color: const Color(0xFF212838),
-              fontSize: 20.0,
+          child: Center(
+            child: Text('Log In',
+              style: TextStyle(
+                color: const Color(0xFF212838),
+                fontSize: 20.0,
+              ),
             ),
-          ),
-          // color: Colors.white,
-        )),
-        //child: Text('Log In', style: TextStyle(color: const Color(0xFF4FB88B), fontSize: 20), ), color: Colors.white,
+          )
+        ),
         key: Key('LogIn'),
         onPressed: () {
           widget.readyToLogIn();
@@ -71,16 +74,22 @@ class _FrontPageState extends State<FrontPage> {
         color: const Color(0xFF212838),
         elevation: 5.0,
         shape: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(60),
-            borderSide: BorderSide(width: 1.0, color: Colors.white)),
+          borderRadius: BorderRadius.circular(60),
+          borderSide: BorderSide(
+            width: 1.0,
+            color: Colors.white
+          )
+        ),
         child: GestureDetector(
-            child: Center(
-          child: Text('Sign Up',
+          child: Center(
+            child: Text('Sign Up',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20.0,
-              )),
-        )),
+              )
+            ),
+          )
+        ),
         key: Key('SignUp'),
         onPressed: () {
           widget.readyToSignUp();

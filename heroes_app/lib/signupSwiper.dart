@@ -38,7 +38,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
   String _chooseClassDescription =
       "Find your band of brothers and sisters by choosing a class for your character. Your choice will determine the type of workouts that are recommended for you.";
   String _strengthDescription =
-      "Pick one of these classes if your main focus to improve your strength";
+      "Pick one of these classes if your main focus is to improve your strength";
   String _dexterityDescription =
       "If instead you want to receive a mix of strength and stamina workouts one of these might be a better choice.";
 
@@ -298,7 +298,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                           'Every hero needs a suitable name! Start your journey by picking a character name.'),
                       _space(40),
                       Container(width: 250, child: characterName),
-                      SizedBox(height: 300),
+                      _space(300),
                     ],
                   ),
                   onChanged: () {
@@ -375,6 +375,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                         _space(20.0),
                         _errorMessage(),
                         letsGoButton,
+                        _space(150),
                       ],
                     ),
                   ))

@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'models/user.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter/material.dart';
+
+import 'models/user.dart';
 
 class Summary extends StatefulWidget {
   final List<dynamic> exercises;
@@ -25,51 +26,51 @@ class Summary extends StatefulWidget {
 class _SummaryState extends State<Summary> {
   @override
   Widget build(BuildContext context) {
-    var user = ScopedModel.of<User>(context);
-    return Scaffold(
-        backgroundColor: Theme.of(context).secondaryHeaderColor,
-        appBar: AppBar(
-          leading: new IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                // Check if levelUp pop-up should appear
-                if (user.levelUp) {
-                  // Display pop-up
-                  showDialog(
-                      context: context,
-                      builder: (context) =>
-                          _onLevelUp(context)); // Call the Dialog.
-                  // Set levelUp back to fase
-                  user.setLevelUpFalse();
-                }
-                // Navigate to homepage
-                widget.alreadyLoggedIn();
-              }),
-          title: Text(
-            "Summary",
-            style: TextStyle(fontSize: 22),
+    return ScopedModelDescendant<User>(builder: (context, child, model) {
+      return Scaffold(
+          backgroundColor: Theme.of(context).secondaryHeaderColor,
+          appBar: AppBar(
+            leading: new IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  // Check if levelUp pop-up should appear
+                  if (model.levelUp) {
+                    // Display pop-up
+                    showDialog(
+                        context: context,
+                        builder: (context) =>
+                            _onLevelUp(context)); // Call the Dialog.
+                    // Set levelUp back to fase
+                    model.setLevelUpFalse();
+                  }
+                  // Navigate to homepage
+                  widget.alreadyLoggedIn();
+                }),
+            title: Text(
+              "Summary",
+              style: TextStyle(fontSize: 22),
+            ),
+            centerTitle: true,
           ),
-          centerTitle: true,
-        ),
-        body: Center(
-            child: Column(
-          children: <Widget>[
-            Container(
-              // set heigth of container to be 80% of screen height
-              height: MediaQuery.of(context).size.height * 0.85,
-              padding: EdgeInsets.only(
-                  right: 20.0, left: 20.0, top: 30.0, bottom: 30.0),
-              child: _buildWorkoutCard(),
-            )
-          ],
-        )));
+          body: Center(
+              child: Column(
+            children: <Widget>[
+              Container(
+                // set height of container to be 85% of screen height
+                height: MediaQuery.of(context).size.height * 0.85,
+                padding: EdgeInsets.only(
+                    right: 15.0, left: 15.0, top: 15.0, bottom: 15.0),
+                child: _buildWorkoutCard(),
+              )
+            ],
+          )));
+    });
   }
 
   Widget _buildExerciseListItem(BuildContext context, exercise) {
     return ListTile(
-      title: Text(exercise["name"], style: TextStyle(fontSize: 18)),
-      trailing: Text(exercise["xp"].toString() + " xp",
-          style: TextStyle(fontSize: 18)),
+      title: Text(exercise["name"]),
+      trailing: Text(exercise["xp"].toString() + " xp"),
       contentPadding: EdgeInsetsDirectional.only(start: 40.0, end: 40.0),
     );
   }
@@ -80,41 +81,37 @@ class _SummaryState extends State<Summary> {
       title: Text(
         widget.workoutType,
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
     ));
   }
 
   Widget _buildScore() {
     if (widget.bonus == 0) {
-      return
-      Column(
+      return Column(
         children: <Widget>[
           ListTile(
-            title: Text("Total: ",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            title:
+                Text("Total: ", style: TextStyle(fontWeight: FontWeight.bold)),
             trailing: Text(widget.total_xp.toString() + " xp",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontWeight: FontWeight.bold)),
             contentPadding: EdgeInsetsDirectional.only(start: 70.0, end: 70.0),
           ),
         ],
       );
-    }
-    else {
+    } else {
       return Column(
         children: <Widget>[
           ListTile(
-            title: Text("Bonus: ", style: TextStyle(fontSize: 22)),
-            trailing: Text(widget.bonus.toString() + " xp",
-                style: TextStyle(fontSize: 22)),
-            contentPadding:
-            EdgeInsetsDirectional.only(top: 1.0, start: 70.0, end: 70.0),
+            title: Text("Bonus: "),
+            trailing: Text(widget.bonus.toString() + " xp"),
+            contentPadding: EdgeInsetsDirectional.only(start: 70.0, end: 70.0),
           ),
           ListTile(
-            title: Text("Total: ",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            title:
+                Text("Total: ", style: TextStyle(fontWeight: FontWeight.bold)),
             trailing: Text(widget.total_xp.toString() + " xp",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontWeight: FontWeight.bold)),
             contentPadding: EdgeInsetsDirectional.only(start: 70.0, end: 70.0),
           ),
         ],
@@ -156,6 +153,10 @@ class _SummaryState extends State<Summary> {
         new Container(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
             margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
+            //decoration: new BoxDecoration(                  //border if we want
+            //color: Colors.white,
+            //border: new Border.all(color: Colors.black)
+            // ),
             child: new ListView(
               shrinkWrap: true,
               children: <Widget>[
@@ -204,22 +205,20 @@ class _SummaryState extends State<Summary> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 10),
-                          RichText(
-                            text: TextSpan(
-                              text: 'Level ${model.gameLevel}',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
+                          Align(
+                            child: RaisedButton(
+                              color: Theme.of(context).secondaryHeaderColor,
+                              textColor: Colors.white,
+                              onPressed: () => Navigator.pop(context),
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.white,
                               ),
                             ),
-                          ),
+                          )
                         ],
                       );
-                    })
-                    //SizedBox(height: 100.0),
-                    )
+                    }))
               ],
             )),
       ],
