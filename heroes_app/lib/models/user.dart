@@ -15,6 +15,10 @@ class User extends Model {
   bool _levelUp = false;
   String _email;
 
+  // History page
+  List _workouts = [];
+  bool _noWorkoutCompleted;
+
   int get xpCap => _xpCap;
   int get xp => _xp;
   int get gameLevel => _gameLevel;
@@ -23,6 +27,10 @@ class User extends Model {
   String get className => _className;
   bool get levelUp => _levelUp;
   String get email => _email;
+
+  //History page
+  List get workouts => _workouts;
+  bool get noWorkoutCompleted => _noWorkoutCompleted;
 
   void startState(String characterName, int gameLevel, int userXp, int xpCap,
       String className, String email, int fitnessLevel) {
@@ -62,6 +70,16 @@ class User extends Model {
     notifyListeners();
   }
 
+  void setWorkouts(List workouts) {
+    this._workouts = workouts;
+    notifyListeners();
+  }
+
+  void setNoWorkoutCompleted(bool status) {
+    this._noWorkoutCompleted = status;
+    notifyListeners();
+  }
+
   // Methods used by other widgets:
   void incrementXP(int xpEarned) async {
     await CloudFunctions.instance
@@ -87,7 +105,6 @@ class User extends Model {
       setLevel(response['gameLevel']);
       setXP(response['userXp']);
       setXpCap(response['xpCap']);
-      setFitnessLevel(response['fitnessLevel']);
     }).catchError((error) {
       print(error);
     });

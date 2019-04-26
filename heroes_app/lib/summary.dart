@@ -194,30 +194,28 @@ class _SummaryState extends State<Summary> {
                     color: Colors.white,
                     child: ScopedModelDescendant<User>(
                         builder: (context, child, model) {
-                      return Column(
-                        children: <Widget>[
-                          RichText(
-                            text: TextSpan(
-                              text: 'Congratulations! You are now: ',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                              ),
+                      return Column(children: <Widget>[
+                        RichText(
+                          text: TextSpan(
+                            text: 'Congratulations! You are now: ',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
                             ),
                           ),
-                          Align(
-                            child: RaisedButton(
-                              color: Theme.of(context).secondaryHeaderColor,
-                              textColor: Colors.white,
-                              onPressed: () => Navigator.pop(context),
-                              child: Icon(
-                                Icons.close,
-                                color: Colors.white,
-                              ),
+                        ),
+                        SizedBox(height: 10),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Level ${model.gameLevel}',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
                             ),
-                          )
-                        ],
-                      );
+                          ),
+                        ),
+                      ]);
                     }))
               ],
             )),
