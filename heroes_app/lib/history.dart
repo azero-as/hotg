@@ -27,24 +27,29 @@ class ListOfTrainingSessions extends StatefulWidget {
 
 class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
   // Container for every workout registered on the user in the database.
-  List _workouts = [];
-  bool _noWorkoutCompleted;
 
   @override
   void initState() {
     super.initState();
+
+    var user = ScopedModel.of<User>(context);
+
+    print("INITSTATE IN HISTORY");
 
     CloudFunctions.instance
         .call(functionName: 'getCompletedUserWorkouts')
         .then((response) {
       if (this.mounted) {
         if (response["workouts"].isEmpty) {
+          print("WORKOUTS IS EMPTY");
           setState(() {
-            _noWorkoutCompleted = true;
+            user.setNoWorkoutCompleted(true);
           });
         } else {
           setState(() {
-            _workouts = response['workouts'];
+            print("WORKOUTS IS NOT EMPTY");
+            user.setWorkouts(response['workouts']);
+            user.setNoWorkoutCompleted(false);
           });
         }
       }
@@ -58,8 +63,8 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
 // Builds a List View of the workout history.
   @override
   Widget build(BuildContext context) {
-    if (_noWorkoutCompleted == true) {
-      return ScopedModelDescendant<User>(builder: (context, child, model) {
+    return ScopedModelDescendant<User>(builder: (context, child, model) {
+    if (model.noWorkoutCompleted == true) {
         return Scaffold(
             backgroundColor: Theme.of(context).secondaryHeaderColor,
             appBar: AppBar(
@@ -77,23 +82,25 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
                   ),
                   _motivationalQuote()
                 ])));
-      });
-    } else if (_workouts.isEmpty) {
+    } else if (model.workouts.isEmpty) {
       return Center(child: CircularProgressIndicator());
     } else {
       return Scaffold(
-          backgroundColor: Theme.of(context).secondaryHeaderColor,
+          backgroundColor: Theme
+              .of(context)
+              .secondaryHeaderColor,
           appBar: AppBar(
             centerTitle: true,
             title: Text("Workout History"),
           ),
           body: ListView.builder(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              itemCount: _workouts.length,
+              itemCount: model.workouts.length,
               itemBuilder: (context, index) {
-                return _workoutCard(context, _workouts[index]);
+                return _workoutCard(context, model.workouts[index]);
               }));
     }
+    });
   }
 
   // Conditional build of the empty workout screen
