@@ -154,8 +154,6 @@ class _LoginPageState extends State<LoginPage> {
       try {
         if (_formMode == FormMode.LOGIN) {
           userId = await widget.auth.signIn(_email, _password);
-          // TODO: Do we need this print statement?
-          print('Signed in: $userId');
         }
         if (this.mounted) {
           setState(() {

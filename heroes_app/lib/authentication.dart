@@ -55,7 +55,6 @@ class Auth implements BaseAuth {
     try {
       return _firebaseAuth.sendPasswordResetEmail(email: email);
     } catch (error) {
-      print('here');
       print('Auth error: ' + error);
     }
   }
