@@ -38,7 +38,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
   String _chooseClassDescription =
       "Find your band of brothers and sisters by choosing a class for your character. Your choice will determine the type of workouts that are recommended for you.";
   String _strengthDescription =
-      "Pick one of these classes if your main focus to improve your strength";
+      "Pick one of these classes if your main focus is to improve your strength";
   String _dexterityDescription =
       "If instead you want to receive a mix of strength and stamina workouts one of these might be a better choice.";
 
