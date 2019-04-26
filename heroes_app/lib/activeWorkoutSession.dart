@@ -101,12 +101,17 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       }
     }
 
+    _calculateBonusXP(int totalXP) {
+      int bonusXP = (totalXP * 0.2).round();
+      return bonusXP;
+    }
+
     //Save the workout to the database using cloud functions
     void _saveWorkout() {
       DateTime date = new DateTime.now();
 
       if (_selectedExercises.length == widget.exercises.length + 1) {
-        _BonusXP = 1;
+        _BonusXP = _calculateBonusXP(this._XpEarned);
       } else {
         _BonusXP = 0;
       }
