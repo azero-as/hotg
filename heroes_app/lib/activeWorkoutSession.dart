@@ -5,6 +5,7 @@ import 'dart:async';
 import 'models/user.dart';
 import 'models/workout.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'logic/calculateXp.dart';
 
 class activeWorkoutSession extends StatefulWidget {
   final List<dynamic> exercises;
@@ -106,7 +107,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       DateTime date = new DateTime.now();
 
       if (_selectedExercises.length == widget.exercises.length + 1) {
-        _BonusXP = 1;
+        _BonusXP = calculateBonusXP(this._XpEarned);
       } else {
         _BonusXP = 0;
       }
@@ -369,6 +370,10 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
           });
     }
 
+    Widget _bonusInformation() {
+      return Text("Remember that you get a bonus if you finish all exercises!");
+    }
+
     Widget _returnFinishWorkoutButton() {
       return new Padding(
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 15.0),
@@ -414,6 +419,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
               Expanded(
                 child: _showInformationWorkout(),
               ),
+              _bonusInformation(),
               _returnFinishWorkoutButton(),
             ],
           )),
