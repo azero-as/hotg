@@ -201,18 +201,18 @@ class _SummaryState extends State<Summary> {
                           ),
                         ),
                       ),
-                      Align(
-                        child: RaisedButton(
-                          color: Theme.of(context).secondaryHeaderColor,
-                          textColor: Colors.white,
-                          onPressed: () => Navigator.pop(context),
-                          child: Icon(
-                            Icons.close,
-                            color: Colors.white,
+                      SizedBox(height: 10),
+                      RichText(
+                        text: TextSpan(
+                          text: 'Level ${model.gameLevel}',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
                           ),
                         ),
-                      )
-                    ],
+                      ),
+                    ]
                   );
                 })
               )
