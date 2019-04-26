@@ -86,24 +86,40 @@ class _SummaryState extends State<Summary> {
   }
 
   Widget _buildScore() {
-    return Column(
-      children: <Widget>[
-        ListTile(
-          title: Text("Bonus: ", style: TextStyle(fontSize: 22)),
-          trailing: Text(widget.bonus.toString() + " xp",
-              style: TextStyle(fontSize: 22)),
-          contentPadding:
-              EdgeInsetsDirectional.only(top: 10.0, start: 70.0, end: 70.0),
-        ),
-        ListTile(
-          title: Text("Total: ",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          trailing: Text(widget.total_xp.toString() + " xp",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          contentPadding: EdgeInsetsDirectional.only(start: 70.0, end: 70.0),
-        ),
-      ],
-    );
+    if (widget.bonus == 0) {
+      return
+      Column(
+        children: <Widget>[
+          ListTile(
+            title: Text("Total: ",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            trailing: Text(widget.total_xp.toString() + " xp",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            contentPadding: EdgeInsetsDirectional.only(start: 70.0, end: 70.0),
+          ),
+        ],
+      );
+    }
+    else {
+      return Column(
+        children: <Widget>[
+          ListTile(
+            title: Text("Bonus: ", style: TextStyle(fontSize: 22)),
+            trailing: Text(widget.bonus.toString() + " xp",
+                style: TextStyle(fontSize: 22)),
+            contentPadding:
+            EdgeInsetsDirectional.only(top: 1.0, start: 70.0, end: 70.0),
+          ),
+          ListTile(
+            title: Text("Total: ",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            trailing: Text(widget.total_xp.toString() + " xp",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            contentPadding: EdgeInsetsDirectional.only(start: 70.0, end: 70.0),
+          ),
+        ],
+      );
+    }
   }
 
   Widget _buildExerciseList() {
