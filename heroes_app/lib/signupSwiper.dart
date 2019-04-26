@@ -30,7 +30,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
   // Radio button start state
   int _fitnessLevel = 1;
   int _rpgClassValue = 1;
-  var _charNameFormKey = GlobalKey<FormState>();
+  static var _charNameFormKey = GlobalKey<FormState>();
 
   FocusNode _focusNodeCharacter = new FocusNode();
 

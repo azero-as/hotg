@@ -27,7 +27,7 @@ class SignupPage extends StatefulWidget {
 enum FormMode { SIGNUP }
 
 class _SignupPageState extends State<SignupPage> {
-  final _formKey = new GlobalKey<FormState>();
+  static final _formKey = new GlobalKey<FormState>();
 
   FocusNode _focusNodeEmail = new FocusNode();
   FocusNode _focusNodePassword = new FocusNode();

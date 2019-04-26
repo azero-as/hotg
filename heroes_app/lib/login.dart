@@ -27,7 +27,7 @@ class LoginPage extends StatefulWidget {
 enum FormMode { LOGIN }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = new GlobalKey<FormState>();
+  static final _formKey = new GlobalKey<FormState>();
 
   FocusNode _focusNodeEmail = new FocusNode();
   FocusNode _focusNodePassword = new FocusNode();
