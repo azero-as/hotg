@@ -27,12 +27,14 @@ class ListOfTrainingSessions extends StatefulWidget {
 
 class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
   // Container for every workout registered on the user in the database.
-  List _workouts = [];
-  bool _noWorkoutCompleted;
+  //List _workouts = [];
+  //bool _noWorkoutCompleted;
 
   @override
   void initState() {
     super.initState();
+
+    var user = ScopedModel.of<User>(context);
 
     CloudFunctions.instance
         .call(functionName: 'getCompletedUserWorkouts')
@@ -40,11 +42,11 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
       if (this.mounted) {
         if (response["workouts"].isEmpty) {
           setState(() {
-            _noWorkoutCompleted = true;
+            user.setNoWorkoutCompleted(true);
           });
         } else {
           setState(() {
-            _workouts = response['workouts'];
+            user.setWorkouts(response['workouts']);
           });
         }
       }
@@ -58,7 +60,8 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
 // Builds a List View of the workout history.
   @override
   Widget build(BuildContext context) {
-    if (_noWorkoutCompleted == true) {
+    var user = ScopedModel.of<User>(context);
+    if (user.noWorkoutCompleted == true) {
       return ScopedModelDescendant<User>(builder: (context, child, model) {
         return Scaffold(
             backgroundColor: Theme.of(context).secondaryHeaderColor,
@@ -78,21 +81,26 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
                   _motivationalQuote()
                 ])));
       });
-    } else if (_workouts.isEmpty) {
+    } else if (user.workouts.isEmpty) {
       return Center(child: CircularProgressIndicator());
     } else {
-      return Scaffold(
-          backgroundColor: Theme.of(context).secondaryHeaderColor,
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text("Workout History"),
-          ),
-          body: ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              itemCount: _workouts.length,
-              itemBuilder: (context, index) {
-                return _workoutCard(context, _workouts[index]);
-              }));
+      return ScopedModelDescendant<User>(builder: (context, child, model)
+      {
+        return Scaffold(
+            backgroundColor: Theme
+                .of(context)
+                .secondaryHeaderColor,
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text("Workout History"),
+            ),
+            body: ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                itemCount: user.workouts.length,
+                itemBuilder: (context, index) {
+                  return _workoutCard(context, user.workouts[index]);
+                }));
+      });
     }
   }
 
