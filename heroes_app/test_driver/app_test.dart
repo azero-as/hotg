@@ -3,7 +3,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Log In', () {
+  group('Log In:', () {
     // First, define the Finders. We can use these to locate Widgets from the
     // test suite. Note: the Strings provided to the `byValueKey` method must
     // be the same as the Strings we used for the Keys.
@@ -63,7 +63,7 @@ void main() {
     });
   });
 
-  group('Sign Up', () {
+  group('Sign Up:', () {
 // First, define the Finders. We can use these to locate Widgets from the
 // test suite. Note: the Strings provided to the `byValueKey` method must
 // be the same as the Strings we used for the Keys.
@@ -149,4 +149,85 @@ void main() {
       await driver.tap(signupBackButton);
     });
   });
+
+  group('Dashboard info:', () {
+    // First, define the Finders. We can use these to locate Widgets from the
+    // test suite. Note: the Strings provided to the `byValueKey` method must
+    // be the same as the Strings we used for the Keys.
+
+    //Widget from frontpage
+    final logInButton = find.byValueKey('LogIn');
+
+    //Widgets from login
+    final usernameTextField = find.byValueKey("loginUsername");
+    final passwordTextField = find.byValueKey("loginPassword");
+    final logInButton2 = find.byValueKey("LogIn2");
+
+    //Widgets from dashboard
+    final settingsButton = find.byValueKey("settingsButton");
+    final signOutButton = find.byValueKey("signOutButton");
+
+    FlutterDriver driver;
+
+    // Connect to the Flutter driver before running any tests
+    setUpAll(() async {
+      driver = await FlutterDriver.connect();
+
+      await driver.tap(logInButton);
+      await driver.tap(usernameTextField);
+      await driver.enterText("test@example.com");
+      await driver.tap(passwordTextField);
+      await driver.enterText("test1234");
+      await driver.tap(logInButton2);
+    });
+
+    // Close the connection to the driver after the tests have completed
+    tearDownAll(() async {
+      //Log out
+      await driver.tap(settingsButton);
+      await driver.tap(signOutButton);
+
+      if (driver != null) {
+        driver.close();
+      }
+    });
+
+    final charName = find.byValueKey("charName");
+    final userXp = find.byValueKey("xp");
+    final levelClass = find.byValueKey("levelClass");
+
+    //IT 1
+    test("Correct character name is shown on the dashboard", () async {
+      expect( await driver.getText(charName), "testusername");
+    });
+
+    //IT 2
+    test("Correct amount of XP is shown on the dashboard.", () async {
+      var xp = await driver.getText(userXp);
+      
+      expect(xp.substring(0,2), "43");
+    });
+
+    //IT 10
+    test("Correct level is shown on the dashboard.", () async {
+      var levelAndClass = await driver.getText(levelClass);
+      var list = levelAndClass.split(' ');
+      var level = list[1];
+      print(level);
+
+      expect(level, "2");
+    });
+
+    //IT 21
+    test("Correct class is shown on the dashboard.", () async {
+      var levelAndClass = await driver.getText(levelClass);
+      var list = levelAndClass.split(' ');
+      var className = list[2];
+
+      print(className);
+
+      expect(className, "Ranger");
+    });
+  });
+
 }
