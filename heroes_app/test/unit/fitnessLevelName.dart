@@ -4,17 +4,17 @@ import 'package:test/test.dart';
 void main() {
   test('Correct name for fitness Level 1', () {
     String result = convertFitnessLevelName(1);
-    expect(result, "beginner");
+    expect(result, "Beginner");
   });
 
   test('Correct name for fitness level 2', () {
     String result = convertFitnessLevelName(2);
-    expect(result, "intermediate");
+    expect(result, "Intermediate");
   });
 
   test('Correct name for fitness level 3', () {
     String result = convertFitnessLevelName(3);
-    expect(result, "advanced");
+    expect(result, "Advanced");
   });
 
 }
