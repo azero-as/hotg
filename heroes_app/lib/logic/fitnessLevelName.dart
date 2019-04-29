@@ -1,10 +1,10 @@
 // Converts classes to either Paladin or Ranger workouts
 convertFitnessLevelName(int fitnessLevel) {
   if (fitnessLevel == 3) {
-    return "advanced";
+    return "Advanced";
   } else if (fitnessLevel == 2) {
-    return "intermediate";
+    return "Intermediate";
   } else {
-    return "beginner";
+    return "Beginner";
   }
 }
