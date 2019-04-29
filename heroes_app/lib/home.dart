@@ -8,6 +8,7 @@ import 'models/workout.dart';
 import 'models/user.dart';
 
 import 'authentication.dart';
+import 'logic/fitnessLevelName.dart';
 
 // Build the home page and call on the stateful classes
 class Home extends StatelessWidget {
@@ -351,7 +352,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
         ),
         _space(10),
         Text(
-          workoutModel.fitnessLevel.toString(),
+          convertFitnessLevelName(workoutModel.fitnessLevel),
           style: TextStyle(color: Color(0xFF434242)),
         ),
         _space(10),

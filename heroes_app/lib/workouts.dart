@@ -4,6 +4,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
 import 'models/user.dart';
+import 'logic/fitnessLevelName.dart';
 
 class Workouts extends StatefulWidget {
   @override
@@ -257,7 +258,7 @@ class _WorkoutsPageState extends State<Workouts> {
                               height: 10,
                             ),
                             Text(
-                              workoutModel.listOfWorkouts[index]["fitnessLevel"].toString(),
+                              convertFitnessLevelName(workoutModel.listOfWorkouts[index]["fitnessLevel"]),
                               style: TextStyle(color: Color(0xFF434242)),
                             ),
                             // add space between lines
