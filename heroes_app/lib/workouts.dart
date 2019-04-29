@@ -166,6 +166,7 @@ class _WorkoutsPageState extends State<Workouts> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Container(
+                          key: Key(workoutModel.listOfWorkouts[index]["workoutName"]),
                           child: Text(
                             workoutModel.listOfWorkouts[index]["workoutName"] ?? '',
                             style: TextStyle(color: Colors.white),

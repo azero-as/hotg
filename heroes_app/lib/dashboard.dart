@@ -120,6 +120,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
                 onTap: model.navigationTapped,
                 currentIndex: model.page,
+                key: Key("navigationBar"),
               );
             })));
   }

@@ -217,7 +217,7 @@ void main() {
       expect(level, "2");
     });
 
-    //IT 21
+    //IT 20
     test("Correct class is shown on the dashboard.", () async {
       var levelAndClass = await driver.getText(levelClass);
       var list = levelAndClass.split(' ');
@@ -239,7 +239,6 @@ void main() {
 
     //Widgets from dashboard
     final settingsButton = find.byValueKey("settingsButton");
-    final settingsBack = find.byValueKey("settingsBack");
     final signOutButton = find.byValueKey("signOutButton");
 
     FlutterDriver driver;
@@ -259,8 +258,8 @@ void main() {
     // Close the connection to the driver after the tests have completed
     tearDownAll(() async {
       //Log out
-      //await driver.tap(settingsButton);
-      //await driver.tap(signOutButton);
+      await driver.tap(settingsButton);
+      await driver.tap(signOutButton);
 
       //TODO: Reset database to inital state for test user
 
@@ -269,7 +268,9 @@ void main() {
       }
     });
 
-    final workoutCard = find.byValueKey("workoutCard");
+    //used for complete a workout from the workouts tab
+    final navigationBar = find.byValueKey("navigationBar");
+    final greenRangerWorkout = find.byValueKey("Green Ranger Workout");
     final startWorkout = find.byValueKey("startWorkout");
     final warmUp = find.byValueKey("warmUp");
     final exercise0 = find.byValueKey("exercise0");
@@ -281,7 +282,8 @@ void main() {
 
     //IT 15
     test("XP should increase with the equivalent value after finishing a workout", () async {
-      await driver.tap(workoutCard);
+      await driver.tap(navigationBar);
+      await driver.tap(greenRangerWorkout);
       await driver.tap(startWorkout);
       await driver.tap(warmUp);
       await driver.tap(exercise0);
@@ -290,6 +292,7 @@ void main() {
       await driver.tap(exercise3);
       await driver.tap(finishButton);
       await driver.tap(summaryExit);
+      await Future.delayed(const Duration(seconds: 5));
 
       var userXp = await find.byValueKey("xp");
       var xp = await driver.getText(userXp);
@@ -297,9 +300,10 @@ void main() {
       expect(xp.substring(0,3), "119");
     });
 
-    //IT 20
+    //IT 19
     test("Level indicator is incremented by 1 when reaching a new level", () async {
-      await driver.tap(workoutCard);
+      await driver.tap(navigationBar);
+      await driver.tap(greenRangerWorkout);
       await driver.tap(startWorkout);
       await driver.tap(warmUp);
       await driver.tap(exercise0);
@@ -308,6 +312,7 @@ void main() {
       await driver.tap(exercise3);
       await driver.tap(finishButton);
       await driver.tap(summaryExit);
+      await Future.delayed(const Duration(seconds: 5));
 
       var levelClass = await find.byValueKey("levelClass");
       var levelAndClass = await driver.getText(levelClass);
