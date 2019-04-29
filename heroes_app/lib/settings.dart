@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'authentication.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/user.dart';
+import 'logic/fitnessLevelName.dart';
 
 class Settings extends StatefulWidget {
   //For signing out
@@ -109,7 +110,7 @@ class SettingsState extends State<Settings> {
               color: Colors.white,
             ),
             title: Text(
-              'Fitness level: ${model.fitnessLevel.toString()}',
+              'Fitness level: ${convertFitnessLevelName(model.fitnessLevel)}',
               style: TextStyle(
                 color: Colors.white,
               ),
