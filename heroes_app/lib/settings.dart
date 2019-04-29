@@ -23,6 +23,7 @@ class SettingsState extends State<Settings> {
         backgroundColor: Theme.of(context).secondaryHeaderColor,
         appBar: AppBar(
           leading: IconButton(
+            key: Key("settingsBack"),
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () {
               widget.alreadyLoggedIn();

@@ -280,6 +280,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
           ),
           key: PageStorageKey<int>(index),
           title: new CheckboxListTile(
+            key: Key("warmUp"),
             value: _selectedExercises.contains("Warm-up"),
             onChanged: (bool selected) {
               _warmUpSelected(
@@ -310,6 +311,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
           key: PageStorageKey<int>(index),
           leading: _showExerciseDescription(index),
           title: new CheckboxListTile(
+            key: Key("exercise$index"),
             value: _selectedExercises.contains(widget.exercises[index]["name"]),
             onChanged: (bool selected) {
               _onCategorySelected(selected, widget.exercises[index],
@@ -374,6 +376,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 15.0),
         child: ScopedModelDescendant<User>(builder: (context, child, model) {
           return RaisedButton(
+            key: Key("finishButton"),
             elevation: 5.0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0),

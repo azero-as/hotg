@@ -420,6 +420,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
   // Make the entire workout card clickable
   Widget _workout(workoutModel) {
     return new GestureDetector(
+      key: Key("workoutCard"),
       onTap: (){
         workoutModel.isFromHomePage = true;
         widget.onStartWorkout();

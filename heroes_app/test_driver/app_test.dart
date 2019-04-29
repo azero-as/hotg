@@ -213,7 +213,6 @@ void main() {
       var levelAndClass = await driver.getText(levelClass);
       var list = levelAndClass.split(' ');
       var level = list[1];
-      print(level);
 
       expect(level, "2");
     });
@@ -224,9 +223,98 @@ void main() {
       var list = levelAndClass.split(' ');
       var className = list[2];
 
-      print(className);
-
       expect(className, "Ranger");
+    });
+  });
+
+  group('Finish workout:', () {
+
+    //Widget from frontpage
+    final logInButton = find.byValueKey('LogIn');
+
+    //Widgets from login
+    final usernameTextField = find.byValueKey("loginUsername");
+    final passwordTextField = find.byValueKey("loginPassword");
+    final logInButton2 = find.byValueKey("LogIn2");
+
+    //Widgets from dashboard
+    final settingsButton = find.byValueKey("settingsButton");
+    final settingsBack = find.byValueKey("settingsBack");
+    final signOutButton = find.byValueKey("signOutButton");
+
+    FlutterDriver driver;
+
+    // Connect to the Flutter driver before running any tests
+    setUpAll(() async {
+      driver = await FlutterDriver.connect();
+
+      await driver.tap(logInButton);
+      await driver.tap(usernameTextField);
+      await driver.enterText("test@example.com");
+      await driver.tap(passwordTextField);
+      await driver.enterText("test1234");
+      await driver.tap(logInButton2);
+    });
+
+    // Close the connection to the driver after the tests have completed
+    tearDownAll(() async {
+      //Log out
+      //await driver.tap(settingsButton);
+      //await driver.tap(signOutButton);
+
+      //TODO: Reset database to inital state for test user
+
+      if (driver != null) {
+        driver.close();
+      }
+    });
+
+    final workoutCard = find.byValueKey("workoutCard");
+    final startWorkout = find.byValueKey("startWorkout");
+    final warmUp = find.byValueKey("warmUp");
+    final exercise0 = find.byValueKey("exercise0");
+    final exercise1 = find.byValueKey("exercise1");
+    final exercise2 = find.byValueKey("exercise2");
+    final exercise3 = find.byValueKey("exercise3");
+    final finishButton = find.byValueKey("finishButton");
+    final summaryExit = find.byValueKey("summaryExit");
+
+    //IT 15
+    test("XP should increase with the equivalent value after finishing a workout", () async {
+      await driver.tap(workoutCard);
+      await driver.tap(startWorkout);
+      await driver.tap(warmUp);
+      await driver.tap(exercise0);
+      await driver.tap(exercise1);
+      await driver.tap(exercise2);
+      await driver.tap(exercise3);
+      await driver.tap(finishButton);
+      await driver.tap(summaryExit);
+
+      var userXp = await find.byValueKey("xp");
+      var xp = await driver.getText(userXp);
+
+      expect(xp.substring(0,3), "119");
+    });
+
+    //IT 20
+    test("Level indicator is incremented by 1 when reaching a new level", () async {
+      await driver.tap(workoutCard);
+      await driver.tap(startWorkout);
+      await driver.tap(warmUp);
+      await driver.tap(exercise0);
+      await driver.tap(exercise1);
+      await driver.tap(exercise2);
+      await driver.tap(exercise3);
+      await driver.tap(finishButton);
+      await driver.tap(summaryExit);
+
+      var levelClass = await find.byValueKey("levelClass");
+      var levelAndClass = await driver.getText(levelClass);
+      var list = levelAndClass.split(' ');
+      var level = list[1];
+
+      expect(level, "3");
     });
   });
 
