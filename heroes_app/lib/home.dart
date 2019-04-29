@@ -399,6 +399,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
   // Build workout card
   Widget _workoutCard() {
     return new Container(
+      key: Key("recommendedWorkout"),
       decoration: BoxDecoration(
         // Border radius to round bottom edges
         borderRadius: BorderRadius.all(Radius.circular(8.0)),

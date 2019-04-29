@@ -48,6 +48,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
         return Text("");
       }
       return new Padding(
+        key: Key("startWorkoutButton"),
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0.0),
         child: RaisedButton(
           elevation: 5.0,
@@ -283,6 +284,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
       appBar: AppBar(
         title: new Text(workout.workoutName),
         leading: IconButton(
+          key: Key("backToHome"),
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
             if (workout.isFromHomePage == true) {

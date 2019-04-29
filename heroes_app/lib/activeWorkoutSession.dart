@@ -148,19 +148,18 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                   child: new Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      RichText(
-                        text: TextSpan(
-                          text: 'No exercises done',
+                      Text(
+                        'No exercises done',
+                          key: Key("NoExercisesPopUp"),
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
+                            fontSize: 20,)
                       ),
                       Align(
                         //alignment: Alignment.topRight,
                         child: RaisedButton(
+                          key: Key("crossOutPopUpNE"),
                           color: Theme.of(context).secondaryHeaderColor,
                           textColor: Colors.white,
                           onPressed: () => Navigator.pop(context),
@@ -376,6 +375,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
     Widget _returnFinishWorkoutButton() {
       return new Padding(
+        key: Key("finishWorkoutButton"),
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 15.0),
         child: ScopedModelDescendant<User>(builder: (context, child, model) {
           return RaisedButton(
@@ -403,6 +403,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
       appBar: AppBar(
         title: new Text(workout.workoutName),
         leading: IconButton(
+          key: Key("backToStartWorkout"),
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
             //TODO: Check if you came from the planpage or from the homepage. Then decide whether to use onStartWorkout or onLoggedIn.
