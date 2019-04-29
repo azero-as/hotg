@@ -34,20 +34,16 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
 
     var user = ScopedModel.of<User>(context);
 
-    print("INITSTATE IN HISTORY");
-
     CloudFunctions.instance
         .call(functionName: 'getCompletedUserWorkouts')
         .then((response) {
       if (this.mounted) {
         if (response["workouts"].isEmpty) {
-          print("WORKOUTS IS EMPTY");
           setState(() {
             user.setNoWorkoutCompleted(true);
           });
         } else {
           setState(() {
-            print("WORKOUTS IS NOT EMPTY");
             user.setWorkouts(response['workouts']);
             user.setNoWorkoutCompleted(false);
           });

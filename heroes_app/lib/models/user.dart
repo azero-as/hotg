@@ -164,7 +164,6 @@ class User extends Model {
   }
 
   void setFitnessLevel(int fitnessLevel) {
-    print(fitnessLevel);
     this._fitnessLevel = fitnessLevel;
     notifyListeners();
   }

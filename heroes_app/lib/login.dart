@@ -27,7 +27,7 @@ class LoginPage extends StatefulWidget {
 enum FormMode { LOGIN }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = new GlobalKey<FormState>();
+  static final _formKey = new GlobalKey<FormState>();
 
   FocusNode _focusNodeEmail = new FocusNode();
   FocusNode _focusNodePassword = new FocusNode();
@@ -154,8 +154,6 @@ class _LoginPageState extends State<LoginPage> {
       try {
         if (_formMode == FormMode.LOGIN) {
           userId = await widget.auth.signIn(_email, _password);
-          // TODO: Do we need this print statement?
-          print('Signed in: $userId');
         }
         if (this.mounted) {
           setState(() {
