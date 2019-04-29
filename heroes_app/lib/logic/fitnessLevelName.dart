@@ -1,4 +1,4 @@
-// Converts classes to either Paladin or Ranger workouts
+// Converts fitnessLevelNumber from the database to a descriptive string.
 convertFitnessLevelName(int fitnessLevel) {
   if (fitnessLevel == 3) {
     return "Advanced";
