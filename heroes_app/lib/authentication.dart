@@ -13,6 +13,8 @@ abstract class BaseAuth {
   Future<void> signOut();
 
   Future<bool> isEmailVerified();
+
+  Future<void> forgotPassword(String email);
 }
 
 class Auth implements BaseAuth {
@@ -49,4 +51,11 @@ class Auth implements BaseAuth {
     return user.isEmailVerified;
   }
 
+  Future<void> forgotPassword(String email) async {
+    try {
+      return _firebaseAuth.sendPasswordResetEmail(email: email);
+    } catch (error) {
+      print('Auth error: ' + error);
+    }
+  }
 }

@@ -27,23 +27,27 @@ class ListOfTrainingSessions extends StatefulWidget {
 
 class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
   // Container for every workout registered on the user in the database.
-  List _workouts = [];
-  bool _noWorkoutCompleted;
 
   @override
   void initState() {
     super.initState();
+
+    var user = ScopedModel.of<User>(context);
+
     CloudFunctions.instance
-        .call(functionName: 'getAllUserWorkouts')
+        .call(functionName: 'getCompletedUserWorkouts')
         .then((response) {
-      if (response["workouts"].isEmpty) {
-        setState(() {
-          _noWorkoutCompleted = true;
-        });
-      } else {
-        setState(() {
-          _workouts = response['workouts'];
-        });
+      if (this.mounted) {
+        if (response["workouts"].isEmpty) {
+          setState(() {
+            user.setNoWorkoutCompleted(true);
+          });
+        } else {
+          setState(() {
+            user.setWorkouts(response['workouts']);
+            user.setNoWorkoutCompleted(false);
+          });
+        }
       }
     }).catchError((error) {
       print(error);
@@ -55,8 +59,8 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
 // Builds a List View of the workout history.
   @override
   Widget build(BuildContext context) {
-    if (_noWorkoutCompleted == true) {
-      return ScopedModelDescendant<User>(builder: (context, child, model) {
+    return ScopedModelDescendant<User>(builder: (context, child, model) {
+    if (model.noWorkoutCompleted == true) {
         return Scaffold(
             backgroundColor: Theme.of(context).secondaryHeaderColor,
             appBar: AppBar(
@@ -74,23 +78,25 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
                   ),
                   _motivationalQuote()
                 ])));
-      });
-    } else if (_workouts.isEmpty) {
+    } else if (model.workouts.isEmpty) {
       return Center(child: CircularProgressIndicator());
     } else {
       return Scaffold(
-          backgroundColor: Theme.of(context).secondaryHeaderColor,
+          backgroundColor: Theme
+              .of(context)
+              .secondaryHeaderColor,
           appBar: AppBar(
             centerTitle: true,
             title: Text("Workout History"),
           ),
           body: ListView.builder(
               padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              itemCount: _workouts.length,
+              itemCount: model.workouts.length,
               itemBuilder: (context, index) {
-                return _workoutCard(context, _workouts[index]);
+                return _workoutCard(context, model.workouts[index]);
               }));
     }
+    });
   }
 
   // Conditional build of the empty workout screen
@@ -98,20 +104,22 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
   Widget _noTrainingMessage(userModel) {
     return Column(children: [
       Container(
-          child: Text(
-        "You haven't done any training yet,",
-        style: TextStyle(
+        child: Text(
+          "You haven't done any training yet,",
+          style: TextStyle(
             color: Colors.white,
           ),
-      ),),
+        ),
+      ),
       SizedBox(
         height: 5,
       ),
       Container(
-        child: Text("${userModel.characterName.toString()}.",
+        child: Text(
+          "${userModel.characterName.toString()}.",
           style: TextStyle(
-          color: Colors.white,
-    ),
+            color: Colors.white,
+          ),
         ),
       )
     ]);
@@ -122,16 +130,21 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
       Container(
           child: Text(
         "Go to Home or Workouts to begin",
-            style: TextStyle(
-              color: Colors.white,
-            ),
+        style: TextStyle(
+          color: Colors.white,
+        ),
       )),
       SizedBox(
         height: 5,
       ),
-      Container(child: Text("your adventure!", style: TextStyle(
-        color: Colors.white,
-      ),),)
+      Container(
+        child: Text(
+          "your adventure!",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      )
     ]);
   }
 

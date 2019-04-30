@@ -3,6 +3,7 @@ import "package:flutter_swiper/flutter_swiper.dart";
 import 'authentication.dart';
 import 'services/crud.dart';
 import 'modifiedSwiperControl.dart';
+import 'ensureVisibleWhenFocused.dart';
 
 class SignupSwiperPage extends StatefulWidget {
   SignupSwiperPage(
@@ -29,13 +30,15 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
   // Radio button start state
   int _fitnessLevel = 1;
   int _rpgClassValue = 1;
-  var _charNameFormKey = GlobalKey<FormState>();
+  static var _charNameFormKey = GlobalKey<FormState>();
+
+  FocusNode _focusNodeCharacter = new FocusNode();
 
   // Descriptions for choosing a class
   String _chooseClassDescription =
       "Find your band of brothers and sisters by choosing a class for your character. Your choice will determine the type of workouts that are recommended for you.";
   String _strengthDescription =
-      "Pick one of these classes if your main focus to improve your strength";
+      "Pick one of these classes if your main focus is to improve your strength";
   String _dexterityDescription =
       "If instead you want to receive a mix of strength and stamina workouts one of these might be a better choice.";
 
@@ -44,11 +47,13 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
   int _xp = 0;
   String rpgClass = 'Barbarian';
 
+  bool _isIos;
+  bool _isAndroid;
   bool _charNameIsValid = false;
   final charactername = TextEditingController();
   CrudMethods crudObj = new CrudMethods();
 
-  void _validateAndSave() async {
+  void _saveInfo() async {
     try {
       crudObj.addFitnessLevel({
         'fitnessLevel': _fitnessLevel,
@@ -56,23 +61,25 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         'gameLevel': _gameLevel,
         'xp': _xp,
         'class': rpgClass,
-        },
-        widget.userId)
-        .then((_) => {
-           widget.onSignedIn()
-        });
-      } catch(e) {
-          print(e);
-        }
+      }, widget.userId).then((_) => {widget.onSignedIn()});
+    } catch (e) {
+      print(e);
     }
+  }
 
   @override
   Widget build(BuildContext context) {
+    _isIos = Theme.of(context).platform == TargetPlatform.iOS;
+    _isAndroid = Theme.of(context).platform == TargetPlatform.android;
+
     //CharacterName input field
-    final characterName = TextFormField(
+    final characterName = EnsureVisibleWhenFocused(
+      focusNode: _focusNodeCharacter,
+      child: TextFormField(
         maxLength: 27,
         keyboardType: TextInputType.text,
         autofocus: false,
+        focusNode: _focusNodeCharacter,
         validator: (value) =>
             value.length == 0 ? 'Every hero needs a name' : null,
         controller: charactername,
@@ -81,7 +88,9 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
           labelText: 'Character Name',
           contentPadding: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
           border: UnderlineInputBorder(),
-        ));
+        ),
+      ),
+    );
 
     // -------RADIO BUTTONS for class---------
     final barbarian = new RadioListTile(
@@ -91,6 +100,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 1,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _rpgClassValue = value;
             rpgClass = "Barbarian";
@@ -105,6 +115,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 2,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _rpgClassValue = value;
             rpgClass = "Fighter";
@@ -118,6 +129,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 3,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _rpgClassValue = value;
             rpgClass = "Paladin";
@@ -132,6 +144,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 4,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _rpgClassValue = value;
             rpgClass = "Monk";
@@ -146,6 +159,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 5,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _rpgClassValue = value;
             rpgClass = "Rogue";
@@ -160,6 +174,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 6,
         groupValue: _rpgClassValue,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _rpgClassValue = value;
             rpgClass = "Ranger";
@@ -175,6 +190,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 1,
         groupValue: _fitnessLevel,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _fitnessLevel = value;
           });
@@ -188,6 +204,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 2,
         groupValue: _fitnessLevel,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _fitnessLevel = value;
           });
@@ -201,6 +218,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         value: 3,
         groupValue: _fitnessLevel,
         onChanged: (int value) {
+          FocusScope.of(context).requestFocus(new FocusNode());
           setState(() {
             _fitnessLevel = value;
           });
@@ -216,7 +234,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         // disables button if character name is not valid
-        onPressed: !_charNameIsValid ? null : _validateAndSave ,
+        onPressed: !_charNameIsValid ? null : _saveInfo,
         padding: EdgeInsets.all(12),
         color: const Color(0xFF612A30),
         child: Text(
@@ -225,6 +243,80 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
         ),
       ),
     );
+
+    // Different build for character name page based on device
+    Widget _characterNameContainer() {
+      if (_isIos) {
+        return Container(
+          margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
+          padding: EdgeInsets.only(left: 24.0, right: 24.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Form(
+                  key: _charNameFormKey,
+                  child: Column(
+                    children: <Widget>[
+                      _space(60.0),
+                      _logo(),
+                      _headerText('Pick your character name'),
+                      _descriptionText(
+                          'Every hero needs a suitable name! Start your journey by picking a character name.'),
+                      _space(40),
+                      Container(width: 250, child: characterName),
+                    ],
+                  ),
+                  onChanged: () {
+                    setState(() {});
+                    if (_charNameFormKey.currentState.validate()) {
+                      _charNameIsValid = true;
+                      _charNameFormKey.currentState.save();
+                    } else {
+                      _charNameIsValid = false;
+                    }
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      } else if (_isAndroid) {
+        return Container(
+          margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
+          padding: EdgeInsets.only(left: 24.0, right: 24.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Form(
+                  key: _charNameFormKey,
+                  child: Column(
+                    children: <Widget>[
+                      _space(60.0),
+                      _logo(),
+                      _headerText('Pick your character name'),
+                      _descriptionText(
+                          'Every hero needs a suitable name! Start your journey by picking a character name.'),
+                      _space(40),
+                      Container(width: 250, child: characterName),
+                      _space(300),
+                    ],
+                  ),
+                  onChanged: () {
+                    setState(() {});
+                    if (_charNameFormKey.currentState.validate()) {
+                      _charNameIsValid = true;
+                      _charNameFormKey.currentState.save();
+                    } else {
+                      _charNameIsValid = false;
+                    }
+                  },
+                )
+              ],
+            ),
+          ),
+        );
+      }
+    }
 
     return new Theme(
         // set theme data for this class to dark
@@ -242,40 +334,10 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                     activeSize: 10.0)),
             control: new ModifiedSwiperControl(color: Colors.white),
             children: <Widget>[
-              Center(
-                  child: Container(
-                margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
-                padding: EdgeInsets.only(left: 24.0, right: 24.0),
-                child: Column(
-                  children: <Widget>[
-                    Form(
-                      key: _charNameFormKey,
-                      child: Column(
-                        children: <Widget>[
-                          _space(60.0),
-                          _logo(),
-                          _headerText('Pick your character name'),
-                          _descriptionText(
-                              'Every hero needs a suitable name! Start your journey by picking a character name.'),
-                          _space(40),
-                          Container(width: 250, child: characterName),
-                        ],
-                      ),
-                      onChanged: () {
-                        if (_charNameFormKey.currentState.validate()) {
-                          _charNameIsValid = true;
-                          _charNameFormKey.currentState.save();
-                        } else {
-                          _charNameIsValid = false;
-                        }
-                      },
-                    )
-                  ],
-                ),
-              )),
+              Center(child: _characterNameContainer()),
               Center(
                 child: Container(
-                  margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
+                  margin: EdgeInsets.fromLTRB(35, 20, 35, 30),
                   padding: EdgeInsets.only(left: 24.0, right: 24.0),
                   child: SingleChildScrollView(
                       child: Column(
@@ -297,9 +359,9 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                 ),
               ),
               Container(
-                  margin: EdgeInsets.fromLTRB(35, 0, 35, 30),
+                  margin: EdgeInsets.fromLTRB(35, 20, 35, 30),
                   padding: EdgeInsets.only(left: 24.0, right: 24.0),
-                  child: Center(
+                  child: SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
                         _space(20),
@@ -313,6 +375,7 @@ class _SignupSwiperState extends State<SignupSwiperPage> {
                         _space(20.0),
                         _errorMessage(),
                         letsGoButton,
+                        _space(150),
                       ],
                     ),
                   ))
