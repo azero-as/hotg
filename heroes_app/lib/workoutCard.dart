@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
+import 'logic/fitnessLevelName.dart';
 
 
 class WorkoutCard extends StatefulWidget {
@@ -124,7 +125,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
             ),
             _space(10),
             Text(
-              workoutModel.fitnessLevel.toString(),
+              convertFitnessLevelName(workoutModel.fitnessLevel),
               style: TextStyle(color: Color(0xFF434242)),
             ),
             _space(10),
@@ -156,7 +157,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
           ),
           _space(10),
           Text(
-            workoutModel.listOfWorkouts[widget.index]["fitnessLevel"].toString(),
+            convertFitnessLevelName(workoutModel.listOfWorkouts[widget.index]["fitnessLevel"]),
             style: TextStyle(color: Color(0xFF434242)),
           ),
           _space(10),
@@ -204,6 +205,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
   // Build workout card
   Widget _workoutCard() {
     return new Container(
+        key: Key("recommendedWorkout"),
         decoration: BoxDecoration(
           // Border radius to round bottom edges
           borderRadius: BorderRadius.all(Radius.circular(8.0)),

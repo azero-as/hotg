@@ -10,6 +10,7 @@ import 'models/workout.dart';
 import 'models/user.dart';
 
 import 'authentication.dart';
+import 'logic/fitnessLevelName.dart';
 
 // Build the home page and call on the stateful classes
 class Home extends StatelessWidget {
@@ -269,6 +270,9 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
     super.initState();
   }
 
+
+// ============ Widget assembly of information ============
+
   // Make the entire workout card clickable
   Widget _workout(workoutModel) {
     return new GestureDetector(
@@ -299,7 +303,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
         workout.fitnessLevel == -1 ||
         workout.xp == -1 ||
         workout.exercises == null ||
-          workout.exercises == []
+        workout.exercises == []
       ) {
           return new Text("No workout found.");
       } else {

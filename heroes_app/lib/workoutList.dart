@@ -66,7 +66,6 @@ class _WorkoutListState extends State<WorkoutList> {
     Widget _workout(int index) {
       var workout = ScopedModel.of<Workout>(context);
       var user = ScopedModel.of<User>(context);
-
       if(workout.listOfWorkouts[index]["intensity"] == "" ||
           workout.listOfWorkouts[index]["workoutName"] == "" ||
           workout.listOfWorkouts[index]["workoutClass"] == "" ||

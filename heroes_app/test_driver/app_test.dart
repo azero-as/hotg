@@ -3,6 +3,73 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
 void main() {
+  group('FinishedWorkout', () {
+// First, define the Finders. We can use these to locate Widgets from the
+// test suite. Note: the Strings provided to the `byValueKey` method must
+// be the same as the Strings we used for the Keys.
+
+    //Widget from frontpage
+    final logInButton = find.byValueKey('LogIn');
+
+    //Widgets from login
+    final usernameTextField = find.byValueKey("loginUsername");
+    final passwordTextField = find.byValueKey("loginPassword");
+    final logInButton2 = find.byValueKey("LogIn2");
+
+    //Widgets from dashboard
+    final settingsButton = find.byValueKey("settingsButton");
+    final signOutButton = find.byValueKey("signOutButton");
+
+    final recommendedWorkout = find.byValueKey("recommendedWorkout");
+    final startWorkout = find.byValueKey("startWorkoutButton");
+    final finishWorkout = find.byValueKey("finishWorkoutButton");
+    final noExercisesPopUp = find.byValueKey("NoExercisesPopUp");
+    final outOfPopUp = find.byValueKey("crossOutPopUpNE");
+    final backToStartWorkout = find.byValueKey("backToStartWorkout");
+    final backToHome = find.byValueKey("backToHome");
+
+    FlutterDriver driver;
+
+// Connect to the Flutter driver before running any tests
+    setUpAll(() async {
+      driver = await FlutterDriver.connect();
+    });
+
+// Close the connection to the driver after the tests have completed
+    tearDownAll(() async {
+      if (driver != null) {
+        driver.close();
+      }
+    });
+
+    test('unFinished Workout PopUp', () async {
+      //Log in
+      await driver.tap(logInButton);
+      await driver.tap(usernameTextField);
+      await driver.enterText("test@example.com");
+      await driver.tap(passwordTextField);
+      await driver.enterText("test1234");
+      await driver.tap(logInButton2);
+
+      await driver.tap(recommendedWorkout);
+      await driver.tap(startWorkout);
+      await driver.tap(finishWorkout);
+
+      expect(await driver.getText(noExercisesPopUp), "No exercises done");
+
+
+      // Back to home page
+      await driver.tap(outOfPopUp);
+      await driver.tap(backToStartWorkout);
+      await driver.tap(backToHome);
+
+      //Logs out
+      await driver.tap(settingsButton);
+      await driver.tap(signOutButton);
+    });
+
+  });
+
   group('Log In', () {
     // First, define the Finders. We can use these to locate Widgets from the
     // test suite. Note: the Strings provided to the `byValueKey` method must
