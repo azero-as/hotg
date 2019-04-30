@@ -40,7 +40,7 @@ class Home extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(40, 30, 40, 0),
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Text('Next planned workout:',
+        child: Text('Next recommended workout:',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -196,12 +196,12 @@ class _AvatarOverviewState extends State<AvatarOverview> {
       var user = ScopedModel.of<User>(context);
       return Column(children: <Widget>[
         Container(
-          width:imageWidth,
+          width: imageWidth,
           height: imageHeight,
           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-          child: Image.network(
-            user.imageUrl,
-            fit: BoxFit.fill,
+          child: user.avatar,
+          decoration: BoxDecoration(
+            color: Color(0xff35343A),
           ),
         ),
       ]);
@@ -222,7 +222,6 @@ class _AvatarOverviewState extends State<AvatarOverview> {
     }
 
 // ============ Return Avatar overview build ============
-
     return SafeArea(
       child: Container(
         height: barHeight,
