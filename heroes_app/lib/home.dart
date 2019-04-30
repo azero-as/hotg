@@ -4,6 +4,8 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'workout.dart';
+
 import 'models/workout.dart';
 import 'models/user.dart';
 
@@ -67,7 +69,7 @@ class Home extends StatelessWidget {
           WorkoutOverview(
             onStartWorkout: onStartWorkout,
             onActiveWorkout: onActiveWorkout,
-            onSummary: onSummary
+            onSummary: onSummary,
           ),
         ],
       )
@@ -243,176 +245,32 @@ class _AvatarOverviewState extends State<AvatarOverview> {
 
 // Create state for workout overview
 class WorkoutOverview extends StatefulWidget {
+
+  final int index;
+
+  const WorkoutOverview({Key key, this.onStartWorkout, this.onActiveWorkout, this.onSummary, this.isFromHomePage, @required this.index}): super(key: key);
+
   @override
   _WorkoutOverviewState createState() => _WorkoutOverviewState();
-
-  WorkoutOverview({this.onStartWorkout, this.onActiveWorkout, this.onSummary});
 
   final VoidCallback onStartWorkout;
   final VoidCallback onActiveWorkout;
   final VoidCallback onSummary;
+  final bool isFromHomePage;
+
 }
 
 // Class for workout overview
 class _WorkoutOverviewState extends State<WorkoutOverview> {
+
+  String workoutName;
+
   @override
   void initState() {
     super.initState();
   }
 
 // ============ Widget build for information ============
-
-  // Making a widget for sized box
-  Widget _space(double height){
-    return SizedBox(
-      height: height,
-    );
-  }
-
-  // Workout title container
-  Widget _workoutTitle() {
-    var workoutModel = ScopedModel.of<Workout>(context);
-    return Container(
-      padding: EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        // Border radius to round top edges
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(8.0),
-          topRight: Radius.circular(8.0)
-        ),
-        color: Theme.of(context).accentColor,
-      ),
-      child: Row(
-        children: <Widget>[
-          Container(
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                workoutModel.workoutName,
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Column with workout information declaration
-  Widget _declareInformation() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Class:',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF434242)),
-        ),
-        _space(10),
-        Text(
-          'Fitness Level:',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF434242)),
-        ),
-        _space(10),
-        Text(
-          'XP:',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF434242)),
-        ),
-        _space(10),
-        Text(
-          'Intensity:',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF434242)),
-        ),
-        _space(10),
-        Icon(
-          Icons.alarm,
-          color: Color(0xFF434242),
-        ),
-      ],
-    );
-  }
-
-  // Column with workout information from database
-  Widget _workoutVariables() {
-    var workoutModel = ScopedModel.of<Workout>(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          workoutModel.workoutClass,
-          style: TextStyle(color: Color(0xFF434242)),
-        ),
-        _space(10),
-        Text(
-          workoutModel.fitnessLevel.toString(),
-          style: TextStyle(color: Color(0xFF434242)),
-        ),
-        _space(10),
-        Text(
-          workoutModel.xp.toString(),
-          style: TextStyle(color: Color(0xFF434242)),
-        ),
-        // add space between lines
-        _space(10),
-        Text(
-          workoutModel.intensity,
-          style: TextStyle(color: Color(0xFF434242)),
-        ),
-        // add space between lines
-        _space(18),
-        Text(
-          workoutModel.duration.toString() + ' min',
-          style: TextStyle(color: Color(0xFF434242)),
-        ),
-      ]
-    );
-  }
-
-// ============ Widget assembly of information ============
-
-  // Assemble workout information in one container
-  Widget _workoutInformation() {
-    return Container(
-      padding: EdgeInsets.all(15),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            flex: 6,
-            child: _declareInformation(),
-          ),
-          Expanded(
-            flex: 6,
-            child: _workoutVariables(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Build workout card
-  Widget _workoutCard() {
-    return new Container(
-      decoration: BoxDecoration(
-        // Border radius to round bottom edges
-        borderRadius: BorderRadius.all(Radius.circular(8.0)),
-        color: Color(0xFFE7E9ED),
-      ),
-      child: Column(
-        //mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          _workoutTitle(),
-          _workoutInformation()
-        ],
-      )
-    );
-  }
 
   // Make the entire workout card clickable
   Widget _workout(workoutModel) {
@@ -421,12 +279,17 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
         workoutModel.isFromHomePage = true;
         widget.onStartWorkout();
       },
-      child: _workoutCard(),
+      child: WorkoutOverview2(
+        onStartWorkout: widget.onStartWorkout,
+        onActiveWorkout: widget.onActiveWorkout,
+        onSummary: widget.onSummary,
+        isFromHomePage: true,
+
+      ),
     );
   }
 
 // ============ Return Workout overview build ============
-
   @override
   Widget build(BuildContext context) {
     var workout = ScopedModel.of<Workout>(context);
@@ -442,8 +305,6 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
           return new Text("No workout found.");
       } else {
         return Container(
-          // Make sure the placement is centered
-          padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
           child: Column(
             children: <Widget>[
               // Call on workout widget
