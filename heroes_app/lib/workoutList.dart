@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
+import 'workoutCard.dart';
 import 'models/user.dart';
-import 'workout.dart';
 
 class WorkoutList extends StatefulWidget {
   @override
-  _WorkoutListPageState createState() => new _WorkoutListPageState();
+  _WorkoutListState createState() => new _WorkoutListState();
 
   WorkoutList(
     {this.onLoggedIn,
@@ -22,7 +22,7 @@ class WorkoutList extends StatefulWidget {
   final VoidCallback onSummary;
 }
 
-class _WorkoutListPageState extends State<WorkoutList> {
+class _WorkoutListState extends State<WorkoutList> {
   bool _dataLoadedFromFireBase = false; //if this is null, it is still loading data from firebase.
 
   @override
@@ -51,9 +51,6 @@ class _WorkoutListPageState extends State<WorkoutList> {
 
 
 
-  @override
-  Widget build(BuildContext context) {
-
     //Builds a waiting screen when the data is not yet loaded
     Widget _buildWaitingScreen() {
       return Scaffold(
@@ -67,15 +64,27 @@ class _WorkoutListPageState extends State<WorkoutList> {
 
     // Make the entire workout card clickable
     Widget _workout(int index) {
-      var workoutModel = ScopedModel.of<Workout>(context);
+      var workout = ScopedModel.of<Workout>(context);
+      var user = ScopedModel.of<User>(context);
 
+      if(workout.listOfWorkouts[index]["intensity"] == "" ||
+          workout.listOfWorkouts[index]["workoutName"] == "" ||
+          workout.listOfWorkouts[index]["workoutClass"] == "" ||
+          workout.listOfWorkouts[index]["duration"] == -1 ||
+          workout.listOfWorkouts[index]["fitnessLevel"] == -1 ||
+          workout.listOfWorkouts[index]["xp"] == -1 ||
+          workout.listOfWorkouts[index]["exercises"] == null ||
+          workout.listOfWorkouts[index]["exercises"] == [] ||
+          workout.listOfWorkouts[index]["fitnessLevel"] > user.fitnessLevel) {
+          return new Text("");
+        };
       return new GestureDetector(
         onTap: (){
-          workoutModel.isFromHomePage = false;
-          workoutModel.changeActiveWorkout(workoutModel.listOfWorkouts, index);
+          workout.isFromHomePage = false;
+          workout.changeActiveWorkout(workout.listOfWorkouts, index);
           widget.onStartWorkout();
         },
-        child: WorkoutOverview2(
+        child: WorkoutCard(
           onStartWorkout: widget.onStartWorkout,
           onActiveWorkout: widget.onActiveWorkout,
           onSummary: widget.onSummary,
@@ -89,7 +98,7 @@ class _WorkoutListPageState extends State<WorkoutList> {
     Widget _listOfWorkouts() {
       var workout = ScopedModel.of<Workout>(context);
       if (workout.listOfWorkouts.isEmpty) {
-        return Text("");
+        return Text("no workouts");
       } else {
         return new ListView.builder(
           scrollDirection: Axis.vertical,
@@ -102,6 +111,9 @@ class _WorkoutListPageState extends State<WorkoutList> {
       }
     }
 
+  // ============ Return WorkoutList build ============
+  @override
+  Widget build(BuildContext context) {
     //If the data is not yet loaded from firebase, a waiting screen will appear
     if (!_dataLoadedFromFireBase) {
       return Scaffold(

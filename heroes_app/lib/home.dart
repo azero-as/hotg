@@ -4,7 +4,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'workout.dart';
+import 'workoutCard.dart';
 
 import 'models/workout.dart';
 import 'models/user.dart';
@@ -246,9 +246,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
 // Create state for workout overview
 class WorkoutOverview extends StatefulWidget {
 
-  final int index;
-
-  const WorkoutOverview({Key key, this.onStartWorkout, this.onActiveWorkout, this.onSummary, this.isFromHomePage, @required this.index}): super(key: key);
+  WorkoutOverview({Key key, this.onStartWorkout, this.onActiveWorkout, this.onSummary, this.isFromHomePage, this.index}): super(key: key);
 
   @override
   _WorkoutOverviewState createState() => _WorkoutOverviewState();
@@ -257,6 +255,7 @@ class WorkoutOverview extends StatefulWidget {
   final VoidCallback onActiveWorkout;
   final VoidCallback onSummary;
   final bool isFromHomePage;
+  final int index;
 
 }
 
@@ -270,8 +269,6 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
     super.initState();
   }
 
-// ============ Widget build for information ============
-
   // Make the entire workout card clickable
   Widget _workout(workoutModel) {
     return new GestureDetector(
@@ -279,7 +276,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
         workoutModel.isFromHomePage = true;
         widget.onStartWorkout();
       },
-      child: WorkoutOverview2(
+      child: WorkoutCard(
         onStartWorkout: widget.onStartWorkout,
         onActiveWorkout: widget.onActiveWorkout,
         onSummary: widget.onSummary,
@@ -301,7 +298,9 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
         workout.duration == -1 ||
         workout.fitnessLevel == -1 ||
         workout.xp == -1 ||
-        workout.exercises == []) {
+        workout.exercises == null ||
+          workout.exercises == []
+      ) {
           return new Text("No workout found.");
       } else {
         return Container(
