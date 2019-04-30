@@ -6,11 +6,11 @@ import 'models/workout.dart';
 import 'models/user.dart';
 import 'workout.dart';
 
-class Workouts extends StatefulWidget {
+class WorkoutList extends StatefulWidget {
   @override
-  _WorkoutsPageState createState() => new _WorkoutsPageState();
+  _WorkoutListPageState createState() => new _WorkoutListPageState();
 
-  Workouts(
+  WorkoutList(
     {this.onLoggedIn,
       this.onStartWorkout,
       this.onActiveWorkout,
@@ -22,7 +22,7 @@ class Workouts extends StatefulWidget {
   final VoidCallback onSummary;
 }
 
-class _WorkoutsPageState extends State<Workouts> {
+class _WorkoutListPageState extends State<WorkoutList> {
   bool _dataLoadedFromFireBase = false; //if this is null, it is still loading data from firebase.
 
   @override
@@ -50,8 +50,11 @@ class _WorkoutsPageState extends State<Workouts> {
   }
 
 
+
   @override
   Widget build(BuildContext context) {
+
+    //Builds a waiting screen when the data is not yet loaded
     Widget _buildWaitingScreen() {
       return Scaffold(
         body: Container(
@@ -65,6 +68,7 @@ class _WorkoutsPageState extends State<Workouts> {
     // Make the entire workout card clickable
     Widget _workout(int index) {
       var workoutModel = ScopedModel.of<Workout>(context);
+
       return new GestureDetector(
         onTap: (){
           workoutModel.isFromHomePage = false;
@@ -81,6 +85,7 @@ class _WorkoutsPageState extends State<Workouts> {
       );
     }
 
+    // Creates a list of workout cards
     Widget _listOfWorkouts() {
       var workout = ScopedModel.of<Workout>(context);
       if (workout.listOfWorkouts.isEmpty) {
@@ -97,6 +102,7 @@ class _WorkoutsPageState extends State<Workouts> {
       }
     }
 
+    //If the data is not yet loaded from firebase, a waiting screen will appear
     if (!_dataLoadedFromFireBase) {
       return Scaffold(
         appBar: new AppBar(

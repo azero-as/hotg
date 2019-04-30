@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'authentication.dart';
 import 'home.dart';
-import 'workouts.dart';
+import 'workoutList.dart';
 import 'history.dart';
 import 'models/user.dart';
 import 'models/workout.dart';
@@ -68,7 +68,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     onStartWorkout: widget.onStartWorkout,
                     onActiveWorkout: widget.onActiveWorkout,
                     onSummary: widget.onSummary),
-                new Workouts(
+                new WorkoutList(
                     onLoggedIn: widget.onSignedIn,
                     onStartWorkout: widget.onStartWorkout,
                     onActiveWorkout: widget.onActiveWorkout,
