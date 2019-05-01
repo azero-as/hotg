@@ -78,6 +78,7 @@ class _WorkoutListState extends State<WorkoutList> {
           return new Text("");
         };
       return new GestureDetector(
+        key: Key(workout.listOfWorkouts[index]["workoutName"]),
         onTap: (){
           workout.isFromHomePage = false;
           workout.changeActiveWorkout(workout.listOfWorkouts, index);

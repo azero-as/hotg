@@ -328,7 +328,7 @@ void main() {
       await driver.tap(settingsButton);
       await driver.tap(signOutButton);
 
-      //TODO: Reset database to inital state for test user
+      //TODO: Reset database to inital state for test user 
 
       if (driver != null) {
         driver.close();
@@ -364,7 +364,7 @@ void main() {
       var userXp = await find.byValueKey("xp");
       var xp = await driver.getText(userXp);
 
-      expect(xp.substring(0,3), "119");
+      expect(xp.substring(0,3), "133");
     });
 
     //IT 19
