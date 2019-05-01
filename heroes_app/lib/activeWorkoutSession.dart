@@ -373,7 +373,10 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     }
 
     Widget _bonusInformation() {
-      return Text("Remember that you get a bonus if you finish all exercises!");
+      return new Padding(
+          padding: EdgeInsets.fromLTRB(30, 0, 0, 10),
+          child: Text("Remember that you get a bonus if you finish all exercises!"),
+      );
     }
 
     Widget _returnFinishWorkoutButton() {
