@@ -4,13 +4,11 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'workoutCard.dart';
-
 import 'models/workout.dart';
 import 'models/user.dart';
 
+import 'workoutCard.dart';
 import 'authentication.dart';
-import 'logic/fitnessLevelName.dart';
 
 // Build the home page and call on the stateful classes
 class Home extends StatelessWidget {
@@ -40,7 +38,7 @@ class Home extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(40, 30, 40, 0),
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Text('Next planned workout:',
+        child: Text('Next recommended workout:',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -95,7 +93,6 @@ class AvatarOverview extends StatefulWidget {
 // Class for appbar of home page
 class _AvatarOverviewState extends State<AvatarOverview> {
 
-  @override
   Widget build(BuildContext context) {
     // Variables for size, for best view across platforms
     var barHeight = (MediaQuery.of(context).size.height) / 3;
@@ -194,16 +191,17 @@ class _AvatarOverviewState extends State<AvatarOverview> {
 
     // Column for half bar, only image
     Widget _image() {
+      var user = ScopedModel.of<User>(context);
       return Column(children: <Widget>[
         Container(
-          margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-          height: imageHeight,
           width: imageWidth,
-          child: Image.asset(
-            'assets/avatar-test.png',
-            fit: BoxFit.fill,
+          height: imageHeight,
+          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+          child: user.avatar,
+          decoration: BoxDecoration(
+            color: Color(0xff35343A),
           ),
-        )
+        ),
       ]);
     }
 
@@ -222,7 +220,6 @@ class _AvatarOverviewState extends State<AvatarOverview> {
     }
 
 // ============ Return Avatar overview build ============
-
     return SafeArea(
       child: Container(
         height: barHeight,

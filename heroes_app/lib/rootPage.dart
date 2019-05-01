@@ -181,6 +181,7 @@ class _RootPageState extends State<RootPage> {
             resp['email'],
             resp["fitnessLevel"]);
         _className = resp['className'];
+        user.setImageUrl();
       });
     } catch (error) {
       print(error);

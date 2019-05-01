@@ -2,6 +2,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import '../authentication.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class User extends Model {
   Auth auth = new Auth();
@@ -14,6 +15,8 @@ class User extends Model {
   String _className;
   bool _levelUp = false;
   String _email;
+  String _imageUrl = '';
+  Image _avatar;
 
   // History page
   List _workouts = [];
@@ -27,6 +30,8 @@ class User extends Model {
   String get className => _className;
   bool get levelUp => _levelUp;
   String get email => _email;
+  String get imageUrl => _imageUrl;
+  Image get avatar => _avatar;
 
   //History page
   List get workouts => _workouts;
@@ -160,6 +165,17 @@ class User extends Model {
 
   void setLevelUpFalse() {
     this._levelUp = false;
+    notifyListeners();
+  }
+
+    // Get ImageUrl based on className.
+  void setImageUrl() async {
+    String imageUrl = _className + '.png';
+
+    StorageReference ref = FirebaseStorage.instance.ref().child(imageUrl);
+    String location = await ref.getDownloadURL();
+    this._imageUrl = location;
+    this._avatar = Image.network(_imageUrl, fit: BoxFit.fill);
     notifyListeners();
   }
 
