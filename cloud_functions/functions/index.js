@@ -219,8 +219,8 @@ exports.resetTestUser = functions.https.onRequest((request, response) => {
   .collection("Users")
   .doc(testuserUID)
   .update({
-      xp: 0,
-      gameLevel: 1,
+      xp: 43,
+      gameLevel: 2,
   })
   .then(function() {
     response.status(200).send('Document successfully updated!')
