@@ -328,7 +328,8 @@ void main() {
       await driver.tap(settingsButton);
       await driver.tap(signOutButton);
 
-      //TODO: Reset database to inital state for test user 
+      //TODO: Reset database to inital state for test user
+      //https://us-central1-heroes-6fe69.cloudfunctions.net/resetTestUser
 
       if (driver != null) {
         driver.close();
