@@ -330,6 +330,7 @@ void main() {
 
       //TODO: Reset database to inital state for test user
       //https://us-central1-heroes-6fe69.cloudfunctions.net/resetTestUser
+      print("Please go to this url to reset the database: https://us-central1-heroes-6fe69.cloudfunctions.net/resetTestUser");
 
       if (driver != null) {
         driver.close();
