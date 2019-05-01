@@ -152,6 +152,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                         'No exercises done',
                           key: Key("NoExercisesPopUp"),
                           style: TextStyle(
+                            decoration: TextDecoration.none,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,)
