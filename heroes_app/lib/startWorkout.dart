@@ -51,6 +51,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
         key: Key("startWorkoutButton"),
         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0.0),
         child: RaisedButton(
+          key: Key("startWorkout"),
           elevation: 5.0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),

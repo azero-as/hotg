@@ -31,6 +31,7 @@ class _SummaryState extends State<Summary> {
           backgroundColor: Theme.of(context).secondaryHeaderColor,
           appBar: AppBar(
             leading: new IconButton(
+                key: Key("summaryExit"),
                 icon: Icon(Icons.close),
                 onPressed: () {
                   // Check if levelUp pop-up should appear

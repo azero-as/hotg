@@ -126,6 +126,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
         child: Text(
           user.characterName.toString(),
           softWrap: true,
+          key: Key("charName"),
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
             color: Colors.white,
@@ -145,6 +146,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
         child: Text(
           'Level ${user.gameLevel.toString()} ${user.className.toString()}',
           style: TextStyle(color: Colors.white),
+          key: Key("levelClass"),
           textAlign: TextAlign.left
         ),
       );
@@ -183,6 +185,7 @@ class _AvatarOverviewState extends State<AvatarOverview> {
         child: Text(
           '${user.xp.toString()}/${user.xpCap.toString()} XP',
           style: TextStyle(color: Colors.white),
+          key: Key("xp"),
           textAlign: TextAlign.left),
       );
     }
@@ -273,6 +276,7 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
   // Make the entire workout card clickable
   Widget _workout(workoutModel) {
     return new GestureDetector(
+      key: Key("workoutCard"),
       onTap: (){
         workoutModel.isFromHomePage = true;
         widget.onStartWorkout();
