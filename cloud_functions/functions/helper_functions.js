@@ -155,7 +155,7 @@ async function increaseXp(currentXp, xpEarned, userId) {
         })
 }
 
-// Get 5 workouts from the User collection, ordered by date
+// Get 10 last workouts from the User collection, ordered by date
 async function getCompletedUserWorkouts(userId) {
     workouts = []
     return admin.firestore()
@@ -163,7 +163,7 @@ async function getCompletedUserWorkouts(userId) {
         .doc(userId)
         .collection('Workouts')
         .orderBy('date', 'desc') // Ordered by descending date
-        .limit(5) // Limit is 5 workouts
+        .limit(10) // Limit is 10 workouts
         .get()
         .then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
