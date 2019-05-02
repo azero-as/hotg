@@ -408,7 +408,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
     var workout = ScopedModel.of<Workout>(context);
     return new Scaffold(
       appBar: AppBar(
-        title: new Text(workout.workoutName),
+        title: new Text(widget.workoutName),
         leading: IconButton(
           key: Key("backToStartWorkout"),
           icon: Icon(Icons.arrow_back_ios),

@@ -7,7 +7,7 @@ class Summary extends StatefulWidget {
   final List<dynamic> exercises;
   final int bonus;
   final int total_xp;
-  final String workoutType;
+  final String workoutName;
   final VoidCallback onLoggedIn;
   final VoidCallback alreadyLoggedIn;
 
@@ -15,7 +15,7 @@ class Summary extends StatefulWidget {
       {this.exercises,
       this.bonus,
       this.total_xp,
-      this.workoutType,
+      this.workoutName,
       this.onLoggedIn,
       this.alreadyLoggedIn});
 
@@ -80,7 +80,7 @@ class _SummaryState extends State<Summary> {
     return Container(
         child: ListTile(
       title: Text(
-        widget.workoutType,
+        widget.workoutName,
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),

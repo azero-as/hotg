@@ -192,6 +192,7 @@ class _RootPageState extends State<RootPage> {
 
   // Requests a workout from the database based on the user's rpg class and
   // creates a workout-model with the data.
+  // Recommended workout
   void _setWorkoutInfo(className) async {
     var workout = ScopedModel.of<Workout>(context);
 
@@ -203,14 +204,14 @@ class _RootPageState extends State<RootPage> {
         },
       );
       setState(() {
-        workout.setIntensity(response['intensity']);
-        workout.setFitnessLevel(response['fitnessLevel']);
-        workout.setWorkOutName(response['workoutName']);
-        workout.setWorkOutClass(response['class']);
-        workout.setDuration(response['duration']);
-        workout.setXp(response['xp']);
-        workout.setExercises(response['exercises']);
-        workout.setWarmUp(response['warmUp']);
+        workout.setIntensityRw(response['intensity']);
+        workout.setFitnessLevelRw(response['fitnessLevel']);
+        workout.setWorkOutNameRw(response['workoutName']);
+        workout.setWorkOutClassRw(response['class']);
+        workout.setDurationRw(response['duration']);
+        workout.setXpRw(response['xp']);
+        workout.setExercisesRw(response['exercises']);
+        workout.setWarmUpRw(response['warmUp']);
         _dataLoadedFromDatabase = true;
       });
     } catch (error) {
@@ -290,38 +291,75 @@ class _RootPageState extends State<RootPage> {
         );
         break;
       case AuthStatus.START_WORKOUT:
-        return new StartWorkout(
-          exercises: workout.exercises,
-          duration: workout.duration,
-          intensity: workout.intensity,
-          xp: workout.xp,
-          workoutName: workout.workoutName,
-          workoutClass: workout.workoutClass,
-          onLoggedIn: _onLoggedIn,
-          onStartWorkout: _startWorkout,
-          onActiveWorkout: _activeWorkout,
-          onSummary: _summary,
-          onBackToWorkout: _backToWorkout,
-          alreadyLoggedIn: _alreadyLoggedIn,
-        );
+        if (workout.isFromHomePage) {
+          return new StartWorkout(
+            exercises: workout.exercisesRw,
+            duration: workout.durationRw,
+            intensity: workout.intensityRw,
+            xp: workout.xpRw,
+            workoutName: workout.workoutNameRw,
+            workoutClass: workout.workoutClassRw,
+            onLoggedIn: _onLoggedIn,
+            onStartWorkout: _startWorkout,
+            onActiveWorkout: _activeWorkout,
+            onSummary: _summary,
+            onBackToWorkout: _backToWorkout,
+            alreadyLoggedIn: _alreadyLoggedIn,
+          );
+        } else
+          return new StartWorkout(
+            exercises: workout.exercises,
+            duration: workout.duration,
+            intensity: workout.intensity,
+            xp: workout.xp,
+            workoutName: workout.workoutName,
+            workoutClass: workout.workoutClass,
+            onLoggedIn: _onLoggedIn,
+            onStartWorkout: _startWorkout,
+            onActiveWorkout: _activeWorkout,
+            onSummary: _summary,
+            onBackToWorkout: _backToWorkout,
+            alreadyLoggedIn: _alreadyLoggedIn,
+          );
         break;
       case AuthStatus.ACTIVE_WORKOUT_SESSION:
-        return new activeWorkoutSession(
-          exercises: workout.exercises,
-          workoutName: workout.workoutName,
-          onLoggedIn: _onLoggedIn,
-          onStartWorkout: _startWorkout,
-          onSummary: _summary,
-        );
+        if (workout.isFromHomePage) {
+          return new activeWorkoutSession(
+            exercises: workout.exercisesRw,
+            workoutName: workout.workoutNameRw,
+            onLoggedIn: _onLoggedIn,
+            onStartWorkout: _startWorkout,
+            onSummary: _summary,
+          );
+        } else
+          return new activeWorkoutSession(
+            exercises: workout.exercises,
+            workoutName: workout.workoutName,
+            onLoggedIn: _onLoggedIn,
+            onStartWorkout: _startWorkout,
+            onSummary: _summary,
+          );
+        break;
       case AuthStatus.SUMMARY:
+        if (workout.isFromHomePage) {
+          return new Summary(
+            exercises: workout.selectedExercises,
+            bonus: workout.BonusXP,
+            total_xp: workout.XpEarned,
+            workoutName: workout.workoutNameRw,
+            onLoggedIn: _onLoggedIn,
+            alreadyLoggedIn: _alreadyLoggedIn,
+          );
+        } else
         return new Summary(
           exercises: workout.selectedExercises,
           bonus: workout.BonusXP,
           total_xp: workout.XpEarned,
-          workoutType: workout.workoutName,
+          workoutName: workout.workoutName,
           onLoggedIn: _onLoggedIn,
           alreadyLoggedIn: _alreadyLoggedIn,
         );
+        break;
       case AuthStatus.BACK_TO_WORKOUTS:
         if (_userId.length > 0 && _userId != null) {
           return new DashboardScreen(

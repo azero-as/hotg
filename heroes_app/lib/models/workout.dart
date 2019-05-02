@@ -5,6 +5,25 @@ class Workout extends Model {
   Auth auth = new Auth();
 
   // Recommended workout
+  String _intensityRw = '';
+  String _workoutNameRw = '';
+  String _workoutClassRw = '';
+  int _fitnessLevelRw = -1;
+  int _durationRw = -1;
+  int _xpRw = -1;
+  List<dynamic> _exercisesRw = [];
+  Map _warmUpRw = {};
+
+  int get xpRw => _xpRw;
+  String get intensityRw => _intensityRw;
+  String get workoutNameRw => _workoutNameRw;
+  String get workoutClassRw => _workoutClassRw;
+  int get durationRw => _durationRw;
+  int get fitnessLevelRw => _fitnessLevelRw;
+  List<dynamic> get exercisesRw => _exercisesRw;
+  Map get warmUpRw => _warmUpRw;
+
+  // ActiveWorkout
   String _intensity = '';
   String _workoutName = '';
   String _workoutClass = '';
@@ -22,25 +41,6 @@ class Workout extends Model {
   int get fitnessLevel => _fitnessLevel;
   List<dynamic> get exercises => _exercises;
   Map get warmUp => _warmUp;
-
-  // ActiveWorkout
-  String _intensityAw = '';
-  String _workoutNameAw = '';
-  String _workoutClassAw = '';
-  int _fitnessLevelAw = -1;
-  int _durationAw = -1;
-  int _xpAw = -1;
-  List<dynamic> _exercisesAw = [];
-  Map _warmUpAw = {};
-
-  int get xpAw => _xpAw;
-  String get intensityAw => _intensityAw;
-  String get workoutNameAw => _workoutNameAw;
-  String get workoutClassAw => _workoutClassAw;
-  int get durationAw => _durationAw;
-  int get fitnessLevelAw => _fitnessLevelAw;
-  List<dynamic> get exercisesAw => _exercisesAw;
-  Map get warmUpAw => _warmUpAw;
 
   //Active workout session
   List<dynamic> _selectedExercises =
@@ -61,20 +61,22 @@ class Workout extends Model {
   //To check whether to go back to home or to plan
   bool isFromHomePage;
 
+  //bool isFromRecommendedWorkout = false;
+
   void setListOfWorkouts(List<dynamic> workouts) {
     this._listOfWorkouts = workouts;
     notifyListeners();
   }
 
   void changeActiveWorkout(List<dynamic> workout, int index) {
-    this._xpAw = workout[index]["xp"];
-    this._durationAw = workout[index]["duration"];
-    this._intensityAw = workout[index]["intensity"];
-    this._workoutNameAw = workout[index]["workoutName"];
-    this._workoutClassAw = workout[index]["class"];
-    this._exercisesAw = workout[index]["exercises"];
-    this._warmUpAw = workout[index]["warmUp"];
-    this._fitnessLevelAw = workout[index]["fitnessLevel"];
+    this._xp = workout[index]["xp"];
+    this._duration = workout[index]["duration"];
+    this._intensity = workout[index]["intensity"];
+    this._workoutName = workout[index]["workoutName"];
+    this._workoutClass = workout[index]["class"];
+    this._exercises = workout[index]["exercises"];
+    this._warmUp = workout[index]["warmUp"];
+    this._fitnessLevel = workout[index]["fitnessLevel"];
   }
 
   void setFinishedWorkout(
@@ -85,43 +87,43 @@ class Workout extends Model {
     notifyListeners();
   }
 
-  void setXp(int xp) {
-    this._xp = xp;
+  void setXpRw(int xp) {
+    this._xpRw = xp;
     notifyListeners();
   }
 
-  void setIntensity(String intensity) {
-    this._intensity = intensity;
+  void setIntensityRw(String intensity) {
+    this._intensityRw = intensity;
     notifyListeners();
   }
 
-  void setFitnessLevel(int fitnessLevel) {
-    this._fitnessLevel = fitnessLevel;
+  void setFitnessLevelRw(int fitnessLevel) {
+    this._fitnessLevelRw = fitnessLevel;
     notifyListeners();
   }
 
-  void setWorkOutName(String workoutName) {
-    this._workoutName = workoutName;
+  void setWorkOutNameRw(String workoutName) {
+    this._workoutNameRw = workoutName;
     notifyListeners();
   }
 
-  void setWarmUp(Map warmUp) {
-    this._warmUp = warmUp;
+  void setWarmUpRw(Map warmUp) {
+    this._warmUpRw = warmUp;
     notifyListeners();
   }
 
-  void setWorkOutClass(String workoutClass) {
-    this._workoutClass = workoutClass;
+  void setWorkOutClassRw(String workoutClass) {
+    this._workoutClassRw = workoutClass;
     notifyListeners();
   }
 
-  void setDuration(int duration) {
-    this._duration = duration;
+  void setDurationRw(int duration) {
+    this._durationRw = duration;
     notifyListeners();
   }
 
-  void setExercises(List<dynamic> exercises) {
-    this._exercises = exercises;
+  void setExercisesRw(List<dynamic> exercises) {
+    this._exercisesRw = exercises;
     notifyListeners();
   }
 }
