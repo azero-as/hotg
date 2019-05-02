@@ -193,23 +193,25 @@ async function getAllWorkouts() {
         })
 }
 
-// Get one workout based on className
+// Get a random recommended workout based on className
 async function getRecommendedWorkout(className) {
 
-    var workout
-
+    var workoutList = []
+  
     return admin.firestore()
-        .collection("Workouts")
-        .where("class", "==", className)
-        .limit(1)
-        .get()
-        .then(function (querySnapshot) {
-            querySnapshot.forEach(function (doc) {
-                workout = doc.data();
-            })
-            return workout
+      .collection("Workouts")
+      .where("class", "==", className)
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+            workoutList.push(doc.data())
         })
-        .catch(function (error) {
-            console.log("Error getting workout. ", error);
-        })
+        
+        randomWorkout = Math.floor(Math.random() * workoutList.length);
+  
+        return workoutList[randomWorkout]
+    })
+    .catch(function (error) {
+        console.log("Error getting workout. ", error);
+    })
 }
