@@ -4,7 +4,7 @@ import '../authentication.dart';
 class Workout extends Model {
   Auth auth = new Auth();
 
-  // Belongs to Home
+  // Recommended workout
   String _intensity = '';
   String _workoutName = '';
   String _workoutClass = '';
@@ -23,7 +23,26 @@ class Workout extends Model {
   List<dynamic> get exercises => _exercises;
   Map get warmUp => _warmUp;
 
-  // Belongs to activeWorkoutSession
+  // ActiveWorkout
+  String _intensityAw = '';
+  String _workoutNameAw = '';
+  String _workoutClassAw = '';
+  int _fitnessLevelAw = -1;
+  int _durationAw = -1;
+  int _xpAw = -1;
+  List<dynamic> _exercisesAw = [];
+  Map _warmUpAw = {};
+
+  int get xpAw => _xpAw;
+  String get intensityAw => _intensityAw;
+  String get workoutNameAw => _workoutNameAw;
+  String get workoutClassAw => _workoutClassAw;
+  int get durationAw => _durationAw;
+  int get fitnessLevelAw => _fitnessLevelAw;
+  List<dynamic> get exercisesAw => _exercisesAw;
+  Map get warmUpAw => _warmUpAw;
+
+  //Active workout session
   List<dynamic> _selectedExercises =
       []; //Same as exercises in activeWorkoutSession.
   int _XpEarned = 0;
@@ -32,6 +51,7 @@ class Workout extends Model {
   List<dynamic> get selectedExercises => _selectedExercises;
   int get XpEarned => _XpEarned;
   int get BonusXP => _BonusXP;
+
 
   // Belongs to plan
   List<dynamic> _listOfWorkouts;
@@ -47,14 +67,14 @@ class Workout extends Model {
   }
 
   void changeActiveWorkout(List<dynamic> workout, int index) {
-    this._xp = workout[index]["xp"];
-    this._duration = workout[index]["duration"];
-    this._intensity = workout[index]["intensity"];
-    this._workoutName = workout[index]["workoutName"];
-    this._workoutClass = workout[index]["class"];
-    this._exercises = workout[index]["exercises"];
-    this._warmUp = workout[index]["warmUp"];
-    this._fitnessLevel = workout[index]["fitnessLevel"];
+    this._xpAw = workout[index]["xp"];
+    this._durationAw = workout[index]["duration"];
+    this._intensityAw = workout[index]["intensity"];
+    this._workoutNameAw = workout[index]["workoutName"];
+    this._workoutClassAw = workout[index]["class"];
+    this._exercisesAw = workout[index]["exercises"];
+    this._warmUpAw = workout[index]["warmUp"];
+    this._fitnessLevelAw = workout[index]["fitnessLevel"];
   }
 
   void setFinishedWorkout(
