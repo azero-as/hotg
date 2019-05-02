@@ -283,7 +283,7 @@ class _StartWorkoutPage extends State<StartWorkout> {
 
     return Scaffold(
       appBar: AppBar(
-        title: new Text(workout.workoutName),
+        title: new Text(widget.workoutName),
         leading: IconButton(
           key: Key("backToHome"),
           icon: Icon(Icons.arrow_back_ios),

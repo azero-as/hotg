@@ -41,7 +41,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
   // Workout title container
   Widget _workoutTitle() {
     var workoutModel = ScopedModel.of<Workout>(context);
-    String workoutName = workoutModel.workoutName.toString();
+    String workoutName = workoutModel.workoutNameRw.toString();
     if(!widget.isFromHomePage){
       workoutName = workoutModel.listOfWorkouts[widget.index]["workoutName"];
     }
@@ -120,29 +120,29 @@ class _WorkoutCardState extends State<WorkoutCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              workoutModel.workoutClass.toString(),
+              workoutModel.workoutClassRw.toString(),
               style: TextStyle(color: Color(0xFF434242)),
             ),
             _space(10),
             Text(
-              convertFitnessLevelName(workoutModel.fitnessLevel),
+              convertFitnessLevelName(workoutModel.fitnessLevelRw),
               style: TextStyle(color: Color(0xFF434242)),
             ),
             _space(10),
             Text(
-              workoutModel.xp.toString(),
+              workoutModel.xpRw.toString(),
               style: TextStyle(color: Color(0xFF434242)),
             ),
             // add space between lines
             _space(10),
             Text(
-              workoutModel.intensity.toString(),
+              workoutModel.intensityRw.toString(),
               style: TextStyle(color: Color(0xFF434242)),
             ),
             // add space between lines
             _space(18),
             Text(
-              workoutModel.duration.toString() + ' min',
+              workoutModel.durationRw.toString() + ' min',
               style: TextStyle(color: Color(0xFF434242)),
             ),
           ]

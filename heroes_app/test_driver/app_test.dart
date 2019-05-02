@@ -346,6 +346,8 @@ void main() {
     final exercise1 = find.byValueKey("exercise1");
     final exercise2 = find.byValueKey("exercise2");
     final exercise3 = find.byValueKey("exercise3");
+    final exercise4 = find.byValueKey("exercise4");
+    final exercise5 = find.byValueKey("exercise5");
     final finishButton = find.byValueKey("finishButton");
     final summaryExit = find.byValueKey("summaryExit");
 
@@ -359,6 +361,8 @@ void main() {
       await driver.tap(exercise1);
       await driver.tap(exercise2);
       await driver.tap(exercise3);
+      await driver.tap(exercise4);
+      await driver.tap(exercise5);
       await driver.tap(finishButton);
       await driver.tap(summaryExit);
       await Future.delayed(const Duration(seconds: 5));

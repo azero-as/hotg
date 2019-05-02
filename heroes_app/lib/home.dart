@@ -297,14 +297,14 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
     var workout = ScopedModel.of<Workout>(context);
     return LayoutBuilder(builder: (context, constraints) {
       // Check that the database has registered workouts compliant of
-      if (workout.intensity == "" ||
-        workout.workoutName == "" ||
-        workout.workoutClass == "" ||
-        workout.duration == -1 ||
-        workout.fitnessLevel == -1 ||
-        workout.xp == -1 ||
-        workout.exercises == null ||
-        workout.exercises == []
+      if (workout.intensityRw == "" ||
+        workout.workoutNameRw == "" ||
+        workout.workoutClassRw == "" ||
+        workout.durationRw == -1 ||
+        workout.fitnessLevelRw == -1 ||
+        workout.xpRw == -1 ||
+        workout.exercisesRw == null ||
+        workout.exercisesRw == []
       ) {
           return new Text("No workout found.");
       } else {
