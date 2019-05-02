@@ -146,7 +146,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                   padding: EdgeInsets.fromLTRB(20, 8, 0, 8),
                   color: const Color(0xFF212838),
                   child: new Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
                         'No exercises done',
