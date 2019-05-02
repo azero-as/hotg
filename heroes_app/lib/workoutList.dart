@@ -11,7 +11,7 @@ class WorkoutList extends StatefulWidget {
   _WorkoutListState createState() => new _WorkoutListState();
 
   WorkoutList(
-    {this.onLoggedIn,
+      {this.onLoggedIn,
       this.onStartWorkout,
       this.onActiveWorkout,
       this.onSummary});
@@ -23,7 +23,8 @@ class WorkoutList extends StatefulWidget {
 }
 
 class _WorkoutListState extends State<WorkoutList> {
-  bool _dataLoadedFromFireBase = false; //if this is null, it is still loading data from firebase.
+  bool _dataLoadedFromFireBase =
+      false; //if this is null, it is still loading data from firebase.
 
   @override
   void initState() {
@@ -34,10 +35,11 @@ class _WorkoutListState extends State<WorkoutList> {
     if (workout.listOfWorkouts != null) {
       _dataLoadedFromFireBase = true;
     }
-    CloudFunctions.instance.call(
+    CloudFunctions.instance
+        .call(
       functionName: 'getAllWorkouts',
     )
-      .then((response) {
+        .then((response) {
       if (this.mounted) {
         workout.setListOfWorkouts(response['workoutList']);
         setState(() {
@@ -49,67 +51,65 @@ class _WorkoutListState extends State<WorkoutList> {
     });
   }
 
+  //Builds a waiting screen when the data is not yet loaded
+  Widget _buildWaitingScreen() {
+    return Scaffold(
+      body: Container(
+        alignment: Alignment.center,
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
 
-
-    //Builds a waiting screen when the data is not yet loaded
-    Widget _buildWaitingScreen() {
-      return Scaffold(
-        body: Container(
-          alignment: Alignment.center,
-          child: CircularProgressIndicator(),
-        ),
-      );
+  // Make the entire workout card clickable
+  Widget _workout(int index) {
+    var workout = ScopedModel.of<Workout>(context);
+    var user = ScopedModel.of<User>(context);
+    if (workout.listOfWorkouts[index]["intensity"] == "" ||
+        workout.listOfWorkouts[index]["workoutName"] == "" ||
+        workout.listOfWorkouts[index]["workoutClass"] == "" ||
+        workout.listOfWorkouts[index]["duration"] == -1 ||
+        workout.listOfWorkouts[index]["fitnessLevel"] == -1 ||
+        workout.listOfWorkouts[index]["xp"] == -1 ||
+        workout.listOfWorkouts[index]["exercises"] == null ||
+        workout.listOfWorkouts[index]["exercises"] == [] ||
+        workout.listOfWorkouts[index]["fitnessLevel"] > user.fitnessLevel) {
+      return SizedBox();
     }
+    ;
+    return new GestureDetector(
+      key: Key(workout.listOfWorkouts[index]["workoutName"]),
+      onTap: () {
+        workout.isFromHomePage = false;
+        workout.changeActiveWorkout(workout.listOfWorkouts, index);
+        widget.onStartWorkout();
+      },
+      child: WorkoutCard(
+        onStartWorkout: widget.onStartWorkout,
+        onActiveWorkout: widget.onActiveWorkout,
+        onSummary: widget.onSummary,
+        isFromHomePage: false,
+        index: index,
+      ),
+    );
+  }
 
-
-    // Make the entire workout card clickable
-    Widget _workout(int index) {
-      var workout = ScopedModel.of<Workout>(context);
-      var user = ScopedModel.of<User>(context);
-      if(workout.listOfWorkouts[index]["intensity"] == "" ||
-          workout.listOfWorkouts[index]["workoutName"] == "" ||
-          workout.listOfWorkouts[index]["workoutClass"] == "" ||
-          workout.listOfWorkouts[index]["duration"] == -1 ||
-          workout.listOfWorkouts[index]["fitnessLevel"] == -1 ||
-          workout.listOfWorkouts[index]["xp"] == -1 ||
-          workout.listOfWorkouts[index]["exercises"] == null ||
-          workout.listOfWorkouts[index]["exercises"] == [] ||
-          workout.listOfWorkouts[index]["fitnessLevel"] > user.fitnessLevel) {
-          return new Text("");
-        };
-      return new GestureDetector(
-        key: Key(workout.listOfWorkouts[index]["workoutName"]),
-        onTap: (){
-          workout.isFromHomePage = false;
-          workout.changeActiveWorkout(workout.listOfWorkouts, index);
-          widget.onStartWorkout();
+  // Creates a list of workout cards
+  Widget _listOfWorkouts() {
+    var workout = ScopedModel.of<Workout>(context);
+    if (workout.listOfWorkouts.isEmpty) {
+      return Text("no workouts");
+    } else {
+      return new ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemCount: workout.listOfWorkouts.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _workout(index);
         },
-        child: WorkoutCard(
-          onStartWorkout: widget.onStartWorkout,
-          onActiveWorkout: widget.onActiveWorkout,
-          onSummary: widget.onSummary,
-          isFromHomePage: false,
-          index: index,
-        ),
       );
     }
-
-    // Creates a list of workout cards
-    Widget _listOfWorkouts() {
-      var workout = ScopedModel.of<Workout>(context);
-      if (workout.listOfWorkouts.isEmpty) {
-        return Text("no workouts");
-      } else {
-        return new ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: workout.listOfWorkouts.length,
-          itemBuilder: (BuildContext context, int index){
-            return _workout(index);
-          },
-        );
-      }
-    }
+  }
 
   // ============ Return WorkoutList build ============
   @override
