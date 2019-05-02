@@ -134,7 +134,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
         children: <Widget>[
           Container(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-            margin: EdgeInsets.fromLTRB(35, 0, 35, 10),
+            margin: EdgeInsets.fromLTRB(30, 0, 30, 10),
             //decoration: new BoxDecoration(                  //border if we want
               //color: Colors.white,
               //border: new Border.all(color: Colors.black)
@@ -143,7 +143,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
               shrinkWrap: true,
               children: <Widget>[
                 new Container(
-                  padding: EdgeInsets.fromLTRB(25, 8, 0, 8),
+                  padding: EdgeInsets.fromLTRB(20, 8, 0, 8),
                   color: const Color(0xFF212838),
                   child: new Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,26 +155,25 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                             decoration: TextDecoration.none,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,)
+                            fontSize: 17,
+                          )
                       ),
                       Align(
-                        //alignment: Alignment.topRight,
-                        child: RaisedButton(
+                        child: FlatButton.icon(
                           key: Key("crossOutPopUpNE"),
+                          padding: EdgeInsets.fromLTRB(45, 8, 0, 8),
                           color: Theme.of(context).secondaryHeaderColor,
                           textColor: Colors.white,
+                          icon: Icon(Icons.close, ),
+                          label: Text(''),
                           onPressed: () => Navigator.pop(context),
-                          child: Icon(
-                            Icons.close,
-                            color: Colors.white,
-                          ),
-                        ),
+                        )
                       ),
                     ],
                   )
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(25, 40, 25, 40),
+                  padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
                   color: Colors.white,
                   child: Column(
                     children: <Widget>[
@@ -189,10 +188,8 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
                     ],
                   ),
-                  //SizedBox(height: 100.0),
                 )
               ],
             )
@@ -238,6 +235,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
                         Navigator.of(context).pop();
                       })
                   ],
+
                 );
               }
             );
@@ -374,7 +372,7 @@ class _activeWorkoutSession extends State<activeWorkoutSession> {
 
     Widget _bonusInformation() {
       return new Padding(
-          padding: EdgeInsets.fromLTRB(30, 0, 0, 10),
+          padding: EdgeInsets.fromLTRB(30, 0, 0, 30),
           child: Text("Remember that you get a bonus if you finish all exercises!"),
       );
     }
