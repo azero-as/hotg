@@ -7,12 +7,33 @@ One Paragraph of project description goes here
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
-
 What things you need to install the software and how to install them
 
+* [Flutter](https://flutter.dev/docs/get-started/install)
+* [Android Studio](https://developer.android.com/studio)
+
+
+#### Tools
+Depending on what device you want to develop on, you need these tools: 
+* Android devices: Android toolchain
+* iOS devices: XCode
+
+#### Cloud Functions
+For writing and deploying Google Cloud Functions, you'll need node.js and FirebaseCLI. 
+
+
+**Node.js**
+
+Go to https://nodejs.org/en/
+
+
+**FirebaseCLI**
 ```
-Give examples
+npm install -g firebase-tools
 ```
+
+Go to https://flutter.dev/docs/get-started/install for a guide on how to install everything you need to get started with the Flutter project. To get started with Cloud Functions see https://firebase.google.com/docs/functions/get-started. 
+
 
 ### Installing
 
