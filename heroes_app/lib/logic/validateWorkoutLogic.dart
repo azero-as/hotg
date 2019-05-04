@@ -12,5 +12,3 @@ convertClassName(String className) {
     return "Ranger";
   }
 }
-
-

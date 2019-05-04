@@ -3,10 +3,8 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'models/workout.dart';
 import 'models/user.dart';
-
 import 'workoutCard.dart';
 import 'authentication.dart';
 
@@ -38,7 +36,8 @@ class Home extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(40, 30, 40, 0),
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Text('Next recommended workout:',
+        child: Text(
+          'Next recommended workout:',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -52,27 +51,25 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     FlutterStatusbarcolor.setStatusBarColor(Color(0xFF612A30));
     return new Container(
-      // general background color for the page
-      decoration: BoxDecoration(
-        color: Theme.of(context).secondaryHeaderColor,
-      ),
-      child: Column(
-        children: <Widget>[
-          AvatarOverview(
-            auth: auth,
-            onSignedOut: onSignedOut,
-            onLoggedIn: onLoggedIn,
-            readyToSignOut: readyToSignOut
-          ),
-          _nextWorkout(),
-          WorkoutOverview(
-            onStartWorkout: onStartWorkout,
-            onActiveWorkout: onActiveWorkout,
-            onSummary: onSummary,
-          ),
-        ],
-      )
-    );
+        // general background color for the page
+        decoration: BoxDecoration(
+          color: Theme.of(context).secondaryHeaderColor,
+        ),
+        child: Column(
+          children: <Widget>[
+            AvatarOverview(
+                auth: auth,
+                onSignedOut: onSignedOut,
+                onLoggedIn: onLoggedIn,
+                readyToSignOut: readyToSignOut),
+            _nextWorkout(),
+            WorkoutOverview(
+              onStartWorkout: onStartWorkout,
+              onActiveWorkout: onActiveWorkout,
+              onSummary: onSummary,
+            ),
+          ],
+        ));
   }
 }
 
@@ -92,7 +89,6 @@ class AvatarOverview extends StatefulWidget {
 
 // Class for appbar of home page
 class _AvatarOverviewState extends State<AvatarOverview> {
-
   Widget build(BuildContext context) {
     // Variables for size, for best view across platforms
     var barHeight = (MediaQuery.of(context).size.height) / 3;
@@ -106,15 +102,13 @@ class _AvatarOverviewState extends State<AvatarOverview> {
     // Settings symbol and onPressed functionality
     Widget _settingsButton() {
       return IconButton(
-        icon: Icon(Icons.settings),
-        key: Key("settingsButton"),
-        color: Colors.white,
-        padding: EdgeInsets.fromLTRB(
-          (barWidth / 2) - 44, 0, 0, 0),
-        onPressed: () {
-          widget.readyToSignOut();
-        }
-      );
+          icon: Icon(Icons.settings),
+          key: Key("settingsButton"),
+          color: Colors.white,
+          padding: EdgeInsets.fromLTRB((barWidth / 2) - 44, 0, 0, 0),
+          onPressed: () {
+            widget.readyToSignOut();
+          });
     }
 
     // Character name
@@ -144,11 +138,10 @@ class _AvatarOverviewState extends State<AvatarOverview> {
       return Container(
         padding: EdgeInsets.fromLTRB(20, 5, 0, 0),
         child: Text(
-          'Level ${user.gameLevel.toString()} ${user.className.toString()}',
-          style: TextStyle(color: Colors.white),
-          key: Key("levelClass"),
-          textAlign: TextAlign.left
-        ),
+            'Level ${user.gameLevel.toString()} ${user.className.toString()}',
+            style: TextStyle(color: Colors.white),
+            key: Key("levelClass"),
+            textAlign: TextAlign.left),
       );
     }
 
@@ -180,13 +173,12 @@ class _AvatarOverviewState extends State<AvatarOverview> {
     // XP / XP cap information
     Widget _xpProgress() {
       var user = ScopedModel.of<User>(context);
-      return Container (
+      return Container(
         padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-        child: Text(
-          '${user.xp.toString()}/${user.xpCap.toString()} XP',
-          style: TextStyle(color: Colors.white),
-          key: Key("xp"),
-          textAlign: TextAlign.left),
+        child: Text('${user.xp.toString()}/${user.xpCap.toString()} XP',
+            style: TextStyle(color: Colors.white),
+            key: Key("xp"),
+            textAlign: TextAlign.left),
       );
     }
 
@@ -211,15 +203,14 @@ class _AvatarOverviewState extends State<AvatarOverview> {
     // Column for second half of bar, character information
     Widget _characterInformation() {
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _settingsButton(),
-          _characterName(),
-          _levelAndClass(),
-          _progressBar(),
-          _xpProgress(),
-        ]
-      );
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _settingsButton(),
+            _characterName(),
+            _levelAndClass(),
+            _progressBar(),
+            _xpProgress(),
+          ]);
     }
 
 // ============ Return Avatar overview build ============
@@ -246,8 +237,14 @@ class _AvatarOverviewState extends State<AvatarOverview> {
 
 // Create state for workout overview
 class WorkoutOverview extends StatefulWidget {
-
-  WorkoutOverview({Key key, this.onStartWorkout, this.onActiveWorkout, this.onSummary, this.isFromHomePage, this.index}): super(key: key);
+  WorkoutOverview(
+      {Key key,
+      this.onStartWorkout,
+      this.onActiveWorkout,
+      this.onSummary,
+      this.isFromHomePage,
+      this.index})
+      : super(key: key);
 
   @override
   _WorkoutOverviewState createState() => _WorkoutOverviewState();
@@ -257,12 +254,10 @@ class WorkoutOverview extends StatefulWidget {
   final VoidCallback onSummary;
   final bool isFromHomePage;
   final int index;
-
 }
 
 // Class for workout overview
 class _WorkoutOverviewState extends State<WorkoutOverview> {
-
   String workoutName;
 
   @override
@@ -270,14 +265,13 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
     super.initState();
   }
 
-
 // ============ Widget assembly of information ============
 
   // Make the entire workout card clickable
   Widget _workout(workoutModel) {
     return new GestureDetector(
       key: Key("workoutCard"),
-      onTap: (){
+      onTap: () {
         workoutModel.isFromHomePage = true;
         widget.onStartWorkout();
       },
@@ -286,7 +280,6 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
         onActiveWorkout: widget.onActiveWorkout,
         onSummary: widget.onSummary,
         isFromHomePage: true,
-
       ),
     );
   }
@@ -298,24 +291,22 @@ class _WorkoutOverviewState extends State<WorkoutOverview> {
     return LayoutBuilder(builder: (context, constraints) {
       // Check that the database has registered workouts compliant of
       if (workout.intensityRw == "" ||
-        workout.workoutNameRw == "" ||
-        workout.workoutClassRw == "" ||
-        workout.durationRw == -1 ||
-        workout.fitnessLevelRw == -1 ||
-        workout.xpRw == -1 ||
-        workout.exercisesRw == null ||
-        workout.exercisesRw == []
-      ) {
-          return new Text("No workout found.");
+          workout.workoutNameRw == "" ||
+          workout.workoutClassRw == "" ||
+          workout.durationRw == -1 ||
+          workout.fitnessLevelRw == -1 ||
+          workout.xpRw == -1 ||
+          workout.exercisesRw == null ||
+          workout.exercisesRw == []) {
+        return new Text("No workout found.");
       } else {
         return Container(
-          child: Column(
-            children: <Widget>[
-              // Call on workout widget
-              _workout(workout),
-            ],
-          )
-        );
+            child: Column(
+          children: <Widget>[
+            // Call on workout widget
+            _workout(workout),
+          ],
+        ));
       }
     });
   }

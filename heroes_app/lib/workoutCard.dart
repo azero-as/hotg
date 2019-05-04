@@ -1,14 +1,18 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'models/workout.dart';
 import 'logic/fitnessLevelName.dart';
 
-
 class WorkoutCard extends StatefulWidget {
-
-  WorkoutCard({Key key, this.onStartWorkout, this.onActiveWorkout, this.onSummary, this.isFromHomePage, this.index}): super(key: key);
+  WorkoutCard(
+      {Key key,
+      this.onStartWorkout,
+      this.onActiveWorkout,
+      this.onSummary,
+      this.isFromHomePage,
+      this.index})
+      : super(key: key);
 
   @override
   _WorkoutCardState createState() => _WorkoutCardState();
@@ -22,8 +26,6 @@ class WorkoutCard extends StatefulWidget {
 
 // Class for workout card
 class _WorkoutCardState extends State<WorkoutCard> {
-
-
   @override
   void initState() {
     super.initState();
@@ -32,7 +34,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
 // ============ Widget build for information ============
 
   // Making a widget for sized box
-  Widget _space(double height){
+  Widget _space(double height) {
     return SizedBox(
       height: height,
     );
@@ -42,7 +44,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
   Widget _workoutTitle() {
     var workoutModel = ScopedModel.of<Workout>(context);
     String workoutName = workoutModel.workoutNameRw.toString();
-    if(!widget.isFromHomePage){
+    if (!widget.isFromHomePage) {
       workoutName = workoutModel.listOfWorkouts[widget.index]["workoutName"];
     }
     return Container(
@@ -50,9 +52,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
       decoration: BoxDecoration(
         // Border radius to round top edges
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(8.0),
-            topRight: Radius.circular(8.0)
-        ),
+            topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
         color: Theme.of(context).accentColor,
       ),
       child: Row(
@@ -78,30 +78,26 @@ class _WorkoutCardState extends State<WorkoutCard> {
       children: <Widget>[
         Text(
           'Class:',
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF434242)),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF434242)),
         ),
         _space(10),
         Text(
           'Fitness Level:',
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF434242)),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF434242)),
         ),
         _space(10),
         Text(
           'XP:',
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF434242)),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF434242)),
         ),
         _space(10),
         Text(
           'Intensity:',
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF434242)),
+          style:
+              TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF434242)),
         ),
         _space(10),
         Icon(
@@ -115,7 +111,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
   // Column with workout information from the database
   Widget _workoutVariables() {
     var workoutModel = ScopedModel.of<Workout>(context);
-    if(widget.isFromHomePage){
+    if (widget.isFromHomePage) {
       return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -145,9 +141,8 @@ class _WorkoutCardState extends State<WorkoutCard> {
               workoutModel.durationRw.toString() + ' min',
               style: TextStyle(color: Color(0xFF434242)),
             ),
-          ]
-      );
-   }
+          ]);
+    }
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -157,7 +152,8 @@ class _WorkoutCardState extends State<WorkoutCard> {
           ),
           _space(10),
           Text(
-            convertFitnessLevelName(workoutModel.listOfWorkouts[widget.index]["fitnessLevel"]),
+            convertFitnessLevelName(
+                workoutModel.listOfWorkouts[widget.index]["fitnessLevel"]),
             style: TextStyle(color: Color(0xFF434242)),
           ),
           _space(10),
@@ -174,11 +170,11 @@ class _WorkoutCardState extends State<WorkoutCard> {
           // add space between lines
           _space(18),
           Text(
-            workoutModel.listOfWorkouts[widget.index]["duration"].toString()  + ' min',
+            workoutModel.listOfWorkouts[widget.index]["duration"].toString() +
+                ' min',
             style: TextStyle(color: Color(0xFF434242)),
           ),
-        ]
-    );
+        ]);
   }
 
 // ============ Widget assembly of information ============
@@ -213,12 +209,8 @@ class _WorkoutCardState extends State<WorkoutCard> {
         ),
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            _workoutTitle(),
-            _workoutInformation()
-          ],
-        )
-    );
+          children: <Widget>[_workoutTitle(), _workoutInformation()],
+        ));
   }
 
   // ============ Return WorkoutCard build ============
@@ -226,17 +218,15 @@ class _WorkoutCardState extends State<WorkoutCard> {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       // Check that the database has registered workouts compliant of
-        return Container(
+      return Container(
           // Make sure the placement is centered
-            padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
-            child: Column(
-              children: <Widget>[
-                // Call on workout widget
-                _workoutCard(),
-              ],
-            )
-        );
-
+          padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
+          child: Column(
+            children: <Widget>[
+              // Call on workout widget
+              _workoutCard(),
+            ],
+          ));
     });
   }
 }

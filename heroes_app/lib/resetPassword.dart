@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'authentication.dart';
 
-//This is the login page
-
 class ResetPasswordPage extends StatefulWidget {
   ResetPasswordPage({this.auth, this.readyToLogIn});
 

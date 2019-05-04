@@ -57,7 +57,6 @@ class _SignupPageState extends State<SignupPage> {
           backgroundColor: const Color(0xFF212838),
           appBar: new AppBar(
             backgroundColor: const Color(0xFF212838),
-            //title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
             leading: IconButton(
                 icon: Icon(Icons.arrow_back_ios),
                 key: Key("signupBackButton"),

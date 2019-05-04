@@ -1,7 +1,6 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-
 import './logic/recommendedWorkoutLogic.dart';
 import 'activeWorkoutSession.dart';
 import 'authentication.dart';
@@ -351,14 +350,14 @@ class _RootPageState extends State<RootPage> {
             alreadyLoggedIn: _alreadyLoggedIn,
           );
         } else
-        return new Summary(
-          exercises: workout.selectedExercises,
-          bonus: workout.BonusXP,
-          total_xp: workout.XpEarned,
-          workoutName: workout.workoutName,
-          onLoggedIn: _onLoggedIn,
-          alreadyLoggedIn: _alreadyLoggedIn,
-        );
+          return new Summary(
+            exercises: workout.selectedExercises,
+            bonus: workout.BonusXP,
+            total_xp: workout.XpEarned,
+            workoutName: workout.workoutName,
+            onLoggedIn: _onLoggedIn,
+            alreadyLoggedIn: _alreadyLoggedIn,
+          );
         break;
       case AuthStatus.BACK_TO_WORKOUTS:
         if (_userId.length > 0 && _userId != null) {

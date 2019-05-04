@@ -1,6 +1,5 @@
 import 'package:scoped_model/scoped_model.dart';
 import 'package:flutter/material.dart';
-
 import 'models/user.dart';
 
 class Summary extends StatefulWidget {
@@ -154,10 +153,6 @@ class _SummaryState extends State<Summary> {
         new Container(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
             margin: EdgeInsets.fromLTRB(35, 0, 35, 35),
-            //decoration: new BoxDecoration(                  //border if we want
-            //color: Colors.white,
-            //border: new Border.all(color: Colors.black)
-            // ),
             child: new ListView(
               shrinkWrap: true,
               children: <Widget>[

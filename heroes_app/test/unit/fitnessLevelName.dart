@@ -16,5 +16,4 @@ void main() {
     String result = convertFitnessLevelName(3);
     expect(result, "Advanced");
   });
-
 }
