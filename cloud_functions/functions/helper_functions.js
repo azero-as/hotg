@@ -87,7 +87,6 @@ async function getUsersCollection(userId) {
         })
 }
 
-
 // Get xpCap for current gameLevel from Levels collection
 async function getLevelXpCap(gameLevel) {
     return admin.firestore()
@@ -105,7 +104,6 @@ async function getLevelXpCap(gameLevel) {
             console.log("Error: ", error)
         })
 }
-
 
 // Increase gameLevel by 1
 async function increaseLevel(gameLevel, userId) {
@@ -162,8 +160,8 @@ async function getCompletedUserWorkouts(userId) {
         .collection('Users')
         .doc(userId)
         .collection('Workouts')
-        .orderBy('date', 'desc') // Ordered by descending date
-        .limit(10) // Limit is 10 workouts
+        .orderBy('date', 'desc')
+        .limit(10)
         .get()
         .then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
@@ -197,21 +195,21 @@ async function getAllWorkouts() {
 async function getRecommendedWorkout(className) {
 
     var workoutList = []
-  
+
     return admin.firestore()
-      .collection("Workouts")
-      .where("class", "==", className)
-      .get()
-      .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
-            workoutList.push(doc.data())
+        .collection("Workouts")
+        .where("class", "==", className)
+        .get()
+        .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                workoutList.push(doc.data())
+            })
+
+            randomWorkout = Math.floor(Math.random() * workoutList.length);
+
+            return workoutList[randomWorkout]
         })
-        
-        randomWorkout = Math.floor(Math.random() * workoutList.length);
-  
-        return workoutList[randomWorkout]
-    })
-    .catch(function (error) {
-        console.log("Error getting workout. ", error);
-    })
+        .catch(function (error) {
+            console.log("Error getting workout. ", error);
+        })
 }
