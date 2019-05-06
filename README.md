@@ -72,6 +72,18 @@ Add additional notes about how to deploy this on a live system
 
 ## Contributors
 
+### Project owners
+* Anders Wilhelmsen Carter (Personal trainer)
+* Dag Frode Solberg (IT-consultant)
+
+### Developers
+* Astrid Vik
+* Hanna Evensen
+* Hedda Nikolaisen Holmen
+* Lena Tørresdal
+* Marianne Voss Siljan
+* Maria Osen
+* Therese Hansen Federl
 
 ## License
 
