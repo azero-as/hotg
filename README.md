@@ -7,48 +7,49 @@ One Paragraph of project description goes here
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
-What things you need to install the software and how to install them
+Before you can run the project you have to make sure you have installed all the prerequisites. 
 
+#### SDK
 * [Flutter](https://flutter.dev/docs/get-started/install)
-* [Android Studio](https://developer.android.com/studio)
 
 
-#### Tools
-Depending on what device you want to develop on, you need these tools: 
-* Android devices: Android toolchain
-* iOS devices: XCode
+#### Development tools
+* Code editor (we recommend [VS Code](https://code.visualstudio.com/) or [IntelliJ](https://www.jetbrains.com/idea/)
+
+Depending on what device you want to use during development, you need either one or both of these tools: 
+* Android devices: [Android Studio](https://developer.android.com/studio)
+* iOS devices: [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12)
+
+Once you have installed either one or both you need to create a device simulator.
+* [How to create an Android device](https://developer.android.com/studio/run/emulator)
+
 
 #### Cloud Functions
-For writing and deploying Google Cloud Functions, you'll need node.js and FirebaseCLI. 
+For writing and deploying Google Cloud Functions, you'll need node.js and FirebaseCLI.
 
+* [Node.js](https://nodejs.org/en/)
+* To install FirebaseCLI, run: ```npm install -g firebase-tools```.
 
-**Node.js**
-
-Go to https://nodejs.org/en/
-
-
-**FirebaseCLI**
-```
-npm install -g firebase-tools
-```
-
-Go to https://flutter.dev/docs/get-started/install for a guide on how to install everything you need to get started with the Flutter project. To get started with Cloud Functions see https://firebase.google.com/docs/functions/get-started. 
+For more information about Cloud Functions, see https://firebase.google.com/docs/functions/get-started. 
 
 
 ### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+Open a terminal window and clone the repository.
 
 ```
-Give the example
+git clone git@github.com:marose14/heroes.git
 ```
 
-And repeat
+Open the repository in your code editor. Install the necessary packages by running:
 
 ```
-until finished
+flutter packages get
+```
+
+Make sure a simulator is connected and running. cd to the folder heroes_app and start the project by running:
+
+```
+flutter run
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
