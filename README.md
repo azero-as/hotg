@@ -54,6 +54,15 @@ flutter run
 
 End with an example of getting some data out of the system or using it for a little demo
 
+### Running the emulator
+When having installed Xcode and Android Studio, this is how you run the project on the emulator. 
+
+#### Xcode
+In the top left, change 'Generic iOS Device' to the preferd iOS simulator. Then click the 'play' button to build and run the code on the emulator. 
+
+#### Android Studio
+In the menu bar, click the 'AVD Manager' button and start the virtual device you made in an earlier step. Then make sure 'main.dart' and your device is selected in the menu bar. Click the 'play' button to run the code on the emulator.    
+
 ## Running the tests
 
 Explain how to run the automated tests for this system
