@@ -27,7 +27,8 @@ class RootPage extends StatefulWidget {
   State<StatefulWidget> createState() => new _RootPageState();
 }
 
-//Labels to find out if a user is signed in when launching the app
+//Labels to find out if a user is signed in when launching the app.
+//Also used for deciding which page to view.
 enum AuthStatus {
   NOT_DETERMINED,
   NOT_LOGGED_IN,
@@ -218,6 +219,9 @@ class _RootPageState extends State<RootPage> {
     }
   }
 
+  // Main widget of the application. Listens constantly to authStatus whether
+  // it is changed, and makes sure the right page is shown. All pages are opened
+  // through this widget.
   @override
   Widget build(BuildContext context) {
     var workout = ScopedModel.of<Workout>(context);
