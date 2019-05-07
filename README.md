@@ -65,15 +65,33 @@ In the menu bar, click the 'AVD Manager' button and start the virtual device you
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+There are two types of automated tests in this project, unit tests and integration tests.
 
-### Break down into end to end tests
+### Unit tests
+The unit tests test the smallest testable parts of the code. The purpose of such a test is to verify the correctness of a unit of logic under a variety of conditions. To do this we have used the integrated testpackage for Dart code, which provides the core framework for writing unit tests.
 
-Explain what these tests test and why
+To run all the tests, in the heroes_app folder run the following command:
 
 ```
-Give an example
+flutter test test/unit/
 ```
+
+You can also run one test at a time by running this command:
+
+```
+flutter test test/unit/filename.dart
+```
+
+### Integration tests
+Integration testing is used for testing if the individual smaller parts work together. We have used Flutter’s own package flutter_driver to make the tests. These tests open a simulator, and "use" the application, testing that the right messages and widgets are shown on the screen when certain inputs are entered and buttons are tapped.
+
+To run the tests, in the heroes_app folder run the following command:
+
+```
+flutter drive --target=test_driver/app.dart
+```
+
+After running the tests you will need to reset the database. This can be done by going to the following url, which will fire the cloud function resetTestUser: https://us-central1-heroes-6fe69.cloudfunctions.net/resetTestUser.
 
 ## Deployment
 
