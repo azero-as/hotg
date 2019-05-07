@@ -3,8 +3,7 @@
 One Paragraph of project description goes here
 
 ## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions describe how you can install and run the project on your local machine for further development and testing.
 
 ### Prerequisites
 Before you can run the project you have to make sure you have installed all the prerequisites. 
