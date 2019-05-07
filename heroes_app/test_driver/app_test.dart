@@ -336,7 +336,7 @@ void main() {
       }
     });
 
-    //used for complete a workout from the workouts tab
+    //Used for complete a workout from the workouts tab
     final navigationBar = find.byValueKey("navigationBar");
     final greenRangerWorkout = find.byValueKey("Green Ranger Workout");
     final startWorkout = find.byValueKey("startWorkout");
@@ -354,6 +354,7 @@ void main() {
     test(
         "XP should increase with the equivalent value after finishing a workout",
         () async {
+      //do the greenRangerWorkout
       await driver.tap(navigationBar);
       await driver.tap(greenRangerWorkout);
       await driver.tap(startWorkout);
@@ -368,15 +369,18 @@ void main() {
       await driver.tap(summaryExit);
       await Future.delayed(const Duration(seconds: 5));
 
+      //find the xp
       var userXp = await find.byValueKey("xp");
       var xp = await driver.getText(userXp);
 
+      //check if xp = 133 (43+90)
       expect(xp.substring(0, 3), "133");
     });
 
     //IT 19
     test("Level indicator is incremented by 1 when reaching a new level",
         () async {
+      //Do the greenRangerWorkout
       await driver.tap(navigationBar);
       await driver.tap(greenRangerWorkout);
       await driver.tap(startWorkout);
@@ -385,15 +389,19 @@ void main() {
       await driver.tap(exercise1);
       await driver.tap(exercise2);
       await driver.tap(exercise3);
+      await driver.tap(exercise4);
+      await driver.tap(exercise5);
       await driver.tap(finishButton);
       await driver.tap(summaryExit);
       await Future.delayed(const Duration(seconds: 5));
 
+      //find the level
       var levelClass = await find.byValueKey("levelClass");
       var levelAndClass = await driver.getText(levelClass);
       var list = levelAndClass.split(' ');
       var level = list[1];
 
+      //check if the new level = 3
       expect(level, "3");
     });
   });

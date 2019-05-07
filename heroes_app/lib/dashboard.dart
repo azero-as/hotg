@@ -50,6 +50,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         body: Center(child:
             ScopedModelDescendant<User>(builder: (context, child, model) {
           return new PageView(
+            //Pages in the bottom navigation bar
               children: [
                 new Home(
                     auth: widget.auth,
