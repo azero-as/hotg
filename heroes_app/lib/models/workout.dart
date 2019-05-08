@@ -52,7 +52,6 @@ class Workout extends Model {
   int get XpEarned => _XpEarned;
   int get BonusXP => _BonusXP;
 
-
   // Belongs to plan
   List<dynamic> _listOfWorkouts;
 
@@ -60,8 +59,6 @@ class Workout extends Model {
 
   //To check whether to go back to home or to plan
   bool isFromHomePage;
-
-  //bool isFromRecommendedWorkout = false;
 
   void setListOfWorkouts(List<dynamic> workouts) {
     this._listOfWorkouts = workouts;

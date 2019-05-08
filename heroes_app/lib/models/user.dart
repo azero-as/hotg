@@ -142,8 +142,6 @@ class User extends Model {
   }
 
   void dispose() {
-    //var user = ScopedModel.of<User>(context);
-    //super.dispose();
     this._pageController.dispose();
     notifyListeners();
   }
@@ -168,7 +166,7 @@ class User extends Model {
     notifyListeners();
   }
 
-    // Get ImageUrl based on className.
+  // Get ImageUrl based on className.
   void setImageUrl() async {
     String imageUrl = _className + '.png';
 

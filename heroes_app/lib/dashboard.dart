@@ -5,7 +5,6 @@ import 'home.dart';
 import 'workoutList.dart';
 import 'history.dart';
 import 'models/user.dart';
-import 'models/workout.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -37,9 +36,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  //PageController _pageController;
-  //int _page = 0;
-
   @override
   void initState() {
     var user = ScopedModel.of<User>(context);
@@ -50,15 +46,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    /*void onPageChanged(int page) {
-      var user = ScopedModel.of<User>(context);
-      user.setPage(page);
-    }*/
-
     return new Scaffold(
         body: Center(child:
             ScopedModelDescendant<User>(builder: (context, child, model) {
           return new PageView(
+            //Pages in the bottom navigation bar
               children: [
                 new Home(
                     auth: widget.auth,

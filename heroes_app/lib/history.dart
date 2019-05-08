@@ -60,7 +60,7 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<User>(builder: (context, child, model) {
-    if (model.noWorkoutCompleted == true) {
+      if (model.noWorkoutCompleted == true) {
         return Scaffold(
             backgroundColor: Theme.of(context).secondaryHeaderColor,
             appBar: AppBar(
@@ -78,24 +78,22 @@ class _ListOfTrainingSessionsState extends State<ListOfTrainingSessions> {
                   ),
                   _motivationalQuote()
                 ])));
-    } else if (model.workouts.isEmpty) {
-      return Center(child: CircularProgressIndicator());
-    } else {
-      return Scaffold(
-          backgroundColor: Theme
-              .of(context)
-              .secondaryHeaderColor,
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text("Workout History"),
-          ),
-          body: ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              itemCount: model.workouts.length,
-              itemBuilder: (context, index) {
-                return _workoutCard(context, model.workouts[index]);
-              }));
-    }
+      } else if (model.workouts.isEmpty) {
+        return Center(child: CircularProgressIndicator());
+      } else {
+        return Scaffold(
+            backgroundColor: Theme.of(context).secondaryHeaderColor,
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text("Workout History"),
+            ),
+            body: ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                itemCount: model.workouts.length,
+                itemBuilder: (context, index) {
+                  return _workoutCard(context, model.workouts[index]);
+                }));
+      }
     });
   }
 

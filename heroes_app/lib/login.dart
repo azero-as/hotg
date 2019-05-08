@@ -55,7 +55,6 @@ class _LoginPageState extends State<LoginPage> {
             backgroundColor: Theme.of(context).secondaryHeaderColor,
             appBar: new AppBar(
               backgroundColor: Theme.of(context).secondaryHeaderColor,
-              //title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
               leading: IconButton(
                   icon: Icon(Icons.arrow_back_ios),
                   key: Key("loginBackButton"),

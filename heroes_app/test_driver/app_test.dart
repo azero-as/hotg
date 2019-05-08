@@ -57,7 +57,6 @@ void main() {
 
       expect(await driver.getText(noExercisesPopUp), "No exercises done");
 
-
       // Back to home page
       await driver.tap(outOfPopUp);
       await driver.tap(backToStartWorkout);
@@ -67,7 +66,6 @@ void main() {
       await driver.tap(settingsButton);
       await driver.tap(signOutButton);
     });
-
   });
 
   group('Log In:', () {
@@ -75,19 +73,19 @@ void main() {
     // test suite. Note: the Strings provided to the `byValueKey` method must
     // be the same as the Strings we used for the Keys.
 
-      //Widget from frontpage
-      final logInButton = find.byValueKey('LogIn');
+    //Widget from frontpage
+    final logInButton = find.byValueKey('LogIn');
 
-      //Widgets from login
-      final usernameTextField = find.byValueKey("loginUsername");
-      final passwordTextField = find.byValueKey("loginPassword");
-      final logInButton2 = find.byValueKey("LogIn2");
-      final errormessage = find.byValueKey("LogInErrorMessage");
-      final loginBackButton = find.byValueKey("loginBackButton");
+    //Widgets from login
+    final usernameTextField = find.byValueKey("loginUsername");
+    final passwordTextField = find.byValueKey("loginPassword");
+    final logInButton2 = find.byValueKey("LogIn2");
+    final errormessage = find.byValueKey("LogInErrorMessage");
+    final loginBackButton = find.byValueKey("loginBackButton");
 
-      //Widgets from dashboard
-      final settingsButton = find.byValueKey("settingsButton");
-      final signOutButton = find.byValueKey("signOutButton");
+    //Widgets from dashboard
+    final settingsButton = find.byValueKey("settingsButton");
+    final signOutButton = find.byValueKey("signOutButton");
 
     FlutterDriver driver;
 
@@ -108,7 +106,8 @@ void main() {
       await driver.tap(usernameTextField);
       await driver.enterText("test@example.com");
       await driver.tap(passwordTextField);
-      await driver.enterText("wrongPassword");//The correct password is test1234
+      await driver
+          .enterText("wrongPassword"); //The correct password is test1234
       await driver.tap(logInButton2);
       expect(await driver.getText(errormessage), "Wrong email or password");
 
@@ -183,7 +182,8 @@ void main() {
       await driver.tap(passwordTextField2);
       await driver.enterText("wrongPassword2");
       await driver.tap(signUpButton2);
-      expect(await driver.getText(errormessage), "The email address is badly formatted.");
+      expect(await driver.getText(errormessage),
+          "The email address is badly formatted.");
 
       await driver.tap(signupBackButton);
     });
@@ -197,7 +197,8 @@ void main() {
       await driver.tap(passwordTextField2);
       await driver.enterText("wrongPassword2");
       await driver.tap(signUpButton2);
-      expect(await driver.getText(errormessage), "The email address is already in use by another account.");
+      expect(await driver.getText(errormessage),
+          "The email address is already in use by another account.");
 
       await driver.tap(signupBackButton);
     });
@@ -211,7 +212,8 @@ void main() {
       await driver.tap(passwordTextField2);
       await driver.enterText("test");
       await driver.tap(signUpButton2);
-      expect(await driver.getText(errormessage), "The password must be 6 characters long or more.");
+      expect(await driver.getText(errormessage),
+          "The password must be 6 characters long or more.");
 
       await driver.tap(signupBackButton);
     });
@@ -265,14 +267,14 @@ void main() {
 
     //IT 1
     test("Correct character name is shown on the dashboard", () async {
-      expect( await driver.getText(charName), "testusername");
+      expect(await driver.getText(charName), "testusername");
     });
 
     //IT 2
     test("Correct amount of XP is shown on the dashboard.", () async {
       var xp = await driver.getText(userXp);
-      
-      expect(xp.substring(0,2), "43");
+
+      expect(xp.substring(0, 2), "43");
     });
 
     //IT 10
@@ -295,7 +297,6 @@ void main() {
   });
 
   group('Finish workout:', () {
-
     //Widget from frontpage
     final logInButton = find.byValueKey('LogIn');
 
@@ -327,17 +328,15 @@ void main() {
       //Log out
       await driver.tap(settingsButton);
       await driver.tap(signOutButton);
-
-      //TODO: Reset database to inital state for test user
-      //https://us-central1-heroes-6fe69.cloudfunctions.net/resetTestUser
-      print("Please go to this url to reset the database: https://us-central1-heroes-6fe69.cloudfunctions.net/resetTestUser");
+      print(
+          "Please go to this url to reset the database: https://us-central1-heroes-6fe69.cloudfunctions.net/resetTestUser");
 
       if (driver != null) {
         driver.close();
       }
     });
 
-    //used for complete a workout from the workouts tab
+    //Used for complete a workout from the workouts tab
     final navigationBar = find.byValueKey("navigationBar");
     final greenRangerWorkout = find.byValueKey("Green Ranger Workout");
     final startWorkout = find.byValueKey("startWorkout");
@@ -352,7 +351,10 @@ void main() {
     final summaryExit = find.byValueKey("summaryExit");
 
     //IT 15
-    test("XP should increase with the equivalent value after finishing a workout", () async {
+    test(
+        "XP should increase with the equivalent value after finishing a workout",
+        () async {
+      //do the greenRangerWorkout
       await driver.tap(navigationBar);
       await driver.tap(greenRangerWorkout);
       await driver.tap(startWorkout);
@@ -367,14 +369,18 @@ void main() {
       await driver.tap(summaryExit);
       await Future.delayed(const Duration(seconds: 5));
 
+      //find the xp
       var userXp = await find.byValueKey("xp");
       var xp = await driver.getText(userXp);
 
-      expect(xp.substring(0,3), "133");
+      //check if xp = 133 (43+90)
+      expect(xp.substring(0, 3), "133");
     });
 
     //IT 19
-    test("Level indicator is incremented by 1 when reaching a new level", () async {
+    test("Level indicator is incremented by 1 when reaching a new level",
+        () async {
+      //Do the greenRangerWorkout
       await driver.tap(navigationBar);
       await driver.tap(greenRangerWorkout);
       await driver.tap(startWorkout);
@@ -383,17 +389,20 @@ void main() {
       await driver.tap(exercise1);
       await driver.tap(exercise2);
       await driver.tap(exercise3);
+      await driver.tap(exercise4);
+      await driver.tap(exercise5);
       await driver.tap(finishButton);
       await driver.tap(summaryExit);
       await Future.delayed(const Duration(seconds: 5));
 
+      //find the level
       var levelClass = await find.byValueKey("levelClass");
       var levelAndClass = await driver.getText(levelClass);
       var list = levelAndClass.split(' ');
       var level = list[1];
 
+      //check if the new level = 3
       expect(level, "3");
     });
   });
-
 }

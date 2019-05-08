@@ -57,7 +57,6 @@ class _SignupPageState extends State<SignupPage> {
           backgroundColor: const Color(0xFF212838),
           appBar: new AppBar(
             backgroundColor: const Color(0xFF212838),
-            //title: Text("Heroes of the Gym", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
             leading: IconButton(
                 icon: Icon(Icons.arrow_back_ios),
                 key: Key("signupBackButton"),
@@ -233,7 +232,6 @@ class _SignupPageState extends State<SignupPage> {
           borderRadius: BorderRadius.circular(15.0),
         ),
         onPressed: _validateAndSubmit,
-        //TODO: Navigate to signuplevel, then sign up.
         padding: EdgeInsets.all(12),
         color: const Color(0xFF612A30),
         child: Text(
