@@ -2,6 +2,19 @@
 
 Heroes of the Gym is a mobile app for iOS and Android developed using the framework Flutter. This application combines exercise with role-playing game elements (RPGs) in order to increase motivation. A workout plan is generated for the user after signing up based on personal fitness level and a specified goal. The user earn experience points (xp) by completing selected workouts, and can follow the progress of his/her game character. Instead of waiting for the slow progress that happens in real life, the user will be able to see the continuous progress shown in the application.
 
+<p float="left">
+  <img src="app_screenshots/pickClass_1.png" width="180" />
+  <img src="app_screenshots/fitnessLevel_2.png" width="180" />
+  <img src="app_screenshots/home_3.png" width="180" />
+  <img src="app_screenshots/startWorkout_4.png" width="180" />
+</p>
+<p float="left">
+  <img src="app_screenshots/levelUp_5.png" width="180">
+  <img src="app_screenshots/workoutList_6.png" width="180">
+  <img src="app_screenshots/history_7.png" width="180">
+  <img src="app_screenshots/settings_8.png" width="180">
+</p>
+
 ## Getting Started
 These instructions describe how you can install and run the project on your local machine for further development and testing.
 
