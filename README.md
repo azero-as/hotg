@@ -66,8 +66,6 @@ Make sure a simulator is connected and running. cd to the folder heroes_app and 
 flutter run
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
-
 ### Running the emulator
 When having installed Xcode and Android Studio, this is how you run the project on the emulator. 
 
