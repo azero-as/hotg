@@ -105,10 +105,6 @@ flutter drive --target=test_driver/app.dart
 
 After running the tests you will need to reset the database. This can be done by going to the following url, which will fire the cloud function resetTestUser: https://us-central1-heroes-6fe69.cloudfunctions.net/resetTestUser.
 
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
 ## Contributors
 
 ### Project owners
